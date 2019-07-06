@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{2B5533BB-04A1-424F-9BCA-1CA963B46B7F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>TLAC</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetExt>.dva</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetExt>.dva</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;TLAC_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>..\..\..\dependencies\detours\include;..\..\..\dependencies\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>XINPUT9_1_0.LIB;dinput8.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>Xinput.h</IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>..\..\..\dependencies\detours\lib;..\..\..\dependencies\freeglut\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;TLAC_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;TLAC_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>..\..\..\dependencies\detours\include;..\..\..\dependencies\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalLibraryDirectories>..\..\..\dependencies\detours\lib;..\..\..\dependencies\freeglut\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>XINPUT9_1_0.LIB;dinput8.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>Xinput.h</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;TLAC_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Components\CameraController.h" />
+    <ClInclude Include="Components\ComponentsManager.h" />
+    <ClInclude Include="Components\CustomPlayerData.h" />
+    <ClInclude Include="Components\DebugComponent.h" />
+    <ClInclude Include="Components\EmulatorComponent.h" />
+    <ClInclude Include="Components\FastLoader.h" />
+    <ClInclude Include="Components\FPSLimiter.h" />
+    <ClInclude Include="Components\FrameRateManager.h" />
+    <ClInclude Include="Components\GameState.h" />
+    <ClInclude Include="Components\GameTargets\HoldState.h" />
+    <ClInclude Include="Components\GameTargets\TargetHitStates.h" />
+    <ClInclude Include="Components\GameTargets\TargetInspector.h" />
+    <ClInclude Include="Components\GameTargets\TargetState.h" />
+    <ClInclude Include="Components\GameTargets\TargetTypes.h" />
+    <ClInclude Include="Components\Input\InputBufferType.h" />
+    <ClInclude Include="Components\Input\InputEmulator.h" />
+    <ClInclude Include="Components\Input\InputState.h" />
+    <ClInclude Include="Components\Input\JvsButtons.h" />
+    <ClInclude Include="Components\Input\TouchPanelEmulator.h" />
+    <ClInclude Include="Components\Input\TouchPanelState.h" />
+    <ClInclude Include="Components\Input\TouchSliderEmulator.h" />
+    <ClInclude Include="Components\Input\TouchSliderState.h" />
+    <ClInclude Include="Components\PlayerData.h" />
+    <ClInclude Include="Components\PlayerDataManager.h" />
+    <ClInclude Include="Components\ScaleComponent.h" />
+    <ClInclude Include="Components\StageManager.h" />
+    <ClInclude Include="Components\SysTimer.h" />
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="FileSystem\ConfigFile.h" />
+    <ClInclude Include="FileSystem\TextFile.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="Input\Bindings\Binding.h" />
+    <ClInclude Include="Input\Bindings\Ds4Binding.h" />
+    <ClInclude Include="Input\Bindings\IInputBinding.h" />
+    <ClInclude Include="Input\Bindings\KeyboardBinding.h" />
+    <ClInclude Include="Input\Bindings\MouseBinding.h" />
+    <ClInclude Include="Input\Bindings\XinputBinding.h" />
+    <ClInclude Include="Input\DirectInput\Controller.h" />
+    <ClInclude Include="Input\DirectInput\DirectInput.h" />
+    <ClInclude Include="Input\DirectInput\DirectInputDevice.h" />
+    <ClInclude Include="Input\DirectInput\DirectInputMouse.h" />
+    <ClInclude Include="Input\DirectInput\Ds4\Ds4Button.h" />
+    <ClInclude Include="Input\DirectInput\Ds4\Ds4State.h" />
+    <ClInclude Include="Input\DirectInput\Ds4\DualShock4.h" />
+    <ClInclude Include="Input\IInputDevice.h" />
+    <ClInclude Include="Input\Keyboard\Keyboard.h" />
+    <ClInclude Include="Input\Keyboard\KeyboardState.h" />
+    <ClInclude Include="Input\KeyConfig\Config.h" />
+    <ClInclude Include="Input\KeyConfig\KeyString.h" />
+    <ClInclude Include="Input\KeyConfig\KeyStringHash.h" />
+    <ClInclude Include="Input\Mouse\Mouse.h" />
+    <ClInclude Include="Input\Mouse\MouseState.h" />
+    <ClInclude Include="Input\Xinput\Xinput.h" />
+    <ClInclude Include="Input\Xinput\XinputState.h" />
+    <ClInclude Include="Utilities\EnumBitwiseOperations.h" />
+    <ClInclude Include="Utilities\Math.h" />
+    <ClInclude Include="Utilities\Operations.h" />
+    <ClInclude Include="Utilities\Stopwatch.h" />
+    <ClInclude Include="Utilities\Vec2.h" />
+    <ClInclude Include="Utilities\Vec3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Components\CameraController.cpp" />
+    <ClCompile Include="Components\ComponentsManager.cpp" />
+    <ClCompile Include="Components\DebugComponent.cpp" />
+    <ClCompile Include="Components\EmulatorComponent.cpp" />
+    <ClCompile Include="Components\FastLoader.cpp" />
+    <ClCompile Include="Components\FPSLimiter.cpp" />
+    <ClCompile Include="Components\FrameRateManager.cpp" />
+    <ClCompile Include="Components\GameTargets\TargetInspector.cpp" />
+    <ClCompile Include="Components\Input\InputEmulator.cpp" />
+    <ClCompile Include="Components\Input\InputState.cpp" />
+    <ClCompile Include="Components\Input\TouchPanelEmulator.cpp" />
+    <ClCompile Include="Components\Input\TouchSliderEmulator.cpp" />
+    <ClCompile Include="Components\Input\TouchSliderState.cpp" />
+    <ClCompile Include="Components\PlayerDataManager.cpp" />
+    <ClCompile Include="Components\ScaleComponent.cpp" />
+    <ClCompile Include="Components\StageManager.cpp" />
+    <ClCompile Include="Components\SysTimer.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="FileSystem\ConfigFile.cpp" />
+    <ClCompile Include="FileSystem\TextFile.cpp" />
+    <ClCompile Include="framework.cpp" />
+    <ClCompile Include="Input\Bindings\Binding.cpp" />
+    <ClCompile Include="Input\Bindings\Ds4Binding.cpp" />
+    <ClCompile Include="Input\Bindings\KeyboardBinding.cpp" />
+    <ClCompile Include="Input\Bindings\MouseBinding.cpp" />
+    <ClCompile Include="Input\Bindings\XinputBinding.cpp" />
+    <ClCompile Include="Input\DirectInput\Controller.cpp" />
+    <ClCompile Include="Input\DirectInput\DirectInput.cpp" />
+    <ClCompile Include="Input\DirectInput\DirectInputDevice.cpp" />
+    <ClCompile Include="Input\DirectInput\DirectInputMouse.cpp" />
+    <ClCompile Include="Input\DirectInput\Ds4\Ds4State.cpp" />
+    <ClCompile Include="Input\DirectInput\Ds4\DualShock4.cpp" />
+    <ClCompile Include="Input\Keyboard\Keyboard.cpp" />
+    <ClCompile Include="Input\Keyboard\KeyboardState.cpp" />
+    <ClCompile Include="Input\KeyConfig\Config.cpp" />
+    <ClCompile Include="Input\KeyConfig\KeyString.cpp" />
+    <ClCompile Include="Input\KeyConfig\KeyStringHash.cpp" />
+    <ClCompile Include="Input\Mouse\Mouse.cpp" />
+    <ClCompile Include="Input\Xinput\Xinput.cpp" />
+    <ClCompile Include="Input\Xinput\XinputState.cpp" />
+    <ClCompile Include="Utilities\Math.cpp" />
+    <ClCompile Include="Utilities\Operations.cpp" />
+    <ClCompile Include="Utilities\Stopwatch.cpp" />
+    <ClCompile Include="Utilities\Vec2.cpp" />
+    <ClCompile Include="Utilities\Vec3.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

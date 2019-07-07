@@ -4,9 +4,9 @@
 
 ## License and Legal
 
-The code included in this repository is intended for the solely usage of investigative reasons for the **PDAFT** videogame.\
-Based on your current jurisdiction, it may be illegal to tamper with an arcade cabinet or its hardware and so it would be the usage of this software.\
-Protection circumvention is not provided by this software.\
+The code included in this repository is intended for the solely usage of investigative reasons for the **PDAFT** videogame.
+Based on your current jurisdiction, it may be illegal to tamper with an arcade cabinet or its hardware and so it would be the usage of this software.
+**You must have your own legal dump of the game to use this software.**
 Additionally, a MIT License is provided.
 
 ## Installation
@@ -35,15 +35,23 @@ Files required to make **"mdata"** available in the game are included (**"ram\da
 
 **IMPORTANT:** Do *not* edit any of the *.ini* configuration files with Notepad. Use [Notepad++](https://notepad-plus-plus.org/download) (or WordPad) with UTF-8 encoding instead, otherwise your game may crash.
 
-Use **"plugins\components.ini"** to enable or disable TLAC components.\
-Use **"plugins\config.ini"** to enable or disable plugins loading along other useful settings.\
-Use **"plugins\keyconfig.ini"** to change your game keybinds.\
+Use **"plugins\components.ini"** to enable or disable TLAC components.
+Use **"plugins\config.ini"** to enable or disable plugins loading along other useful settings.
+Use **"plugins\keyconfig.ini"** to change your game keybinds.
 Use **"plugins\playerdata.ini"** to change your playername and other player customization.
 
-Place any **.dva** plugin you want to use inside the **"plugins"** folder.\
+Place any **.dva** plugin you want to use inside the **"plugins"** folder.
 
 Launch **"diva.exe"**.
 Use **"--launch"** argument to bypass the launcher and to be able to use other arguments.
+
+## Modules
+
+Edit **"plugins\playerdata.ini** with [Notepad++](https://notepad-plus-plus.org/download) (or WordPad) and set use_card to true.
+
+## Sound
+
+If you do not hear any audio from the game, please install [DivaSound](https://github.com/somewhatlurker/DivaSound).
 
 ## Screenshots
 
@@ -67,14 +75,15 @@ MIT (see "LICENSE").
 
 ## Third party plugins
 
-[DiscordDiva](https://github.com/bela333/DiscordDiva) - Discord integration by **bela333**.\
+[DiscordDiva](https://github.com/bela333/DiscordDiva) - Discord integration by **bela333**.
+
 [DivaSound](https://github.com/somewhatlurker/DivaSound) - Replacement audio output by **somewhatlurker**, this plugin is a must if you have audio issues or no audio at all.
 
 ## FAQ
 
 Only **NVIDIA** videocards are supported for now, AMD and Intel GPU support is possible but further research needs to be done.
 
-**Linux** can run the game with **Wine**, for audio you must use [DivaSound](https://github.com/somewhatlurker/DivaSound).\
+**Linux** can run the game with **Wine**, for audio you must use [DivaSound](https://github.com/somewhatlurker/DivaSound).
 WMV movie videos are not supported and it is recommended to set **No_Movies** to **1** to prevent crashes when the game attempts to load a movie.
 
 **Windows 7** is supported except for WMV movie videos.
@@ -91,16 +100,16 @@ To enable logs and dumps create a folder called "logs" in the root folder, each 
 
 This is a stripdown of [**ThirteenAG's** Ultimate ASI Loader v4.47](https://github.com/ThirteenAG/Ultimate-ASI-Loader/) for **"dnsapi.dll"** usage only.
 
-Solution for **Visual Studio 2019**.\
-Requires platform toolset **v142**.\
+Solution for **Visual Studio 2019**.
+Requires platform toolset **v142**.
 Requires **Windows 10 SDK (10.0.17763.0)**.
 
-Requires **Desktop development with C++**.\
+Requires **Desktop development with C++**.
 Requires **Windows Universal CRT SDK**.
 
-Requires **.NET desktop development** (Launcher plugin).\
-Requires **.NET Framework 4 targeting pack** (Launcher plugin).\
+Requires **.NET desktop development** (Launcher plugin).
+Requires **.NET Framework 4 targeting pack** (Launcher plugin).
 Requires **C++/CLI support for v142 build tools (14.21)** (Launcher plugin)
 
-Requires [**Microsoft Research Detours Package**](https://github.com/microsoft/Detours) (included in the solution).\
+Requires [**Microsoft Research Detours Package**](https://github.com/microsoft/Detours) (included in the solution).
 Requires [**FreeGLUT 3.0.0 PD**](https://github.com/Rayduxz/FreeGLUT) (included in the solution).

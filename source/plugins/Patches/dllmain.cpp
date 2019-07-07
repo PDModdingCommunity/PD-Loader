@@ -57,6 +57,9 @@ void ApplyPatches() {
 		{ (void*)0x0000000140502150, { 0x90 } },
 		// Toon Shader Outline Fix by lybxlpsv
 		{ (void*)0x0000000140641102, { 0x01 } },
+		// Skip unnecessary checks
+		{ (void*)0x0000000140210820, { 0xB8, 0x00, 0x00, 0x00, 0x00, 0xC3 } },
+		{ (void*)0x000000014066E820, { 0xB8, 0x01, 0x00, 0x00, 0x00, 0xC3 } },
 		// Disables call to glutFitWindowSizeToDesktop, prevents window automatic resize
 		{ (void*)0x0000000140194E06, { 0x90, 0x90, 0x90, 0x90, 0x90 } },
 		// Allow modifier mode selection (by Team Shimapan)

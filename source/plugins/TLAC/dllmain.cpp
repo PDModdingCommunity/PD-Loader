@@ -82,11 +82,6 @@ namespace TLAC
 		HadWindowFocus = HasWindowFocus;
 		HasWindowFocus = framework::DivaWindowHandle == NULL || GetForegroundWindow() == framework::DivaWindowHandle;
 
-		if (HasWindowFocus && GetAsyncKeyState(VK_ESCAPE))
-		{
-			exit(1);
-		}
-
 		if ((HasWindowFocus) && (!framework::inputDisable))
 		{
 			Input::Keyboard::GetInstance()->PollInput();

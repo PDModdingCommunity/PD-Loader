@@ -92,7 +92,7 @@ Previous versions used **dinput8.dll** in the game root folder, if you still hav
 
 Always use the original game executable.
 
-Special thanks to **Brolijah**, **Skyth**, **korenkonder**, **Samyuu**, **somewhatlurker**, **Cainan**, **crash5band**, **ano**, **lybxlpsv** and everyone else who helped at the [Project DIVA Modding 2nd Community Discord](https://discord.gg/cvBVGDZ), come join us if you want to help us to improve this project.
+Special thanks to **Brolijah**, **Skyth**, **korenkonder**, **Samyuu**, **somewhatlurker**, **SwigS-27**, **crash5band**, **ano**, **lybxlpsv** and everyone else who helped at the [Project DIVA Modding 2nd Community Discord](https://discord.gg/cvBVGDZ), come join us if you want to help us to improve this project.
 
 ## Developer FAQ
 

@@ -27,8 +27,25 @@ namespace Launcher {
 			this->ClientSize = Drawing::Size(444, 323);
 			TabPadding^ tabpad = gcnew TabPadding(tabControl);
 
+			this->panel_Components->SuspendLayout();
 			// Beta version, components not working yet and tab disabled
 			tabPage_Components->Enabled = false;
+			int componentsY = 3;
+			for (componentInfo& component : componentsArray)
+			{
+				CheckBox^ cb = gcnew CheckBox();
+				cb->Text = gcnew String(component.friendlyName);
+				cb->Checked = GetPrivateProfileBoolW(L"components", component.name, false, COMPONENTS_FILE);
+				cb->Left = 3;
+				cb->Top = componentsY;
+				cb->AutoSize = true;
+				cb->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+				panel_Components->Controls->Add(cb);
+				component.cb = cb->Handle;
+				componentsY += 23;
+			}
+			this->panel_Components->ResumeLayout(false);
+			this->panel_Components->PerformLayout();
 
 			comboBox_Display->SelectedIndex = nDisplay;
 
@@ -129,20 +146,9 @@ namespace Launcher {
 	private: System::Windows::Forms::GroupBox^ groupBox_InternalRes;
 	private: System::Windows::Forms::CheckBox^ checkBox_InternalRes;
 	private: System::Windows::Forms::TabPage^ tabPage_Components;
-	private: System::Windows::Forms::CheckBox^ checkBox_sys_timer;
-	private: System::Windows::Forms::CheckBox^ checkBox_touch_panel_emulator;
-	private: System::Windows::Forms::CheckBox^ checkBox_touch_slider_emulator;
-	private: System::Windows::Forms::CheckBox^ checkBox_input_emulator;
-	private: System::Windows::Forms::CheckBox^ checkBox_player_data_manager;
 
-	private: System::Windows::Forms::CheckBox^ checkBox_frame_rate_manager;
-	private: System::Windows::Forms::CheckBox^ checkBox_stage_manager;
-	private: System::Windows::Forms::CheckBox^ checkBox_fast_loader;
-	private: System::Windows::Forms::CheckBox^ checkBox_camera_controller;
 	private: System::Windows::Forms::Panel^ panel_Components;
 
-	private: System::Windows::Forms::CheckBox^ checkBox_scale_component;
-	private: System::Windows::Forms::CheckBox^ checkBox_fps_limiter;
 	private: System::Windows::Forms::TabPage^ tabPage_Patches;
 	private: System::Windows::Forms::Panel^ panel_Patches;
 
@@ -192,7 +198,7 @@ private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel_Status;
 
 
 private: System::Windows::Forms::CheckBox^ checkBox_NoMovies;
-private: System::Windows::Forms::Label^ label_Soon;
+
 private: System::Windows::Forms::Button^ button_github;
 private: System::Windows::Forms::CheckBox^ checkBox_DisableErrorBanner;
 private: System::Windows::Forms::CheckBox^ checkBox_SkipLauncher;
@@ -262,18 +268,6 @@ private: System::Windows::Forms::Label^ label_BitDepth;
 			this->checkBox_NoPVUi = (gcnew System::Windows::Forms::CheckBox());
 			this->tabPage_Components = (gcnew System::Windows::Forms::TabPage());
 			this->panel_Components = (gcnew System::Windows::Forms::Panel());
-			this->label_Soon = (gcnew System::Windows::Forms::Label());
-			this->checkBox_fps_limiter = (gcnew System::Windows::Forms::CheckBox());
-			this->checkBox_scale_component = (gcnew System::Windows::Forms::CheckBox());
-			this->checkBox_camera_controller = (gcnew System::Windows::Forms::CheckBox());
-			this->checkBox_input_emulator = (gcnew System::Windows::Forms::CheckBox());
-			this->checkBox_fast_loader = (gcnew System::Windows::Forms::CheckBox());
-			this->checkBox_touch_slider_emulator = (gcnew System::Windows::Forms::CheckBox());
-			this->checkBox_stage_manager = (gcnew System::Windows::Forms::CheckBox());
-			this->checkBox_touch_panel_emulator = (gcnew System::Windows::Forms::CheckBox());
-			this->checkBox_frame_rate_manager = (gcnew System::Windows::Forms::CheckBox());
-			this->checkBox_sys_timer = (gcnew System::Windows::Forms::CheckBox());
-			this->checkBox_player_data_manager = (gcnew System::Windows::Forms::CheckBox());
 			this->button_Discord = (gcnew System::Windows::Forms::Button());
 			this->button_github = (gcnew System::Windows::Forms::Button());
 			this->groupBox_ScreenRes->SuspendLayout();
@@ -288,7 +282,6 @@ private: System::Windows::Forms::Label^ label_BitDepth;
 			this->tableLayoutPanel_FPSLimit->SuspendLayout();
 			this->tableLayoutPanel_Status->SuspendLayout();
 			this->tabPage_Components->SuspendLayout();
-			this->panel_Components->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// button_Launch
@@ -783,143 +776,10 @@ private: System::Windows::Forms::Label^ label_BitDepth;
 			// panel_Components
 			// 
 			this->panel_Components->AutoScroll = true;
-			this->panel_Components->Controls->Add(this->label_Soon);
-			this->panel_Components->Controls->Add(this->checkBox_fps_limiter);
-			this->panel_Components->Controls->Add(this->checkBox_scale_component);
-			this->panel_Components->Controls->Add(this->checkBox_camera_controller);
-			this->panel_Components->Controls->Add(this->checkBox_input_emulator);
-			this->panel_Components->Controls->Add(this->checkBox_fast_loader);
-			this->panel_Components->Controls->Add(this->checkBox_touch_slider_emulator);
-			this->panel_Components->Controls->Add(this->checkBox_stage_manager);
-			this->panel_Components->Controls->Add(this->checkBox_touch_panel_emulator);
-			this->panel_Components->Controls->Add(this->checkBox_frame_rate_manager);
-			this->panel_Components->Controls->Add(this->checkBox_sys_timer);
-			this->panel_Components->Controls->Add(this->checkBox_player_data_manager);
 			this->panel_Components->Location = System::Drawing::Point(0, 0);
 			this->panel_Components->Name = L"panel_Components";
 			this->panel_Components->Size = System::Drawing::Size(225, 232);
 			this->panel_Components->TabIndex = 0;
-			// 
-			// label_Soon
-			// 
-			this->label_Soon->AutoSize = true;
-			this->label_Soon->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->label_Soon->Location = System::Drawing::Point(3, 3);
-			this->label_Soon->Name = L"label_Soon";
-			this->label_Soon->Size = System::Drawing::Size(143, 52);
-			this->label_Soon->TabIndex = 12;
-			this->label_Soon->Text = L"Options not yet available\r\nthrough the launcher.\r\nPlease use \"components.ini\"\r\nin"
-				L"side the \"plugins\" folder.";
-			// 
-			// checkBox_fps_limiter
-			// 
-			this->checkBox_fps_limiter->AutoSize = true;
-			this->checkBox_fps_limiter->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->checkBox_fps_limiter->Location = System::Drawing::Point(6, 277);
-			this->checkBox_fps_limiter->Name = L"checkBox_fps_limiter";
-			this->checkBox_fps_limiter->Size = System::Drawing::Size(76, 17);
-			this->checkBox_fps_limiter->TabIndex = 10;
-			this->checkBox_fps_limiter->Text = L"FPS Limiter";
-			// 
-			// checkBox_scale_component
-			// 
-			this->checkBox_scale_component->AutoSize = true;
-			this->checkBox_scale_component->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->checkBox_scale_component->Location = System::Drawing::Point(6, 253);
-			this->checkBox_scale_component->Name = L"checkBox_scale_component";
-			this->checkBox_scale_component->Size = System::Drawing::Size(107, 17);
-			this->checkBox_scale_component->TabIndex = 9;
-			this->checkBox_scale_component->Text = L"Scale Component";
-			// 
-			// checkBox_camera_controller
-			// 
-			this->checkBox_camera_controller->AutoSize = true;
-			this->checkBox_camera_controller->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->checkBox_camera_controller->Location = System::Drawing::Point(6, 230);
-			this->checkBox_camera_controller->Name = L"checkBox_camera_controller";
-			this->checkBox_camera_controller->Size = System::Drawing::Size(106, 17);
-			this->checkBox_camera_controller->TabIndex = 8;
-			this->checkBox_camera_controller->Text = L"Camera Controller";
-			// 
-			// checkBox_input_emulator
-			// 
-			this->checkBox_input_emulator->AutoSize = true;
-			this->checkBox_input_emulator->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->checkBox_input_emulator->Location = System::Drawing::Point(6, 35);
-			this->checkBox_input_emulator->Name = L"checkBox_input_emulator";
-			this->checkBox_input_emulator->Size = System::Drawing::Size(91, 17);
-			this->checkBox_input_emulator->TabIndex = 0;
-			this->checkBox_input_emulator->Text = L"Input Emulator";
-			// 
-			// checkBox_fast_loader
-			// 
-			this->checkBox_fast_loader->AutoSize = true;
-			this->checkBox_fast_loader->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->checkBox_fast_loader->Location = System::Drawing::Point(6, 207);
-			this->checkBox_fast_loader->Name = L"checkBox_fast_loader";
-			this->checkBox_fast_loader->Size = System::Drawing::Size(79, 17);
-			this->checkBox_fast_loader->TabIndex = 7;
-			this->checkBox_fast_loader->Text = L"Fast Loader";
-			// 
-			// checkBox_touch_slider_emulator
-			// 
-			this->checkBox_touch_slider_emulator->AutoSize = true;
-			this->checkBox_touch_slider_emulator->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->checkBox_touch_slider_emulator->Location = System::Drawing::Point(6, 69);
-			this->checkBox_touch_slider_emulator->Name = L"checkBox_touch_slider_emulator";
-			this->checkBox_touch_slider_emulator->Size = System::Drawing::Size(128, 17);
-			this->checkBox_touch_slider_emulator->TabIndex = 1;
-			this->checkBox_touch_slider_emulator->Text = L"Touch Panel Emulator";
-			// 
-			// checkBox_stage_manager
-			// 
-			this->checkBox_stage_manager->AutoSize = true;
-			this->checkBox_stage_manager->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->checkBox_stage_manager->Location = System::Drawing::Point(6, 184);
-			this->checkBox_stage_manager->Name = L"checkBox_stage_manager";
-			this->checkBox_stage_manager->Size = System::Drawing::Size(96, 17);
-			this->checkBox_stage_manager->TabIndex = 6;
-			this->checkBox_stage_manager->Text = L"Stage Manager";
-			// 
-			// checkBox_touch_panel_emulator
-			// 
-			this->checkBox_touch_panel_emulator->AutoSize = true;
-			this->checkBox_touch_panel_emulator->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->checkBox_touch_panel_emulator->Location = System::Drawing::Point(6, 92);
-			this->checkBox_touch_panel_emulator->Name = L"checkBox_touch_panel_emulator";
-			this->checkBox_touch_panel_emulator->Size = System::Drawing::Size(127, 17);
-			this->checkBox_touch_panel_emulator->TabIndex = 2;
-			this->checkBox_touch_panel_emulator->Text = L"Touch Slider Emulator";
-			// 
-			// checkBox_frame_rate_manager
-			// 
-			this->checkBox_frame_rate_manager->AutoSize = true;
-			this->checkBox_frame_rate_manager->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->checkBox_frame_rate_manager->Location = System::Drawing::Point(6, 161);
-			this->checkBox_frame_rate_manager->Name = L"checkBox_frame_rate_manager";
-			this->checkBox_frame_rate_manager->Size = System::Drawing::Size(123, 17);
-			this->checkBox_frame_rate_manager->TabIndex = 5;
-			this->checkBox_frame_rate_manager->Text = L"Frame Rate Manager";
-			// 
-			// checkBox_sys_timer
-			// 
-			this->checkBox_sys_timer->AutoSize = true;
-			this->checkBox_sys_timer->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->checkBox_sys_timer->Location = System::Drawing::Point(6, 115);
-			this->checkBox_sys_timer->Name = L"checkBox_sys_timer";
-			this->checkBox_sys_timer->Size = System::Drawing::Size(117, 17);
-			this->checkBox_sys_timer->TabIndex = 3;
-			this->checkBox_sys_timer->Text = L"Freeze Select Timer";
-			// 
-			// checkBox_player_data_manager
-			// 
-			this->checkBox_player_data_manager->AutoSize = true;
-			this->checkBox_player_data_manager->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->checkBox_player_data_manager->Location = System::Drawing::Point(6, 138);
-			this->checkBox_player_data_manager->Name = L"checkBox_player_data_manager";
-			this->checkBox_player_data_manager->Size = System::Drawing::Size(123, 17);
-			this->checkBox_player_data_manager->TabIndex = 4;
-			this->checkBox_player_data_manager->Text = L"Player Data Manager";
 			// 
 			// button_Discord
 			// 
@@ -997,8 +857,6 @@ private: System::Windows::Forms::Label^ label_BitDepth;
 			this->tableLayoutPanel_Status->ResumeLayout(false);
 			this->tableLayoutPanel_Status->PerformLayout();
 			this->tabPage_Components->ResumeLayout(false);
-			this->panel_Components->ResumeLayout(false);
-			this->panel_Components->PerformLayout();
 			this->ResumeLayout(false);
 
 		}

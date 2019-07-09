@@ -69,7 +69,7 @@ void ApplyPatches() {
 		{ (void*)0x00000001405CB14A,{ 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 } },
 		{ (void*)0x0000000140136CFA,{ 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 } },
 		// enable module selector without use_card (Modules are not getting saved upon selection, commented until a fix is found)
-		//{ (void*)0x00000001405C513B, { 0x01 } },
+		{ (void*)0x00000001405C513B, { 0x01 } },
 		// Show Freeplay instead
 		{ (void*)0x00000001403BABEA, { 0x75 } },
 		// Force Hide IDs

@@ -67,6 +67,6 @@ namespace TLAC::FileSystem
 
 	bool ConfigFile::IsComment(const std::string &line)
 	{
-		return line.size() <= 0 || line[0] == '#' || line._Starts_with("//");
+		return line.size() <= 0 || line[0] == '#' || line[0] == '[' || line._Starts_with("//");
 	}
 }

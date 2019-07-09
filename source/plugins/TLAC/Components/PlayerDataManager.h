@@ -21,8 +21,9 @@ namespace TLAC::Components
 		PlayerData* playerData;
 		CustomPlayerData* customPlayerData;
 		int lastPvId = -1;
-		bool initPvId = false;
-		bool pvModuleLoaded = false;
+		bool initPvId = true;
+		bool pvModuleLoaded = true;
+		bool moduleCardWorkaround = false;
 		int lastModState = 0;
 		void ApplyPatch();
 		void LoadConfig();

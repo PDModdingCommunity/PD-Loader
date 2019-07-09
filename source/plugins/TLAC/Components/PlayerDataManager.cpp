@@ -43,103 +43,137 @@ namespace TLAC::Components
 			printf("[TLAC] PlayerDataManager::Update(): Loading config...\n");
 			LoadConfig();
 		}
+		if (moduleCardWorkaround) {
+			int* pvId = (int*)0x00000001418054C4;
+			int* modState = (int*)0x00000001411A9790;
 
-		int* pvId = (int*)0x00000001418054C4;
-		int* modState = (int*)0x00000001411A9790;
-
-		if (!customPlayerData->UseCard)
-		{
-			if (*(char*)0x000000014CC5E270 == 32)
+			if (!customPlayerData->UseCard)
 			{
-				DWORD oldProtect, bck;
-				VirtualProtect((BYTE*)0x00000001405BC8E6, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((BYTE*)0x00000001405BC8E6 + 0) = 0x00;
-				VirtualProtect((BYTE*)0x00000001405BC8E6, 3, oldProtect, &bck);
-				pvModuleLoaded = false;
-			}
-			else {
-				if (!pvModuleLoaded)
+				if (*(char*)0x000000014CC5E270 == 32)
 				{
-					pvModuleLoaded = true;
-					DWORD oldProtect, bck;
-					VirtualProtect((BYTE*)0x00000001405BC8E6, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
-					*((BYTE*)0x00000001405BC8E6 + 0) = 0x01;
-					VirtualProtect((BYTE*)0x00000001405BC8E6, 3, oldProtect, &bck);
-				}
-			}
-
-			if ((initPvId == false) || ((lastModState == 0) && (*modState == 1)))
-			{
-				if ((lastModState == 0) && (*modState == 1))
-				{
-					*(int*)0x00000001411A8A10 = *(int*)0x00000001411A8A28;
-					*(int*)(0x00000001411A8A10 + 4) = *(int*)(0x00000001411A8A28 + 4);
-					*(int*)(0x00000001411A8A10 + 8) = *(int*)(0x00000001411A8A28 + 8);
-					*(int*)(0x00000001411A8A10 + 12) = *(int*)(0x00000001411A8A28 + 12);
-					*(int*)(0x00000001411A8A10 + 16) = *(int*)(0x00000001411A8A28 + 16);
-					*(int*)(0x00000001411A8A10 + 18) = *(int*)(0x00000001411A8A28 + 18);
-				}
-
-				initPvId = true;
-				lastModState = *modState;
-				DWORD oldProtect, bck;
-				VirtualProtect((BYTE*)0x00000001405CBBA3, 8, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((BYTE*)0x00000001405CBBA3 + 0) = 0x90;
-				*((BYTE*)0x00000001405CBBA3 + 1) = 0x90;
-				*((BYTE*)0x00000001405CBBA3 + 2) = 0x90;
-				*((BYTE*)0x00000001405CBBA3 + 3) = 0x90;
-				*((BYTE*)0x00000001405CBBA3 + 4) = 0x90;
-				*((BYTE*)0x00000001405CBBA3 + 5) = 0x90;
-				*((BYTE*)0x00000001405CBBA3 + 6) = 0x90;
-				*((BYTE*)0x00000001405CBBA3 + 7) = 0x90;
-				VirtualProtect((BYTE*)0x00000001405CBBA3, 8, oldProtect, &bck);
-			}
-
-			if ( ((*modState == 0) && (*pvId != lastPvId)) || ((lastModState == 1) && (*modState == 0)))
-			{
-				if ((lastModState == 1) && (*modState == 0))
-				{
-					*(int*)0x00000001411A8A28 = *(int*)0x00000001411A8A10;
-					*(int*)(0x00000001411A8A28 + 4) = *(int*)(0x00000001411A8A10 + 4);
-					*(int*)(0x00000001411A8A28 + 8) = *(int*)(0x00000001411A8A10 + 8);
-					*(int*)(0x00000001411A8A28 + 12) = *(int*)(0x00000001411A8A10 + 12);
-					*(int*)(0x00000001411A8A28 + 16) = *(int*)(0x00000001411A8A10 + 16);
-					*(int*)(0x00000001411A8A28 + 18) = *(int*)(0x00000001411A8A10 + 18);
-				}
-
-				initPvId = false;
-				lastPvId = *pvId;
-				lastModState = *modState;
-				DWORD oldProtect, bck;
-				VirtualProtect((BYTE*)0x00000001405CBBA3, 8, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((BYTE*)0x00000001405CBBA3 + 0) = 0x42;
-				*((BYTE*)0x00000001405CBBA3 + 1) = 0x89;
-				*((BYTE*)0x00000001405CBBA3 + 2) = 0x84;
-				*((BYTE*)0x00000001405CBBA3 + 3) = 0xb6;
-				*((BYTE*)0x00000001405CBBA3 + 4) = 0xc0;
-				*((BYTE*)0x00000001405CBBA3 + 5) = 0x01;
-				*((BYTE*)0x00000001405CBBA3 + 6) = 0x00;
-				*((BYTE*)0x00000001405CBBA3 + 7) = 0x00;
-				VirtualProtect((BYTE*)0x00000001405CBBA3, 8, oldProtect, &bck);
-			}
-		}
-		else {
-			if (*(char*)0x000000014CC5E270 == 32)
-			{
-				DWORD oldProtect, bck;
-				VirtualProtect((BYTE*)0x00000001405BC8E6, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((BYTE*)0x00000001405BC8E6 + 0) = 0x01;
-				VirtualProtect((BYTE*)0x00000001405BC8E6, 3, oldProtect, &bck);
-				pvModuleLoaded = false;
-			}
-			else {
-				if (!pvModuleLoaded)
-				{
-					pvModuleLoaded = true;
 					DWORD oldProtect, bck;
 					VirtualProtect((BYTE*)0x00000001405BC8E6, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
 					*((BYTE*)0x00000001405BC8E6 + 0) = 0x00;
 					VirtualProtect((BYTE*)0x00000001405BC8E6, 3, oldProtect, &bck);
+					pvModuleLoaded = false;
+				}
+				else {
+					if (!pvModuleLoaded)
+					{
+						pvModuleLoaded = true;
+						DWORD oldProtect, bck;
+						VirtualProtect((BYTE*)0x00000001405BC8E6, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
+						*((BYTE*)0x00000001405BC8E6 + 0) = 0x01;
+						VirtualProtect((BYTE*)0x00000001405BC8E6, 3, oldProtect, &bck);
+					}
+				}
+
+				if ((initPvId == false) || ((lastModState == 0) && (*modState == 1)))
+				{
+					if ((lastModState == 0) && (*modState == 1))
+					{
+						*(int*)0x00000001411A8A10 = *(int*)0x00000001411A8A28;
+						*(int*)(0x00000001411A8A10 + 4) = *(int*)(0x00000001411A8A28 + 4);
+						*(int*)(0x00000001411A8A10 + 8) = *(int*)(0x00000001411A8A28 + 8);
+						*(int*)(0x00000001411A8A10 + 12) = *(int*)(0x00000001411A8A28 + 12);
+						*(int*)(0x00000001411A8A10 + 16) = *(int*)(0x00000001411A8A28 + 16);
+						*(int*)(0x00000001411A8A10 + 18) = *(int*)(0x00000001411A8A28 + 18);
+					}
+
+					initPvId = true;
+					lastModState = *modState;
+					DWORD oldProtect, bck;
+					VirtualProtect((BYTE*)0x00000001405CBBA3, 8, PAGE_EXECUTE_READWRITE, &oldProtect);
+					*((BYTE*)0x00000001405CBBA3 + 0) = 0x90;
+					*((BYTE*)0x00000001405CBBA3 + 1) = 0x90;
+					*((BYTE*)0x00000001405CBBA3 + 2) = 0x90;
+					*((BYTE*)0x00000001405CBBA3 + 3) = 0x90;
+					*((BYTE*)0x00000001405CBBA3 + 4) = 0x90;
+					*((BYTE*)0x00000001405CBBA3 + 5) = 0x90;
+					*((BYTE*)0x00000001405CBBA3 + 6) = 0x90;
+					*((BYTE*)0x00000001405CBBA3 + 7) = 0x90;
+					VirtualProtect((BYTE*)0x00000001405CBBA3, 8, oldProtect, &bck);
+				}
+
+				if (((*modState == 0) && (*pvId != lastPvId)) || ((lastModState == 1) && (*modState == 0)))
+				{
+					if ((lastModState == 1) && (*modState == 0))
+					{
+						*(int*)0x00000001411A8A28 = *(int*)0x00000001411A8A10;
+						*(int*)(0x00000001411A8A28 + 4) = *(int*)(0x00000001411A8A10 + 4);
+						*(int*)(0x00000001411A8A28 + 8) = *(int*)(0x00000001411A8A10 + 8);
+						*(int*)(0x00000001411A8A28 + 12) = *(int*)(0x00000001411A8A10 + 12);
+						*(int*)(0x00000001411A8A28 + 16) = *(int*)(0x00000001411A8A10 + 16);
+						*(int*)(0x00000001411A8A28 + 18) = *(int*)(0x00000001411A8A10 + 18);
+					}
+
+					initPvId = false;
+					lastPvId = *pvId;
+					lastModState = *modState;
+					DWORD oldProtect, bck;
+					VirtualProtect((BYTE*)0x00000001405CBBA3, 8, PAGE_EXECUTE_READWRITE, &oldProtect);
+					*((BYTE*)0x00000001405CBBA3 + 0) = 0x42;
+					*((BYTE*)0x00000001405CBBA3 + 1) = 0x89;
+					*((BYTE*)0x00000001405CBBA3 + 2) = 0x84;
+					*((BYTE*)0x00000001405CBBA3 + 3) = 0xb6;
+					*((BYTE*)0x00000001405CBBA3 + 4) = 0xc0;
+					*((BYTE*)0x00000001405CBBA3 + 5) = 0x01;
+					*((BYTE*)0x00000001405CBBA3 + 6) = 0x00;
+					*((BYTE*)0x00000001405CBBA3 + 7) = 0x00;
+					VirtualProtect((BYTE*)0x00000001405CBBA3, 8, oldProtect, &bck);
+				}
+			}
+			else {
+				if (*(char*)0x000000014CC5E270 == 32)
+				{
+					DWORD oldProtect, bck;
+					VirtualProtect((BYTE*)0x00000001405BC8E6, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
+					*((BYTE*)0x00000001405BC8E6 + 0) = 0x01;
+					VirtualProtect((BYTE*)0x00000001405BC8E6, 3, oldProtect, &bck);
+
+					VirtualProtect((BYTE*)0x00000001405CBBA3, 8, PAGE_EXECUTE_READWRITE, &oldProtect);
+					*((BYTE*)0x00000001405CBBA3 + 0) = 0x42;
+					*((BYTE*)0x00000001405CBBA3 + 1) = 0x89;
+					*((BYTE*)0x00000001405CBBA3 + 2) = 0x84;
+					*((BYTE*)0x00000001405CBBA3 + 3) = 0xb6;
+					*((BYTE*)0x00000001405CBBA3 + 4) = 0xc0;
+					*((BYTE*)0x00000001405CBBA3 + 5) = 0x01;
+					*((BYTE*)0x00000001405CBBA3 + 6) = 0x00;
+					*((BYTE*)0x00000001405CBBA3 + 7) = 0x00;
+					VirtualProtect((BYTE*)0x00000001405CBBA3, 8, oldProtect, &bck);
+
+					VirtualProtect((BYTE*)0x00000001405BCBE9, 2, PAGE_EXECUTE_READWRITE, &oldProtect);
+					*((BYTE*)0x00000001405BCBE9 + 0) = 0x89;
+					*((BYTE*)0x00000001405BCBE9 + 1) = 0x03;
+					VirtualProtect((BYTE*)0x00000001405BCBE9, 2, oldProtect, &bck);
+
+					pvModuleLoaded = false;
+				}
+				else {
+					if (!pvModuleLoaded)
+					{
+						pvModuleLoaded = true;
+						DWORD oldProtect, bck;
+						VirtualProtect((BYTE*)0x00000001405BC8E6, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
+						*((BYTE*)0x00000001405BC8E6 + 0) = 0x00;
+						VirtualProtect((BYTE*)0x00000001405BC8E6, 3, oldProtect, &bck);
+
+						VirtualProtect((BYTE*)0x00000001405CBBA3, 8, PAGE_EXECUTE_READWRITE, &oldProtect);
+						*((BYTE*)0x00000001405CBBA3 + 0) = 0x90;
+						*((BYTE*)0x00000001405CBBA3 + 1) = 0x90;
+						*((BYTE*)0x00000001405CBBA3 + 2) = 0x90;
+						*((BYTE*)0x00000001405CBBA3 + 3) = 0x90;
+						*((BYTE*)0x00000001405CBBA3 + 4) = 0x90;
+						*((BYTE*)0x00000001405CBBA3 + 5) = 0x90;
+						*((BYTE*)0x00000001405CBBA3 + 6) = 0x90;
+						*((BYTE*)0x00000001405CBBA3 + 7) = 0x90;
+						VirtualProtect((BYTE*)0x00000001405CBBA3, 8, oldProtect, &bck);
+
+						VirtualProtect((BYTE*)0x00000001405BCBE9, 2, PAGE_EXECUTE_READWRITE, &oldProtect);
+						*((BYTE*)0x00000001405BCBE9 + 0) = 0x90;
+						*((BYTE*)0x00000001405BCBE9 + 1) = 0x90;
+						VirtualProtect((BYTE*)0x00000001405BCBE9, 2, oldProtect, &bck);
+					}
 				}
 			}
 		}
@@ -204,62 +238,65 @@ namespace TLAC::Components
 		customPlayerData->ShowGreatClearBorder = config.GetBooleanValue("border_great");
 		customPlayerData->UseCard = config.GetBooleanValue("use_card");
 		customPlayerData->GameModifierOptions = config.GetBooleanValue("gamemode_options");
-		
-		if(!customPlayerData->UseCard)
-		{
-			DWORD oldProtect, bck;
-			VirtualProtect((BYTE*)0x000000014010523F, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
-			*((BYTE*)0x0000000140105239 + 0) = 0x30;
-			*((BYTE*)0x0000000140105239 + 1) = 0xC0;
-			*((BYTE*)0x0000000140105239 + 2) = 0x90;
-			VirtualProtect((BYTE*)0x0000000140105239, 3, oldProtect, &bck);
+		moduleCardWorkaround = config.GetBooleanValue("module_card_workaround");
 
-			VirtualProtect((BYTE*)0x00000001405BCC48, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
-			*((BYTE*)0x00000001405BCC48 + 0) = 0x90;
-			*((BYTE*)0x00000001405BCC48 + 1) = 0x90;
-			*((BYTE*)0x00000001405BCC48 + 2) = 0x90;
-			*((BYTE*)0x00000001405BCC48 + 3) = 0x90;
-			*((BYTE*)0x00000001405BCC48 + 4) = 0x90;
-			*((BYTE*)0x00000001405BCC48 + 5) = 0x90;
-			VirtualProtect((BYTE*)0x00000001405BCC48, 6, oldProtect, &bck);
+		if (moduleCardWorkaround) {
+			if (!customPlayerData->UseCard)
+			{
+				DWORD oldProtect, bck;
+				VirtualProtect((BYTE*)0x000000014010523F, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((BYTE*)0x0000000140105239 + 0) = 0x30;
+				*((BYTE*)0x0000000140105239 + 1) = 0xC0;
+				*((BYTE*)0x0000000140105239 + 2) = 0x90;
+				VirtualProtect((BYTE*)0x0000000140105239, 3, oldProtect, &bck);
 
-			VirtualProtect((BYTE*)0x00000001405BC8E6, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
-			*((BYTE*)0x00000001405BC8E6 + 0) = 0x01;
-			VirtualProtect((BYTE*)0x00000001405BC8E6, 3, oldProtect, &bck);
+				VirtualProtect((BYTE*)0x00000001405BCC48, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((BYTE*)0x00000001405BCC48 + 0) = 0x90;
+				*((BYTE*)0x00000001405BCC48 + 1) = 0x90;
+				*((BYTE*)0x00000001405BCC48 + 2) = 0x90;
+				*((BYTE*)0x00000001405BCC48 + 3) = 0x90;
+				*((BYTE*)0x00000001405BCC48 + 4) = 0x90;
+				*((BYTE*)0x00000001405BCC48 + 5) = 0x90;
+				VirtualProtect((BYTE*)0x00000001405BCC48, 6, oldProtect, &bck);
 
-		}
-		else {
-			DWORD oldProtect, bck;
-			VirtualProtect((BYTE*)0x00000001405BC8E6, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
-			*((BYTE*)0x00000001405BC8E6 + 0) = 0x00;
-			VirtualProtect((BYTE*)0x00000001405BC8E6, 3, oldProtect, &bck);
+				VirtualProtect((BYTE*)0x00000001405BC8E6, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((BYTE*)0x00000001405BC8E6 + 0) = 0x01;
+				VirtualProtect((BYTE*)0x00000001405BC8E6, 3, oldProtect, &bck);
 
-			VirtualProtect((BYTE*)0x00000001405BCC48, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
-			*((BYTE*)0x00000001405BCC48 + 0) = 0xC7;
-			*((BYTE*)0x00000001405BCC48 + 1) = 0x03;
-			*((BYTE*)0x00000001405BCC48 + 2) = 0x00;
-			*((BYTE*)0x00000001405BCC48 + 3) = 0x00;
-			*((BYTE*)0x00000001405BCC48 + 4) = 0x00;
-			*((BYTE*)0x00000001405BCC48 + 5) = 0x00;
-			VirtualProtect((BYTE*)0x00000001405BCC48, 6, oldProtect, &bck);
+			}
+			else {
+				DWORD oldProtect, bck;
+				VirtualProtect((BYTE*)0x00000001405BC8E6, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((BYTE*)0x00000001405BC8E6 + 0) = 0x00;
+				VirtualProtect((BYTE*)0x00000001405BC8E6, 3, oldProtect, &bck);
 
-			VirtualProtect((BYTE*)0x000000014010523F, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
-			*((BYTE*)0x0000000140105239 + 0) = 0x0F;
-			*((BYTE*)0x0000000140105239 + 1) = 0x94;
-			*((BYTE*)0x0000000140105239 + 2) = 0xC1;
-			VirtualProtect((BYTE*)0x0000000140105239, 3, oldProtect, &bck);
+				VirtualProtect((BYTE*)0x00000001405BCC48, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((BYTE*)0x00000001405BCC48 + 0) = 0xC7;
+				*((BYTE*)0x00000001405BCC48 + 1) = 0x03;
+				*((BYTE*)0x00000001405BCC48 + 2) = 0x00;
+				*((BYTE*)0x00000001405BCC48 + 3) = 0x00;
+				*((BYTE*)0x00000001405BCC48 + 4) = 0x00;
+				*((BYTE*)0x00000001405BCC48 + 5) = 0x00;
+				VirtualProtect((BYTE*)0x00000001405BCC48, 6, oldProtect, &bck);
 
-			//just incase the player is reloading
-			VirtualProtect((BYTE*)0x00000001405CBBA3, 8, PAGE_EXECUTE_READWRITE, &oldProtect);
-			*((BYTE*)0x00000001405CBBA3 + 0) = 0x42;
-			*((BYTE*)0x00000001405CBBA3 + 1) = 0x89;
-			*((BYTE*)0x00000001405CBBA3 + 2) = 0x84;
-			*((BYTE*)0x00000001405CBBA3 + 3) = 0xb6;
-			*((BYTE*)0x00000001405CBBA3 + 4) = 0xc0;
-			*((BYTE*)0x00000001405CBBA3 + 5) = 0x01;
-			*((BYTE*)0x00000001405CBBA3 + 6) = 0x00;
-			*((BYTE*)0x00000001405CBBA3 + 7) = 0x00;
-			VirtualProtect((BYTE*)0x00000001405CBBA3, 8, oldProtect, &bck);
+				VirtualProtect((BYTE*)0x000000014010523F, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((BYTE*)0x0000000140105239 + 0) = 0x0F;
+				*((BYTE*)0x0000000140105239 + 1) = 0x94;
+				*((BYTE*)0x0000000140105239 + 2) = 0xC1;
+				VirtualProtect((BYTE*)0x0000000140105239, 3, oldProtect, &bck);
+
+				//just incase the player is reloading
+				VirtualProtect((BYTE*)0x00000001405CBBA3, 8, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((BYTE*)0x00000001405CBBA3 + 0) = 0x42;
+				*((BYTE*)0x00000001405CBBA3 + 1) = 0x89;
+				*((BYTE*)0x00000001405CBBA3 + 2) = 0x84;
+				*((BYTE*)0x00000001405CBBA3 + 3) = 0xb6;
+				*((BYTE*)0x00000001405CBBA3 + 4) = 0xc0;
+				*((BYTE*)0x00000001405CBBA3 + 5) = 0x01;
+				*((BYTE*)0x00000001405CBBA3 + 6) = 0x00;
+				*((BYTE*)0x00000001405CBBA3 + 7) = 0x00;
+				VirtualProtect((BYTE*)0x00000001405CBBA3, 8, oldProtect, &bck);
+			}
 		}
 	}
 

@@ -142,10 +142,9 @@ namespace TLAC::Components
 					*((BYTE*)0x00000001405CBBA3 + 7) = 0x00;
 					VirtualProtect((BYTE*)0x00000001405CBBA3, 8, oldProtect, &bck);
 
-					VirtualProtect((BYTE*)0x00000001405BCBE9, 2, PAGE_EXECUTE_READWRITE, &oldProtect);
-					*((BYTE*)0x00000001405BCBE9 + 0) = 0x89;
-					*((BYTE*)0x00000001405BCBE9 + 1) = 0x03;
-					VirtualProtect((BYTE*)0x00000001405BCBE9, 2, oldProtect, &bck);
+					VirtualProtect((BYTE*)0x00000001405BCBE3, 2, PAGE_EXECUTE_READWRITE, &oldProtect);
+					*((BYTE*)0x00000001405BCBE3 + 0) = 0x00;
+					VirtualProtect((BYTE*)0x00000001405BCBE3, 2, oldProtect, &bck);
 
 					pvModuleLoaded = false;
 				}
@@ -169,10 +168,9 @@ namespace TLAC::Components
 						*((BYTE*)0x00000001405CBBA3 + 7) = 0x90;
 						VirtualProtect((BYTE*)0x00000001405CBBA3, 8, oldProtect, &bck);
 
-						VirtualProtect((BYTE*)0x00000001405BCBE9, 2, PAGE_EXECUTE_READWRITE, &oldProtect);
-						*((BYTE*)0x00000001405BCBE9 + 0) = 0x90;
-						*((BYTE*)0x00000001405BCBE9 + 1) = 0x90;
-						VirtualProtect((BYTE*)0x00000001405BCBE9, 2, oldProtect, &bck);
+						VirtualProtect((BYTE*)0x00000001405BCBE3, 2, PAGE_EXECUTE_READWRITE, &oldProtect);
+						*((BYTE*)0x00000001405BCBE3 + 0) = 0x01;
+						VirtualProtect((BYTE*)0x00000001405BCBE3, 2, oldProtect, &bck);
 					}
 				}
 			}

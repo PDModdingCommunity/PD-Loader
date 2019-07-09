@@ -4,6 +4,7 @@
 // Windows Header Files
 #include <windows.h>
 #include <string>
+#include <fstream>
 
 int (__cdecl* divaMain)(int argc, const char** argv, const char** envp) = (int(__cdecl*)(int argc, const char** argv, const char** envp))0x140194D90;
 
@@ -110,3 +111,51 @@ componentInfo componentsArray[] = {
 
 	{ L"target_inspector", L"Target Inspector", L"Enables hold transfers.", System::IntPtr::Zero },
 };
+
+bool IsLineInFile(LPCSTR searchLine, LPCWSTR fileName)
+{
+	bool result = false;
+
+	std::ifstream fileStream(fileName);
+
+	if (!fileStream.is_open())
+		return false;
+
+	std::string line;
+
+	while (std::getline(fileStream, line))
+	{
+		if (line.compare(searchLine) == 0)
+		{
+			result = true;
+			break;
+		}
+	}
+
+	fileStream.close();
+	return result;
+}
+
+void PrependFile(LPCSTR newStr, LPCWSTR fileName)
+{
+	std::fstream fileStream(fileName);
+
+	if (!fileStream.is_open())
+		return;
+
+
+	std::string origStr;
+
+	// this is apparently more efficient than just going straight into the string
+	fileStream.seekg(0, std::ios::end);
+	origStr.reserve(fileStream.tellg());
+	fileStream.seekg(0, std::ios::beg);
+	origStr.assign((std::istreambuf_iterator<char>(fileStream)), std::istreambuf_iterator<char>());
+
+	std::string outStr = newStr;
+	outStr += origStr;
+
+	fileStream.seekg(0, std::ios::beg);
+	fileStream << outStr;
+	fileStream.close();
+}

@@ -27,9 +27,17 @@ namespace Launcher {
 			this->ClientSize = Drawing::Size(444, 323);
 			TabPadding^ tabpad = gcnew TabPadding(tabControl);
 
+
+			// if components.ini has no section name, add one
+			if (!IsLineInFile("[components]", COMPONENTS_FILE))
+			{
+				PrependFile("[components]\n", COMPONENTS_FILE);
+			}
+
 			this->panel_Components->SuspendLayout();
-			// Beta version, components not working yet and tab disabled
-			tabPage_Components->Enabled = false;
+
+			// populate components from array in framework
+			// (easier than manually setting everything up)
 			int componentsY = 3;
 			for (componentInfo& component : componentsArray)
 			{
@@ -953,6 +961,12 @@ private: System::Void SaveSettings() {
 	userInput = Convert::ToInt32(checkBox_SkipLauncher->Checked).ToString();
 	input = msclr::interop::marshal_as<std::wstring>(userInput);
 	WritePrivateProfileStringW(L"launcher", L"skip", input.c_str(), CONFIG_FILE);
+
+	for (componentInfo& component : componentsArray)
+	{
+		bool enabled = ((CheckBox^)CheckBox::FromHandle(component.cb))->Checked;
+		WritePrivateProfileStringW(L"components", component.name, enabled ? L"true" : L"false", COMPONENTS_FILE);
+	}
 }
 private: System::Void Ui_Load(System::Object^ sender, System::EventArgs^ e){
 }

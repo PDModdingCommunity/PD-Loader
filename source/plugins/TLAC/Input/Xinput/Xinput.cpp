@@ -20,6 +20,35 @@ namespace TLAC::Input
 		return instance;
 	}
 
+	void Xinput::SetTapStates(BYTE keycode, float elapsed)
+	{
+		KeyDoubleTapStates[keycode] = IsTapped(keycode) ? KeyDoubleTapWatches[keycode].Restart() <= DOUBLE_TAP_THRESHOLD : false;
+
+		bool isDown = currentState.KeyStates[keycode];
+		bool isTapped = IsTapped(keycode);
+
+		keyIntervalTapStates[keycode] = isTapped;
+
+		if (isTapped)
+		{
+			keyIntervalTapTimes[keycode] = 0;
+			keyIntervalInitials[keycode] = true;
+		}
+		else if (isDown)
+		{
+			float threshold = keyIntervalInitials[keycode] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
+
+			bool intervalTapped = (keyIntervalTapTimes[keycode] += elapsed) > threshold;
+			keyIntervalTapStates[keycode] = intervalTapped;
+
+			if (intervalTapped)
+			{
+				keyIntervalTapTimes[keycode] = 0;
+				keyIntervalInitials[keycode] = false;
+			}
+		}
+	}
+	
 	bool Xinput::PollInput()
 	{
 		lastState = currentState;
@@ -33,32 +62,7 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 				i = XINPUT_DOWN;
@@ -66,32 +70,7 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 				i = XINPUT_B;
@@ -99,32 +78,7 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_B)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 				i = XINPUT_RIGHT;
@@ -132,32 +86,7 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 				i = XINPUT_X;
@@ -165,32 +94,7 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_X)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 				i = XINPUT_LEFT;
@@ -198,32 +102,7 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 				i = XINPUT_Y;
@@ -231,32 +110,7 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_Y)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 				i = XINPUT_UP;
@@ -264,32 +118,7 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 				i = XINPUT_LS;
@@ -297,32 +126,7 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 				i = XINPUT_RS;
@@ -330,32 +134,23 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
+					SetTapStates(i, elapsed);
+				}
+				
+				i = XINPUT_LSB;
+				{
+					currentState.KeyStates[i] = false;
+					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB)
+						currentState.KeyStates[i] = true;
+					SetTapStates(i, elapsed);
+				}
 
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+				i = XINPUT_RSB;
+				{
+					currentState.KeyStates[i] = false;
+					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB)
+						currentState.KeyStates[i] = true;
+					SetTapStates(i, elapsed);
 				}
 
 				i = XINPUT_START;
@@ -363,32 +158,7 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_START)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 				i = XINPUT_BACK;
@@ -396,33 +166,7 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.wButtons & XINPUT_GAMEPAD_BACK)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 				i = XINPUT_LT;
@@ -430,33 +174,7 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.bLeftTrigger > 230)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 				i = XINPUT_RT;
@@ -464,33 +182,7 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.bRightTrigger > 230)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 
@@ -500,66 +192,13 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.sThumbLX > 10000)
 						currentState.KeyStates[i] = true;
-
-
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
+					
 					i = XINPUT_LLEFT;
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.sThumbLX < -10000)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 
 				{
@@ -568,63 +207,13 @@ namespace TLAC::Input
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.sThumbRX > 10000)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
+					
 					i = XINPUT_RLEFT;
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.sThumbRX < -10000)
 						currentState.KeyStates[i] = true;
-					KeyDoubleTapStates[i] = IsTapped(i) ? KeyDoubleTapWatches[i].Restart() <= DOUBLE_TAP_THRESHOLD : false;
-					{
-						bool isDown = currentState.KeyStates[i];
-						bool isTapped = IsTapped(i);
-
-						keyIntervalTapStates[i] = isTapped;
-
-						if (isTapped)
-						{
-							keyIntervalTapTimes[i] = 0;
-							keyIntervalInitials[i] = true;
-						}
-						else if (isDown)
-						{
-							float threshold = keyIntervalInitials[i] ? INTERVAL_TAP_DELAY_THRESHOLD : INTERVAL_TAP_THRESHOLD;
-
-							bool intervalTapped = (keyIntervalTapTimes[i] += elapsed) > threshold;
-							keyIntervalTapStates[i] = intervalTapped;
-
-							if (intervalTapped)
-							{
-								keyIntervalTapTimes[i] = 0;
-								keyIntervalInitials[i] = false;
-							}
-						}
-					}
+					SetTapStates(i, elapsed);
 				}
 		}
 		else {

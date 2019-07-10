@@ -45,5 +45,7 @@ namespace TLAC::Input
 		FLOAT keyIntervalTapTimes[0xFF];
 
 		static Xinput* instance;
+
+		void SetTapStates(BYTE keycode, float elapsed);
 	};
 }

@@ -90,6 +90,8 @@ constexpr uint64_t UI_ASPECT_RATIO = 0x000000014CC621D0;
 #define XINPUT_RS 0x21
 #define XINPUT_LT 0x22
 #define XINPUT_RT 0x23
+#define XINPUT_LSB 0x24
+#define XINPUT_RSB 0x25
 #define XINPUT_START 0x30
 #define XINPUT_BACK 0x31
 #define XINPUT_LUP 0x40

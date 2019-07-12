@@ -81,7 +81,7 @@ MIT (see "LICENSE").
 
 ## FAQ
 
-Only **NVIDIA** videocards are supported for now, AMD and Intel GPU support is possible but further research needs to be done.
+Only **NVIDIA** videocards are supported for now, AMD and Intel GPU support is possible but further research needs to be done. On computers with multiple GPUs, such as most laptops, the game must be set to run on the NVIDIA GPU manually.
 
 **Linux** can run the game with **Wine**, for audio you must use [DivaSound](https://github.com/somewhatlurker/DivaSound).
 WMV movie videos are not supported and it is recommended to set **No_Movies** to **1** to prevent crashes when the game attempts to load a movie.

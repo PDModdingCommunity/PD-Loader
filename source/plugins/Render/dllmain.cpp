@@ -3,39 +3,52 @@
 #pragma comment(lib, "detours.lib")
 #include <GL\freeglut.h>
 #include <GL\GL.h>
+#include <wingdi.h>
 #include <windows.h>
 #include <iostream>
 
 int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 {
-	if (nDisplay == 1)
+	if (nDisplay == 1) // borderless fullscreen
 	{
 		*fullScreenFlag = 0;
+		int nWidth = glutGet(GLUT_SCREEN_WIDTH);
+		int nHeight = glutGet(GLUT_SCREEN_HEIGHT);
+
 		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_BORDERLESS);
-		glutInitWindowSize(glutGet(GLUT_SCREEN_WIDTH), glutGet(GLUT_SCREEN_HEIGHT));
+		glutInitWindowSize(nWidth, nHeight);
 		glutInitWindowPosition(0, 0);
 		glutCreateWindow(title);
-	printf("[Render Manager] Borderless mode.\n");
+
+		// support borderless mode even with original copy of glut
+		HDC hDev = wglGetCurrentDC(); // get handle to current opengl device context
+		HWND hWnd = WindowFromDC(hDev); // convert it to a window handle
+		SetWindowLongPtr(hWnd, GWL_STYLE, WS_POPUP); // set popup style (no border)
+		SetWindowPos(hWnd, HWND_TOP, 0, 0, nWidth, nHeight, 0); // adjust position to apply new style
+
+		printf("[Render Manager] Borderless mode.\n");
 	}
-	else if (nDisplay == 2)
+	else if (nDisplay == 2) // fullscreen
 	{
-		// Crashes, no idea why yet
+		char GameModeString[24];
+		sprintf_s(GameModeString, sizeof(GameModeString), "%dx%d:%d@%d", nWidth, nHeight, nBitDepth, nRefreshRate);
+		glutGameModeString(GameModeString);
+		
 		if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)) {
-			char GameModeString[24];
-			sprintf_s(GameModeString, sizeof(GameModeString),"%dx%d:%d@%d", nWidth, nHeight, nBitDepth ,nRefreshRate);
-			printf("[Render Manager] Game Mode supported and enabled in replacement of Fullscreen.\n");
+			printf("[Render Manager] Game mode (exclusive fullscreen) enabled.\n");
 			printf(GameModeString);
 			printf("\n");
-			glutGameModeString(GameModeString);
 			glutEnterGameMode();
 		}
 		else {
-		*fullScreenFlag = 1;
-		glutCreateWindow(title);
-		printf("[Render Manager] Fullscreen enabled.\n");
+			printf("[Render Manager] Requested display mode not supported. Using non-exclusive fullscreen instead.\n");
+			printf(GameModeString);
+			printf("\n");
+			*fullScreenFlag = 1;
+			glutCreateWindow(title);
 		}
 	}
-	else
+	else // windowed
 	{
 		*fullScreenFlag = 0;
 		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);

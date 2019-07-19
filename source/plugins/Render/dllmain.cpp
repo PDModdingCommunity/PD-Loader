@@ -14,17 +14,22 @@ int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 		*fullScreenFlag = 0;
 		int nWidth = glutGet(GLUT_SCREEN_WIDTH);
 		int nHeight = glutGet(GLUT_SCREEN_HEIGHT);
+		int nX = 0;
+		int nY = 0;
 
 		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_BORDERLESS);
 		glutInitWindowSize(nWidth, nHeight);
-		glutInitWindowPosition(0, 0);
+		glutInitWindowPosition(nX, nY);
 		glutCreateWindow(title);
 
-		// support borderless mode even with original copy of glut
-		HDC hDev = wglGetCurrentDC(); // get handle to current opengl device context
-		HWND hWnd = WindowFromDC(hDev); // convert it to a window handle
-		SetWindowLongPtr(hWnd, GWL_STYLE, WS_POPUP); // set popup style (no border)
-		SetWindowPos(hWnd, HWND_TOP, 0, 0, nWidth, nHeight, 0); // adjust position to apply new style
+		if (glutGet(GLUT_WINDOW_X) != nX || glutGet(GLUT_WINDOW_Y) != nY) // if not in borderless mode (top left of client area isn't top left of window position)
+		{
+			// support borderless mode even with original copy of glut
+			HDC hDev = wglGetCurrentDC(); // get handle to current opengl device context
+			HWND hWnd = WindowFromDC(hDev); // convert it to a window handle
+			SetWindowLongPtr(hWnd, GWL_STYLE, WS_POPUP); // set popup style (no border)
+			SetWindowPos(hWnd, HWND_TOP, 0, 0, nWidth, nHeight, 0); // adjust position to apply new style
+		}
 
 		printf("[Render Manager] Borderless mode.\n");
 	}

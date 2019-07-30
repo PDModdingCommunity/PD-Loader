@@ -1,0 +1,10 @@
+LIBRARY "dnsapi"
+EXPORTS
+DnsFree = _DnsFree
+DnsQuery_A = _DnsQuery_A
+DnsQueryEx = _DnsQueryEx
+DnsCancelQuery = _DnsCancelQuery
+DllCanUnloadNow = _DllCanUnloadNow PRIVATE
+DllGetClassObject = _DllGetClassObject PRIVATE
+DllRegisterServer = _DllRegisterServer PRIVATE
+DllUnregisterServer = _DllUnregisterServer PRIVATE

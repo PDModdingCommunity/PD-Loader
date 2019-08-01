@@ -24,7 +24,7 @@ namespace TLAC::Components
 		bool initPvId = true;
 		bool pvModuleLoaded = true;
 		bool moduleCardWorkaround = true;
-		int lastModState = 0;
+		int lastModState = 2;
 		void ApplyPatch();
 		void LoadConfig();
 		void ApplyCustomData();

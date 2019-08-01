@@ -39,6 +39,13 @@ struct dnsapi_dll
 	FARPROC DnsQuery_A;
 	FARPROC DnsQueryEx;
 	FARPROC DnsCancelQuery;
+	FARPROC DnsDhcpRegisterTerm;
+	FARPROC DnsNotifyResolver;
+	FARPROC DnsDhcpRegisterHostAddrs;
+	FARPROC DnsQueryConfigDword;
+	FARPROC DnsDhcpRemoveRegistrations;
+	FARPROC DnsDhcpRegisterInit;
+	FARPROC DnsDhcpRegisterAddrs;
 
 	// DnsQueryEx and DnsCancelQuery take pointers to structs as parameters
 	// (three for DnsQueryEx and one for DnsCancelQuery)
@@ -52,6 +59,34 @@ struct dnsapi_dll
 	{
 		return 9004; // DNS_ERROR_RCODE_NOT_IMPLEMENTED
 	}
+	static LONG WINAPI DnsDhcpRegisterTermStub()
+	{
+		return 9004; // DNS_ERROR_RCODE_NOT_IMPLEMENTED
+	}
+	static LONG WINAPI DnsNotifyResolverStub()
+	{
+		return 9004; // DNS_ERROR_RCODE_NOT_IMPLEMENTED
+	}
+	static LONG WINAPI DnsDhcpRegisterHostAddrsStub()
+	{
+		return 9004; // DNS_ERROR_RCODE_NOT_IMPLEMENTED
+	}
+	static LONG WINAPI DnsQueryConfigDwordStub()
+	{
+		return 9004; // DNS_ERROR_RCODE_NOT_IMPLEMENTED
+	}
+	static LONG WINAPI DnsDhcpRemoveRegistrationsStub()
+	{
+		return 9004; // DNS_ERROR_RCODE_NOT_IMPLEMENTED
+	}
+	static LONG WINAPI DnsDhcpRegisterInitStub()
+	{
+		return 9004; // DNS_ERROR_RCODE_NOT_IMPLEMENTED
+	}
+	static LONG WINAPI DnsDhcpRegisterAddrsStub()
+	{
+		return 9004; // DNS_ERROR_RCODE_NOT_IMPLEMENTED
+	}
 
 	void LoadOriginalLibrary(HMODULE module)
 	{
@@ -61,12 +96,26 @@ struct dnsapi_dll
 		DnsQuery_A = GetProcAddress(dll, "DnsQuery_A");
 		DnsQueryEx = GetProcAddress(dll, "DnsQueryEx");
 		DnsCancelQuery = GetProcAddress(dll, "DnsCancelQuery");
+		DnsDhcpRegisterTerm = GetProcAddress(dll, "DnsDhcpRegisterTerm");
+		DnsNotifyResolver = GetProcAddress(dll, "DnsNotifyResolver");
+		DnsDhcpRegisterHostAddrs = GetProcAddress(dll, "DnsDhcpRegisterHostAddrs");
+		DnsQueryConfigDword = GetProcAddress(dll, "DnsQueryConfigDword");
+		DnsDhcpRemoveRegistrations = GetProcAddress(dll, "DnsDhcpRemoveRegistrations");
+		DnsDhcpRegisterInit = GetProcAddress(dll, "DnsDhcpRegisterInit");
+		DnsDhcpRegisterInit = GetProcAddress(dll, "DnsDhcpRegisterAddrs");
 
 		// if entry points aren't found, GetProcAddress should return null
 		// I hope this is correct
 		// Thanks to somewhatlurker
 		if (DnsQueryEx == NULL) { DnsQueryEx = (FARPROC)& DnsQueryExStub; };
 		if (DnsCancelQuery == NULL) { DnsCancelQuery = (FARPROC)& DnsCancelQueryStub; };
+		if (DnsDhcpRegisterTerm == NULL) { DnsDhcpRegisterTerm = (FARPROC)& DnsDhcpRegisterTermStub; };
+		if (DnsNotifyResolver == NULL) { DnsNotifyResolver = (FARPROC)& DnsNotifyResolverStub; };
+		if (DnsDhcpRegisterHostAddrs == NULL) { DnsDhcpRegisterHostAddrs = (FARPROC)& DnsDhcpRegisterHostAddrsStub; };
+		if (DnsQueryConfigDword == NULL) { DnsQueryConfigDword = (FARPROC)& DnsQueryConfigDwordStub; };
+		if (DnsDhcpRemoveRegistrations == NULL) { DnsDhcpRemoveRegistrations = (FARPROC)& DnsDhcpRemoveRegistrationsStub; };
+		if (DnsDhcpRegisterInit == NULL) { DnsDhcpRegisterInit = (FARPROC)& DnsDhcpRegisterInitStub; };
+		if (DnsDhcpRegisterAddrs == NULL) { DnsDhcpRegisterAddrs = (FARPROC)& DnsDhcpRegisterAddrsStub; };
 	}
 } dnsapi;
 
@@ -74,6 +123,13 @@ void _DnsFree() { dnsapi.DnsFree(); }
 void _DnsQuery_A() { dnsapi.DnsQuery_A(); }
 void _DnsQueryEx() { dnsapi.DnsQueryEx(); }
 void _DnsCancelQuery() { dnsapi.DnsCancelQuery(); }
+void _DnsDhcpRegisterTerm() { dnsapi.DnsDhcpRegisterTerm(); }
+void _DnsNotifyResolver() { dnsapi.DnsNotifyResolver(); }
+void _DnsDhcpRegisterHostAddrs() { dnsapi.DnsDhcpRegisterHostAddrs(); }
+void _DnsQueryConfigDword() { dnsapi.DnsQueryConfigDword(); }
+void _DnsDhcpRemoveRegistrations() { dnsapi.DnsDhcpRemoveRegistrations(); }
+void _DnsDhcpRegisterInit() { dnsapi.DnsDhcpRegisterInit(); }
+void _DnsDhcpRegisterAddrs() { dnsapi.DnsDhcpRegisterAddrs(); }
 
 #pragma runtime_checks( "", off )
 

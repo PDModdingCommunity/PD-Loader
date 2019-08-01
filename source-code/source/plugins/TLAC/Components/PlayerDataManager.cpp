@@ -46,6 +46,7 @@ namespace TLAC::Components
 		if (moduleCardWorkaround) {
 			int* pvId = (int*)0x00000001418054C4;
 			int* modState = (int*)0x00000001411A9790;
+			int* loadState = (int*)0x0000000141197E58;
 
 			if (!customPlayerData->UseCard)
 			{
@@ -243,10 +244,10 @@ namespace TLAC::Components
 			{
 				DWORD oldProtect, bck;
 				VirtualProtect((BYTE*)0x000000014010523F, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((BYTE*)0x0000000140105239 + 0) = 0x30;
-				*((BYTE*)0x0000000140105239 + 1) = 0xC0;
-				*((BYTE*)0x0000000140105239 + 2) = 0x90;
-				VirtualProtect((BYTE*)0x0000000140105239, 3, oldProtect, &bck);
+				*((BYTE*)0x000000014010523F + 0) = 0x30;
+				*((BYTE*)0x000000014010523F + 1) = 0xC0;
+				*((BYTE*)0x000000014010523F + 2) = 0x90;
+				VirtualProtect((BYTE*)0x000000014010523F, 3, oldProtect, &bck);
 
 				VirtualProtect((BYTE*)0x00000001405BCC48, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
 				*((BYTE*)0x00000001405BCC48 + 0) = 0x90;
@@ -278,10 +279,10 @@ namespace TLAC::Components
 				VirtualProtect((BYTE*)0x00000001405BCC48, 6, oldProtect, &bck);
 
 				VirtualProtect((BYTE*)0x000000014010523F, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((BYTE*)0x0000000140105239 + 0) = 0x0F;
-				*((BYTE*)0x0000000140105239 + 1) = 0x94;
-				*((BYTE*)0x0000000140105239 + 2) = 0xC1;
-				VirtualProtect((BYTE*)0x0000000140105239, 3, oldProtect, &bck);
+				*((BYTE*)0x000000014010523F + 0) = 0x0F;
+				*((BYTE*)0x000000014010523F + 1) = 0x94;
+				*((BYTE*)0x000000014010523F + 2) = 0xC1;
+				VirtualProtect((BYTE*)0x000000014010523F, 3, oldProtect, &bck);
 
 				//just incase the player is reloading
 				VirtualProtect((BYTE*)0x00000001405CBBA3, 8, PAGE_EXECUTE_READWRITE, &oldProtect);

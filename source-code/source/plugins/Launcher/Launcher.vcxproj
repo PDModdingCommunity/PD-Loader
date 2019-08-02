@@ -165,6 +165,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConfigOption.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="TabPadding.h" />
     <ClInclude Include="ui.h">

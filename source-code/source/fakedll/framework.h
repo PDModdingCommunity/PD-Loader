@@ -59,7 +59,7 @@ struct dnsapi_dll
 	{
 		return 9004; // DNS_ERROR_RCODE_NOT_IMPLEMENTED
 	}
-	static LONG WINAPI DnsDhcpRegisterTermStub()
+	/*static LONG WINAPI DnsDhcpRegisterTermStub()
 	{
 		return 9004; // DNS_ERROR_RCODE_NOT_IMPLEMENTED
 	}
@@ -86,7 +86,7 @@ struct dnsapi_dll
 	static LONG WINAPI DnsDhcpRegisterAddrsStub()
 	{
 		return 9004; // DNS_ERROR_RCODE_NOT_IMPLEMENTED
-	}
+	}*/
 
 	void LoadOriginalLibrary(HMODULE module)
 	{
@@ -109,13 +109,13 @@ struct dnsapi_dll
 		// Thanks to somewhatlurker
 		if (DnsQueryEx == NULL) { DnsQueryEx = (FARPROC)& DnsQueryExStub; };
 		if (DnsCancelQuery == NULL) { DnsCancelQuery = (FARPROC)& DnsCancelQueryStub; };
-		if (DnsDhcpRegisterTerm == NULL) { DnsDhcpRegisterTerm = (FARPROC)& DnsDhcpRegisterTermStub; };
+		/*if (DnsDhcpRegisterTerm == NULL) { DnsDhcpRegisterTerm = (FARPROC)& DnsDhcpRegisterTermStub; };
 		if (DnsNotifyResolver == NULL) { DnsNotifyResolver = (FARPROC)& DnsNotifyResolverStub; };
 		if (DnsDhcpRegisterHostAddrs == NULL) { DnsDhcpRegisterHostAddrs = (FARPROC)& DnsDhcpRegisterHostAddrsStub; };
 		if (DnsQueryConfigDword == NULL) { DnsQueryConfigDword = (FARPROC)& DnsQueryConfigDwordStub; };
 		if (DnsDhcpRemoveRegistrations == NULL) { DnsDhcpRemoveRegistrations = (FARPROC)& DnsDhcpRemoveRegistrationsStub; };
 		if (DnsDhcpRegisterInit == NULL) { DnsDhcpRegisterInit = (FARPROC)& DnsDhcpRegisterInitStub; };
-		if (DnsDhcpRegisterAddrs == NULL) { DnsDhcpRegisterAddrs = (FARPROC)& DnsDhcpRegisterAddrsStub; };
+		if (DnsDhcpRegisterAddrs == NULL) { DnsDhcpRegisterAddrs = (FARPROC)& DnsDhcpRegisterAddrsStub; };*/
 	}
 } dnsapi;
 

@@ -102,7 +102,7 @@ struct dnsapi_dll
 		DnsQueryConfigDword = GetProcAddress(dll, "DnsQueryConfigDword");
 		DnsDhcpRemoveRegistrations = GetProcAddress(dll, "DnsDhcpRemoveRegistrations");
 		DnsDhcpRegisterInit = GetProcAddress(dll, "DnsDhcpRegisterInit");
-		DnsDhcpRegisterInit = GetProcAddress(dll, "DnsDhcpRegisterAddrs");
+		DnsDhcpRegisterAddrs = GetProcAddress(dll, "DnsDhcpRegisterAddrs");
 
 		// if entry points aren't found, GetProcAddress should return null
 		// I hope this is correct

@@ -505,7 +505,7 @@ private: System::Void DisplayTypeChangedHandler(System::Object^ sender, System::
 	}
 }
 private: System::Void Ui_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
-	switch (MessageBox::Show("Do you want to save your settings?", "PD Launcher", MessageBoxButtons::YesNoCancel, MessageBoxIcon::Question))
+	switch (SkinnedMessageBox::Show(this, "Do you want to save your settings?", "PD Launcher", MessageBoxButtons::YesNoCancel, MessageBoxIcon::Question))
 	{
 	case System::Windows::Forms::DialogResult::Yes:
 		SaveSettings();

@@ -267,4 +267,4 @@ void(WINAPI * cuInit)(unsigned int flags) = (void(WINAPI*)(unsigned int flags))G
 
 // needed to close the OpenGL window (freeglut only)
 HMODULE glutModule = LoadLibraryW(L"glut32.dll");
-void(__stdcall * glutMainLoopEventDynamic)() = (void(__stdcall*)())GetProcAddress(glutModule, "glutMainLoopEventDynamic");
+void(__stdcall * glutMainLoopEventDynamic)() = (void(__stdcall*)())GetProcAddress(glutModule, "glutMainLoopEvent");

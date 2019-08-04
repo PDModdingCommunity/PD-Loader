@@ -167,15 +167,21 @@
   <ItemGroup>
     <ClInclude Include="ConfigOption.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="SkinnedMessageBox.h" />
     <ClInclude Include="TabPadding.h" />
     <ClInclude Include="ui.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="SkinnedMessageBox.resx" />
     <EmbeddedResource Include="ui.resx">
       <DependentUpon>ui.h</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="PokeSnarf2x.bmp" />
+    <Image Include="PokeSnarf2x.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

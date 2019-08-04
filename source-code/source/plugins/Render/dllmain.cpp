@@ -9,6 +9,14 @@
 
 int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 {
+	SetProcessDPIAware();
+
+	// trick Optimus into switching to the NVIDIA GPU
+	HMODULE nvcudaModule = LoadLibraryW(L"nvcuda.dll");
+	// cuInit actually returns a CUresult, but we don't really care about it
+	void(WINAPI * cuInit)(unsigned int flags) = (void(WINAPI*)(unsigned int flags))GetProcAddress(nvcudaModule, "cuInit");
+	if (cuInit != NULL) cuInit(0);
+
 	if (nDisplay == 1) // borderless fullscreen
 	{
 		*fullScreenFlag = 0;

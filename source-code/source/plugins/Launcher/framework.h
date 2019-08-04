@@ -258,3 +258,13 @@ void PrependFile(LPCSTR newStr, LPCWSTR fileName)
 	fileStream << outStr;
 	fileStream.close();
 }
+
+
+// used to trick Optimus into switching to the NVIDIA GPU
+HMODULE nvcudaModule = LoadLibraryW(L"nvcuda.dll");
+// cuInit actually returns a CUresult, but we don't really care about it
+void(WINAPI * cuInit)(unsigned int flags) = (void(WINAPI*)(unsigned int flags))GetProcAddress(nvcudaModule, "cuInit");
+
+// needed to close the OpenGL window (freeglut only)
+HMODULE glutModule = LoadLibraryW(L"glut32.dll");
+void(__stdcall * glutMainLoopEventDynamic)() = (void(__stdcall*)())GetProcAddress(glutModule, "glutMainLoopEventDynamic");

@@ -112,18 +112,27 @@ namespace Launcher {
 			this->panel_Components->ResumeLayout(false);
 			this->panel_Components->PerformLayout();
 
+
+
+			// trick Optimus into switching to the NVIDIA GPU
+			if (cuInit != NULL) cuInit(0);
+
 			int argc = 1;
 			char* argv[1] = { (char*)"" };
+
 			glutInit(&argc, argv);
-			int window = glutCreateWindow("glut");
+			int window = glutCreateWindow("glut"); // a context must be created to use glGetString
+
 			String^ vendor = gcnew String((char*)glGetString(GL_VENDOR));
 			String^ renderer = gcnew String((char*)glGetString(GL_RENDERER));
 			String^ version = gcnew String((char*)glGetString(GL_VERSION));
-			glutDestroyWindow(window);
-			glutMainLoopEvent();
+
+			glutDestroyWindow(window); // destroy the window so it doesn't remain on screen
+			if (glutMainLoopEventDynamic != NULL) glutMainLoopEventDynamic(); // freeglut needs this
+
 			this->labelGPU->Text = "Vendor: " + vendor + "\nRenderer: " + renderer + "\nOpenGL: " + version;
-			if (vendor != "NVIDIA Corporation")	SkinnedMessageBox::Show(this, "Your graphics card is not supported! Only NVIDIA GPUs are currently supported.", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
-			else if ((int)(version[0]) - 48 < 3) SkinnedMessageBox::Show(this, "Your GPU is too old. The game might not render PVs correctly!", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+			if (!vendor->Contains("NVIDIA"))	SkinnedMessageBox::Show(this, "Your graphics card is not supported! Only NVIDIA GPUs are currently supported.", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+			else if (version[0] < '3') SkinnedMessageBox::Show(this, "Your GPU is too old. The game might not render PVs correctly!", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 		}
 
 	protected:
@@ -473,15 +482,6 @@ private: System::Void InternalResEnabledChangedHandler(System::Object^ sender, S
 }
 private: System::Void DisplayTypeChangedHandler(System::Object^ sender, System::EventArgs^ e) {
 	int idx = ((ComboBox^)ComboBox::FromHandle(DisplayModeDropdown->mainControlHandle))->SelectedIndex;
-
-	if (idx == 0 || idx == 2) // windowed or fullscreen
-	{
-		((Control^)Control::FromHandle(DisplayResolutionOption->mainControlHandle))->Enabled = true;
-	}
-	else
-	{
-		((Control^)Control::FromHandle(DisplayResolutionOption->mainControlHandle))->Enabled = false;
-	}
 
 	if (idx == 2) // fullscreen
 	{

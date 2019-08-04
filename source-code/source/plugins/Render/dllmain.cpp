@@ -9,39 +9,13 @@
 
 int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 {
-	SetProcessDPIAware();
-
 	// trick Optimus into switching to the NVIDIA GPU
 	HMODULE nvcudaModule = LoadLibraryW(L"nvcuda.dll");
 	// cuInit actually returns a CUresult, but we don't really care about it
 	void(WINAPI * cuInit)(unsigned int flags) = (void(WINAPI*)(unsigned int flags))GetProcAddress(nvcudaModule, "cuInit");
 	if (cuInit != NULL) cuInit(0);
 
-	if (nDisplay == 1) // borderless fullscreen
-	{
-		*fullScreenFlag = 0;
-		int nWidth = glutGet(GLUT_SCREEN_WIDTH);
-		int nHeight = glutGet(GLUT_SCREEN_HEIGHT);
-		int nX = 0;
-		int nY = 0;
-
-		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_BORDERLESS);
-		glutInitWindowSize(nWidth, nHeight);
-		glutInitWindowPosition(nX, nY);
-		glutCreateWindow(title);
-
-		if (glutGet(GLUT_WINDOW_X) != nX || glutGet(GLUT_WINDOW_Y) != nY) // if not in borderless mode (top left of client area isn't top left of window position)
-		{
-			// support borderless mode even with original copy of glut
-			HDC hDev = wglGetCurrentDC(); // get handle to current opengl device context
-			HWND hWnd = WindowFromDC(hDev); // convert it to a window handle
-			SetWindowLongPtr(hWnd, GWL_STYLE, WS_POPUP); // set popup style (no border)
-			SetWindowPos(hWnd, HWND_TOP, 0, 0, nWidth, nHeight, 0); // adjust position to apply new style
-		}
-
-		printf("[Render Manager] Borderless mode.\n");
-	}
-	else if (nDisplay == 2) // fullscreen
+	if (nDisplay == 2) // fullscreen
 	{
 		char GameModeString[24];
 		sprintf_s(GameModeString, sizeof(GameModeString), "%dx%d:%d@%d", nWidth, nHeight, nBitDepth, nRefreshRate);
@@ -61,15 +35,47 @@ int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 			glutCreateWindow(title);
 		}
 	}
-	else // windowed
+	else // windowed or borderless
 	{
 		*fullScreenFlag = 0;
+
+		// looks like GLUT_SCREEN_WIDTH and GLUT_SCREEN_HEIGHT can have issues after SetProcessDPIAware()
+		// not sure if calling SetProcessDPIAware later will fix this, but I'll try it
+		// if not, using GetSystemMetrics should work
+		int screenWidth = glutGet(GLUT_SCREEN_WIDTH);
+		int screenHeight = glutGet(GLUT_SCREEN_HEIGHT);
+		//int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+		//int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+		// window position for centered window
+		int wndX = (screenWidth - nWidth) / 2;
+		int wndY = (screenHeight - nHeight) / 2;
+
+
 		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+
 		glutInitWindowSize(nWidth, nHeight);
-		glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - nWidth) / 2, (glutGet(GLUT_SCREEN_HEIGHT) - nHeight) / 2); // Center to the middle of the screen when windowed
+		glutInitWindowPosition(wndX, wndY);
 		glutCreateWindow(title);
-		printf("[Render Manager] Windowed mode.\n");
+
+		if (nDisplay == 1) // borderless mode
+		{
+			// support borderless mode even with original copy of glut
+			HDC hDev = wglGetCurrentDC(); // get handle to current opengl device context
+			HWND hWnd = WindowFromDC(hDev); // convert it to a window handle
+
+			SetWindowLongPtr(hWnd, GWL_STYLE, WS_POPUP + WS_VISIBLE); // set popup style (no border)
+			SetWindowPos(hWnd, HWND_TOP, wndX, wndY, nWidth, nHeight, 0); // adjust position to apply new style
+
+			printf("[Render Manager] Borderless mode.\n");
+		}
+		else
+		{
+			printf("[Render Manager] Windowed mode.\n");
+		}
 	}
+
+	SetProcessDPIAware();
 	return true;
 }
 

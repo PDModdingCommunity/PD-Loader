@@ -142,7 +142,8 @@ private: ref class SkinnedMessageBoxForm : Form
 		SkinnedMessageBoxForm(IWin32Window^ owner, String^ message, String^ caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultbutton, MessageBoxOptions options)
 		{
 			InitComponentNew();
-			ScaleWidth = Font->SizeInPoints / 8.0f;
+			Graphics^ grfx = Graphics::FromHwnd(Handle);
+			ScaleWidth = Font->SizeInPoints / 72 * grfx->DpiX / 10.67f;
 			ScaleHeight = ScaleWidth;
 			btnWidth *= ScaleWidth;
 			btnHeight *= ScaleHeight;
@@ -265,10 +266,11 @@ private: ref class SkinnedMessageBoxForm : Form
 				}
 				else if (icon == MessageBoxIcon::Warning) // also Exclamation
 				{
-					Drawing::Icon^ warnicon = gcnew Drawing::Icon(SystemIcons::Warning, iconsize, iconsize);
-					iconPB->Image = warnicon->ToBitmap();
-					//System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(SkinnedMessageBox::typeid));
-					//iconPB->Image = cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"PokeSnarf2x"));
+					//Drawing::Icon^ warnicon = gcnew Drawing::Icon(SystemIcons::Warning, iconsize, iconsize);
+					//iconPB->Image = warnicon->ToBitmap();
+					System::Resources::ResourceManager^ ResMgr = gcnew System::Resources::ResourceManager("Launcher.SkinnedMessageBox", SkinnedMessageBox::typeid->Assembly); 
+					iconPB->SizeMode = PictureBoxSizeMode::Zoom;
+					iconPB->Image = (Image^)(ResMgr->GetObject("PokeSnarf4xd"));
 					iconPB->AccessibleDescription = "Warning";
 					//this.Icon = SystemIcons.Warning;
 					textpadding -= 2 * ScaleWidth; // triangle shape looks worse without this

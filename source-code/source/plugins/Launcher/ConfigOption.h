@@ -230,7 +230,9 @@ public:
 		cb->Top = top;
 		cb->AutoSize = true;
 		cb->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-		cb->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)));
+
+		// hack to ensure high contrast
+		cb->BackColor = System::Drawing::Color::FromArgb(0, 0, 0, 0);
 		
 		Form^ RootForm = panel->FindForm();
 		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;

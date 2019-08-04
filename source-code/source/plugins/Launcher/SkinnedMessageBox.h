@@ -261,8 +261,7 @@ private: ref class SkinnedMessageBoxForm : Form
 				}
 				else if (icon == MessageBoxIcon::Question)
 				{
-					Drawing::Icon^ qicon = gcnew Drawing::Icon(SystemIcons::Question, iconsize, iconsize);
-					iconPB->Image = qicon->ToBitmap();
+					iconPB->Image = (Image^)(ResMgr->GetObject("PokeWhat4xvc2"));
 					iconPB->AccessibleDescription = "Question";
 					//this.Icon = SystemIcons.Question;
 					System::Media::SystemSounds::Question->Play();

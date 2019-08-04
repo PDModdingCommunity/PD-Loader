@@ -12,6 +12,12 @@
 using namespace System;
 using namespace System::Windows::Forms;
 
+float BaseScaleSize = 96;
+int Col1Width = 110;
+int Col2Left = 114;
+int Col2Width = 110;
+int ControlSpacing = 6;
+
 // Custom function. Works like GetPrivateProfileIntW but returns bool. Can detect a numeric value or string.
 bool GetPrivateProfileBoolW(LPCWSTR lpAppName, LPCWSTR lpKeyName, bool default, LPCWSTR lpFileName)
 {
@@ -220,16 +226,24 @@ public:
 
 		cb->Text = gcnew String(_friendlyName);
 		cb->Checked = GetPrivateProfileBoolW(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath);
-		cb->Left = left;
+		cb->Left = left + 2;
 		cb->Top = top;
 		cb->AutoSize = true;
 		cb->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		
+		Form^ RootForm = panel->FindForm();
+		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		cb->Scale(ScaleWidth, ScaleHeight);
 
 		tooltip->SetToolTip(cb, gcnew String(_description));
 
 		panel->Controls->Add(cb);
 		mainControlHandle = cb->Handle;
-		return 23;
+
+		int ControlHeight = cb->Font->Height / ScaleHeight;
+		return ControlHeight + ControlSpacing;
 	}
 
 	virtual void SaveOption()
@@ -271,7 +285,7 @@ public:
 		label->Text = gcnew String(_friendlyName);
 		label->Left = left;
 		label->Top = top + 3;
-		label->Width = 100;
+		label->Width = Col1Width;
 		label->AutoSize = true;
 		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
@@ -280,10 +294,17 @@ public:
 
 		numberbox->Value = (int)GetPrivateProfileIntW(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath); // cast to int because this returns uint and breaks -1
 																												// it seems it does read negative values correctly though... but eventually a parser that properly supports negative numbers would be ideal
-		numberbox->Left = left + 104;
+		numberbox->Left = left + Col2Left;
 		numberbox->Top = top;
-		numberbox->Width = 90;
+		numberbox->Width = Col2Width;
 		numberbox->AutoSize = true;
+
+		Form^ RootForm = panel->FindForm();
+		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		label->Scale(ScaleWidth, ScaleHeight);
+		numberbox->Scale(ScaleWidth, ScaleHeight);
 
 		tooltip->SetToolTip(label, gcnew String(_description));
 		tooltip->SetToolTip(numberbox, gcnew String(_description));
@@ -291,7 +312,9 @@ public:
 		panel->Controls->Add(label);
 		panel->Controls->Add(numberbox);
 		mainControlHandle = numberbox->Handle;
-		return 28;
+
+		int ControlHeight = numberbox->Height / ScaleHeight;
+		return ControlHeight + ControlSpacing;
 	}
 
 	virtual void SaveOption()
@@ -334,7 +357,7 @@ public:
 		label->Text = gcnew String(_friendlyName);
 		label->Left = left;
 		label->Top = top + 3;
-		label->Width = 100;
+		label->Width = Col1Width;
 		label->AutoSize = true;
 		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
@@ -345,11 +368,18 @@ public:
 		}
 
 		textbox->Text = gcnew String(stringBuf);
-		textbox->Left = left + 104;
+		textbox->Left = left + Col2Left;
 		textbox->Top = top;
-		textbox->Width = 90;
+		textbox->Width = Col2Width;
 		textbox->AutoSize = true;
 
+		Form^ RootForm = panel->FindForm();
+		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		label->Scale(ScaleWidth, ScaleHeight);
+		textbox->Scale(ScaleWidth, ScaleHeight);
+		
 		// disable editing for utf8 mode because the ANSI hack used may not work correctly
 		if (_useUtf8) {
 			textbox->Enabled = false;
@@ -361,7 +391,9 @@ public:
 		panel->Controls->Add(label);
 		panel->Controls->Add(textbox);
 		mainControlHandle = textbox->Handle;
-		return 28;
+
+		int ControlHeight = textbox->Height / ScaleHeight;
+		return ControlHeight + ControlSpacing;
 	}
 
 	virtual void SaveOption()
@@ -415,7 +447,7 @@ public:
 		label->Text = gcnew String(_friendlyName);
 		label->Left = left;
 		label->Top = top + 3;
-		label->Width = 100;
+		label->Width = Col1Width;
 		label->AutoSize = true;
 		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
@@ -423,12 +455,19 @@ public:
 			combobox->Items->Add(msclr::interop::marshal_as<System::String^>(choice));
 		}
 		combobox->SelectedIndex = GetPrivateProfileIntW(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath);
-		combobox->Left = left + 104;
+		combobox->Left = left + Col2Left;
 		combobox->Top = top;
-		combobox->Width = 90;
+		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
 		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 		combobox->DropDownStyle = ComboBoxStyle::DropDownList;
+
+		Form^ RootForm = panel->FindForm();
+		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		label->Scale(ScaleWidth, ScaleHeight);
+		combobox->Scale(ScaleWidth, ScaleHeight);
 
 		tooltip->SetToolTip(label, gcnew String(_description));
 		tooltip->SetToolTip(combobox, gcnew String(_description));
@@ -436,7 +475,9 @@ public:
 		panel->Controls->Add(label);
 		panel->Controls->Add(combobox);
 		mainControlHandle = combobox->Handle;
-		return 28;;
+
+		int ControlHeight = combobox->Height / ScaleHeight;
+		return ControlHeight + ControlSpacing;
 	}
 
 	virtual void SaveOption()
@@ -481,7 +522,7 @@ public:
 		label->Text = gcnew String(_friendlyName);
 		label->Left = left;
 		label->Top = top + 3;
-		label->Width = 100;
+		label->Width = Col1Width;
 		label->AutoSize = true;
 		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
@@ -496,12 +537,19 @@ public:
 		}
 
 		combobox->Text = gcnew String(stringBuf);
-		combobox->Left = left + 104;
+		combobox->Left = left + Col2Left;
 		combobox->Top = top;
-		combobox->Width = 90;
+		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
 		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 		combobox->DropDownStyle = ComboBoxStyle::DropDown;
+
+		Form^ RootForm = panel->FindForm();
+		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		label->Scale(ScaleWidth, ScaleHeight);
+		combobox->Scale(ScaleWidth, ScaleHeight);
 
 		// disable editing for utf8 mode because the ANSI hack used may not work correctly
 		if (_useUtf8) {
@@ -515,7 +563,9 @@ public:
 		panel->Controls->Add(label);
 		panel->Controls->Add(combobox);
 		mainControlHandle = combobox->Handle;
-		return 28;;
+
+		int ControlHeight = combobox->Height / ScaleHeight;
+		return ControlHeight + ControlSpacing;
 	}
 
 	virtual void SaveOption()
@@ -571,7 +621,7 @@ public:
 		label->Text = gcnew String(_friendlyName);
 		label->Left = left;
 		label->Top = top + 3;
-		label->Width = 100;
+		label->Width = Col1Width;
 		label->AutoSize = true;
 		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
@@ -582,12 +632,19 @@ public:
 		tempSysStr = Convert::ToInt32((int)GetPrivateProfileIntW(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath)).ToString();
 
 		combobox->Text = gcnew String(tempSysStr);
-		combobox->Left = left + 104;
+		combobox->Left = left + Col2Left;
 		combobox->Top = top;
-		combobox->Width = 90;
+		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
 		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 		combobox->DropDownStyle = ComboBoxStyle::DropDown;
+
+		Form^ RootForm = panel->FindForm();
+		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		label->Scale(ScaleWidth, ScaleHeight);
+		combobox->Scale(ScaleWidth, ScaleHeight);
 
 		tooltip->SetToolTip(label, gcnew String(_description));
 		tooltip->SetToolTip(combobox, gcnew String(_description));
@@ -598,7 +655,9 @@ public:
 		panel->Controls->Add(label);
 		panel->Controls->Add(combobox);
 		mainControlHandle = combobox->Handle;
-		return 28;;
+
+		int ControlHeight = combobox->Height / ScaleHeight;
+		return ControlHeight + ControlSpacing;
 	}
 
 	virtual void SaveOption()
@@ -643,7 +702,7 @@ public:
 		label->Text = gcnew String(_friendlyName);
 		label->Left = left;
 		label->Top = top + 3;
-		label->Width = 100;
+		label->Width = Col1Width;
 		label->AutoSize = true;
 		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
@@ -663,12 +722,19 @@ public:
 			combobox->Text = tempSysStr;
 		}
 
-		combobox->Left = left + 104;
+		combobox->Left = left + Col2Left;
 		combobox->Top = top;
-		combobox->Width = 90;
+		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
 		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 		combobox->DropDownStyle = ComboBoxStyle::DropDown;
+
+		Form^ RootForm = panel->FindForm();
+		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		label->Scale(ScaleWidth, ScaleHeight);
+		combobox->Scale(ScaleWidth, ScaleHeight);
 
 		tooltip->SetToolTip(label, gcnew String(_description));
 		tooltip->SetToolTip(combobox, gcnew String(_description));
@@ -679,7 +745,9 @@ public:
 		panel->Controls->Add(label);
 		panel->Controls->Add(combobox);
 		mainControlHandle = combobox->Handle;
-		return 28;;
+
+		int ControlHeight = combobox->Height / ScaleHeight;
+		return ControlHeight + ControlSpacing;
 	}
 
 	virtual void SaveOption()

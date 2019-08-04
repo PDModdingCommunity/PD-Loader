@@ -179,10 +179,6 @@
       <DependentUpon>ui.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="PokeSnarf2x.bmp" />
-    <Image Include="PokeSnarf2x.png" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

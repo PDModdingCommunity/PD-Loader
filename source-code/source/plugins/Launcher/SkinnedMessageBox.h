@@ -245,6 +245,9 @@ private: ref class SkinnedMessageBoxForm : Form
 				iconPB->Top = 10 * ScaleHeight;
 				iconPB->Left = 10 * ScaleWidth;
 				iconPB->AccessibleName = "Icon";
+				iconPB->SizeMode = PictureBoxSizeMode::Zoom;
+
+				System::Resources::ResourceManager^ ResMgr = gcnew System::Resources::ResourceManager("Launcher.SkinnedMessageBox", SkinnedMessageBox::typeid->Assembly);
 
 				// there are many duplicated values:
 				// https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.messageboxicon?view=netframework-4.7.2
@@ -266,14 +269,10 @@ private: ref class SkinnedMessageBoxForm : Form
 				}
 				else if (icon == MessageBoxIcon::Warning) // also Exclamation
 				{
-					//Drawing::Icon^ warnicon = gcnew Drawing::Icon(SystemIcons::Warning, iconsize, iconsize);
-					//iconPB->Image = warnicon->ToBitmap();
-					System::Resources::ResourceManager^ ResMgr = gcnew System::Resources::ResourceManager("Launcher.SkinnedMessageBox", SkinnedMessageBox::typeid->Assembly); 
-					iconPB->SizeMode = PictureBoxSizeMode::Zoom;
 					iconPB->Image = (Image^)(ResMgr->GetObject("PokeSnarf4xd"));
 					iconPB->AccessibleDescription = "Warning";
 					//this.Icon = SystemIcons.Warning;
-					textpadding -= 2 * ScaleWidth; // triangle shape looks worse without this
+					//textpadding -= 2 * ScaleWidth; // triangle shape looks worse without this
 					System::Media::SystemSounds::Exclamation->Play();
 				}
 				else if (icon == MessageBoxIcon::Information) // also Asterisk

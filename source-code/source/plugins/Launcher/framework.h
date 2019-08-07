@@ -154,6 +154,7 @@ ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"no_lyrics", PATCHES_SECTION, CONFIG_FILE, L"Disable Lyrics", L"Disables showing lyrics.", false, false),
 	new BooleanOption(L"hide_pv_watermark", PATCHES_SECTION, CONFIG_FILE, L"Hide PV Watermark", L"Hides the watermark that's usually shown in PV viewing mode.", false, false),
 	new BooleanOption(L"no_error", PATCHES_SECTION, CONFIG_FILE, L"Disable Error Banner", L"Disables the error banner on the attract screen.", true, false),
+	new BooleanOption(L"hardware_slider", PATCHES_SECTION, CONFIG_FILE, L"Use Hardware Slider", L"Enable this if using a real arcade slider.\n(set the slider to port COM11)", false, false),
 
 	new BooleanOption(L"skip", LAUNCHER_SECTION, CONFIG_FILE, L"Skip Launcher", L"Forces the launcher to be skipped, you can also use the --launch parameter instead of this.", false, false),
 

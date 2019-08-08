@@ -134,7 +134,7 @@ ConfigOptionBase* screenResolutionArray[] = {
 };
 
 BooleanOption* InternalResolutionCheckbox = new BooleanOption(L"r.enable", RESOLUTION_SECTION, CONFIG_FILE, L"Enable", L"Enable or disable custom internal resolution.", false, false);
-ResolutionOption* InternalResolutionOption = new ResolutionOption(L"r.width", L"r.height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the internal resolution.", resolution(1280, 720), std::vector<resolution>({ resolution(640,480), resolution(800,600), resolution(960,720), resolution(1280,720), resolution(1920,1080), resolution(2560,1440), resolution(3840,2160), resolution(5120,2880), resolution(7680,4320) }));
+ResolutionOption* InternalResolutionOption = new ResolutionOption(L"r.width", L"r.height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the internal resolution.", resolution(1280, 720), std::vector<resolution>({ resolution(640,480), resolution(800,600), resolution(960,720), resolution(1280,720), resolution(1600,900), resolution(1920,1080), resolution(2560,1440), resolution(3200,1800), resolution(3840,2160), resolution(5120,2880), resolution(6400,3600), resolution(7680,4320) }));
 
 ConfigOptionBase* internalResolutionArray[] = {
 	InternalResolutionCheckbox,

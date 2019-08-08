@@ -36,18 +36,24 @@ int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 	{
 		*fullScreenFlag = 0;
 
-		// looks like GLUT_SCREEN_WIDTH and GLUT_SCREEN_HEIGHT can have issues after SetProcessDPIAware()
-		// not sure if calling SetProcessDPIAware later will fix this, but I'll try it
-		// if not, using GetSystemMetrics should work
-		int screenWidth = glutGet(GLUT_SCREEN_WIDTH);
-		int screenHeight = glutGet(GLUT_SCREEN_HEIGHT);
-		//int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-		//int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+		RECT xy;
+		SetProcessDPIAware();
+		SystemParametersInfo(SPI_GETWORKAREA, 0, &xy, 0);
+		int screenWidth = xy.right - xy.left;
+		int screenHeight = xy.bottom - xy.top;
+		if (nWidth > screenWidth)
+		{
+			screenWidth = GetSystemMetrics(SM_CXFULLSCREEN);
+			xy.left = 0;
+		}
 
-		// window position for centered window
-		int wndX = (screenWidth - nWidth) / 2;
-		int wndY = (screenHeight - nHeight) / 2;
-
+		if (nHeight > screenHeight)
+		{
+			screenHeight = GetSystemMetrics(SM_CYFULLSCREEN);
+			xy.top = 0;
+		}
+		int wndX = xy.left + (screenWidth - nWidth) / 2;
+		int wndY = xy.top + (screenHeight - nHeight) / 2;
 
 		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 

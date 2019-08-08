@@ -98,5 +98,6 @@ namespace TLAC::Components
 		bool IsHold();
 
 		void UpdateInputBit(uint32_t bit, uint8_t keycode);
+		void UpdateSliderLR();
 	};
 }

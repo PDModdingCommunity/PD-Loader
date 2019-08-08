@@ -125,6 +125,13 @@ namespace TLAC::Components
 		inputState->DoubleTapped.Buttons = GetJvsButtonsState(tappedFunc);
 		inputState->IntervalTapped.Buttons = GetJvsButtonsState(tappedFunc);
 
+		// if not interacting with L and R, use values from the slider instead
+		if ( ( (inputState->Tapped.Buttons | inputState->Released.Buttons | inputState->Down.Buttons)
+			 & (JVS_L | JVS_R) ) == 0)
+		{
+			UpdateSliderLR();
+		}
+
 		UpdateHoldState();
 		heldButtons = GetButtonFromHold();
 
@@ -304,5 +311,44 @@ namespace TLAC::Components
 		inputState->SetBit(bit, keyboard->IsDoubleTapped(keycode), InputBufferType_DoubleTapped);
 		inputState->SetBit(bit, keyboard->IsIntervalTapped(keycode), InputBufferType_IntervalTapped);
 
+	}
+
+	typedef uint8_t getSliderSensorFunc(void*, int);
+	void InputEmulator::UpdateSliderLR()
+	{
+		getSliderSensorFunc* getSliderSensorTapped = (getSliderSensorFunc*)GET_SLIDER_TAPPED_ADDRESS;
+		getSliderSensorFunc* getSliderSensorReleased = (getSliderSensorFunc*)GET_SLIDER_RELEASED_ADDRESS;
+		getSliderSensorFunc* getSliderSensorDown = (getSliderSensorFunc*)GET_SLIDER_DOWN_ADDRESS;
+
+		if (getSliderSensorTapped((void*)SLIDER_CTRL_TASK_ADDRESS, 36))
+			inputState->Tapped.Buttons |= JVS_L;
+		else
+			inputState->Tapped.Buttons &= ~JVS_L;
+
+		if (getSliderSensorReleased((void*)SLIDER_CTRL_TASK_ADDRESS, 36))
+			inputState->Released.Buttons |= JVS_L;
+		else
+			inputState->Released.Buttons &= ~JVS_L;
+		
+		if (getSliderSensorDown((void*)SLIDER_CTRL_TASK_ADDRESS, 36))
+			inputState->Down.Buttons |= JVS_L;
+		else
+			inputState->Down.Buttons &= ~JVS_L;
+
+
+		if (getSliderSensorTapped((void*)SLIDER_CTRL_TASK_ADDRESS, 37))
+			inputState->Tapped.Buttons |= JVS_R;
+		else
+			inputState->Tapped.Buttons &= ~JVS_R;
+
+		if (getSliderSensorReleased((void*)SLIDER_CTRL_TASK_ADDRESS, 37))
+			inputState->Released.Buttons |= JVS_R;
+		else
+			inputState->Released.Buttons &= ~JVS_R;
+
+		if (getSliderSensorDown((void*)SLIDER_CTRL_TASK_ADDRESS, 37))
+			inputState->Down.Buttons |= JVS_R;
+		else
+			inputState->Down.Buttons &= ~JVS_R;
 	}
 }

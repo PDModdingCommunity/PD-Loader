@@ -131,8 +131,23 @@ namespace Launcher {
 			if (glutMainLoopEventDynamic != NULL) glutMainLoopEventDynamic(); // freeglut needs this
 
 			this->labelGPU->Text = "Vendor: " + vendor + "\nRenderer: " + renderer + "\nOpenGL: " + version;
-			if (!vendor->Contains("NVIDIA"))	SkinnedMessageBox::Show(this, "Your graphics card is not supported! Only NVIDIA GPUs are currently supported.", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
-			else if (version[0] < '3') SkinnedMessageBox::Show(this, "Your GPU is too old. The game might not render PVs correctly!", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+			if (!vendor->Contains("NVIDIA"))
+			{
+				this->labelGPU->Text += "\nIssues: NVIDIA GPU REQUIRED!";
+				this->labelGPU->ForeColor = System::Drawing::Color::Red;
+				SkinnedMessageBox::Show(this, "Your graphics card is not supported! Only NVIDIA GPUs are currently supported.", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+			}
+			else if (version[0] < '4')
+			{
+				this->labelGPU->Text += "\nIssues: GPU too old! 3D rendering might be broken.";
+				this->labelGPU->ForeColor = System::Drawing::Color::Orange;
+			}
+			else if (renderer->Contains("RTX") || renderer->Contains("GTX 16"))
+			{
+				this->labelGPU->Text += "\nIssues: Turing GPU detected! Possible noise.";
+				this->labelGPU->ForeColor = System::Drawing::Color::Yellow;
+			}
+			else this->labelGPU->Text += "\nIssues: None.";
 		}
 
 	protected:
@@ -165,6 +180,7 @@ namespace Launcher {
 	private: System::Windows::Forms::Panel^  panel_IntRes;
 	private: System::Windows::Forms::Label^ labelGPU;
 	private: System::Windows::Forms::Button^ button_Apply;
+
 
 
 
@@ -222,6 +238,9 @@ namespace Launcher {
 			this->tabPage_Playerdata->SuspendLayout();
 			this->tabPage_Components->SuspendLayout();
 			this->SuspendLayout();
+			// 
+			// button_Launch
+			// 
 			this->button_Launch->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Launch->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_Launch->Location = System::Drawing::Point(4, 473);
@@ -231,6 +250,9 @@ namespace Launcher {
 			this->button_Launch->TabIndex = 20;
 			this->button_Launch->Text = L"Launch";
 			this->button_Launch->Click += gcnew System::EventHandler(this, &ui::Button_Launch_Click);
+			// 
+			// button_Help
+			// 
 			this->button_Help->DialogResult = System::Windows::Forms::DialogResult::Cancel;
 			this->button_Help->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Help->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
@@ -241,6 +263,9 @@ namespace Launcher {
 			this->button_Help->TabIndex = 21;
 			this->button_Help->Text = L"Get help";
 			this->button_Help->Click += gcnew System::EventHandler(this, &ui::Button_Help_Click);
+			// 
+			// groupBox_ScreenRes
+			// 
 			this->groupBox_ScreenRes->Controls->Add(this->panel_ScreenRes);
 			this->groupBox_ScreenRes->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->groupBox_ScreenRes->ForeColor = System::Drawing::Color::White;
@@ -248,16 +273,22 @@ namespace Launcher {
 			this->groupBox_ScreenRes->Margin = System::Windows::Forms::Padding(4);
 			this->groupBox_ScreenRes->Name = L"groupBox_ScreenRes";
 			this->groupBox_ScreenRes->Padding = System::Windows::Forms::Padding(4);
-			this->groupBox_ScreenRes->Size = System::Drawing::Size(417, 205);
+			this->groupBox_ScreenRes->Size = System::Drawing::Size(417, 169);
 			this->groupBox_ScreenRes->TabIndex = 10;
 			this->groupBox_ScreenRes->TabStop = false;
 			this->groupBox_ScreenRes->Text = L"Screen Resolution";
+			// 
+			// panel_ScreenRes
+			// 
 			this->panel_ScreenRes->AutoScroll = true;
 			this->panel_ScreenRes->Location = System::Drawing::Point(6, 28);
 			this->panel_ScreenRes->Margin = System::Windows::Forms::Padding(4);
 			this->panel_ScreenRes->Name = L"panel_ScreenRes";
-			this->panel_ScreenRes->Size = System::Drawing::Size(403, 169);
+			this->panel_ScreenRes->Size = System::Drawing::Size(403, 133);
 			this->panel_ScreenRes->TabIndex = 0;
+			// 
+			// tabControl
+			// 
 			this->tabControl->Appearance = System::Windows::Forms::TabAppearance::FlatButtons;
 			this->tabControl->Controls->Add(this->tabPage_Resolution);
 			this->tabControl->Controls->Add(this->tabPage_Patches);
@@ -269,6 +300,9 @@ namespace Launcher {
 			this->tabControl->SelectedIndex = 0;
 			this->tabControl->Size = System::Drawing::Size(441, 465);
 			this->tabControl->TabIndex = 10;
+			// 
+			// tabPage_Resolution
+			// 
 			this->tabPage_Resolution->BackColor = System::Drawing::Color::Transparent;
 			this->tabPage_Resolution->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"tabPage_Resolution.BackgroundImage")));
 			this->tabPage_Resolution->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
@@ -282,17 +316,24 @@ namespace Launcher {
 			this->tabPage_Resolution->Size = System::Drawing::Size(433, 429);
 			this->tabPage_Resolution->TabIndex = 0;
 			this->tabPage_Resolution->Text = L"Resolution";
+			// 
+			// labelGPU
+			// 
 			this->labelGPU->AutoSize = true;
-			this->labelGPU->Location = System::Drawing::Point(12, 359);
+			this->labelGPU->ForeColor = System::Drawing::Color::Lime;
+			this->labelGPU->Location = System::Drawing::Point(12, 319);
 			this->labelGPU->MinimumSize = System::Drawing::Size(410, 20);
 			this->labelGPU->Name = L"labelGPU";
 			this->labelGPU->Size = System::Drawing::Size(410, 20);
 			this->labelGPU->TabIndex = 21;
 			this->labelGPU->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+			// 
+			// groupBox_InternalRes
+			// 
 			this->groupBox_InternalRes->Controls->Add(this->panel_IntRes);
 			this->groupBox_InternalRes->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->groupBox_InternalRes->ForeColor = System::Drawing::Color::White;
-			this->groupBox_InternalRes->Location = System::Drawing::Point(8, 222);
+			this->groupBox_InternalRes->Location = System::Drawing::Point(8, 186);
 			this->groupBox_InternalRes->Margin = System::Windows::Forms::Padding(4);
 			this->groupBox_InternalRes->Name = L"groupBox_InternalRes";
 			this->groupBox_InternalRes->Padding = System::Windows::Forms::Padding(4);
@@ -300,12 +341,18 @@ namespace Launcher {
 			this->groupBox_InternalRes->TabIndex = 20;
 			this->groupBox_InternalRes->TabStop = false;
 			this->groupBox_InternalRes->Text = L"Internal Resolution";
+			// 
+			// panel_IntRes
+			// 
 			this->panel_IntRes->AutoScroll = true;
 			this->panel_IntRes->Location = System::Drawing::Point(6, 28);
 			this->panel_IntRes->Margin = System::Windows::Forms::Padding(4);
 			this->panel_IntRes->Name = L"panel_IntRes";
 			this->panel_IntRes->Size = System::Drawing::Size(403, 88);
 			this->panel_IntRes->TabIndex = 1;
+			// 
+			// tabPage_Patches
+			// 
 			this->tabPage_Patches->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->tabPage_Patches->Controls->Add(this->panel_Patches);
@@ -315,12 +362,18 @@ namespace Launcher {
 			this->tabPage_Patches->Size = System::Drawing::Size(433, 429);
 			this->tabPage_Patches->TabIndex = 1;
 			this->tabPage_Patches->Text = L"Options";
+			// 
+			// panel_Patches
+			// 
 			this->panel_Patches->AutoScroll = true;
 			this->panel_Patches->Location = System::Drawing::Point(0, 0);
 			this->panel_Patches->Margin = System::Windows::Forms::Padding(4);
 			this->panel_Patches->Name = L"panel_Patches";
 			this->panel_Patches->Size = System::Drawing::Size(429, 425);
 			this->panel_Patches->TabIndex = 9;
+			// 
+			// tabPage_Playerdata
+			// 
 			this->tabPage_Playerdata->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->tabPage_Playerdata->Controls->Add(this->panel_Playerdata);
@@ -330,12 +383,18 @@ namespace Launcher {
 			this->tabPage_Playerdata->Size = System::Drawing::Size(433, 429);
 			this->tabPage_Playerdata->TabIndex = 3;
 			this->tabPage_Playerdata->Text = L"Player";
+			// 
+			// panel_Playerdata
+			// 
 			this->panel_Playerdata->AutoScroll = true;
 			this->panel_Playerdata->Location = System::Drawing::Point(0, 0);
 			this->panel_Playerdata->Margin = System::Windows::Forms::Padding(4);
 			this->panel_Playerdata->Name = L"panel_Playerdata";
 			this->panel_Playerdata->Size = System::Drawing::Size(429, 425);
 			this->panel_Playerdata->TabIndex = 1;
+			// 
+			// tabPage_Components
+			// 
 			this->tabPage_Components->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->tabPage_Components->Controls->Add(this->panel_Components);
@@ -346,12 +405,18 @@ namespace Launcher {
 			this->tabPage_Components->Size = System::Drawing::Size(433, 429);
 			this->tabPage_Components->TabIndex = 2;
 			this->tabPage_Components->Text = L"Components";
+			// 
+			// panel_Components
+			// 
 			this->panel_Components->AutoScroll = true;
 			this->panel_Components->Location = System::Drawing::Point(0, 0);
 			this->panel_Components->Margin = System::Windows::Forms::Padding(4);
 			this->panel_Components->Name = L"panel_Components";
 			this->panel_Components->Size = System::Drawing::Size(429, 425);
 			this->panel_Components->TabIndex = 0;
+			// 
+			// button_Discord
+			// 
 			this->button_Discord->BackColor = System::Drawing::Color::Transparent;
 			this->button_Discord->FlatAppearance->BorderSize = 0;
 			this->button_Discord->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
@@ -365,6 +430,9 @@ namespace Launcher {
 			this->button_Discord->TabIndex = 31;
 			this->button_Discord->UseVisualStyleBackColor = false;
 			this->button_Discord->Click += gcnew System::EventHandler(this, &ui::button_Discord_Click);
+			// 
+			// button_github
+			// 
 			this->button_github->BackColor = System::Drawing::Color::Transparent;
 			this->button_github->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->button_github->FlatAppearance->BorderSize = 0;
@@ -379,6 +447,9 @@ namespace Launcher {
 			this->button_github->TabIndex = 32;
 			this->button_github->UseVisualStyleBackColor = false;
 			this->button_github->Click += gcnew System::EventHandler(this, &ui::button_github_Click);
+			// 
+			// button_Apply
+			// 
 			this->button_Apply->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Apply->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_Apply->Location = System::Drawing::Point(225, 473);
@@ -388,6 +459,9 @@ namespace Launcher {
 			this->button_Apply->TabIndex = 33;
 			this->button_Apply->Text = L"Apply";
 			this->button_Apply->Click += gcnew System::EventHandler(this, &ui::button_Apply_Click);
+			// 
+			// ui
+			// 
 			this->AcceptButton = this->button_Launch;
 			this->AutoScaleDimensions = System::Drawing::SizeF(144, 144);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Dpi;
@@ -406,8 +480,8 @@ namespace Launcher {
 			this->DoubleBuffered = true;
 			this->ForeColor = System::Drawing::Color::White;
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
-			this->KeyPreview = true;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
+			this->KeyPreview = true;
 			this->Margin = System::Windows::Forms::Padding(4);
 			this->MaximizeBox = false;
 			this->MinimizeBox = false;

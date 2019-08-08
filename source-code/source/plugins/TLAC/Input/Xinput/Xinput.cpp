@@ -1,6 +1,8 @@
 #include <windows.h>
 #include "Xinput.h"
 #include "../../Constants.h"
+#include "../../FileSystem/ConfigFile.h"
+#include "../../framework.h"
 
 namespace TLAC::Input
 {
@@ -55,8 +57,16 @@ namespace TLAC::Input
 		ZeroMemory(&state, sizeof(XINPUT_STATE));
 		float elapsed = keyIntervalWatch.Restart();
 
-		if (XInputGetState(0, &state) == ERROR_SUCCESS)
+		TLAC::FileSystem::ConfigFile configFile(TLAC::framework::GetModuleDirectory(), "keyconfig.ini");
+		configFile.OpenRead();
+
+		int xc_pref = configFile.GetIntegerValue("xinput_preferred");
+		if (xc_pref < 0 || xc_pref > 3) xc_pref = 0;
+		for (int n = 0; n < 4; n++)
 		{
+			ZeroMemory(&state, sizeof(XINPUT_STATE));
+			if (XInputGetState(xc_pref, &state) == ERROR_SUCCESS)
+			{
 				BYTE i = XINPUT_A;
 				{
 					currentState.KeyStates[i] = false;
@@ -136,7 +146,7 @@ namespace TLAC::Input
 						currentState.KeyStates[i] = true;
 					SetTapStates(i, elapsed);
 				}
-				
+
 				i = XINPUT_LSB;
 				{
 					currentState.KeyStates[i] = false;
@@ -193,7 +203,7 @@ namespace TLAC::Input
 					if (state.Gamepad.sThumbLX > 10000)
 						currentState.KeyStates[i] = true;
 					SetTapStates(i, elapsed);
-					
+
 					i = XINPUT_LLEFT;
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.sThumbLX < -10000)
@@ -208,17 +218,23 @@ namespace TLAC::Input
 					if (state.Gamepad.sThumbRX > 10000)
 						currentState.KeyStates[i] = true;
 					SetTapStates(i, elapsed);
-					
+
 					i = XINPUT_RLEFT;
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.sThumbRX < -10000)
 						currentState.KeyStates[i] = true;
 					SetTapStates(i, elapsed);
 				}
-		}
-		else {
-		ZeroMemory(&state, sizeof(XINPUT_STATE));
-		ZeroMemory(&currentState, sizeof(currentState));
+
+				break;
+			}
+			else if (n == 3) {
+				ZeroMemory(&state, sizeof(XINPUT_STATE));
+				ZeroMemory(&currentState, sizeof(currentState));
+			}
+
+			if (xc_pref == 3) xc_pref = 0;
+			else xc_pref++;
 		}
 			return TRUE;
 	}

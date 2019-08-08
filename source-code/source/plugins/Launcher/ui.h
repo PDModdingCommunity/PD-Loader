@@ -147,8 +147,7 @@ namespace Launcher {
 			}
 		}
 	private: System::Windows::Forms::Button^ button_Launch;
-private: System::Windows::Forms::Button^ button_Help;
-
+	private: System::Windows::Forms::Button^ button_Help;
 	private: System::Windows::Forms::GroupBox^ groupBox_ScreenRes;
 	private: System::Windows::Forms::TabControl^ tabControl;
 	private: System::Windows::Forms::TabPage^ tabPage_Resolution;
@@ -164,7 +163,9 @@ private: System::Windows::Forms::Button^ button_Help;
 	private: System::Windows::Forms::ToolTip^  toolTip1;
 	private: System::Windows::Forms::Panel^  panel_ScreenRes;
 	private: System::Windows::Forms::Panel^  panel_IntRes;
-private: System::Windows::Forms::Label^ labelGPU;
+	private: System::Windows::Forms::Label^ labelGPU;
+	private: System::Windows::Forms::Button^ button_Apply;
+
 
 
 
@@ -212,6 +213,7 @@ private: System::Windows::Forms::Label^ labelGPU;
 			this->button_Discord = (gcnew System::Windows::Forms::Button());
 			this->button_github = (gcnew System::Windows::Forms::Button());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
+			this->button_Apply = (gcnew System::Windows::Forms::Button());
 			this->groupBox_ScreenRes->SuspendLayout();
 			this->tabControl->SuspendLayout();
 			this->tabPage_Resolution->SuspendLayout();
@@ -222,20 +224,20 @@ private: System::Windows::Forms::Label^ labelGPU;
 			this->SuspendLayout();
 			this->button_Launch->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Launch->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Launch->Location = System::Drawing::Point(25, 473);
+			this->button_Launch->Location = System::Drawing::Point(4, 473);
 			this->button_Launch->Margin = System::Windows::Forms::Padding(4);
 			this->button_Launch->Name = L"button_Launch";
-			this->button_Launch->Size = System::Drawing::Size(112, 34);
+			this->button_Launch->Size = System::Drawing::Size(102, 34);
 			this->button_Launch->TabIndex = 20;
 			this->button_Launch->Text = L"Launch";
 			this->button_Launch->Click += gcnew System::EventHandler(this, &ui::Button_Launch_Click);
 			this->button_Help->DialogResult = System::Windows::Forms::DialogResult::Cancel;
 			this->button_Help->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Help->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Help->Location = System::Drawing::Point(151, 473);
+			this->button_Help->Location = System::Drawing::Point(114, 473);
 			this->button_Help->Margin = System::Windows::Forms::Padding(4);
 			this->button_Help->Name = L"button_Help";
-			this->button_Help->Size = System::Drawing::Size(112, 34);
+			this->button_Help->Size = System::Drawing::Size(103, 34);
 			this->button_Help->TabIndex = 21;
 			this->button_Help->Text = L"Get help";
 			this->button_Help->Click += gcnew System::EventHandler(this, &ui::Button_Help_Click);
@@ -356,10 +358,10 @@ private: System::Windows::Forms::Label^ labelGPU;
 			this->button_Discord->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 			this->button_Discord->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_Discord->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_Discord.Image")));
-			this->button_Discord->Location = System::Drawing::Point(295, 459);
+			this->button_Discord->Location = System::Drawing::Point(337, 466);
 			this->button_Discord->Margin = System::Windows::Forms::Padding(4);
 			this->button_Discord->Name = L"button_Discord";
-			this->button_Discord->Size = System::Drawing::Size(63, 63);
+			this->button_Discord->Size = System::Drawing::Size(48, 48);
 			this->button_Discord->TabIndex = 31;
 			this->button_Discord->UseVisualStyleBackColor = false;
 			this->button_Discord->Click += gcnew System::EventHandler(this, &ui::button_Discord_Click);
@@ -370,13 +372,22 @@ private: System::Windows::Forms::Label^ labelGPU;
 			this->button_github->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 			this->button_github->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_github->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_github.Image")));
-			this->button_github->Location = System::Drawing::Point(378, 459);
+			this->button_github->Location = System::Drawing::Point(393, 466);
 			this->button_github->Margin = System::Windows::Forms::Padding(4);
 			this->button_github->Name = L"button_github";
-			this->button_github->Size = System::Drawing::Size(63, 63);
+			this->button_github->Size = System::Drawing::Size(48, 48);
 			this->button_github->TabIndex = 32;
 			this->button_github->UseVisualStyleBackColor = false;
 			this->button_github->Click += gcnew System::EventHandler(this, &ui::button_github_Click);
+			this->button_Apply->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
+			this->button_Apply->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button_Apply->Location = System::Drawing::Point(225, 473);
+			this->button_Apply->Margin = System::Windows::Forms::Padding(4);
+			this->button_Apply->Name = L"button_Apply";
+			this->button_Apply->Size = System::Drawing::Size(104, 34);
+			this->button_Apply->TabIndex = 33;
+			this->button_Apply->Text = L"Apply";
+			this->button_Apply->Click += gcnew System::EventHandler(this, &ui::button_Apply_Click);
 			this->AcceptButton = this->button_Launch;
 			this->AutoScaleDimensions = System::Drawing::SizeF(144, 144);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Dpi;
@@ -386,6 +397,7 @@ private: System::Windows::Forms::Label^ labelGPU;
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			this->ClientSize = System::Drawing::Size(440, 514);
+			this->Controls->Add(this->button_Apply);
 			this->Controls->Add(this->tabControl);
 			this->Controls->Add(this->button_Help);
 			this->Controls->Add(this->button_Launch);
@@ -394,6 +406,7 @@ private: System::Windows::Forms::Label^ labelGPU;
 			this->DoubleBuffered = true;
 			this->ForeColor = System::Drawing::Color::White;
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
+			this->KeyPreview = true;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Margin = System::Windows::Forms::Padding(4);
 			this->MaximizeBox = false;
@@ -401,8 +414,6 @@ private: System::Windows::Forms::Label^ labelGPU;
 			this->Name = L"ui";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"PD Launcher";
-			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &ui::Ui_FormClosing);
-			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &ui::Ui_FormClosed);
 			this->Load += gcnew System::EventHandler(this, &ui::Ui_Load);
 			this->groupBox_ScreenRes->ResumeLayout(false);
 			this->tabControl->ResumeLayout(false);
@@ -504,21 +515,6 @@ private: System::Void DisplayTypeChangedHandler(System::Object^ sender, System::
 		}
 	}
 }
-private: System::Void Ui_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
-	switch (SkinnedMessageBox::Show(this, "Do you want to save your settings?", "PD Launcher", MessageBoxButtons::YesNoCancel, MessageBoxIcon::Question))
-	{
-	case System::Windows::Forms::DialogResult::Yes:
-		SaveSettings();
-		break;
-
-	case System::Windows::Forms::DialogResult::No:
-		break;
-
-	case System::Windows::Forms::DialogResult::Cancel:
-		e->Cancel = true;
-		break;
-	}
-}
 private: System::Void Ui_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
 	// Prevents abnormal termination messages, remember that the game is still technically running and must be killed!
 	TerminateProcess(GetCurrentProcess(), EXIT_SUCCESS);
@@ -529,12 +525,11 @@ private: System::Void button_Discord_Click(System::Object^ sender, System::Event
 private: System::Void button_github_Click(System::Object^ sender, System::EventArgs^ e) {
 	System::Diagnostics::Process::Start("https://notabug.org/nastys/PD-Loader");
 }
-
-private: System::Void Panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+private: System::Void button_Apply_Click(System::Object^ sender, System::EventArgs^ e) {
+	if (SkinnedMessageBox::Show(this, "Do you want to save your settings?", "PD Launcher", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes) SaveSettings();
 }
-private: System::Void Label1_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void Button2_Click(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void Ui_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+	if (e->KeyCode == Keys::Escape) this->Close();
 }
 };
 }

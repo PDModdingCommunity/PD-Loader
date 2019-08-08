@@ -295,7 +295,7 @@ namespace TLAC::Components
 		if (keyboard->IsIntervalTapped(VK_SPACE))
 			inputKey = 0x20;
 
-		if (keyboard->IsIntervalTapped(VK_ESCAPE))
+		if (keyboard->IsDoubleTapped(VK_ESCAPE))
 			exit(0);
 
 		return inputKey;

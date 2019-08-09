@@ -9,6 +9,8 @@
 
 int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 {
+	SetProcessDPIAware();
+
 	// trick Optimus into switching to the NVIDIA GPU
 	if (cuInit != NULL) cuInit(0);
 
@@ -37,19 +39,18 @@ int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 		*fullScreenFlag = 0;
 
 		RECT xy;
-		SetProcessDPIAware();
 		SystemParametersInfo(SPI_GETWORKAREA, 0, &xy, 0);
 		int screenWidth = xy.right - xy.left;
 		int screenHeight = xy.bottom - xy.top;
 		if (nWidth > screenWidth)
 		{
-			screenWidth = GetSystemMetrics(SM_CXFULLSCREEN);
+			screenWidth = GetSystemMetrics(SM_CXSCREEN);
 			xy.left = 0;
 		}
 
 		if (nHeight > screenHeight)
 		{
-			screenHeight = GetSystemMetrics(SM_CYFULLSCREEN);
+			screenHeight = GetSystemMetrics(SM_CYSCREEN);
 			xy.top = 0;
 		}
 		int wndX = xy.left + (screenWidth - nWidth) / 2;
@@ -78,7 +79,6 @@ int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 		}
 	}
 
-	SetProcessDPIAware();
 	return true;
 }
 

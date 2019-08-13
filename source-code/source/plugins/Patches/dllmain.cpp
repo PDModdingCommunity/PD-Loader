@@ -139,12 +139,12 @@ void ApplyPatches() {
 		printf("[Patches] Hide FREE PLAY/CREDIT(S) enabled\n");
 	}
 	// Enable "FREE PLAY" mode
-	else if (nFreeplay)
+	if (nFreeplay || nHideFreeplay)
 	{
 		InjectCode((void*)0x00000001403BABEA, { 0x75 });
 		printf("[Patches] Show FREE PLAY instead of CREDIT(S)\n");
 
-		if (nPDLoaderText)
+		if (nPDLoaderText && !nHideFreeplay)
 		{
 			InjectCode((void*)0x00000001409F61F0, { 0x50, 0x44, 0x20, 0x4C, 0x6F, 0x61, 0x64, 0x65, 0x72, 0x20, 0x41, 0x4C, 0x50, 0x48, 0x41});
 			printf("[Patches] Show PD Loader version\n");

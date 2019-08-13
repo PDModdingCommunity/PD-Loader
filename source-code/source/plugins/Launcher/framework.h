@@ -147,14 +147,20 @@ ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"TAA", GRAPHICS_SECTION, CONFIG_FILE, L"TAA", L"Temporal Anti-Aliasing", true, false),
 	new BooleanOption(L"MLAA", GRAPHICS_SECTION, CONFIG_FILE, L"MLAA", L"Morphological Anti-Aliasing", true, false),
 
-	new BooleanOption(L"hide_freeplay", PATCHES_SECTION, CONFIG_FILE, L"Hide Freeplay", L"Hide Freeplay text.", false, false),
+	new BooleanOption(L"hide_freeplay", PATCHES_SECTION, CONFIG_FILE, L"Hide \"CREDIT(S)\"", L"Hide the \"CREDIT(S)\" text.", false, false),
+	new BooleanOption(L"freeplay", PATCHES_SECTION, CONFIG_FILE, L"FREE PLAY", L"Show \"FREE PLAY\" instead of \"CREDIT(S)\".", false, false),
+	new BooleanOption(L"pdloadertext", PATCHES_SECTION, CONFIG_FILE, L"PD Loader FREE PLAY", L"Show the version of PD Loader instead of \"FREE PLAY\".", false, false),
 	new BooleanOption(L"hide_volume", PATCHES_SECTION, CONFIG_FILE, L"Hide Volume Buttons", L"Hide the volume and SE control buttons.", false, false),
-	new BooleanOption(L"no_movies", PATCHES_SECTION, CONFIG_FILE, L"Disable Movies", L"Disables movies (enable this if the game hangs when loading certain PVs).", false, false),
-	new BooleanOption(L"no_pv_ui", PATCHES_SECTION, CONFIG_FILE, L"Disable PV UI", L"Removes the photo controls during PV playback.", false, false),
-	new BooleanOption(L"no_lyrics", PATCHES_SECTION, CONFIG_FILE, L"Disable Lyrics", L"Disables showing lyrics.", false, false),
-	new BooleanOption(L"hide_pv_watermark", PATCHES_SECTION, CONFIG_FILE, L"Hide PV Watermark", L"Hides the watermark that's usually shown in PV viewing mode.", false, false),
-	new BooleanOption(L"no_error", PATCHES_SECTION, CONFIG_FILE, L"Disable Error Banner", L"Disables the error banner on the attract screen.", true, false),
+	new BooleanOption(L"no_movies", PATCHES_SECTION, CONFIG_FILE, L"Disable Movies", L"Disable movies (enable this if the game hangs when loading certain PVs).", false, false),
+	new BooleanOption(L"mp4_movies", PATCHES_SECTION, CONFIG_FILE, L"Custom MP4 Adv Movies", L"Enable custom MP4 adv movies (experimental).", false, false),
+	new BooleanOption(L"no_pv_ui", PATCHES_SECTION, CONFIG_FILE, L"Disable PV UI", L"Remove the photo controls during PV playback.", false, false),
+	new BooleanOption(L"no_lyrics", PATCHES_SECTION, CONFIG_FILE, L"Disable Lyrics", L"Disable showing lyrics.", false, false),
+	new BooleanOption(L"hide_pv_watermark", PATCHES_SECTION, CONFIG_FILE, L"Hide PV Watermark", L"Hide the watermark that's usually shown in PV viewing mode.", false, false),
+	new BooleanOption(L"no_error", PATCHES_SECTION, CONFIG_FILE, L"Disable Error Banner", L"Disable the error banner on the attract screen.", true, false),
 	new BooleanOption(L"hardware_slider", PATCHES_SECTION, CONFIG_FILE, L"Use Hardware Slider", L"Enable this if using a real arcade slider.\n(set the slider to port COM11)", false, false),
+
+	new NumericOption(L"Enhanced_Stage_Manager", GRAPHICS_SECTION, CONFIG_FILE, L"Number of stages:", L"Set the number of stages (0 = default).", 0, 0, INT_MAX),
+	new BooleanOption(L"Enhanced_Stage_Manager_Encore", PATCHES_SECTION, CONFIG_FILE, L"Encore", L"Enable the Encore stage.", false, false),
 
 	new BooleanOption(L"skip", LAUNCHER_SECTION, CONFIG_FILE, L"Skip Launcher", L"Forces the launcher to be skipped, you can also use the --launch parameter instead of this.", false, false),
 

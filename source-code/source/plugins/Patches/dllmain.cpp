@@ -2,6 +2,10 @@
 #include "vector"
 #include <tchar.h>
 #include <GL/freeglut.h>
+#include <iostream>
+#include <filesystem>
+#include <sstream>
+#include <iomanip>
 
 void InjectCode(void* address, const std::vector<uint8_t> data);
 void ApplyPatches();
@@ -23,6 +27,30 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		break;
 	}
 	return TRUE;
+}
+
+void patchMovieExt(std::string moviefile, void* address)
+{
+	bool isinmdata = 0;
+	for (int i = 0; i < 1000; i++)
+	{
+		std::stringstream ss;
+		ss << std::setw(3) << std::setfill('0') << i;
+		if (std::filesystem::exists("../mdata/M" + ss.str() + "/rom/movie/" + moviefile + ".mp4"))
+		{
+			isinmdata = 1;
+			//std::cout << "Movie " << moviefile << ".mp4 found in M" << ss.str() << std::endl;
+			break;
+		}
+	}
+	if (isinmdata || std::filesystem::exists("../rom/movie/" + moviefile + ".mp4"))
+	{
+		InjectCode(address, { 0x6D, 0x70, 0x34 });
+		std::cout << "Movie " << moviefile << " patched to mp4\n";
+		return;
+	}
+	//std::cout << "Movie " << moviefile << " NOT patched to mp4\n";
+	return;
 }
 
 void ApplyPatches() {
@@ -68,8 +96,6 @@ void ApplyPatches() {
 		{ (void*)0x0000000140136CFA,{ 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 } },
 		// enable module selector without use_card
 		{ (void*)0x00000001405C513B, { 0x01 } },
-		// Show Freeplay instead
-		{ (void*)0x00000001403BABEA, { 0x75 } },
 		// Force Hide IDs
 		{ (void*)0x00000001409A5918, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } },
 		{ (void*)0x00000001409A5928, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } }
@@ -81,22 +107,48 @@ void ApplyPatches() {
 
 	auto nCursor = GetPrivateProfileIntW(L"patches", L"cursor", TRUE, CONFIG_FILE);
 	auto nHideFreeplay = GetPrivateProfileIntW(L"patches", L"hide_freeplay", FALSE, CONFIG_FILE);
+	auto nFreeplay = GetPrivateProfileIntW(L"patches", L"freeplay", TRUE, CONFIG_FILE);
+	auto nPDLoaderText = GetPrivateProfileIntW(L"patches", L"pdloader_text", TRUE, CONFIG_FILE);
 	auto nStatusIcons = GetPrivateProfileIntW(L"patches", L"status_icons", 0, CONFIG_FILE);
 	auto nHidePVWatermark = GetPrivateProfileIntW(L"patches", L"hide_pv_watermark", FALSE, CONFIG_FILE);
 	auto nNoPVUi = GetPrivateProfileIntW(L"patches", L"no_pv_ui", FALSE, CONFIG_FILE);
 	auto nHideVolCtrl = GetPrivateProfileIntW(L"patches", L"hide_volume", FALSE, CONFIG_FILE);
 	auto nNoLyrics = GetPrivateProfileIntW(L"patches", L"no_lyrics", FALSE, CONFIG_FILE);
 	auto nNoMovies = GetPrivateProfileIntW(L"patches", L"no_movies", FALSE, CONFIG_FILE);
+	auto nMP4Movies = GetPrivateProfileIntW(L"patches", L"mp4_movies", FALSE, CONFIG_FILE);
 	auto nNoError = GetPrivateProfileIntW(L"patches", L"no_error", FALSE, CONFIG_FILE);
 	auto nEStageManager = GetPrivateProfileIntW(L"patches", L"enhanced_stage_manager", 0, CONFIG_FILE);
 	auto nEStageManagerEncore = GetPrivateProfileIntW(L"patches", L"enhanced_stage_manager_encore", TRUE, CONFIG_FILE);
 	auto nHardwareSlider = GetPrivateProfileIntW(L"patches", L"hardware_slider", FALSE, CONFIG_FILE);
 
-	// Hides the Freeplay text
+	// Replace the hardcoded videos with MP4s, if they exist
+	if (nMP4Movies)
+	{
+		patchMovieExt("adv_cm_01", (void*)0x00000001409A53CC);
+		patchMovieExt("adv_cm_02", (void*)0x00000001409A53E4);
+		patchMovieExt("adv_cm_03", (void*)0x00000001409A53FC);
+		patchMovieExt("adv_cfm_cm", (void*)0x00000001409C22CD);
+		patchMovieExt("adv_sega_cm", (void*)0x00000001409C22EE);
+		patchMovieExt("diva_adv02", (void*)0x00000001409FF455);
+		patchMovieExt("diva_adv", (void*)0x00000001409FF483);
+	}
+	// Hide "FREE PLAY"
 	if (nHideFreeplay)
 	{
 		InjectCode((void*)0x00000001403BABEF, { 0x06, 0xB6 });
-		printf("[Patches] Hide Freeplay enabled\n");
+		printf("[Patches] Hide FREE PLAY/CREDIT(S) enabled\n");
+	}
+	// Enable "FREE PLAY" mode
+	else if (nFreeplay)
+	{
+		InjectCode((void*)0x00000001403BABEA, { 0x75 });
+		printf("[Patches] Show FREE PLAY instead of CREDIT(S)\n");
+
+		if (nPDLoaderText)
+		{
+			InjectCode((void*)0x00000001409F61F0, { 0x50, 0x44, 0x20, 0x4C, 0x6F, 0x61, 0x64, 0x65, 0x72, 0x20, 0x41, 0x4C, 0x50, 0x48, 0x41});
+			printf("[Patches] Show PD Loader version\n");
+		}
 	}
 	// Use GLUT_CURSOR_RIGHT_ARROW instead of GLUT_CURSOR_NONE
 	if (nCursor)

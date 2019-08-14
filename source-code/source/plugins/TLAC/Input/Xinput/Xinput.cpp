@@ -11,7 +11,9 @@ namespace TLAC::Input
 
 	Xinput::Xinput()
 	{
-
+		TLAC::FileSystem::ConfigFile config(TLAC::framework::GetModuleDirectory(), "keyconfig.ini");
+		config.OpenRead();
+		xinput_num = config.GetIntegerValue("xinput_preferred");
 	}
 
 	Xinput* Xinput::GetInstance()
@@ -58,10 +60,7 @@ namespace TLAC::Input
 		ZeroMemory(&state, sizeof(XINPUT_STATE));
 		float elapsed = keyIntervalWatch.Restart();
 
-		TLAC::FileSystem::ConfigFile configFile(TLAC::framework::GetModuleDirectory(), "keyconfig.ini");
-		configFile.OpenRead();
-
-		int xc_pref = configFile.GetIntegerValue("xinput_preferred");
+		int xc_pref = xinput_num;
 		if (xc_pref < 0 || xc_pref > 3) xc_pref = 0;
 		for (int n = 0; n < 4; n++)
 		{

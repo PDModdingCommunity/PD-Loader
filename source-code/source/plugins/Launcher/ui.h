@@ -51,6 +51,7 @@ namespace Launcher {
 			int screenresY = 3;
 			for (ConfigOptionBase* option : screenResolutionArray)
 			{
+				option->hasChanged = ConfigHasChanged;
 				screenresY += option->AddToPanel(panel_ScreenRes, 12, screenresY, toolTip1);
 			}
 			((ComboBox^)ComboBox::FromHandle(DisplayModeDropdown->mainControlHandle))->SelectedIndexChanged += gcnew System::EventHandler(this, &ui::DisplayTypeChangedHandler);
@@ -66,6 +67,7 @@ namespace Launcher {
 			int intresY = 3;
 			for (ConfigOptionBase* option : internalResolutionArray)
 			{
+				option->hasChanged = ConfigHasChanged;
 				intresY += option->AddToPanel(panel_IntRes, 12, intresY, toolTip1);
 			}
 			((CheckBox^)CheckBox::FromHandle(InternalResolutionCheckbox->mainControlHandle))->CheckedChanged += gcnew System::EventHandler(this, &ui::InternalResEnabledChangedHandler);
@@ -81,6 +83,7 @@ namespace Launcher {
 			int optionsY = 3;
 			for (ConfigOptionBase* option : optionsArray)
 			{
+				option->hasChanged = ConfigHasChanged;
 				optionsY += option->AddToPanel(panel_Patches, 12, optionsY, toolTip1);
 			}
 			this->panel_Patches->ResumeLayout(false);
@@ -94,6 +97,7 @@ namespace Launcher {
 			int playerdataY = 3;
 			for (ConfigOptionBase* option : playerdataArray)
 			{
+				option->hasChanged = ConfigHasChanged;
 				playerdataY += option->AddToPanel(panel_Playerdata, 12, playerdataY, toolTip1);
 			}
 			this->panel_Playerdata->ResumeLayout(false);
@@ -107,6 +111,7 @@ namespace Launcher {
 			int componentsY = 3;
 			for (ConfigOptionBase* component : componentsArray)
 			{
+				component->hasChanged = ConfigHasChanged;
 				componentsY += component->AddToPanel(panel_Components, 12, componentsY, toolTip1);
 			}
 			this->panel_Components->ResumeLayout(false);
@@ -488,6 +493,8 @@ namespace Launcher {
 			this->Name = L"ui";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"PD Launcher";
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &ui::Ui_FormClosing);
+			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &ui::Ui_FormClosed);
 			this->Load += gcnew System::EventHandler(this, &ui::Ui_Load);
 			this->groupBox_ScreenRes->ResumeLayout(false);
 			this->tabControl->ResumeLayout(false);
@@ -589,6 +596,24 @@ private: System::Void DisplayTypeChangedHandler(System::Object^ sender, System::
 		}
 	}
 }
+private: System::Void Ui_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
+	if (!*ConfigHasChanged)
+		return;
+
+	switch (SkinnedMessageBox::Show(this, "Do you want to save your settings?", "PD Launcher", MessageBoxButtons::YesNoCancel, MessageBoxIcon::Question))
+	{
+	case System::Windows::Forms::DialogResult::Yes:
+		SaveSettings();
+		break;
+
+	case System::Windows::Forms::DialogResult::No:
+		break;
+
+	case System::Windows::Forms::DialogResult::Cancel:
+		e->Cancel = true;
+		break;
+	}
+}
 private: System::Void Ui_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
 	// Prevents abnormal termination messages, remember that the game is still technically running and must be killed!
 	TerminateProcess(GetCurrentProcess(), EXIT_SUCCESS);
@@ -600,10 +625,16 @@ private: System::Void button_github_Click(System::Object^ sender, System::EventA
 	System::Diagnostics::Process::Start("https://notabug.org/nastys/PD-Loader");
 }
 private: System::Void button_Apply_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (SkinnedMessageBox::Show(this, "Do you want to save your settings?", "PD Launcher", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes) SaveSettings();
+	SaveSettings();
 }
 private: System::Void Ui_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
 	if (e->KeyCode == Keys::Escape) this->Close();
 }
+
+private: bool* ConfigHasChanged = new bool(false);/*
+
+private: System::Void ConfigChanged(System::Object^ sender, System::EventArgs^ e) {
+	*ConfigHasChanged = true;
+}*/
 };
 }

@@ -7,7 +7,7 @@
 
 namespace TLAC::Components
 {
-	const int maxTargetSlots = 32;
+	const int maxTargetSlots = 64;
 
 	class TargetInspector : public EmulatorComponent
 	{
@@ -21,23 +21,20 @@ namespace TLAC::Components
 		virtual void Update() override;
 		virtual const char* GetDisplayName() override;
 
-		void GetTargetStates();
 		static bool IsAnyRepress();
 
+		static bool ShouldVibrate;
+
 	private:
-		const uint64_t offset = 0x4A8;
+		//const uint64_t offset = 0x4A8;
 		const float timingThreshold = 0.13f; // PS4 estimate
 
-		TargetState tgtStates[maxTargetSlots];
-
-		int* tgtTypePtr;
-		int* tgtHitStatePtr;
-		float* tgtRemainingTimePtr;
+		TargetState* tgtStates;
 
 		bool IsSlide(int);
 		bool IsWithinRange(float);
 		bool HasNotBeenHit(int);
 		void UpdateRepressTbl();
-
+		void UpdateShouldVibrate();
 	};
 }

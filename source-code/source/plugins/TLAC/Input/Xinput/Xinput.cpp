@@ -3,6 +3,7 @@
 #include "../../Constants.h"
 #include "../../FileSystem/ConfigFile.h"
 #include "../../framework.h"
+#include "../../Components/GameTargets/TargetInspector.h"
 
 namespace TLAC::Input
 {
@@ -224,6 +225,25 @@ namespace TLAC::Input
 					if (state.Gamepad.sThumbRX < -10000)
 						currentState.KeyStates[i] = true;
 					SetTapStates(i, elapsed);
+				}
+
+				if (TLAC::Components::TargetInspector::ShouldVibrate)
+				{
+					XINPUT_VIBRATION vibration;
+					ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+					vibration.wLeftMotorSpeed = 8000; // use any value between 0-65535 here
+					vibration.wRightMotorSpeed = 4000; // use any value between 0-65535 here
+					//XInputSetState(xc_pref, &vibration);
+					//printf("1");
+				}
+				else
+				{
+					XINPUT_VIBRATION vibration;
+					ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+					vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
+					vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
+					//XInputSetState(xc_pref, &vibration);
+					//printf("0");
 				}
 
 				break;

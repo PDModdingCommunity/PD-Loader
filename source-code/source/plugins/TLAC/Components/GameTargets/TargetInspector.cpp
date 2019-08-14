@@ -3,6 +3,7 @@
 namespace TLAC::Components
 {
 	bool TargetInspector::repressTbl[maxTargetSlots];
+	bool TargetInspector::ShouldVibrate;
 
 	TargetInspector::TargetInspector()
 	{
@@ -14,30 +15,18 @@ namespace TLAC::Components
 
 	void TargetInspector::Initialize(ComponentsManager*)
 	{
-		tgtTypePtr = (int*)TGT_TYPE_BASE_ADDRESS;
-		tgtHitStatePtr = (int*)TGT_HIT_STATE_BASE_ADDRESS;
-		tgtRemainingTimePtr = (float*)TGT_REMAINING_DURATION_BASE_ADDRESS;
+		tgtStates = (TargetState*)TGT_STATES_BASE_ADDRESS;
 	}
 
 	void TargetInspector::Update()
 	{
-		GetTargetStates();
 		UpdateRepressTbl();
+		UpdateShouldVibrate();
 	}
 
 	const char* TargetInspector::GetDisplayName()
 	{
 		return "target_inspector";
-	}
-
-	void TargetInspector::GetTargetStates()
-	{
-		for (int i = 0; i < maxTargetSlots; ++i)
-		{
-			tgtStates[i].tgtType = *((int*)((char*)tgtTypePtr + (i * offset)));
-			tgtStates[i].tgtHitState = *((int*)((char*)tgtHitStatePtr + (i * offset)));
-			tgtStates[i].tgtRemainingTime = *((float*)((char*)tgtRemainingTimePtr + (i * offset)));
-		}
 	}
 
 	void TargetInspector::UpdateRepressTbl()
@@ -48,6 +37,22 @@ namespace TLAC::Components
 				&& HasNotBeenHit(tgtStates[i].tgtHitState)
 				&& !IsSlide(tgtStates[i].tgtType);
 		}
+	}
+
+	void TargetInspector::UpdateShouldVibrate()
+	{
+		for (int i = 0; i < maxTargetSlots; ++i)
+		{
+			if (IsWithinRange(tgtStates[i].tgtRemainingTime)
+				&& (tgtStates[i].tgtType == SLIDE_LONG_L || tgtStates[i].tgtType == SLIDE_LONG_R)
+				&& tgtStates[i].tgtHitState == NONE)
+				{
+					//printf("%d\n", tgtStates[i].tgtHitState);
+					ShouldVibrate = true;
+					return;
+				}
+		}
+		ShouldVibrate = false;
 	}
 
 	bool TargetInspector::IsWithinRange(float time)

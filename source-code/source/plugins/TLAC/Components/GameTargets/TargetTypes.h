@@ -2,7 +2,7 @@
 
 namespace TLAC::Components
 {
-	enum TargetTypes
+	enum TargetTypes : int32_t
 	{
 		SANKAKU,
 		MARU,

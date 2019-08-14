@@ -47,5 +47,7 @@ namespace TLAC::Input
 		static Xinput* instance;
 
 		void SetTapStates(BYTE keycode, float elapsed);
+
+		int xinput_num;
 	};
 }

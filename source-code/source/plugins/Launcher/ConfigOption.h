@@ -178,6 +178,22 @@ public:
 
 };
 
+static ref class ChangeHandler
+{
+public:
+	bool* changebool;
+
+	ChangeHandler(bool* onchangebool)
+	{
+		changebool = onchangebool;
+	}
+
+	System::Void SetChanged(System::Object^ sender, System::EventArgs^ e)
+	{
+		*changebool = true;
+	}
+};
+
 
 class ConfigOptionBase
 {
@@ -188,8 +204,9 @@ public:
 
 	LPCWSTR _friendlyName;
 	LPCWSTR _description;
-
+	
 	System::IntPtr mainControlHandle;
+	bool* hasChanged;
 
 	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
 	{
@@ -241,6 +258,11 @@ public:
 		cb->Scale(ScaleWidth, ScaleHeight);
 
 		tooltip->SetToolTip(cb, gcnew String(_description));
+
+		if (hasChanged == nullptr)
+			hasChanged = new bool;
+		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
+		cb->CheckedChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
 		panel->Controls->Add(cb);
 		mainControlHandle = cb->Handle;
@@ -311,6 +333,11 @@ public:
 
 		tooltip->SetToolTip(label, gcnew String(_description));
 		tooltip->SetToolTip(numberbox, gcnew String(_description));
+
+		if (hasChanged == nullptr)
+			hasChanged = new bool;
+		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
+		numberbox->ValueChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
 		panel->Controls->Add(label);
 		panel->Controls->Add(numberbox);
@@ -390,6 +417,11 @@ public:
 
 		tooltip->SetToolTip(label, gcnew String(_description));
 		tooltip->SetToolTip(textbox, gcnew String(_description));
+
+		if (hasChanged == nullptr)
+			hasChanged = new bool;
+		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
+		textbox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
 		panel->Controls->Add(label);
 		panel->Controls->Add(textbox);
@@ -474,6 +506,11 @@ public:
 
 		tooltip->SetToolTip(label, gcnew String(_description));
 		tooltip->SetToolTip(combobox, gcnew String(_description));
+
+		if (hasChanged == nullptr)
+			hasChanged = new bool;
+		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
+		combobox->SelectedIndexChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
 		panel->Controls->Add(label);
 		panel->Controls->Add(combobox);
@@ -562,6 +599,11 @@ public:
 
 		tooltip->SetToolTip(label, gcnew String(_description));
 		tooltip->SetToolTip(combobox, gcnew String(_description));
+
+		if (hasChanged == nullptr)
+			hasChanged = new bool;
+		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
+		combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
 		panel->Controls->Add(label);
 		panel->Controls->Add(combobox);
@@ -655,6 +697,11 @@ public:
 		ComboboxValidation^ validation = gcnew ComboboxValidation(combobox);
 		combobox->Leave += gcnew System::EventHandler(validation, &ComboboxValidation::CheckNumberLeave);
 
+		if (hasChanged == nullptr)
+			hasChanged = new bool;
+		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
+		combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+
 		panel->Controls->Add(label);
 		panel->Controls->Add(combobox);
 		mainControlHandle = combobox->Handle;
@@ -741,6 +788,11 @@ public:
 
 		tooltip->SetToolTip(label, gcnew String(_description));
 		tooltip->SetToolTip(combobox, gcnew String(_description));
+
+		if (hasChanged == nullptr)
+			hasChanged = new bool;
+		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
+		combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
 		ComboboxValidation^ validation = gcnew ComboboxValidation(combobox);
 		combobox->Leave += gcnew System::EventHandler(validation, &ComboboxValidation::CheckResolutionLeave);

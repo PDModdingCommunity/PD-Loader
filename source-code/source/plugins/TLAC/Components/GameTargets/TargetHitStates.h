@@ -2,7 +2,7 @@
 
 namespace TLAC::Components
 {
-	enum TargetHitStates
+	enum TargetHitStates : int32_t
 	{
 		COOL,
 		FINE,

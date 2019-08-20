@@ -178,7 +178,7 @@ public:
 
 };
 
-static ref class ChangeHandler
+ref class ChangeHandler
 {
 public:
 	bool* changebool;
@@ -220,6 +220,26 @@ public:
 };
 
 
+class OptionMetaGroupStart : public ConfigOptionBase
+{
+public:
+	int _height;
+
+	OptionMetaGroupStart(LPCWSTR friendlyName, int height)
+	{
+		_friendlyName = friendlyName;
+		_height = height;
+	}
+};
+class OptionMetaGroupEnd : public ConfigOptionBase
+{
+public:
+	OptionMetaGroupEnd()
+	{
+	}
+};
+
+
 class BooleanOption : public ConfigOptionBase
 {
 public:
@@ -252,9 +272,14 @@ public:
 		cb->BackColor = System::Drawing::Color::FromArgb(0, 0, 0, 0);
 		
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		cb->Scale(ScaleWidth, ScaleHeight);
 
 		tooltip->SetToolTip(cb, gcnew String(_description));
@@ -325,9 +350,14 @@ public:
 		numberbox->AutoSize = true;
 
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		label->Scale(ScaleWidth, ScaleHeight);
 		numberbox->Scale(ScaleWidth, ScaleHeight);
 
@@ -404,9 +434,14 @@ public:
 		textbox->AutoSize = true;
 
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		label->Scale(ScaleWidth, ScaleHeight);
 		textbox->Scale(ScaleWidth, ScaleHeight);
 		
@@ -498,9 +533,14 @@ public:
 		combobox->DropDownStyle = ComboBoxStyle::DropDownList;
 
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		label->Scale(ScaleWidth, ScaleHeight);
 		combobox->Scale(ScaleWidth, ScaleHeight);
 
@@ -585,9 +625,14 @@ public:
 		combobox->DropDownStyle = ComboBoxStyle::DropDown;
 
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		label->Scale(ScaleWidth, ScaleHeight);
 		combobox->Scale(ScaleWidth, ScaleHeight);
 
@@ -685,9 +730,14 @@ public:
 		combobox->DropDownStyle = ComboBoxStyle::DropDown;
 
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		label->Scale(ScaleWidth, ScaleHeight);
 		combobox->Scale(ScaleWidth, ScaleHeight);
 
@@ -780,9 +830,14 @@ public:
 		combobox->DropDownStyle = ComboBoxStyle::DropDown;
 
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		label->Scale(ScaleWidth, ScaleHeight);
 		combobox->Scale(ScaleWidth, ScaleHeight);
 
@@ -824,3 +879,72 @@ public:
 
 	}
 };
+
+
+Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> cfg, ToolTip^ tooltip)
+{
+	Panel^ outpanel = gcnew Panel();
+	outpanel->Width = width;
+	outpanel->Height = height;
+	outpanel->AutoScroll = true;
+
+	Form^ RootForm = outpanel->FindForm();
+	float ScaleWidth = 1.0f;
+	float ScaleHeight = 1.0f;
+	if (RootForm)
+	{
+		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+		ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+		ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+	}
+
+	int curX = 12;
+	int curY = 3;
+
+	for (int i = 0; i < cfg.size(); i++)
+	{
+		if (typeid(cfg[i]).hash_code() == typeid(OptionMetaGroupEnd).hash_code())
+			continue;
+
+		if (typeid(cfg[i]).hash_code() == typeid(OptionMetaGroupStart).hash_code())
+		{
+			OptionMetaGroupStart* groupData = (OptionMetaGroupStart*)(cfg[i]);
+			GroupBox^ groupbox = gcnew GroupBox();
+			groupbox->Width = width - (ScaleWidth * 8);
+			groupbox->Height = ScaleHeight * groupData->_height;
+			groupbox->Left = ScaleWidth * 4;
+			groupbox->Top = ScaleHeight * curY;
+			groupbox->Text = gcnew String(groupData->_friendlyName);
+
+			// find the end of this group by simple iteration keeping track of indent level
+			int level = 1;
+			int endidx;
+			for (endidx = i + 1; endidx < cfg.size(); endidx++)
+			{
+				if (typeid(&cfg[endidx]).hash_code() == typeid(OptionMetaGroupStart).hash_code())
+					level++;
+				if (typeid(&cfg[endidx]).hash_code() == typeid(OptionMetaGroupEnd).hash_code())
+					level--;
+
+				if (level == 0)
+					break;
+			}
+
+			Panel^ groupPanel = MakePanel(groupbox->Width - (ScaleWidth * 8), groupbox->Height - (ScaleHeight * 10), std::vector<ConfigOptionBase*>(&(cfg[i + 1]), &(cfg[endidx])), tooltip);
+			groupPanel->Left = ScaleWidth * 12;
+			groupPanel->Top = ScaleHeight * (curY + 8);
+
+			groupbox->Controls->Add(groupPanel);
+			outpanel->Controls->Add(groupbox);
+
+			i = endidx;
+			curY += groupData->_height;
+		}
+		else
+		{
+			curY += cfg[i]->AddToPanel(outpanel, curX, curY, tooltip);
+		}
+	}
+
+	return outpanel;
+}

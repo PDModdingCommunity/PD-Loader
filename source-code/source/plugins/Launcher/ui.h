@@ -122,7 +122,7 @@ namespace Launcher {
 
 
 			using namespace PluginConfig;
-			//tabPage_Components->Controls->Add(MakePanel(256, 800, testcfg, toolTip1));
+			//tabPage_Components->Controls->Add(MakePanel(256, 256, testcfgconfigopts, toolTip1));
 			tabPage_Components->Controls->Add(MakePanel(256, 100, std::vector<ConfigOptionBase*>(&componentsArray[0], &componentsArray[12]), toolTip1));
 
 

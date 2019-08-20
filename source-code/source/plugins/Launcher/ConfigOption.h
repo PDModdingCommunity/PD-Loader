@@ -903,10 +903,10 @@ Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> cfg, Tool
 
 	for (int i = 0; i < cfg.size(); i++)
 	{
-		if (typeid(cfg[i]).hash_code() == typeid(OptionMetaGroupEnd).hash_code())
+		if (typeid(*cfg[i]).hash_code() == typeid(OptionMetaGroupEnd).hash_code())
 			continue;
 
-		if (typeid(cfg[i]).hash_code() == typeid(OptionMetaGroupStart).hash_code())
+		if (typeid(*cfg[i]).hash_code() == typeid(OptionMetaGroupStart).hash_code())
 		{
 			OptionMetaGroupStart* groupData = (OptionMetaGroupStart*)(cfg[i]);
 			GroupBox^ groupbox = gcnew GroupBox();
@@ -921,9 +921,9 @@ Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> cfg, Tool
 			int endidx;
 			for (endidx = i + 1; endidx < cfg.size(); endidx++)
 			{
-				if (typeid(&cfg[endidx]).hash_code() == typeid(OptionMetaGroupStart).hash_code())
+				if (typeid(*cfg[endidx]).hash_code() == typeid(OptionMetaGroupStart).hash_code())
 					level++;
-				if (typeid(&cfg[endidx]).hash_code() == typeid(OptionMetaGroupEnd).hash_code())
+				if (typeid(*cfg[endidx]).hash_code() == typeid(OptionMetaGroupEnd).hash_code())
 					level--;
 
 				if (level == 0)

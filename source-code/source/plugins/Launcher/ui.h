@@ -6,6 +6,7 @@
 #include <GL\freeglut.h>
 #include <GL\GL.h>
 #include "SkinnedMessageBox.h"
+#include "PluginConfig.h"
 
 namespace Launcher {
 
@@ -90,6 +91,7 @@ namespace Launcher {
 			this->panel_Patches->PerformLayout();
 
 
+
 			this->panel_Playerdata->SuspendLayout();
 
 			// populate playerdata options from array in framework
@@ -112,11 +114,16 @@ namespace Launcher {
 			for (ConfigOptionBase* component : componentsArray)
 			{
 				component->hasChanged = ConfigHasChanged;
-				componentsY += component->AddToPanel(panel_Components, 12, componentsY, toolTip1);
+				//componentsY += component->AddToPanel(panel_Components, 12, componentsY, toolTip1);
 			}
 			this->panel_Components->ResumeLayout(false);
 			this->panel_Components->PerformLayout();
 
+
+
+			using namespace PluginConfig;
+			//tabPage_Components->Controls->Add(MakePanel(256, 800, testcfg, toolTip1));
+			tabPage_Components->Controls->Add(MakePanel(256, 100, std::vector<ConfigOptionBase*>(&componentsArray[0], &componentsArray[12]), toolTip1));
 
 
 			// trick Optimus into switching to the NVIDIA GPU
@@ -402,7 +409,7 @@ namespace Launcher {
 			// 
 			this->tabPage_Components->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Components->Controls->Add(this->panel_Components);
+			//this->tabPage_Components->Controls->Add(this->panel_Components);
 			this->tabPage_Components->Location = System::Drawing::Point(4, 32);
 			this->tabPage_Components->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage_Components->Name = L"tabPage_Components";

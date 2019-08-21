@@ -1,106 +1,9 @@
 #pragma once
 #include "ConfigOption.h"
-#include "framework.h"
+#include "PluginConfigApi.h"
 
 namespace PluginConfig
 {
-	enum ConfigType {
-		CONFIG_BOOLEAN,
-		CONFIG_NUMERIC,
-		CONFIG_STRING,
-		CONFIG_DROPDOWN_INDEX,
-		CONFIG_DROPDOWN_TEXT,
-		CONFIG_DROPDOWN_NUMBER,
-		CONFIG_RESOLUTION,
-		CONFIG_GROUP_START,
-		CONFIG_GROUP_END
-	};
-
-	struct PluginConfigBooleanData {
-		LPCWSTR iniVarName;
-		LPCWSTR iniSectionName;
-		LPCWSTR iniFilePath;
-		LPCWSTR friendlyName;
-		LPCWSTR description;
-		bool defaultVal;
-		bool saveAsString;
-	};
-
-	struct PluginConfigNumericData {
-		LPCWSTR iniVarName;
-		LPCWSTR iniSectionName;
-		LPCWSTR iniFilePath;
-		LPCWSTR friendlyName;
-		LPCWSTR description;
-		int defaultVal;
-		int minVal;
-		int maxVal;
-	};
-
-	struct PluginConfigStringData {
-		LPCWSTR iniVarName;
-		LPCWSTR iniSectionName;
-		LPCWSTR iniFilePath;
-		LPCWSTR friendlyName;
-		LPCWSTR description;
-		LPCWSTR defaultVal;
-		bool useUtf8;
-	};
-
-	struct PluginConfigDropdownIndexData {
-		LPCWSTR iniVarName;
-		LPCWSTR iniSectionName;
-		LPCWSTR iniFilePath;
-		LPCWSTR friendlyName;
-		LPCWSTR description;
-		int defaultVal;
-		std::vector<LPCWSTR> valueStrings;
-	};
-
-	struct PluginConfigDropdownTextData {
-		LPCWSTR iniVarName;
-		LPCWSTR iniSectionName;
-		LPCWSTR iniFilePath;
-		LPCWSTR friendlyName;
-		LPCWSTR description;
-		LPCWSTR defaultVal;
-		std::vector<LPCWSTR> valueStrings;
-		bool useUtf8;
-	};
-
-	struct PluginConfigDropdownNumberData {
-		LPCWSTR iniVarName;
-		LPCWSTR iniSectionName;
-		LPCWSTR iniFilePath;
-		LPCWSTR friendlyName;
-		LPCWSTR description;
-		int defaultVal;
-		std::vector<int> valueInts;
-	};
-
-	struct PluginConfigResolutionData {
-		LPCWSTR iniVarName;
-		LPCWSTR iniVarName2;
-		LPCWSTR iniSectionName;
-		LPCWSTR iniFilePath;
-		LPCWSTR friendlyName;
-		LPCWSTR description;
-		resolution defaultVal;
-		std::vector<resolution> valueResolutions;
-	};
-
-	struct PluginConfigGroupData
-	{
-		LPCWSTR name;
-		int height;
-	};
-
-	struct PluginConfigOption
-	{
-		ConfigType cfgType;
-		void* data;
-	};
-
 	ConfigOptionBase* GetConfigOption(PluginConfigOption cfg)
 	{
 		PluginConfigBooleanData* boolData = (PluginConfigBooleanData*)(cfg.data);
@@ -137,7 +40,7 @@ namespace PluginConfig
 		}
 	}
 
-	std::vector<ConfigOptionBase*> GetConfigOptionVec(std::vector<PluginConfigOption> in)
+	std::vector<ConfigOptionBase*> GetConfigOptionVec(std::vector<PluginConfigOption> &in)
 	{
 		std::vector<ConfigOptionBase*> outvec;
 		for (PluginConfigOption &opt : in)
@@ -147,12 +50,12 @@ namespace PluginConfig
 		return outvec;
 	}
 
-	std::vector<PluginConfigOption> testcfg = 
+	/*std::vector<PluginConfigOption> testcfg = 
 	{
 		PluginConfigOption{ CONFIG_GROUP_START, new PluginConfigGroupData{L"Screen Resolution", 400 } },
 		PluginConfigOption{ CONFIG_DROPDOWN_INDEX, new PluginConfigDropdownIndexData{ L"display", RESOLUTION_SECTION, CONFIG_FILE, L"Display:", L"Sets the window/screen mode.", 0, std::vector<LPCWSTR>({ L"Windowed", L"Borderless", L"Fullscreen" }) } },
 		PluginConfigOption{ CONFIG_RESOLUTION, new PluginConfigResolutionData{ L"width", L"height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the display resolution.", resolution(1280, 720), getScreenResolutionsVec(screenModes) } }
-	};
+	};*/
 
-	std::vector<ConfigOptionBase*> testcfgconfigopts = GetConfigOptionVec(testcfg);
+	//std::vector<ConfigOptionBase*> testcfgconfigopts = GetConfigOptionVec(testcfg);
 };

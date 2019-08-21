@@ -9,6 +9,7 @@
 #include <algorithm>
 
 #include "ConfigOption.h"
+#include "PluginConfig.h"
 
 int (__cdecl* divaMain)(int argc, const char** argv, const char** envp) = (int(__cdecl*)(int argc, const char** argv, const char** envp))0x140194D90;
 
@@ -34,13 +35,15 @@ LPCWSTR DIVA_EXECUTABLE = DIVA_EXECUTABLE_STRING.c_str();
 wstring DIVA_EXECUTABLE_LAUNCH_STRING = DIVA_EXECUTABLE_STRING + L" --launch";
 LPWSTR DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING.c_str());
 
-wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\config.ini";
+wstring PLUGINS_DIR = DirPath() + L"\\plugins";
+
+wstring CONFIG_FILE_STRING = PLUGINS_DIR + L"\\config.ini";
 LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
 
-wstring COMPONENTS_FILE_STRING = DirPath() + L"\\plugins\\components.ini";
+wstring COMPONENTS_FILE_STRING = PLUGINS_DIR + L"\\components.ini";
 LPCWSTR COMPONENTS_FILE = COMPONENTS_FILE_STRING.c_str();
 
-wstring PLAYERDATA_FILE_STRING = DirPath() + L"\\plugins\\playerdata.ini";
+wstring PLAYERDATA_FILE_STRING = PLUGINS_DIR + L"\\playerdata.ini";
 LPCWSTR PLAYERDATA_FILE = PLAYERDATA_FILE_STRING.c_str();
 
 LPCWSTR PATCHES_SECTION = L"patches";
@@ -263,6 +266,70 @@ void PrependFile(LPCSTR newStr, LPCWSTR fileName)
 	fileStream << outStr;
 	fileStream.close();
 }
+
+
+struct PluginInfo {
+	HMODULE handle;
+	std::wstring filename;
+	std::wstring name;
+	std::wstring description;
+	std::vector<PluginConfig::PluginConfigOption> configopts;
+};
+std::vector<PluginInfo> LoadPlugins()
+{
+	std::vector<PluginInfo> outvec;
+
+	HANDLE hFind;
+	WIN32_FIND_DATAW ffd;
+
+	hFind = FindFirstFileW((PLUGINS_DIR + L"\\*.dva").c_str(), &ffd);
+	if (hFind != INVALID_HANDLE_VALUE) {
+		do {
+			if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+			{
+				auto pos = wcslen(ffd.cFileName);
+
+				if (ffd.cFileName[pos - 4] == '.' &&
+					(ffd.cFileName[pos - 3] == 'd' || ffd.cFileName[pos - 3] == 'D') &&
+					(ffd.cFileName[pos - 2] == 'v' || ffd.cFileName[pos - 2] == 'V') &&
+					(ffd.cFileName[pos - 1] == 'a' || ffd.cFileName[pos - 1] == 'A'))
+				{
+					PluginInfo thisplugin;
+					thisplugin.handle = LoadLibraryW(ffd.cFileName);
+					thisplugin.filename = ffd.cFileName;
+
+					if (thisplugin.handle == NULL)
+						continue;
+
+					auto nameFunc = (LPCWSTR(*)())GetProcAddress(thisplugin.handle, "GetPluginName");
+					auto descFunc = (LPCWSTR(*)())GetProcAddress(thisplugin.handle, "GetPluginDescription");
+					auto optsFunc = (std::vector<PluginConfig::PluginConfigOption>(*)())GetProcAddress(thisplugin.handle, "GetPluginOptions");
+
+					if (nameFunc != NULL)
+						thisplugin.name = nameFunc();
+					else
+						thisplugin.name = thisplugin.filename;
+
+					if (descFunc != NULL)
+						thisplugin.description = descFunc();
+					else
+						thisplugin.description = (thisplugin.filename + L" plugin").c_str();
+
+					if (optsFunc != NULL)
+						thisplugin.configopts = optsFunc();
+
+					FreeLibrary(thisplugin.handle);
+
+					outvec.push_back(thisplugin);
+				}
+			}
+		} while (FindNextFileW(hFind, &ffd));
+		FindClose(hFind);
+	}
+
+	return outvec;
+}
+std::vector<PluginInfo> AllPlugins = LoadPlugins();
 
 
 // used to trick Optimus into switching to the NVIDIA GPU

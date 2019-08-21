@@ -9,6 +9,8 @@
 
 #include <msclr\marshal_cppstd.h>
 
+#include "PluginConfigApi.h"
+
 using namespace System;
 using namespace System::Windows::Forms;
 
@@ -38,47 +40,6 @@ bool GetPrivateProfileBoolW(LPCWSTR lpAppName, LPCWSTR lpKeyName, bool default, 
 
 	return out;
 }
-
-// resolution class to store and sort the width and height easily
-class resolution
-{
-public:
-	unsigned int width;
-	unsigned int height;
-
-	resolution()
-	{
-		width = 0;
-		height = 0;
-	}
-
-	resolution(unsigned int width, unsigned int height)
-	{
-		resolution::width = width;
-		resolution::height = height;
-	}
-
-	bool operator ==(const resolution &res2)
-	{
-		return width == res2.width && height == res2.height;
-	}
-
-	// in comparisons width takes priority because it's usually displayed first
-	bool operator <(const resolution &res2)
-	{
-		if (width == res2.width)
-			return height < res2.height;
-		else
-			return width < res2.width;
-	}
-	bool operator >(const resolution &res2)
-	{
-		if (width == res2.width)
-			return height > res2.height;
-		else
-			return width > res2.width;
-	}
-};
 
 
 ref class ComboboxValidation
@@ -881,7 +842,7 @@ public:
 };
 
 
-Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> cfg, ToolTip^ tooltip)
+Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, ToolTip^ tooltip)
 {
 	Panel^ outpanel = gcnew Panel();
 	outpanel->Width = width;

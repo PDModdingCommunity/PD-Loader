@@ -313,12 +313,13 @@ std::vector<PluginInfo> LoadPlugins()
 					if (descFunc != NULL)
 						thisplugin.description = descFunc();
 					else
-						thisplugin.description = (thisplugin.filename + L" plugin").c_str();
+						thisplugin.description = (thisplugin.filename + L" Plugin").c_str();
 
 					if (optsFunc != NULL)
 						thisplugin.configopts = optsFunc();
 
-					FreeLibrary(thisplugin.handle);
+					// afaik FreeLibrary should be fine because of ref counting, but it isn't. whatever.
+					// FreeLibrary(thisplugin.handle);
 
 					outvec.push_back(thisplugin);
 				}

@@ -167,6 +167,8 @@
   <ItemGroup>
     <ClInclude Include="ConfigOption.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="PluginConfig.h" />
+    <ClInclude Include="PluginConfigApi.h" />
     <ClInclude Include="SkinnedMessageBox.h" />
     <ClInclude Include="TabPadding.h" />
     <ClInclude Include="ui.h">

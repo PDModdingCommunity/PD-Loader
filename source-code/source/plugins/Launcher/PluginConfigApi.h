@@ -2,6 +2,7 @@
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #include <windows.h>
 #include <vector>
+#include "framework.h"
 
 // resolution class to store and sort the width and height easily
 class resolution

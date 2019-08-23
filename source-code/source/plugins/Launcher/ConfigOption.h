@@ -533,14 +533,15 @@ public:
 };
 
 
-class EditableDropdownOption : public ConfigOptionBase
+class DropdownTextOption : public ConfigOptionBase
 {
 public:
 	LPCWSTR _defaultVal;
 	std::vector<LPCWSTR> _valueStrings;
+	bool _editable;
 	bool _useUtf8;
 
-	EditableDropdownOption(LPCWSTR iniVarName, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, LPCWSTR defaultVal, std::vector<LPCWSTR> valueStrings, bool useUtf8)
+	DropdownTextOption(LPCWSTR iniVarName, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, LPCWSTR defaultVal, std::vector<LPCWSTR> valueStrings, bool editable, bool useUtf8)
 	{
 		_iniVarName = iniVarName;
 		_iniSectionName = iniSectionName;
@@ -549,6 +550,7 @@ public:
 		_description = description;
 		_defaultVal = defaultVal;
 		_valueStrings = valueStrings;
+		_editable = editable;
 		_useUtf8 = useUtf8;
 	}
 
@@ -583,7 +585,11 @@ public:
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
 		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-		combobox->DropDownStyle = ComboBoxStyle::DropDown;
+
+		if (_editable)
+			combobox->DropDownStyle = ComboBoxStyle::DropDown;
+		else
+			combobox->DropDownStyle = ComboBoxStyle::DropDownList;
 
 		Form^ RootForm = panel->FindForm();
 		float ScaleWidth = 1.0f;
@@ -645,13 +651,14 @@ public:
 };
 
 
-class EditableDropdownNumberOption : public ConfigOptionBase
+class DropdownNumberOption : public ConfigOptionBase
 {
 public:
 	int _defaultVal;
 	std::vector<int> _valueInts;
+	bool _editable;
 
-	EditableDropdownNumberOption(LPCWSTR iniVarName, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, int defaultVal, std::vector<int> valueInts)
+	DropdownNumberOption(LPCWSTR iniVarName, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, int defaultVal, std::vector<int> valueInts, bool editable)
 	{
 		_iniVarName = iniVarName;
 		_iniSectionName = iniSectionName;
@@ -660,6 +667,7 @@ public:
 		_description = description;
 		_defaultVal = defaultVal;
 		_valueInts = valueInts;
+		_editable = editable;
 	}
 
 	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
@@ -688,7 +696,11 @@ public:
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
 		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-		combobox->DropDownStyle = ComboBoxStyle::DropDown;
+		
+		if (_editable)
+			combobox->DropDownStyle = ComboBoxStyle::DropDown;
+		else
+			combobox->DropDownStyle = ComboBoxStyle::DropDownList;
 
 		Form^ RootForm = panel->FindForm();
 		float ScaleWidth = 1.0f;

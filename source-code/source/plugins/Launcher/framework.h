@@ -132,8 +132,8 @@ ResolutionOption* DisplayResolutionOption = new ResolutionOption(L"width", L"hei
 ConfigOptionBase* screenResolutionArray[] = {
 	DisplayModeDropdown,
 	DisplayResolutionOption,
-	//new EditableDropdownNumberOption(L"bitdepth", RESOLUTION_SECTION, CONFIG_FILE, L"Bit Depth:", L"Sets the display bit depth.", 32, getScreenDepthsVec(screenModes)),
-	new EditableDropdownNumberOption(L"refreshrate", RESOLUTION_SECTION, CONFIG_FILE, L"Refresh Rate:", L"Sets the display refresh rate.", 60, getScreenRatesVec(screenModes)),
+	//new DropdownNumberOption(L"bitdepth", RESOLUTION_SECTION, CONFIG_FILE, L"Bit Depth:", L"Sets the display bit depth.", 32, getScreenDepthsVec(screenModes), true),
+	new DropdownNumberOption(L"refreshrate", RESOLUTION_SECTION, CONFIG_FILE, L"Refresh Rate:", L"Sets the display refresh rate.", 60, getScreenRatesVec(screenModes), true),
 };
 
 BooleanOption* InternalResolutionCheckbox = new BooleanOption(L"r.enable", RESOLUTION_SECTION, CONFIG_FILE, L"Enable", L"Enable or disable custom internal resolution.", false, false);

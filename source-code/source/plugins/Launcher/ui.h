@@ -123,16 +123,10 @@ namespace Launcher {
 			this->panel_Plugins->SuspendLayout();
 
 			int pluginsY = 3;
-			for (PluginInfo &plugin : AllPlugins)
+			for (ConfigOptionBase* option : AllPluginOpts)
 			{
-				Label^ lbl = gcnew Label;
-				lbl->AutoSize = true;
-				lbl->Text = gcnew String(plugin.name.c_str());
-				lbl->Left = 12;
-				lbl->Top = pluginsY;
-				panel_Plugins->Controls->Add(lbl);
-				toolTip1->SetToolTip(lbl, gcnew String(plugin.description.c_str()));
-				pluginsY += lbl->Font->Height + 6;
+				option->hasChanged = ConfigHasChanged;
+				pluginsY += option->AddToPanel(panel_Plugins, 12, pluginsY, toolTip1);
 			}
 			this->panel_Plugins->ResumeLayout(false);
 			this->panel_Plugins->PerformLayout();

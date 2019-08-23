@@ -273,7 +273,7 @@ struct PluginInfo {
 	std::wstring filename;
 	std::wstring name;
 	std::wstring description;
-	std::vector<PluginConfig::PluginConfigOption> configopts;
+	std::vector<ConfigOptionBase*> configopts;
 };
 std::vector<PluginInfo> LoadPlugins()
 {
@@ -316,7 +316,7 @@ std::vector<PluginInfo> LoadPlugins()
 						thisplugin.description = (thisplugin.filename + L" Plugin").c_str();
 
 					if (optsFunc != NULL)
-						thisplugin.configopts = optsFunc();
+						thisplugin.configopts = PluginConfig::GetConfigOptionVec(optsFunc());
 
 					// afaik FreeLibrary should be fine because of ref counting, but it isn't. whatever.
 					// FreeLibrary(thisplugin.handle);
@@ -331,6 +331,20 @@ std::vector<PluginInfo> LoadPlugins()
 	return outvec;
 }
 std::vector<PluginInfo> AllPlugins = LoadPlugins();
+
+std::vector<PluginOption*> GetPluginOptions(std::vector<PluginInfo>* plugins)
+{
+	std::vector<PluginOption*> outvec;
+
+	for (PluginInfo &pi : *plugins)
+	{
+		PluginOption* opt = new PluginOption(pi.filename.c_str(), L"plugins", CONFIG_FILE, pi.name.c_str(), pi.description.c_str(), true, pi.configopts);
+		outvec.push_back(opt);
+	}
+
+	return outvec;
+}
+std::vector<PluginOption*> AllPluginOpts = GetPluginOptions(&AllPlugins);
 
 
 // used to trick Optimus into switching to the NVIDIA GPU

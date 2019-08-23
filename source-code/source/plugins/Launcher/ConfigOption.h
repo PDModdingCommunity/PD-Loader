@@ -18,6 +18,7 @@ float BaseScaleSize = 96;
 int Col1Width = 110;
 int Col2Left = 114;
 int Col2Width = 110;
+int ConfigBtnLeft = 160;
 int ControlSpacing = 6;
 
 // Custom function. Works like GetPrivateProfileIntW but returns bool. Can detect a numeric value or string.
@@ -40,6 +41,10 @@ bool GetPrivateProfileBoolW(LPCWSTR lpAppName, LPCWSTR lpKeyName, bool default, 
 
 	return out;
 }
+
+// declare this early (actual definitions below)
+class ConfigOptionBase;
+Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, ToolTip^ tooltip, bool* hasChanged);
 
 
 ref class ComboboxValidation
@@ -137,6 +142,49 @@ public:
 		cb->Text = text;
 	}
 
+};
+
+ref class PluginConfigHandler
+{
+public:
+	Panel^ opts;
+
+	PluginConfigHandler(Panel^ optspanel)
+	{
+		opts = optspanel;
+	}
+
+	System::Void OpenForm(System::Object^ sender, System::EventArgs^ e)
+	{
+		Form^ OptsForm = gcnew Form();
+
+		OptsForm->FormBorderStyle = FormBorderStyle::FixedDialog;
+		OptsForm->StartPosition = FormStartPosition::CenterScreen;
+		OptsForm->MaximizeBox = false;
+		OptsForm->MinimizeBox = false;
+		OptsForm->ShowInTaskbar = false;
+		OptsForm->ShowIcon = false;
+
+		OptsForm->BackColor = Drawing::Color::FromArgb(64, 64, 64);
+		OptsForm->ForeColor = Drawing::Color::White;
+
+		opts->Left = 0;
+		opts->Top = 0;
+
+		Button^ OkBtn = gcnew Button();
+		OkBtn->Text = L"OK";
+		OkBtn->Left = 4;
+		OkBtn->Top = opts->Bottom + 4;
+		OkBtn->AutoSize = true;
+		OkBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+
+		OptsForm->ClientSize = Drawing::Size(opts->Width, OkBtn->Bottom + 4);
+
+		OptsForm->Controls->Add(opts);
+		OptsForm->Controls->Add(OkBtn);
+
+		OptsForm->ShowDialog();
+	}
 };
 
 ref class ChangeHandler
@@ -854,7 +902,90 @@ public:
 };
 
 
-Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, ToolTip^ tooltip)
+class PluginOption : public ConfigOptionBase
+{
+public:
+	bool _defaultVal;
+	std::vector<ConfigOptionBase*> _configopts;
+
+	PluginOption(LPCWSTR iniVarName, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, bool defaultVal, std::vector<ConfigOptionBase*> configopts)
+	{
+		_iniVarName = iniVarName;
+		_iniSectionName = iniSectionName;
+		_iniFilePath = iniFilePath;
+		_friendlyName = friendlyName;
+		_description = description;
+		_defaultVal = defaultVal;
+		_configopts = configopts;
+	}
+
+	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
+	{
+		CheckBox^ cb = gcnew CheckBox();
+		Button^ button = gcnew Button();
+
+		cb->Text = gcnew String(_friendlyName);
+		cb->Checked = GetPrivateProfileBoolW(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath);
+		cb->Left = left + 2;
+		cb->Top = top + 3;
+		cb->AutoSize = true;
+		cb->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+
+		// hack to ensure high contrast
+		cb->BackColor = System::Drawing::Color::FromArgb(0, 0, 0, 0);
+
+		button->Text = L"Config";
+		button->Left = left + ConfigBtnLeft;
+		button->Top = top;
+		button->AutoSize = true;
+		button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+
+		Form^ RootForm = panel->FindForm();
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
+		cb->Scale(ScaleWidth, ScaleHeight);
+		button->Scale(ScaleWidth, ScaleHeight);
+
+		tooltip->SetToolTip(cb, gcnew String(_description));
+
+		if (hasChanged == nullptr)
+			hasChanged = new bool;
+		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
+		cb->CheckedChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+
+		panel->Controls->Add(cb);
+		mainControlHandle = cb->Handle;
+
+		if (_configopts.size() > 0)
+		{
+			Panel^ configPanel = MakePanel((Col2Left + Col2Width + 64), 250, _configopts, tooltip, hasChanged);
+			configPanel->Scale(ScaleWidth, ScaleHeight);
+			PluginConfigHandler^ confighandler = gcnew PluginConfigHandler(configPanel);
+			button->Click += gcnew System::EventHandler(confighandler, &PluginConfigHandler::OpenForm);
+
+			panel->Controls->Add(button);
+		}
+
+		int ControlHeight = button->Height / ScaleHeight;
+		return ControlHeight + ControlSpacing;
+	}
+
+	virtual void SaveOption()
+	{
+		bool boolEnabled = ((CheckBox^)CheckBox::FromHandle(mainControlHandle))->Checked;
+
+		WritePrivateProfileStringW(_iniSectionName, _iniVarName, boolEnabled ? L"1" : L"0", _iniFilePath);
+	}
+};
+
+
+Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, ToolTip^ tooltip, bool* hasChanged)
 {
 	Panel^ outpanel = gcnew Panel();
 	outpanel->Width = width;
@@ -903,7 +1034,7 @@ Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, Too
 					break;
 			}
 
-			Panel^ groupPanel = MakePanel(groupbox->Width - (ScaleWidth * 8), groupbox->Height - (ScaleHeight * 10), std::vector<ConfigOptionBase*>(&(cfg[i + 1]), &(cfg[endidx])), tooltip);
+			Panel^ groupPanel = MakePanel(groupbox->Width - (ScaleWidth * 8), groupbox->Height - (ScaleHeight * 10), std::vector<ConfigOptionBase*>(&(cfg[i + 1]), &(cfg[endidx])), tooltip, hasChanged);
 			groupPanel->Left = ScaleWidth * 12;
 			groupPanel->Top = ScaleHeight * (curY + 8);
 
@@ -915,6 +1046,7 @@ Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, Too
 		}
 		else
 		{
+			cfg[i]->hasChanged = hasChanged;
 			curY += cfg[i]->AddToPanel(outpanel, curX, curY, tooltip);
 		}
 	}

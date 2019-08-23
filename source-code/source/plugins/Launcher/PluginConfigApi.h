@@ -2,7 +2,6 @@
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #include <windows.h>
 #include <vector>
-#include "framework.h"
 
 // resolution class to store and sort the width and height easily
 class resolution
@@ -108,6 +107,7 @@ namespace PluginConfig
 		LPCWSTR description;
 		LPCWSTR defaultVal;
 		std::vector<LPCWSTR> valueStrings;
+		bool editable;
 		bool useUtf8;
 	};
 
@@ -119,6 +119,7 @@ namespace PluginConfig
 		LPCWSTR description;
 		int defaultVal;
 		std::vector<int> valueInts;
+		bool editable;
 	};
 
 	struct PluginConfigResolutionData {

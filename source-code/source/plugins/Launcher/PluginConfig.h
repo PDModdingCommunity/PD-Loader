@@ -26,9 +26,9 @@ namespace PluginConfig
 		case CONFIG_DROPDOWN_INDEX:
 			return new DropdownOption(ddIdxData->iniVarName, ddIdxData->iniSectionName, ddIdxData->iniFilePath, ddIdxData->friendlyName, ddIdxData->description, ddIdxData->defaultVal, ddIdxData->valueStrings);
 		case CONFIG_DROPDOWN_TEXT:
-			return new EditableDropdownOption(ddTextData->iniVarName, ddTextData->iniSectionName, ddTextData->iniFilePath, ddTextData->friendlyName, ddTextData->description, ddTextData->defaultVal, ddTextData->valueStrings, ddTextData->useUtf8);
+			return new DropdownTextOption(ddTextData->iniVarName, ddTextData->iniSectionName, ddTextData->iniFilePath, ddTextData->friendlyName, ddTextData->description, ddTextData->defaultVal, ddTextData->valueStrings, ddTextData->editable, ddTextData->useUtf8);
 		case CONFIG_DROPDOWN_NUMBER:
-			return new EditableDropdownNumberOption(ddNumberData->iniVarName, ddNumberData->iniSectionName, ddNumberData->iniFilePath, ddNumberData->friendlyName, ddNumberData->description, ddNumberData->defaultVal, ddNumberData->valueInts);
+			return new DropdownNumberOption(ddNumberData->iniVarName, ddNumberData->iniSectionName, ddNumberData->iniFilePath, ddNumberData->friendlyName, ddNumberData->description, ddNumberData->defaultVal, ddNumberData->valueInts, ddNumberData->editable);
 		case CONFIG_RESOLUTION:
 			return new ResolutionOption(resData->iniVarName, resData->iniVarName2, resData->iniSectionName, resData->iniFilePath, resData->friendlyName, resData->description, resData->defaultVal, resData->valueResolutions);
 		case CONFIG_GROUP_START:

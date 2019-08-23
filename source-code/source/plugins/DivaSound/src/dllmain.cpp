@@ -415,9 +415,9 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 using namespace PluginConfig;
 
 std::vector<PluginConfigOption> config = {
-	PluginConfigOption{ CONFIG_DROPDOWN_TEXT, new PluginConfigDropdownTextData{ L"backend", L"general", CONFIG_FILE, L"Backend:", L"Sets the audio output protocol.", L"WASAPI", std::vector<LPCWSTR>({ L"WASAPI", L"WASAPI_Exclusive" }) } },
-	PluginConfigOption{ CONFIG_DROPDOWN_NUMBER, new PluginConfigDropdownNumberData{ L"channels", L"general", CONFIG_FILE, L"Channels:", L"Sets the number of channels.", 2, std::vector<int>({ 2, 4 }) } },
-	PluginConfigOption{ CONFIG_DROPDOWN_NUMBER, new PluginConfigDropdownNumberData{ L"bit_depth", L"general", CONFIG_FILE, L"Bit Depth:", L"Sets the audio sample format.\n(32 uses floating point samples)", 16, std::vector<int>({ 16, 24, 32 }) } },
+	PluginConfigOption{ CONFIG_DROPDOWN_TEXT, new PluginConfigDropdownTextData{L"backend", L"general", CONFIG_FILE, L"Backend:", L"Sets the audio output protocol.", L"WASAPI", std::vector<LPCWSTR>({ L"WASAPI", L"WASAPI_Exclusive" }), true, false } },
+	PluginConfigOption{ CONFIG_DROPDOWN_NUMBER, new PluginConfigDropdownNumberData{ L"channels", L"general", CONFIG_FILE, L"Channels:", L"Sets the number of channels.", 2, std::vector<int>({ 2, 4 }), false } },
+	PluginConfigOption{ CONFIG_DROPDOWN_NUMBER, new PluginConfigDropdownNumberData{ L"bit_depth", L"general", CONFIG_FILE, L"Bit Depth:", L"Sets the audio sample format.\n(32 uses floating point samples)", 16, std::vector<int>({ 16, 24, 32 }), false } },
 	PluginConfigOption{ CONFIG_NUMERIC, new PluginConfigNumericData{ L"buffer_size", L"buffer", CONFIG_FILE, L"Target Buffer Size:", L"Sets the target buffer size in ms.\nWASAPI will often ignore this and adapt to your hardware config automatically.", 10, 1, 100 } },
 	PluginConfigOption{ CONFIG_NUMERIC, new PluginConfigNumericData{ L"periods", L"buffer", CONFIG_FILE, L"Buffer Periods:", L"Sets how often the buffer should be filled.\nFewer periods usually allows for lower latency, but lowering this may cause issues.", 2, 1, 8 } },
 	PluginConfigOption{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"alternate_init", L"general", CONFIG_FILE, L"Use new init", L"Use the full initialisation replacement.\nTry unchecking this if DivaSound seems to cause crashes.", true } },

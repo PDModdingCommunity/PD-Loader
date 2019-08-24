@@ -147,43 +147,64 @@ public:
 ref class PluginConfigHandler
 {
 public:
-	Panel^ opts;
+	Form^ form;
 
-	PluginConfigHandler(Panel^ optspanel)
+	PluginConfigHandler(Panel^ optspanel, String^ title)
 	{
-		opts = optspanel;
-	}
+		form = gcnew Form();
 
-	System::Void OpenForm(System::Object^ sender, System::EventArgs^ e)
-	{
-		Form^ OptsForm = gcnew Form();
+		form->Text = title;
 
-		OptsForm->FormBorderStyle = FormBorderStyle::FixedDialog;
-		OptsForm->StartPosition = FormStartPosition::CenterScreen;
-		OptsForm->MaximizeBox = false;
-		OptsForm->MinimizeBox = false;
-		OptsForm->ShowInTaskbar = false;
-		OptsForm->ShowIcon = false;
+		form->FormBorderStyle = FormBorderStyle::FixedDialog;
+		form->StartPosition = FormStartPosition::CenterScreen;
+		form->MaximizeBox = false;
+		form->MinimizeBox = false;
+		form->ShowInTaskbar = false;
+		form->ShowIcon = false;
 
-		OptsForm->BackColor = Drawing::Color::FromArgb(64, 64, 64);
-		OptsForm->ForeColor = Drawing::Color::White;
+		form->BackColor = Drawing::Color::FromArgb(64, 64, 64);
+		form->ForeColor = Drawing::Color::White;
 
-		opts->Left = 0;
-		opts->Top = 0;
+		optspanel->Left = 0;
+		optspanel->Top = 0;
 
 		Button^ OkBtn = gcnew Button();
 		OkBtn->Text = L"OK";
 		OkBtn->Left = 4;
-		OkBtn->Top = opts->Bottom + 4;
+		OkBtn->Top = optspanel->Bottom + 4;
 		OkBtn->AutoSize = true;
 		OkBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
-		OptsForm->ClientSize = Drawing::Size(opts->Width, OkBtn->Bottom + 4);
+		form->ClientSize = Drawing::Size(optspanel->Width, OkBtn->Bottom + 4);
 
-		OptsForm->Controls->Add(opts);
-		OptsForm->Controls->Add(OkBtn);
+		form->Controls->Add(optspanel);
+		form->Controls->Add(OkBtn);
+		form->AcceptButton = OkBtn;
 
-		OptsForm->ShowDialog();
+		form->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &PluginConfigHandler::FormClosing);
+		OkBtn->Click += gcnew EventHandler(this, &PluginConfigHandler::OkClick);
+	}
+
+	System::Void OpenForm(System::Object^ sender, System::EventArgs^ e)
+	{
+		// ShowDialog seems to prevent disposal by copying the panel...
+		// which would be fine if I didn't rely on using the control handles
+		// MessageBox::Show(form->Controls[0]->Handle.ToString());
+
+		//Application::OpenForms[0]->Enabled = false;
+		form->Show();
+	}
+
+	System::Void FormClosing(System::Object^ sender, FormClosingEventArgs^ e)
+	{
+		form->Hide();
+		//Application::OpenForms[0]->Enabled = true;
+		e->Cancel = true;
+	}
+
+	System::Void OkClick(System::Object^ sender, System::EventArgs^ e)
+	{
+		form->Close();
 	}
 };
 
@@ -294,7 +315,7 @@ public:
 		tooltip->SetToolTip(cb, gcnew String(_description));
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
 		cb->CheckedChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
@@ -374,7 +395,7 @@ public:
 		tooltip->SetToolTip(numberbox, gcnew String(_description));
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
 		numberbox->ValueChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
@@ -463,7 +484,7 @@ public:
 		tooltip->SetToolTip(textbox, gcnew String(_description));
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
 		textbox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
@@ -557,7 +578,7 @@ public:
 		tooltip->SetToolTip(combobox, gcnew String(_description));
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
 		combobox->SelectedIndexChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
@@ -661,7 +682,7 @@ public:
 		tooltip->SetToolTip(combobox, gcnew String(_description));
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
 		combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
@@ -769,7 +790,7 @@ public:
 		combobox->Leave += gcnew System::EventHandler(validation, &ComboboxValidation::CheckNumberLeave);
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
 		combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
@@ -866,7 +887,7 @@ public:
 		tooltip->SetToolTip(combobox, gcnew String(_description));
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
 		combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
@@ -955,7 +976,7 @@ public:
 		tooltip->SetToolTip(cb, gcnew String(_description));
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
 		cb->CheckedChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
@@ -966,7 +987,7 @@ public:
 		{
 			Panel^ configPanel = MakePanel((Col2Left + Col2Width + 64), 250, _configopts, tooltip, hasChanged);
 			configPanel->Scale(ScaleWidth, ScaleHeight);
-			PluginConfigHandler^ confighandler = gcnew PluginConfigHandler(configPanel);
+			PluginConfigHandler^ confighandler = gcnew PluginConfigHandler(configPanel, gcnew String(_friendlyName) + " Options");
 			button->Click += gcnew System::EventHandler(confighandler, &PluginConfigHandler::OpenForm);
 
 			panel->Controls->Add(button);
@@ -981,6 +1002,11 @@ public:
 		bool boolEnabled = ((CheckBox^)CheckBox::FromHandle(mainControlHandle))->Checked;
 
 		WritePrivateProfileStringW(_iniSectionName, _iniVarName, boolEnabled ? L"1" : L"0", _iniFilePath);
+
+		for (ConfigOptionBase* opt : _configopts)
+		{
+			opt->SaveOption();
+		}
 	}
 };
 

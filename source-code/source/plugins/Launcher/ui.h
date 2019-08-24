@@ -132,12 +132,6 @@ namespace Launcher {
 			this->panel_Plugins->PerformLayout();
 
 
-
-			using namespace PluginConfig;
-			//tabPage_Components->Controls->Add(MakePanel(256, 256, testcfgconfigopts, toolTip1));
-			//tabPage_Components->Controls->Add(MakePanel(256, 100, std::vector<ConfigOptionBase*>(&componentsArray[0], &componentsArray[13]), toolTip1));
-
-
 			// trick Optimus into switching to the NVIDIA GPU
 			if (cuInit != NULL) cuInit(0);
 
@@ -580,6 +574,11 @@ private: System::Void SaveSettings() {
 	for (ConfigOptionBase* component : componentsArray)
 	{
 		component->SaveOption();
+	}
+
+	for (ConfigOptionBase* option : AllPluginOpts)
+	{
+		option->SaveOption();
 	}
 }
 private: System::Void Ui_Load(System::Object^ sender, System::EventArgs^ e){

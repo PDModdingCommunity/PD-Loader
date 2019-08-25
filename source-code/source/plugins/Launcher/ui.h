@@ -120,6 +120,9 @@ namespace Launcher {
 			this->panel_Components->PerformLayout();
 
 
+			AllPlugins = LoadPlugins();
+			AllPluginOpts = GetPluginOptions(&AllPlugins);
+
 			this->panel_Plugins->SuspendLayout();
 
 			int pluginsY = 3;

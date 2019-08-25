@@ -318,8 +318,7 @@ std::vector<PluginInfo> LoadPlugins()
 					if (optsFunc != NULL)
 						thisplugin.configopts = PluginConfig::GetConfigOptionVec(optsFunc());
 
-					// afaik FreeLibrary should be fine because of ref counting, but it isn't. whatever.
-					// FreeLibrary(thisplugin.handle);
+					FreeLibrary(thisplugin.handle);
 
 					outvec.push_back(thisplugin);
 				}
@@ -330,7 +329,8 @@ std::vector<PluginInfo> LoadPlugins()
 
 	return outvec;
 }
-std::vector<PluginInfo> AllPlugins = LoadPlugins();
+// don't load until actually needed to avoid loading disabled plugins
+std::vector<PluginInfo> AllPlugins; // = LoadPlugins();
 
 std::vector<PluginOption*> GetPluginOptions(std::vector<PluginInfo>* plugins)
 {
@@ -344,7 +344,8 @@ std::vector<PluginOption*> GetPluginOptions(std::vector<PluginInfo>* plugins)
 
 	return outvec;
 }
-std::vector<PluginOption*> AllPluginOpts = GetPluginOptions(&AllPlugins);
+// don't load until actually needed to avoid loading disabled plugins
+std::vector<PluginOption*> AllPluginOpts; // = GetPluginOptions(&AllPlugins);
 
 
 // used to trick Optimus into switching to the NVIDIA GPU

@@ -161,6 +161,7 @@ public:
 		form->MinimizeBox = false;
 		form->ShowInTaskbar = false;
 		form->ShowIcon = false;
+		//form->TopMost = true;
 
 		form->BackColor = Drawing::Color::FromArgb(64, 64, 64);
 		form->ForeColor = Drawing::Color::White;
@@ -192,14 +193,20 @@ public:
 		// MessageBox::Show(form->Controls[0]->Handle.ToString());
 
 		//Application::OpenForms[0]->Enabled = false;
+		form->Owner = Application::OpenForms[0];
+		if (form->Visible)
+			form->Hide();
 		form->Show();
 	}
 
 	System::Void FormClosing(System::Object^ sender, FormClosingEventArgs^ e)
 	{
-		form->Hide();
-		//Application::OpenForms[0]->Enabled = true;
-		e->Cancel = true;
+		if (e->CloseReason == CloseReason::UserClosing)
+		{
+			form->Hide();
+			//Application::OpenForms[0]->Enabled = true;
+			e->Cancel = true;
+		}
 	}
 
 	System::Void OkClick(System::Object^ sender, System::EventArgs^ e)

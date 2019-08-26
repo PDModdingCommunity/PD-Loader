@@ -144,4 +144,10 @@ namespace PluginConfig
 		ConfigType cfgType;
 		void* data;
 	};
+
+	struct PluginConfigArray
+	{
+		int len;
+		PluginConfigOption* options;
+	};
 }

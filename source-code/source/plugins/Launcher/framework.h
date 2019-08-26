@@ -303,7 +303,7 @@ std::vector<PluginInfo> LoadPlugins()
 
 					auto nameFunc = (LPCWSTR(*)())GetProcAddress(thisplugin.handle, "GetPluginName");
 					auto descFunc = (LPCWSTR(*)())GetProcAddress(thisplugin.handle, "GetPluginDescription");
-					auto optsFunc = (std::vector<PluginConfig::PluginConfigOption>(*)())GetProcAddress(thisplugin.handle, "GetPluginOptions");
+					auto optsFunc = (PluginConfig::PluginConfigArray(*)())GetProcAddress(thisplugin.handle, "GetPluginOptions");
 
 					if (nameFunc != NULL)
 						thisplugin.name = nameFunc();

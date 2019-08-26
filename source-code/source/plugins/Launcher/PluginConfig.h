@@ -40,12 +40,16 @@ namespace PluginConfig
 		}
 	}
 
-	std::vector<ConfigOptionBase*> GetConfigOptionVec(std::vector<PluginConfigOption> &in)
+	std::vector<ConfigOptionBase*> GetConfigOptionVec(PluginConfigArray &in)
 	{
 		std::vector<ConfigOptionBase*> outvec;
-		for (PluginConfigOption &opt : in)
+		for (int i = 0; i < in.len; i++)
 		{
-			outvec.push_back(GetConfigOption(opt));
+			// basic check for validity
+			if (in.options[i].data == nullptr)
+				break;
+
+			outvec.push_back(GetConfigOption(in.options[i]));
 		}
 		return outvec;
 	}

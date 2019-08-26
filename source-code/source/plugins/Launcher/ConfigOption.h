@@ -691,7 +691,10 @@ public:
 		if (hasChanged == nullptr)
 			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
-		combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+		if (_editable)
+			combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+		else
+			combobox->SelectedIndexChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
 		panel->Controls->Add(label);
 		panel->Controls->Add(combobox);
@@ -799,7 +802,10 @@ public:
 		if (hasChanged == nullptr)
 			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
-		combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+		if (_editable)
+			combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+		else
+			combobox->SelectedIndexChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
 		panel->Controls->Add(label);
 		panel->Controls->Add(combobox);

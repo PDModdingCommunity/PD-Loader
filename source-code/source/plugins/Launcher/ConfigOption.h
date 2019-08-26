@@ -834,8 +834,9 @@ public:
 	LPCWSTR _iniVarName2;
 	resolution _defaultVal;
 	std::vector<resolution> _valueResolutions;
+	bool _editable;
 
-	ResolutionOption(LPCWSTR iniVarName, LPCWSTR iniVarName2, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, resolution defaultVal, std::vector<resolution> valueResolutions)
+	ResolutionOption(LPCWSTR iniVarName, LPCWSTR iniVarName2, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, resolution defaultVal, std::vector<resolution> valueResolutions, bool editable)
 	{
 		_iniVarName = iniVarName;
 		_iniVarName2 = iniVarName2;
@@ -845,6 +846,7 @@ public:
 		_description = description;
 		_defaultVal = defaultVal;
 		_valueResolutions = valueResolutions;
+		_editable = editable;
 	}
 
 	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
@@ -882,7 +884,11 @@ public:
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
 		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-		combobox->DropDownStyle = ComboBoxStyle::DropDown;
+
+		if (_editable)
+			combobox->DropDownStyle = ComboBoxStyle::DropDown;
+		else
+			combobox->DropDownStyle = ComboBoxStyle::DropDownList;
 
 		Form^ RootForm = panel->FindForm();
 		float ScaleWidth = 1.0f;
@@ -902,7 +908,10 @@ public:
 		if (hasChanged == nullptr)
 			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
-		combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+		if (_editable)
+			combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+		else
+			combobox->SelectedIndexChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
 		ComboboxValidation^ validation = gcnew ComboboxValidation(combobox);
 		combobox->Leave += gcnew System::EventHandler(validation, &ComboboxValidation::CheckResolutionLeave);

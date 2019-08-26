@@ -30,7 +30,7 @@ namespace PluginConfig
 		case CONFIG_DROPDOWN_NUMBER:
 			return new DropdownNumberOption(ddNumberData->iniVarName, ddNumberData->iniSectionName, ddNumberData->iniFilePath, ddNumberData->friendlyName, ddNumberData->description, ddNumberData->defaultVal, ddNumberData->valueInts, ddNumberData->editable);
 		case CONFIG_RESOLUTION:
-			return new ResolutionOption(resData->iniVarName, resData->iniVarName2, resData->iniSectionName, resData->iniFilePath, resData->friendlyName, resData->description, resData->defaultVal, resData->valueResolutions);
+			return new ResolutionOption(resData->iniVarName, resData->iniVarName2, resData->iniSectionName, resData->iniFilePath, resData->friendlyName, resData->description, resData->defaultVal, resData->valueResolutions, resData->editable);
 		case CONFIG_GROUP_START:
 			return new OptionMetaGroupStart(groupData->name, groupData->height);
 		case CONFIG_GROUP_END:

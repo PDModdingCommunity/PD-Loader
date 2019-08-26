@@ -131,6 +131,7 @@ namespace PluginConfig
 		LPCWSTR description;
 		resolution defaultVal;
 		std::vector<resolution> valueResolutions;
+		bool editable;
 	};
 
 	struct PluginConfigGroupData

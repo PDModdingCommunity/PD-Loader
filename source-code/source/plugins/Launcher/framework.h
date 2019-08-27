@@ -295,7 +295,7 @@ std::vector<PluginInfo> LoadPlugins()
 					(ffd.cFileName[pos - 1] == 'a' || ffd.cFileName[pos - 1] == 'A'))
 				{
 					PluginInfo thisplugin;
-					thisplugin.handle = LoadLibraryW(ffd.cFileName);
+					thisplugin.handle = LoadLibraryW((PLUGINS_DIR + L"\\" + ffd.cFileName).c_str());
 					thisplugin.filename = ffd.cFileName;
 
 					if (thisplugin.handle == NULL)

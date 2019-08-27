@@ -158,7 +158,8 @@ void FindFiles(WIN32_FIND_DATAW* fd)
 				if (fd->cFileName[pos - 4] == '.' &&
 					(fd->cFileName[pos - 3] == 'd' || fd->cFileName[pos - 3] == 'D') &&
 					(fd->cFileName[pos - 2] == 'v' || fd->cFileName[pos - 2] == 'V') &&
-					(fd->cFileName[pos - 1] == 'a' || fd->cFileName[pos - 1] == 'A'))
+					(fd->cFileName[pos - 1] == 'a' || fd->cFileName[pos - 1] == 'A') &&
+					GetPrivateProfileIntW(L"plugins", fd->cFileName, TRUE, iniPaths))
 				{
 					auto path = dir + L'\\' + fd->cFileName;
 

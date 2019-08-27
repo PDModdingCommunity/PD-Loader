@@ -1085,7 +1085,8 @@ public:
 
 		if (_configopts.size() > 0)
 		{
-			Panel^ configPanel = MakePanel((Col2Left + Col2Width + 64), 250, _configopts, tooltip, hasChanged);
+			ToolTip^ paneltooltip = gcnew ToolTip();
+			Panel^ configPanel = MakePanel((Col2Left + Col2Width + 64), 250, _configopts, paneltooltip, hasChanged);
 			configPanel->Scale(ScaleWidth, ScaleHeight);
 			PluginConfigHandler^ confighandler = gcnew PluginConfigHandler(configPanel, gcnew String(_friendlyName) + " Options");
 			button->Click += gcnew System::EventHandler(confighandler, &PluginConfigHandler::OpenForm);

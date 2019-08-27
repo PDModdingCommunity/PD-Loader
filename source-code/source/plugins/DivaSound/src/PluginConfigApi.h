@@ -46,6 +46,7 @@ public:
 
 namespace PluginConfig
 {
+#pragma pack(push, 1)
 	enum ConfigType {
 		CONFIG_BOOLEAN,
 		CONFIG_NUMERIC,
@@ -151,4 +152,5 @@ namespace PluginConfig
 		int len;
 		PluginConfigOption* options;
 	};
+#pragma pack(pop)
 }

@@ -319,7 +319,8 @@ std::vector<PluginInfo> LoadPlugins()
 					if (optsFunc != NULL)
 						thisplugin.configopts = PluginConfig::GetConfigOptionVec(optsFunc());
 
-					FreeLibrary(thisplugin.handle);
+					// sometimes this might screw with custom button config, so let's just not free stuff
+					// FreeLibrary(thisplugin.handle);
 
 					outvec.push_back(thisplugin);
 				}

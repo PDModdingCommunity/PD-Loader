@@ -56,7 +56,9 @@ namespace PluginConfig
 		CONFIG_DROPDOWN_NUMBER,
 		CONFIG_RESOLUTION,
 		CONFIG_GROUP_START,
-		CONFIG_GROUP_END
+		CONFIG_GROUP_END,
+		CONFIG_BUTTON,
+		CONFIG_SPACER
 	};
 
 	struct PluginConfigBooleanData {
@@ -138,6 +140,16 @@ namespace PluginConfig
 	struct PluginConfigGroupData
 	{
 		LPCWSTR name;
+		int height;
+	};
+
+	struct PluginConfigButtonData {
+		LPCWSTR friendlyName;
+		LPCWSTR description;
+		void(*func)();
+	};
+
+	struct PluginConfigSpacerData {
 		int height;
 	};
 

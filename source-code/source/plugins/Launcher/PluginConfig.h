@@ -14,6 +14,8 @@ namespace PluginConfig
 		PluginConfigDropdownNumberData* ddNumberData = (PluginConfigDropdownNumberData*)(cfg.data);
 		PluginConfigResolutionData* resData = (PluginConfigResolutionData*)(cfg.data);
 		PluginConfigGroupData* groupData = (PluginConfigGroupData*)(cfg.data);
+		PluginConfigButtonData* btnData = (PluginConfigButtonData*)(cfg.data);
+		PluginConfigSpacerData* spacerData = (PluginConfigSpacerData*)(cfg.data);
 
 		switch (cfg.cfgType)
 		{
@@ -35,6 +37,10 @@ namespace PluginConfig
 			return new OptionMetaGroupStart(groupData->name, groupData->height);
 		case CONFIG_GROUP_END:
 			return new OptionMetaGroupEnd();
+		case CONFIG_BUTTON:
+			return new ButtonOption(btnData->friendlyName, btnData->description, btnData->func);
+		case CONFIG_SPACER:
+			return new OptionMetaSpacer(spacerData->height);
 		default:
 			return new ConfigOptionBase();
 		}

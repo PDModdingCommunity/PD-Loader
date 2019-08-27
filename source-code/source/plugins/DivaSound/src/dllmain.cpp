@@ -8,6 +8,7 @@
 #include <vector>
 #include <strsafe.h>
 #include <bassasio.h>
+#include <shellapi.h>
 
 void InjectCode(void* address, const std::vector<uint8_t> data)
 {
@@ -414,6 +415,11 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 
 using namespace PluginConfig;
 
+void OpenWiki()
+{
+	ShellExecuteW(NULL, L"open", L"https://github.com/somewhatlurker/DivaSound/wiki", NULL, NULL, SW_SHOW);
+}
+
 PluginConfigOption config[] = {
 	{ CONFIG_DROPDOWN_TEXT, new PluginConfigDropdownTextData{L"backend", L"general", CONFIG_FILE, L"Backend:", L"Sets the audio output protocol.", L"WASAPI", std::vector<LPCWSTR>({ L"WASAPI", L"WASAPI_Exclusive" }), true, false } },
 	{ CONFIG_DROPDOWN_NUMBER, new PluginConfigDropdownNumberData{ L"channels", L"general", CONFIG_FILE, L"Channels:", L"Sets the number of channels.", 2, std::vector<int>({ 2, 4 }), false } },
@@ -421,6 +427,9 @@ PluginConfigOption config[] = {
 	{ CONFIG_NUMERIC, new PluginConfigNumericData{ L"buffer_size", L"buffer", CONFIG_FILE, L"Target Buffer Size:", L"Sets the target buffer size in ms.\nWASAPI will often ignore this and adapt to your hardware config automatically.", 10, 1, 100 } },
 	{ CONFIG_NUMERIC, new PluginConfigNumericData{ L"periods", L"buffer", CONFIG_FILE, L"Buffer Periods:", L"Sets how often the buffer should be filled.\nFewer periods usually allows for lower latency, but lowering this may cause issues.", 2, 1, 8 } },
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"alternate_init", L"general", CONFIG_FILE, L"Use new init", L"Use the full initialisation replacement.\nTry unchecking this if DivaSound seems to cause crashes.", true } },
+	{ CONFIG_SPACER, new PluginConfigSpacerData{ 8 } },
+	{ CONFIG_BUTTON, new PluginConfigButtonData{ L"Help", L"Get help on the DivaSound wiki.", OpenWiki } },
+	{ CONFIG_SPACER, new PluginConfigSpacerData{ 8 } },
 };
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)

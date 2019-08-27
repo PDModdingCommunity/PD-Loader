@@ -231,6 +231,22 @@ public:
 	}
 };
 
+ref class CustomFuncHandler
+{
+public:
+	void(*_func)();
+
+	CustomFuncHandler(void(*func)())
+	{
+		_func = func;
+	}
+
+	System::Void RunFunc(System::Object^ sender, System::EventArgs^ e)
+	{
+		_func();
+	}
+};
+
 
 class ConfigOptionBase
 {
@@ -273,6 +289,22 @@ class OptionMetaGroupEnd : public ConfigOptionBase
 public:
 	OptionMetaGroupEnd()
 	{
+	}
+};
+
+class OptionMetaSpacer : public ConfigOptionBase
+{
+public:
+	int _height;
+
+	OptionMetaSpacer(int height)
+	{
+		_height = height;
+	}
+
+	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
+	{
+		return _height;
 	}
 };
 
@@ -941,6 +973,52 @@ public:
 		tempWStr = msclr::interop::marshal_as<std::wstring>(tempSysStr);
 		WritePrivateProfileStringW(_iniSectionName, _iniVarName2, tempWStr.c_str(), _iniFilePath);
 
+	}
+};
+
+
+class ButtonOption : public ConfigOptionBase
+{
+public:
+	void(*_func)();
+
+	ButtonOption(LPCWSTR friendlyName, LPCWSTR description, void(*func)())
+	{
+		_friendlyName = friendlyName;
+		_description = description;
+		_func = func;
+	}
+
+	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
+	{
+		Button^ button = gcnew Button();
+
+		button->Text = gcnew String(_friendlyName);
+		button->Left = left;
+		button->Top = top;
+		button->AutoSize = true;
+		button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+
+		Form^ RootForm = panel->FindForm();
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
+		button->Scale(ScaleWidth, ScaleHeight);
+
+		tooltip->SetToolTip(button, gcnew String(_description));
+
+		CustomFuncHandler^ funchandler = gcnew CustomFuncHandler(_func);
+		button->Click += gcnew System::EventHandler(funchandler, &CustomFuncHandler::RunFunc);
+
+		panel->Controls->Add(button);
+
+		int ControlHeight = button->Height / ScaleHeight;
+		return ControlHeight + ControlSpacing;
 	}
 };
 

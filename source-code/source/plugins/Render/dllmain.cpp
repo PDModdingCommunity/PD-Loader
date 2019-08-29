@@ -100,12 +100,13 @@ microseconds expectedFrameDuration(1000000 / nFpsLimit);
 
 __int64 __fastcall hookedEngineUpdate(__int64 a1)
 {
-	if (high_resolution_clock::now() < nextUpdate)
+	const auto beforeUpdate = high_resolution_clock::now();
+	if (beforeUpdate < nextUpdate)
 		return 0;
 
 	const auto result = divaEngineUpdate(a1);
 
-	nextUpdate = high_resolution_clock::now() + expectedFrameDuration;
+	nextUpdate = beforeUpdate + expectedFrameDuration;
 
 	return result;
 }

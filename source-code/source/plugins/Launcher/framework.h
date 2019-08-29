@@ -166,7 +166,7 @@ ConfigOptionBase* optionsArray[] = {
 
 	new DropdownOption(L"status_icons", PATCHES_SECTION, CONFIG_FILE, L"Status Icons:", L"Set the state of card reader and network status icons.", 3, std::vector<LPCWSTR>({ L"Default", L"Hidden", L"Error", L"OK", L"Partial OK" })),
 	
-	new NumericOption(L"FPS.Limit", GRAPHICS_SECTION, CONFIG_FILE, L"FPS Limit:", L"Using the FPS limit requires the \"FPS Limiter\" component to be enabled.", 60, 0, INT_MAX),
+	new NumericOption(L"FPS.Limit", GRAPHICS_SECTION, CONFIG_FILE, L"FPS Limit:", L"Allows you to set a frame rate cap. Set to -1 to unlock the frame rate.", 60, -1, INT_MAX),
 
 	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"Command Line:", L"Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.", L"", false),
 };
@@ -212,8 +212,6 @@ ConfigOptionBase* componentsArray[] = {
 	new BooleanOption(L"scale_component", COMPONENTS_SECTION, COMPONENTS_FILE, L"Scale Component", L"Scales the graphics output framebuffer to fill the screen/window.", false, true),
 
 	new BooleanOption(L"debug_component", COMPONENTS_SECTION, COMPONENTS_FILE, L"Debug Component", L"Allows for changing game state (F4-F8 keys), using dev GUI and tests, and speeding up 2d animations/menus (hold SHIFT+TAB).", false, true),
-
-	new BooleanOption(L"fps_limiter", COMPONENTS_SECTION, COMPONENTS_FILE, L"FPS Limiter", L"Lets you set a framerate cap. The value of the limit is in the options tab.", false, true),
 
 	new BooleanOption(L"target_inspector", COMPONENTS_SECTION, COMPONENTS_FILE, L"Target Inspector", L"Enables hold transfers.", false, true),
 };

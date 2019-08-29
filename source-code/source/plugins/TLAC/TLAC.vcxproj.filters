@@ -177,9 +177,6 @@
     <ClInclude Include="Input\Xinput\XinputState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\FPSLimiter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Components\GameTargets\HoldState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -324,9 +321,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Input\Xinput\XinputState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\FPSLimiter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\GameTargets\TargetInspector.cpp">

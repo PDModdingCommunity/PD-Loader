@@ -7,6 +7,10 @@
 #include <windows.h>
 #include <iostream>
 
+#include <chrono>
+
+using namespace std::chrono;
+
 int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 {
 	SetProcessDPIAware();
@@ -91,6 +95,21 @@ __int64 hookedParseParameters(int a1, __int64* a2)
 	return divaParseParameters(a1, a2);
 }
 
+time_point<high_resolution_clock> nextUpdate;
+microseconds expectedFrameDuration(1000000 / nFpsLimit);
+
+__int64 __fastcall hookedEngineUpdate(__int64 a1)
+{
+	if (high_resolution_clock::now() < nextUpdate)
+		return 0;
+
+	const auto result = divaEngineUpdate(a1);
+
+	nextUpdate = high_resolution_clock::now() + expectedFrameDuration;
+
+	return result;
+}
+
 
 BOOL APIENTRY DllMain(HMODULE hModule,
 	DWORD  ul_reason_for_call,
@@ -109,6 +128,14 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(PVOID&)divaParseParameters, hookedParseParameters);
 		DetourTransactionCommit();
+
+		if (nFpsLimit > 0) 
+		{
+			DetourTransactionBegin();
+			DetourUpdateThread(GetCurrentThread());
+			DetourAttach(&(PVOID&)divaEngineUpdate, hookedEngineUpdate);
+			DetourTransactionCommit();
+		}
 	}
 	return TRUE;
 }

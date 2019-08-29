@@ -12,7 +12,6 @@
 #include "CameraController.h"
 #include "DebugComponent.h"
 #include "ScaleComponent.h"
-#include "FPSLimiter.h"
 #include "GameTargets/TargetInspector.h"
 
 using ConfigFile = TLAC::FileSystem::ConfigFile;
@@ -42,7 +41,6 @@ namespace TLAC::Components
 			new FrameRateManager(),
 			new FastLoader(),
 			new ScaleComponent(),
-			new FPSLimiter(),
 			new StageManager(),
 			new CameraController(),
 			new DebugComponent(),

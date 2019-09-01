@@ -237,6 +237,7 @@ namespace TLAC::Components
 		customPlayerData->ShowGreatClearBorder = config.GetBooleanValue("border_great");
 		customPlayerData->UseCard = config.GetBooleanValue("use_card");
 		customPlayerData->GameModifierOptions = config.GetBooleanValue("gamemode_options");
+		customPlayerData->ActionSE = config.GetBooleanValue("act_toggle");
 		moduleCardWorkaround = config.GetBooleanValue("module_card_workaround");
 
 		if (moduleCardWorkaround) {
@@ -313,15 +314,14 @@ namespace TLAC::Components
 		setIfNotEqual(&playerData->btn_se_equip, customPlayerData->BtnSeEquip, -1);
 		setIfNotEqual(&playerData->slide_se_equip, customPlayerData->SlideSeEquip, -1);
 		setIfNotEqual(&playerData->chainslide_se_equip, customPlayerData->ChainslideSeEquip, -1);
+		setIfNotEqual(&playerData->act_toggle, customPlayerData->ActionSE, 1);
 
 		// Display clear borders on the progress bar
 		*(byte*)(PLAYER_DATA_ADDRESS + 0xD94) = (customPlayerData->ShowExcellentClearBorder << 1) | (customPlayerData->ShowGreatClearBorder);
 		
-		if (customPlayerData->UseCard)
-			playerData->use_card = 1; // required to allow for module selection
+		playerData->use_card = customPlayerData->UseCard; // required to allow for module selection
 
-		if (customPlayerData->GameModifierOptions)
-			playerData->game_opts = 1; // hi-speed, etc..
+		playerData->game_opts = customPlayerData->GameModifierOptions; // hi-speed, etc..
 
 		memset((void*)MODULE_TABLE_START, 0xFF, 128);
 		memset((void*)ITEM_TABLE_START, 0xFF, 128);

@@ -9,6 +9,7 @@
 #include <algorithm>
 
 #include "ConfigOption.h"
+#include "PluginConfig.h"
 
 int (__cdecl* divaMain)(int argc, const char** argv, const char** envp) = (int(__cdecl*)(int argc, const char** argv, const char** envp))0x140194D90;
 
@@ -34,13 +35,15 @@ LPCWSTR DIVA_EXECUTABLE = DIVA_EXECUTABLE_STRING.c_str();
 wstring DIVA_EXECUTABLE_LAUNCH_STRING = DIVA_EXECUTABLE_STRING + L" --launch";
 LPWSTR DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING.c_str());
 
-wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\config.ini";
+wstring PLUGINS_DIR = DirPath() + L"\\plugins";
+
+wstring CONFIG_FILE_STRING = PLUGINS_DIR + L"\\config.ini";
 LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
 
-wstring COMPONENTS_FILE_STRING = DirPath() + L"\\plugins\\components.ini";
+wstring COMPONENTS_FILE_STRING = PLUGINS_DIR + L"\\components.ini";
 LPCWSTR COMPONENTS_FILE = COMPONENTS_FILE_STRING.c_str();
 
-wstring PLAYERDATA_FILE_STRING = DirPath() + L"\\plugins\\playerdata.ini";
+wstring PLAYERDATA_FILE_STRING = PLUGINS_DIR + L"\\playerdata.ini";
 LPCWSTR PLAYERDATA_FILE = PLAYERDATA_FILE_STRING.c_str();
 
 LPCWSTR PATCHES_SECTION = L"patches";
@@ -124,17 +127,17 @@ std::vector<DEVMODEW> screenModes = getScreenModes();
 
 
 DropdownOption* DisplayModeDropdown = new DropdownOption(L"display", RESOLUTION_SECTION, CONFIG_FILE, L"Display:", L"Sets the window/screen mode.", 0, std::vector<LPCWSTR>({ L"Windowed", L"Borderless", L"Fullscreen" }));
-ResolutionOption* DisplayResolutionOption = new ResolutionOption(L"width", L"height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the display resolution.", resolution(1280, 720), getScreenResolutionsVec(screenModes));
+ResolutionOption* DisplayResolutionOption = new ResolutionOption(L"width", L"height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the display resolution.", resolution(1280, 720), getScreenResolutionsVec(screenModes), true);
 
 ConfigOptionBase* screenResolutionArray[] = {
 	DisplayModeDropdown,
 	DisplayResolutionOption,
-	//new EditableDropdownNumberOption(L"bitdepth", RESOLUTION_SECTION, CONFIG_FILE, L"Bit Depth:", L"Sets the display bit depth.", 32, getScreenDepthsVec(screenModes)),
-	new EditableDropdownNumberOption(L"refreshrate", RESOLUTION_SECTION, CONFIG_FILE, L"Refresh Rate:", L"Sets the display refresh rate.", 60, getScreenRatesVec(screenModes)),
+	//new DropdownNumberOption(L"bitdepth", RESOLUTION_SECTION, CONFIG_FILE, L"Bit Depth:", L"Sets the display bit depth.", 32, getScreenDepthsVec(screenModes), true),
+	new DropdownNumberOption(L"refreshrate", RESOLUTION_SECTION, CONFIG_FILE, L"Refresh Rate:", L"Sets the display refresh rate.", 60, getScreenRatesVec(screenModes), true),
 };
 
 BooleanOption* InternalResolutionCheckbox = new BooleanOption(L"r.enable", RESOLUTION_SECTION, CONFIG_FILE, L"Enable", L"Enable or disable custom internal resolution.", false, false);
-ResolutionOption* InternalResolutionOption = new ResolutionOption(L"r.width", L"r.height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the internal resolution.", resolution(1280, 720), std::vector<resolution>({ resolution(640,480), resolution(800,600), resolution(960,720), resolution(1280,720), resolution(1600,900), resolution(1920,1080), resolution(2560,1440), resolution(3200,1800), resolution(3840,2160), resolution(5120,2880), resolution(6400,3600), resolution(7680,4320) }));
+ResolutionOption* InternalResolutionOption = new ResolutionOption(L"r.width", L"r.height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the internal resolution.", resolution(1280, 720), std::vector<resolution>({ resolution(640,480), resolution(800,600), resolution(960,720), resolution(1280,720), resolution(1600,900), resolution(1920,1080), resolution(2560,1440), resolution(3200,1800), resolution(3840,2160), resolution(5120,2880), resolution(6400,3600), resolution(7680,4320) }), true);
 
 ConfigOptionBase* internalResolutionArray[] = {
 	InternalResolutionCheckbox,
@@ -181,6 +184,7 @@ ConfigOptionBase* playerdataArray[] = {
 	new NumericOption(L"btn_se_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Button Sound:", L"Sets the sound effect for buttons.\n-1 = song default", -1, -1, INT_MAX),
 	new NumericOption(L"slide_se_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Slide Sound:", L"Sets the sound effect for slides.\n-1 = song default", -1, -1, INT_MAX),
 	new NumericOption(L"chainslide_se_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Chainslide Sound:", L"Sets the sound effect for chain slides.\n-1 = song default", -1, -1, INT_MAX),
+	new BooleanOption(L"act_toggle", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Button SE", L"Enables button/slider sounds.", true, true),
 
 	new BooleanOption(L"border_great", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Clear Border (Great)", L"Shows the clear border for a great rating on the progress bar.", true, true),
 	new BooleanOption(L"border_excellent", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Clear Border (Excellent)", L"Shows the clear border for an excellent rating on the progress bar.", true, true),
@@ -263,6 +267,87 @@ void PrependFile(LPCSTR newStr, LPCWSTR fileName)
 	fileStream << outStr;
 	fileStream.close();
 }
+
+
+struct PluginInfo {
+	HMODULE handle;
+	std::wstring filename;
+	std::wstring name;
+	std::wstring description;
+	std::vector<ConfigOptionBase*> configopts;
+};
+std::vector<PluginInfo> LoadPlugins()
+{
+	std::vector<PluginInfo> outvec;
+
+	HANDLE hFind;
+	WIN32_FIND_DATAW ffd;
+
+	hFind = FindFirstFileW((PLUGINS_DIR + L"\\*.dva").c_str(), &ffd);
+	if (hFind != INVALID_HANDLE_VALUE) {
+		do {
+			if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+			{
+				auto pos = wcslen(ffd.cFileName);
+
+				if (ffd.cFileName[pos - 4] == '.' &&
+					(ffd.cFileName[pos - 3] == 'd' || ffd.cFileName[pos - 3] == 'D') &&
+					(ffd.cFileName[pos - 2] == 'v' || ffd.cFileName[pos - 2] == 'V') &&
+					(ffd.cFileName[pos - 1] == 'a' || ffd.cFileName[pos - 1] == 'A'))
+				{
+					PluginInfo thisplugin;
+					thisplugin.handle = LoadLibraryW((PLUGINS_DIR + L"\\" + ffd.cFileName).c_str());
+					thisplugin.filename = ffd.cFileName;
+
+					if (thisplugin.handle == NULL)
+						continue;
+
+					auto nameFunc = (LPCWSTR(*)())GetProcAddress(thisplugin.handle, "GetPluginName");
+					auto descFunc = (LPCWSTR(*)())GetProcAddress(thisplugin.handle, "GetPluginDescription");
+					auto optsFunc = (PluginConfig::PluginConfigArray(*)())GetProcAddress(thisplugin.handle, "GetPluginOptions");
+
+					if (nameFunc != NULL)
+						thisplugin.name = nameFunc();
+					else
+						thisplugin.name = thisplugin.filename;
+
+					if (descFunc != NULL)
+						thisplugin.description = descFunc();
+					else
+						thisplugin.description = (thisplugin.filename + L" Plugin").c_str();
+
+					if (optsFunc != NULL)
+						thisplugin.configopts = PluginConfig::GetConfigOptionVec(optsFunc());
+
+					// sometimes this might screw with custom button config, so let's just not free stuff
+					// FreeLibrary(thisplugin.handle);
+
+					outvec.push_back(thisplugin);
+				}
+			}
+		} while (FindNextFileW(hFind, &ffd));
+		FindClose(hFind);
+	}
+
+	return outvec;
+}
+// don't load until actually needed to avoid loading disabled plugins
+std::vector<PluginInfo> AllPlugins; // = LoadPlugins();
+
+std::vector<PluginOption*> GetPluginOptions(std::vector<PluginInfo>* plugins)
+{
+	std::vector<PluginOption*> outvec;
+
+	for (PluginInfo &pi : *plugins)
+	{
+		PluginOption* opt = new PluginOption(pi.filename.c_str(), L"plugins", CONFIG_FILE, pi.name.c_str(), pi.description.c_str(), true, pi.configopts);
+		outvec.push_back(opt);
+	}
+
+	return outvec;
+}
+// don't load until actually needed to avoid loading disabled plugins
+std::vector<PluginOption*> AllPluginOpts; // = GetPluginOptions(&AllPlugins);
 
 
 // used to trick Optimus into switching to the NVIDIA GPU

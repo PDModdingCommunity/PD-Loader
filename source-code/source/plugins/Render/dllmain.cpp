@@ -171,12 +171,12 @@ __int64 __fastcall hookedEngineUpdateLight(__int64 a1)
 	return result;
 }
 
-extern "C" __declspec(dllexport) int getFramerate(void)
+extern "C" __declspec(dllexport) int getFramerateLimit(void)
 {
 	return nFpsLimit;
 }
 
-extern "C" __declspec(dllexport) void setFramerate(int framerate)
+extern "C" __declspec(dllexport) void setFramerateLimit(int framerate)
 {
 	nFpsLimit = framerate;
 	expectedFrameDuration = nanoseconds(1000000000 / nFpsLimit);

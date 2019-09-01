@@ -5,7 +5,9 @@
 #include <GL\GL.h>
 #include <wingdi.h>
 #include <windows.h>
+#include <timeapi.h>
 #include <iostream>
+#include <thread>
 
 #include <chrono>
 
@@ -95,18 +97,76 @@ __int64 hookedParseParameters(int a1, __int64* a2)
 	return divaParseParameters(a1, a2);
 }
 
-time_point<high_resolution_clock> nextUpdate;
-microseconds expectedFrameDuration(1000000 / nFpsLimit);
+time_point<high_resolution_clock> sleepUntil = high_resolution_clock::now();
+time_point<high_resolution_clock> nextUpdate = high_resolution_clock::now();
+nanoseconds expectedFrameDuration(1000000000 / nFpsLimit);
+nanoseconds sleepWindow(2500000);
 
 __int64 __fastcall hookedEngineUpdate(__int64 a1)
 {
-	const auto beforeUpdate = high_resolution_clock::now();
-	if (beforeUpdate < nextUpdate)
+	auto timeNow = high_resolution_clock::now();
+
+	if (timeNow < nextUpdate)
 		return 0;
 
 	const auto result = divaEngineUpdate(a1);
 
-	nextUpdate = beforeUpdate + expectedFrameDuration;
+	timeNow = high_resolution_clock::now();
+
+	// increment nextUpdate by fixed interval to unsure timing accuracy between frames
+	// (ignore time spent outside the update)
+	nextUpdate += expectedFrameDuration;
+
+	// if dropping frames, run as fast as possible
+	// and also change nextUpdate's timing to match current time
+	// (so frame n+2 will be at least 1/nFpsLimit seconds from frame n+1)
+	if (nextUpdate < timeNow)
+		nextUpdate = timeNow;
+
+	return result;
+}
+
+__int64 __fastcall hookedEngineUpdateLight(__int64 a1)
+{
+	auto timeNow = high_resolution_clock::now();
+
+	// sleep until the approximate correct time to save CPU usage,
+	// then change to instantly returning when timing is more critical
+	if (timeNow < sleepUntil)
+	{
+		std::this_thread::sleep_until(sleepUntil);
+
+		if (nVerboseLimiter)
+		{
+			timeNow = high_resolution_clock::now();
+			nanoseconds timeDifference = (timeNow - sleepUntil);
+			if (timeDifference > sleepWindow) // no need for abs because it doesn't matter if this is early
+			{
+				printf("FPS LIMITER SLEEP TIME OUTSIDE ALLOWED WINDOW\n", timeDifference.count());
+				printf(" Target sleep until time: %lld, Actual time: %lld\n", sleepUntil.time_since_epoch().count(), timeNow.time_since_epoch().count());
+				printf(" (Difference: %lld, Window: %lld)\n", timeDifference.count(), sleepWindow.count());
+			}
+		}
+	}
+
+	if (timeNow < nextUpdate)
+		return 0;
+
+	const auto result = divaEngineUpdate(a1);
+
+	timeNow = high_resolution_clock::now();
+
+	// increment nextUpdate by fixed interval to unsure timing accuracy between frames
+	// (ignore time spent outside the update)
+	nextUpdate += expectedFrameDuration;
+
+	// if dropping frames, run as fast as possible
+	// and also change nextUpdate's timing to match current time
+	// (so frame n+2 will be at least 1/nFpsLimit seconds from frame n+1)
+	if (nextUpdate < timeNow)
+		nextUpdate = timeNow;
+
+	sleepUntil = nextUpdate - sleepWindow;
 
 	return result;
 }
@@ -132,10 +192,29 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 
 		if (nFpsLimit > 0) 
 		{
-			DetourTransactionBegin();
-			DetourUpdateThread(GetCurrentThread());
-			DetourAttach(&(PVOID&)divaEngineUpdate, hookedEngineUpdate);
-			DetourTransactionCommit();
+			if (nUseLightLimiter)
+			{
+				// set sleep time resolution to 2ms or device minimum
+				TIMECAPS tc;
+
+				if (timeGetDevCaps(&tc, sizeof(TIMECAPS)) == MMSYSERR_NOERROR)
+				{
+					UINT wTimerRes = min(max(tc.wPeriodMin, 2), tc.wPeriodMax);
+					timeBeginPeriod(wTimerRes);
+				}
+
+				DetourTransactionBegin();
+				DetourUpdateThread(GetCurrentThread());
+				DetourAttach(&(PVOID&)divaEngineUpdate, hookedEngineUpdateLight);
+				DetourTransactionCommit();
+			}
+			else
+			{
+				DetourTransactionBegin();
+				DetourUpdateThread(GetCurrentThread());
+				DetourAttach(&(PVOID&)divaEngineUpdate, hookedEngineUpdate);
+				DetourTransactionCommit();
+			}
 		}
 	}
 	return TRUE;

@@ -583,6 +583,8 @@ private: System::Void SaveSettings() {
 	{
 		option->SaveOption();
 	}
+
+	*ConfigHasChanged = false;
 }
 private: System::Void Ui_Load(System::Object^ sender, System::EventArgs^ e){
 }

@@ -9,6 +9,8 @@
 
 #include <msclr\marshal_cppstd.h>
 
+#include "PluginConfigApi.h"
+
 using namespace System;
 using namespace System::Windows::Forms;
 
@@ -16,6 +18,7 @@ float BaseScaleSize = 96;
 int Col1Width = 110;
 int Col2Left = 114;
 int Col2Width = 110;
+int ConfigBtnLeft = 160;
 int ControlSpacing = 6;
 
 // Custom function. Works like GetPrivateProfileIntW but returns bool. Can detect a numeric value or string.
@@ -39,46 +42,9 @@ bool GetPrivateProfileBoolW(LPCWSTR lpAppName, LPCWSTR lpKeyName, bool default, 
 	return out;
 }
 
-// resolution class to store and sort the width and height easily
-class resolution
-{
-public:
-	unsigned int width;
-	unsigned int height;
-
-	resolution()
-	{
-		width = 0;
-		height = 0;
-	}
-
-	resolution(unsigned int width, unsigned int height)
-	{
-		resolution::width = width;
-		resolution::height = height;
-	}
-
-	bool operator ==(const resolution &res2)
-	{
-		return width == res2.width && height == res2.height;
-	}
-
-	// in comparisons width takes priority because it's usually displayed first
-	bool operator <(const resolution &res2)
-	{
-		if (width == res2.width)
-			return height < res2.height;
-		else
-			return width < res2.width;
-	}
-	bool operator >(const resolution &res2)
-	{
-		if (width == res2.width)
-			return height > res2.height;
-		else
-			return width > res2.width;
-	}
-};
+// declare this early (actual definitions below)
+class ConfigOptionBase;
+Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, ToolTip^ tooltip, bool* hasChanged);
 
 
 ref class ComboboxValidation
@@ -178,7 +144,78 @@ public:
 
 };
 
-static ref class ChangeHandler
+ref class PluginConfigHandler
+{
+public:
+	Form^ form;
+
+	PluginConfigHandler(Panel^ optspanel, String^ title)
+	{
+		form = gcnew Form();
+
+		form->Text = title;
+
+		form->FormBorderStyle = FormBorderStyle::FixedDialog;
+		form->StartPosition = FormStartPosition::CenterScreen;
+		form->MaximizeBox = false;
+		form->MinimizeBox = false;
+		form->ShowInTaskbar = false;
+		form->ShowIcon = false;
+		//form->TopMost = true;
+
+		form->BackColor = Drawing::Color::FromArgb(64, 64, 64);
+		form->ForeColor = Drawing::Color::White;
+
+		optspanel->Left = 0;
+		optspanel->Top = 0;
+
+		Button^ OkBtn = gcnew Button();
+		OkBtn->Text = L"OK";
+		OkBtn->Left = 4;
+		OkBtn->Top = optspanel->Bottom + 4;
+		OkBtn->AutoSize = true;
+		OkBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+
+		form->ClientSize = Drawing::Size(optspanel->Width, OkBtn->Bottom + 4);
+
+		form->Controls->Add(optspanel);
+		form->Controls->Add(OkBtn);
+		form->AcceptButton = OkBtn;
+
+		form->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &PluginConfigHandler::FormClosing);
+		OkBtn->Click += gcnew EventHandler(this, &PluginConfigHandler::OkClick);
+	}
+
+	System::Void OpenForm(System::Object^ sender, System::EventArgs^ e)
+	{
+		// ShowDialog seems to prevent disposal by copying the panel...
+		// which would be fine if I didn't rely on using the control handles
+		// MessageBox::Show(form->Controls[0]->Handle.ToString());
+
+		//Application::OpenForms[0]->Enabled = false;
+		form->Owner = Application::OpenForms[0];
+		if (form->Visible)
+			form->Hide();
+		form->Show();
+	}
+
+	System::Void FormClosing(System::Object^ sender, FormClosingEventArgs^ e)
+	{
+		if (e->CloseReason == CloseReason::UserClosing)
+		{
+			form->Hide();
+			//Application::OpenForms[0]->Enabled = true;
+			e->Cancel = true;
+		}
+	}
+
+	System::Void OkClick(System::Object^ sender, System::EventArgs^ e)
+	{
+		form->Close();
+	}
+};
+
+ref class ChangeHandler
 {
 public:
 	bool* changebool;
@@ -191,6 +228,22 @@ public:
 	System::Void SetChanged(System::Object^ sender, System::EventArgs^ e)
 	{
 		*changebool = true;
+	}
+};
+
+ref class CustomFuncHandler
+{
+public:
+	void(*_func)();
+
+	CustomFuncHandler(void(*func)())
+	{
+		_func = func;
+	}
+
+	System::Void RunFunc(System::Object^ sender, System::EventArgs^ e)
+	{
+		_func();
 	}
 };
 
@@ -216,6 +269,42 @@ public:
 	virtual void SaveOption()
 	{
 		return;
+	}
+};
+
+
+class OptionMetaGroupStart : public ConfigOptionBase
+{
+public:
+	int _height;
+
+	OptionMetaGroupStart(LPCWSTR friendlyName, int height)
+	{
+		_friendlyName = friendlyName;
+		_height = height;
+	}
+};
+class OptionMetaGroupEnd : public ConfigOptionBase
+{
+public:
+	OptionMetaGroupEnd()
+	{
+	}
+};
+
+class OptionMetaSpacer : public ConfigOptionBase
+{
+public:
+	int _height;
+
+	OptionMetaSpacer(int height)
+	{
+		_height = height;
+	}
+
+	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
+	{
+		return _height;
 	}
 };
 
@@ -252,15 +341,20 @@ public:
 		cb->BackColor = System::Drawing::Color::FromArgb(0, 0, 0, 0);
 		
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		cb->Scale(ScaleWidth, ScaleHeight);
 
 		tooltip->SetToolTip(cb, gcnew String(_description));
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
 		cb->CheckedChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
@@ -325,9 +419,14 @@ public:
 		numberbox->AutoSize = true;
 
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		label->Scale(ScaleWidth, ScaleHeight);
 		numberbox->Scale(ScaleWidth, ScaleHeight);
 
@@ -335,7 +434,7 @@ public:
 		tooltip->SetToolTip(numberbox, gcnew String(_description));
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
 		numberbox->ValueChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
@@ -404,9 +503,14 @@ public:
 		textbox->AutoSize = true;
 
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		label->Scale(ScaleWidth, ScaleHeight);
 		textbox->Scale(ScaleWidth, ScaleHeight);
 		
@@ -419,7 +523,7 @@ public:
 		tooltip->SetToolTip(textbox, gcnew String(_description));
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
 		textbox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
@@ -498,9 +602,14 @@ public:
 		combobox->DropDownStyle = ComboBoxStyle::DropDownList;
 
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		label->Scale(ScaleWidth, ScaleHeight);
 		combobox->Scale(ScaleWidth, ScaleHeight);
 
@@ -508,7 +617,7 @@ public:
 		tooltip->SetToolTip(combobox, gcnew String(_description));
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
 		combobox->SelectedIndexChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
@@ -532,14 +641,15 @@ public:
 };
 
 
-class EditableDropdownOption : public ConfigOptionBase
+class DropdownTextOption : public ConfigOptionBase
 {
 public:
 	LPCWSTR _defaultVal;
 	std::vector<LPCWSTR> _valueStrings;
+	bool _editable;
 	bool _useUtf8;
 
-	EditableDropdownOption(LPCWSTR iniVarName, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, LPCWSTR defaultVal, std::vector<LPCWSTR> valueStrings, bool useUtf8)
+	DropdownTextOption(LPCWSTR iniVarName, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, LPCWSTR defaultVal, std::vector<LPCWSTR> valueStrings, bool editable, bool useUtf8)
 	{
 		_iniVarName = iniVarName;
 		_iniSectionName = iniSectionName;
@@ -548,6 +658,7 @@ public:
 		_description = description;
 		_defaultVal = defaultVal;
 		_valueStrings = valueStrings;
+		_editable = editable;
 		_useUtf8 = useUtf8;
 	}
 
@@ -582,12 +693,21 @@ public:
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
 		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-		combobox->DropDownStyle = ComboBoxStyle::DropDown;
+
+		if (_editable)
+			combobox->DropDownStyle = ComboBoxStyle::DropDown;
+		else
+			combobox->DropDownStyle = ComboBoxStyle::DropDownList;
 
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		label->Scale(ScaleWidth, ScaleHeight);
 		combobox->Scale(ScaleWidth, ScaleHeight);
 
@@ -601,9 +721,12 @@ public:
 		tooltip->SetToolTip(combobox, gcnew String(_description));
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
-		combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+		if (_editable)
+			combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+		else
+			combobox->SelectedIndexChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
 		panel->Controls->Add(label);
 		panel->Controls->Add(combobox);
@@ -639,13 +762,14 @@ public:
 };
 
 
-class EditableDropdownNumberOption : public ConfigOptionBase
+class DropdownNumberOption : public ConfigOptionBase
 {
 public:
 	int _defaultVal;
 	std::vector<int> _valueInts;
+	bool _editable;
 
-	EditableDropdownNumberOption(LPCWSTR iniVarName, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, int defaultVal, std::vector<int> valueInts)
+	DropdownNumberOption(LPCWSTR iniVarName, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, int defaultVal, std::vector<int> valueInts, bool editable)
 	{
 		_iniVarName = iniVarName;
 		_iniSectionName = iniSectionName;
@@ -654,6 +778,7 @@ public:
 		_description = description;
 		_defaultVal = defaultVal;
 		_valueInts = valueInts;
+		_editable = editable;
 	}
 
 	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
@@ -682,12 +807,21 @@ public:
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
 		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-		combobox->DropDownStyle = ComboBoxStyle::DropDown;
+		
+		if (_editable)
+			combobox->DropDownStyle = ComboBoxStyle::DropDown;
+		else
+			combobox->DropDownStyle = ComboBoxStyle::DropDownList;
 
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		label->Scale(ScaleWidth, ScaleHeight);
 		combobox->Scale(ScaleWidth, ScaleHeight);
 
@@ -698,9 +832,12 @@ public:
 		combobox->Leave += gcnew System::EventHandler(validation, &ComboboxValidation::CheckNumberLeave);
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
-		combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+		if (_editable)
+			combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+		else
+			combobox->SelectedIndexChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
 		panel->Controls->Add(label);
 		panel->Controls->Add(combobox);
@@ -729,8 +866,9 @@ public:
 	LPCWSTR _iniVarName2;
 	resolution _defaultVal;
 	std::vector<resolution> _valueResolutions;
+	bool _editable;
 
-	ResolutionOption(LPCWSTR iniVarName, LPCWSTR iniVarName2, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, resolution defaultVal, std::vector<resolution> valueResolutions)
+	ResolutionOption(LPCWSTR iniVarName, LPCWSTR iniVarName2, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, resolution defaultVal, std::vector<resolution> valueResolutions, bool editable)
 	{
 		_iniVarName = iniVarName;
 		_iniVarName2 = iniVarName2;
@@ -740,6 +878,7 @@ public:
 		_description = description;
 		_defaultVal = defaultVal;
 		_valueResolutions = valueResolutions;
+		_editable = editable;
 	}
 
 	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
@@ -777,12 +916,21 @@ public:
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
 		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-		combobox->DropDownStyle = ComboBoxStyle::DropDown;
+
+		if (_editable)
+			combobox->DropDownStyle = ComboBoxStyle::DropDown;
+		else
+			combobox->DropDownStyle = ComboBoxStyle::DropDownList;
 
 		Form^ RootForm = panel->FindForm();
-		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
-		float ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
-		float ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
 		label->Scale(ScaleWidth, ScaleHeight);
 		combobox->Scale(ScaleWidth, ScaleHeight);
 
@@ -790,9 +938,12 @@ public:
 		tooltip->SetToolTip(combobox, gcnew String(_description));
 
 		if (hasChanged == nullptr)
-			hasChanged = new bool;
+			hasChanged = new bool(false);
 		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
-		combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+		if (_editable)
+			combobox->TextChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+		else
+			combobox->SelectedIndexChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
 
 		ComboboxValidation^ validation = gcnew ComboboxValidation(combobox);
 		combobox->Leave += gcnew System::EventHandler(validation, &ComboboxValidation::CheckResolutionLeave);
@@ -824,3 +975,208 @@ public:
 
 	}
 };
+
+
+class ButtonOption : public ConfigOptionBase
+{
+public:
+	void(*_func)();
+
+	ButtonOption(LPCWSTR friendlyName, LPCWSTR description, void(*func)())
+	{
+		_friendlyName = friendlyName;
+		_description = description;
+		_func = func;
+	}
+
+	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
+	{
+		Button^ button = gcnew Button();
+
+		button->Text = gcnew String(_friendlyName);
+		button->Left = left;
+		button->Top = top;
+		button->AutoSize = true;
+		button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+
+		Form^ RootForm = panel->FindForm();
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
+		button->Scale(ScaleWidth, ScaleHeight);
+
+		tooltip->SetToolTip(button, gcnew String(_description));
+
+		CustomFuncHandler^ funchandler = gcnew CustomFuncHandler(_func);
+		button->Click += gcnew System::EventHandler(funchandler, &CustomFuncHandler::RunFunc);
+
+		panel->Controls->Add(button);
+
+		int ControlHeight = button->Height / ScaleHeight;
+		return ControlHeight + ControlSpacing;
+	}
+};
+
+
+class PluginOption : public ConfigOptionBase
+{
+public:
+	bool _defaultVal;
+	std::vector<ConfigOptionBase*> _configopts;
+
+	PluginOption(LPCWSTR iniVarName, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, bool defaultVal, std::vector<ConfigOptionBase*> configopts)
+	{
+		_iniVarName = iniVarName;
+		_iniSectionName = iniSectionName;
+		_iniFilePath = iniFilePath;
+		_friendlyName = friendlyName;
+		_description = description;
+		_defaultVal = defaultVal;
+		_configopts = configopts;
+	}
+
+	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
+	{
+		CheckBox^ cb = gcnew CheckBox();
+		Button^ button = gcnew Button();
+
+		cb->Text = gcnew String(_friendlyName);
+		cb->Checked = GetPrivateProfileBoolW(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath);
+		cb->Left = left + 2;
+		cb->Top = top + 3;
+		cb->AutoSize = true;
+		cb->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+
+		// hack to ensure high contrast
+		cb->BackColor = System::Drawing::Color::FromArgb(0, 0, 0, 0);
+
+		button->Text = L"Config";
+		button->Left = left + ConfigBtnLeft;
+		button->Top = top;
+		button->AutoSize = true;
+		button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+
+		Form^ RootForm = panel->FindForm();
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
+		cb->Scale(ScaleWidth, ScaleHeight);
+		button->Scale(ScaleWidth, ScaleHeight);
+
+		tooltip->SetToolTip(cb, gcnew String(_description));
+
+		if (hasChanged == nullptr)
+			hasChanged = new bool(false);
+		ChangeHandler^ changehandler = gcnew ChangeHandler(hasChanged);
+		cb->CheckedChanged += gcnew System::EventHandler(changehandler, &ChangeHandler::SetChanged);
+
+		panel->Controls->Add(cb);
+		mainControlHandle = cb->Handle;
+
+		if (_configopts.size() > 0)
+		{
+			ToolTip^ paneltooltip = gcnew ToolTip();
+			Panel^ configPanel = MakePanel((Col2Left + Col2Width + 64), 250, _configopts, paneltooltip, hasChanged);
+			configPanel->Scale(ScaleWidth, ScaleHeight);
+			PluginConfigHandler^ confighandler = gcnew PluginConfigHandler(configPanel, gcnew String(_friendlyName) + " Options");
+			button->Click += gcnew System::EventHandler(confighandler, &PluginConfigHandler::OpenForm);
+
+			panel->Controls->Add(button);
+		}
+
+		int ControlHeight = button->Height / ScaleHeight;
+		return ControlHeight + ControlSpacing;
+	}
+
+	virtual void SaveOption()
+	{
+		bool boolEnabled = ((CheckBox^)CheckBox::FromHandle(mainControlHandle))->Checked;
+
+		WritePrivateProfileStringW(_iniSectionName, _iniVarName, boolEnabled ? L"1" : L"0", _iniFilePath);
+
+		for (ConfigOptionBase* opt : _configopts)
+		{
+			opt->SaveOption();
+		}
+	}
+};
+
+
+Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, ToolTip^ tooltip, bool* hasChanged)
+{
+	Panel^ outpanel = gcnew Panel();
+	outpanel->Width = width;
+	outpanel->Height = height;
+	outpanel->AutoScroll = true;
+
+	Form^ RootForm = outpanel->FindForm();
+	float ScaleWidth = 1.0f;
+	float ScaleHeight = 1.0f;
+	if (RootForm)
+	{
+		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+		ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+		ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+	}
+
+	int curX = 12;
+	int curY = 3;
+
+	for (int i = 0; i < cfg.size(); i++)
+	{
+		if (typeid(*cfg[i]).hash_code() == typeid(OptionMetaGroupEnd).hash_code())
+			continue;
+
+		if (typeid(*cfg[i]).hash_code() == typeid(OptionMetaGroupStart).hash_code())
+		{
+			OptionMetaGroupStart* groupData = (OptionMetaGroupStart*)(cfg[i]);
+			GroupBox^ groupbox = gcnew GroupBox();
+			groupbox->Width = width - (ScaleWidth * 8);
+			groupbox->Height = ScaleHeight * groupData->_height;
+			groupbox->Left = ScaleWidth * 4;
+			groupbox->Top = ScaleHeight * curY;
+			groupbox->Text = gcnew String(groupData->_friendlyName);
+
+			// find the end of this group by simple iteration keeping track of indent level
+			int level = 1;
+			int endidx;
+			for (endidx = i + 1; endidx < cfg.size(); endidx++)
+			{
+				if (typeid(*cfg[endidx]).hash_code() == typeid(OptionMetaGroupStart).hash_code())
+					level++;
+				if (typeid(*cfg[endidx]).hash_code() == typeid(OptionMetaGroupEnd).hash_code())
+					level--;
+
+				if (level == 0)
+					break;
+			}
+
+			Panel^ groupPanel = MakePanel(groupbox->Width - (ScaleWidth * 8), groupbox->Height - (ScaleHeight * 10), std::vector<ConfigOptionBase*>(&(cfg[i + 1]), &(cfg[endidx])), tooltip, hasChanged);
+			groupPanel->Left = ScaleWidth * 12;
+			groupPanel->Top = ScaleHeight * (curY + 8);
+
+			groupbox->Controls->Add(groupPanel);
+			outpanel->Controls->Add(groupbox);
+
+			i = endidx;
+			curY += groupData->_height;
+		}
+		else
+		{
+			cfg[i]->hasChanged = hasChanged;
+			curY += cfg[i]->AddToPanel(outpanel, curX, curY, tooltip);
+		}
+	}
+
+	return outpanel;
+}

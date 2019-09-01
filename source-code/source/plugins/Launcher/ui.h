@@ -6,6 +6,7 @@
 #include <GL\freeglut.h>
 #include <GL\GL.h>
 #include "SkinnedMessageBox.h"
+#include "PluginConfig.h"
 
 namespace Launcher {
 
@@ -90,6 +91,7 @@ namespace Launcher {
 			this->panel_Patches->PerformLayout();
 
 
+
 			this->panel_Playerdata->SuspendLayout();
 
 			// populate playerdata options from array in framework
@@ -117,6 +119,20 @@ namespace Launcher {
 			this->panel_Components->ResumeLayout(false);
 			this->panel_Components->PerformLayout();
 
+
+			AllPlugins = LoadPlugins();
+			AllPluginOpts = GetPluginOptions(&AllPlugins);
+
+			this->panel_Plugins->SuspendLayout();
+
+			int pluginsY = 3;
+			for (ConfigOptionBase* option : AllPluginOpts)
+			{
+				option->hasChanged = ConfigHasChanged;
+				pluginsY += option->AddToPanel(panel_Plugins, 12, pluginsY, toolTip1);
+			}
+			this->panel_Plugins->ResumeLayout(false);
+			this->panel_Plugins->PerformLayout();
 
 
 			// trick Optimus into switching to the NVIDIA GPU
@@ -176,6 +192,8 @@ namespace Launcher {
 	private: System::Windows::Forms::Panel^ panel_Components;
 	private: System::Windows::Forms::TabPage^ tabPage_Patches;
 	private: System::Windows::Forms::Panel^ panel_Patches;
+	private: System::Windows::Forms::TabPage^ tabPage_Plugins;
+	private: System::Windows::Forms::Panel^ panel_Plugins;
 	private: System::Windows::Forms::Button^ button_Discord;
 	private: System::Windows::Forms::Button^ button_github;
 	private: System::Windows::Forms::TabPage^  tabPage_Playerdata;
@@ -231,6 +249,8 @@ namespace Launcher {
 			this->panel_Playerdata = (gcnew System::Windows::Forms::Panel());
 			this->tabPage_Components = (gcnew System::Windows::Forms::TabPage());
 			this->panel_Components = (gcnew System::Windows::Forms::Panel());
+			this->tabPage_Plugins = (gcnew System::Windows::Forms::TabPage());
+			this->panel_Plugins = (gcnew System::Windows::Forms::Panel());
 			this->button_Discord = (gcnew System::Windows::Forms::Button());
 			this->button_github = (gcnew System::Windows::Forms::Button());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
@@ -242,6 +262,7 @@ namespace Launcher {
 			this->tabPage_Patches->SuspendLayout();
 			this->tabPage_Playerdata->SuspendLayout();
 			this->tabPage_Components->SuspendLayout();
+			this->tabPage_Plugins->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// button_Launch
@@ -299,6 +320,7 @@ namespace Launcher {
 			this->tabControl->Controls->Add(this->tabPage_Patches);
 			this->tabControl->Controls->Add(this->tabPage_Playerdata);
 			this->tabControl->Controls->Add(this->tabPage_Components);
+			this->tabControl->Controls->Add(this->tabPage_Plugins);
 			this->tabControl->Location = System::Drawing::Point(0, 0);
 			this->tabControl->Margin = System::Windows::Forms::Padding(4);
 			this->tabControl->Name = L"tabControl";
@@ -420,6 +442,28 @@ namespace Launcher {
 			this->panel_Components->Size = System::Drawing::Size(429, 425);
 			this->panel_Components->TabIndex = 0;
 			// 
+			// tabPage_Plugins
+			// 
+			this->tabPage_Plugins->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
+				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
+			this->tabPage_Plugins->Controls->Add(this->panel_Plugins);
+			this->tabPage_Plugins->Location = System::Drawing::Point(4, 32);
+			this->tabPage_Plugins->Margin = System::Windows::Forms::Padding(4);
+			this->tabPage_Plugins->Name = L"tabPage_Plugins";
+			this->tabPage_Plugins->Padding = System::Windows::Forms::Padding(4);
+			this->tabPage_Plugins->Size = System::Drawing::Size(433, 429);
+			this->tabPage_Plugins->TabIndex = 3;
+			this->tabPage_Plugins->Text = L"Plugins";
+			// 
+			// panel_Plugins
+			// 
+			this->panel_Plugins->AutoScroll = true;
+			this->panel_Plugins->Location = System::Drawing::Point(0, 0);
+			this->panel_Plugins->Margin = System::Windows::Forms::Padding(4);
+			this->panel_Plugins->Name = L"panel_Plugins";
+			this->panel_Plugins->Size = System::Drawing::Size(429, 425);
+			this->panel_Plugins->TabIndex = 0;
+			// 
 			// button_Discord
 			// 
 			this->button_Discord->BackColor = System::Drawing::Color::Transparent;
@@ -504,6 +548,7 @@ namespace Launcher {
 			this->tabPage_Patches->ResumeLayout(false);
 			this->tabPage_Playerdata->ResumeLayout(false);
 			this->tabPage_Components->ResumeLayout(false);
+			this->tabPage_Plugins->ResumeLayout(false);
 			this->ResumeLayout(false);
 
 		}
@@ -532,6 +577,11 @@ private: System::Void SaveSettings() {
 	for (ConfigOptionBase* component : componentsArray)
 	{
 		component->SaveOption();
+	}
+
+	for (ConfigOptionBase* option : AllPluginOpts)
+	{
+		option->SaveOption();
 	}
 }
 private: System::Void Ui_Load(System::Object^ sender, System::EventArgs^ e){

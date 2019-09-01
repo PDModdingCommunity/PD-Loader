@@ -16,5 +16,6 @@ namespace TLAC::Components
 		bool ShowExcellentClearBorder;
 		bool UseCard;
 		bool GameModifierOptions;
+		bool ActionSE;
 	};
 }

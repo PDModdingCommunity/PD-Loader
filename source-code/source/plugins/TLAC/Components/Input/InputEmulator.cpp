@@ -296,7 +296,7 @@ namespace TLAC::Components
 			inputKey = 0x20;
 
 		if (keyboard->IsDoubleTapped(VK_ESCAPE))
-			exit(0);
+			((void(*)(unsigned int, int, int))DOEXIT_ADDRESS)(0, 0, 0);
 
 		return inputKey;
 	}

@@ -159,11 +159,31 @@ namespace TLAC
 		}
 		if (!nTAA)
 		{
-			DWORD oldProtect, bck;
-			VirtualProtect((BYTE*)0x00000001411AB67C, 1, PAGE_EXECUTE_READWRITE, &oldProtect);
-			*((byte*)0x00000001411AB67C + 0) = 0x00;
-			VirtualProtect((BYTE*)0x00000001411AB67C, 1, oldProtect, &bck);
-
+			{
+				DWORD oldProtect, bck;
+				VirtualProtect((BYTE*)0x00000001411AB67C, 1, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((byte*)0x00000001411AB67C + 0) = 0x00;
+				VirtualProtect((BYTE*)0x00000001411AB67C, 1, oldProtect, &bck);
+			}
+			{
+				DWORD oldProtect, bck;
+				VirtualProtect((BYTE*)0x00000001404AB11D, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((byte*)0x00000001404AB11D + 0) = 0x90;
+				*((byte*)0x00000001404AB11D + 1) = 0x90;
+				*((byte*)0x00000001404AB11D + 2) = 0x90;
+				VirtualProtect((BYTE*)0x00000001404AB11D, 3, oldProtect, &bck);
+			}
+			/*
+			{
+				DWORD oldProtect, bck;
+				VirtualProtect((BYTE*)0x00000001404A877F, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((byte*)0x00000001404A877F + 0) = 0x90;
+				*((byte*)0x00000001404A877F + 1) = 0x90;
+				*((byte*)0x00000001404A877F + 2) = 0x90;
+				*((byte*)0x00000001404A877F + 3) = 0x90;
+				VirtualProtect((BYTE*)0x00000001404A877F, 4, oldProtect, &bck);
+			}
+			*/
 			printf("[TLAC] TAA disabled\n");
 		}
 		if (!nMLAA)

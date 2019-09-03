@@ -232,6 +232,13 @@ bool IsLineInFile(LPCSTR searchLine, LPCWSTR fileName)
 
 	std::string line;
 
+	// check for BOM
+	std::getline(fileStream, line);
+	if (line.size() >= 3 & line.rfind("\xEF\xBB\xBF", 0) == 0)
+		fileStream.seekg(3);
+	else
+		fileStream.seekg(0);
+
 	while (std::getline(fileStream, line))
 	{
 		if (line.compare(searchLine) == 0)
@@ -259,7 +266,17 @@ void PrependFile(LPCSTR newStr, LPCWSTR fileName)
 	fileStream.seekg(0, std::ios::end);
 	origStr.reserve(fileStream.tellg());
 	fileStream.seekg(0, std::ios::beg);
+
+	// check for BOM
+	std::string BOMcheckLine;
+	std::getline(fileStream, BOMcheckLine);
+	if (BOMcheckLine.size() >= 3 & BOMcheckLine.rfind("\xEF\xBB\xBF", 0) == 0)
+		fileStream.seekg(3);
+	else
+		fileStream.seekg(0);
+
 	origStr.assign((std::istreambuf_iterator<char>(fileStream)), std::istreambuf_iterator<char>());
+
 
 	std::string outStr = newStr;
 	outStr += origStr;

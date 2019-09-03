@@ -99,10 +99,10 @@ __int64 hookedParseParameters(int a1, __int64* a2)
 
 time_point<high_resolution_clock> sleepUntil = high_resolution_clock::now();
 time_point<high_resolution_clock> nextUpdate = high_resolution_clock::now();
-nanoseconds expectedFrameDuration(1000000000 / nFpsLimit);
+nanoseconds expectedFrameDuration;
 nanoseconds sleepWindow(2500000);
 
-__int64 __fastcall hookedEngineUpdate(__int64 a1)
+__int64 __fastcall limiterFuncNormal(__int64 a1)
 {
 	auto timeNow = high_resolution_clock::now();
 
@@ -126,7 +126,7 @@ __int64 __fastcall hookedEngineUpdate(__int64 a1)
 	return result;
 }
 
-__int64 __fastcall hookedEngineUpdateLight(__int64 a1)
+__int64 __fastcall limiterFuncLight(__int64 a1)
 {
 	auto timeNow = high_resolution_clock::now();
 
@@ -171,6 +171,16 @@ __int64 __fastcall hookedEngineUpdateLight(__int64 a1)
 	return result;
 }
 
+__int64 __fastcall hookedEngineUpdate(__int64 a1)
+{
+	if (nFpsLimit < 1)
+		return divaEngineUpdate(a1);
+	else if (nUseLightLimiter)
+		return limiterFuncLight(a1);
+	else
+		return limiterFuncNormal(a1);
+}
+
 extern "C" __declspec(dllexport) int getFramerateLimit(void)
 {
 	return nFpsLimit;
@@ -179,7 +189,10 @@ extern "C" __declspec(dllexport) int getFramerateLimit(void)
 extern "C" __declspec(dllexport) void setFramerateLimit(int framerate)
 {
 	nFpsLimit = framerate;
-	expectedFrameDuration = nanoseconds(1000000000 / nFpsLimit);
+	if (nFpsLimit < 1)
+		expectedFrameDuration = nanoseconds(0);
+	else
+		expectedFrameDuration = nanoseconds(1000000000 / nFpsLimit);
 	return;
 }
 
@@ -201,32 +214,21 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		DetourAttach(&(PVOID&)divaParseParameters, hookedParseParameters);
 		DetourTransactionCommit();
 
-		if (nFpsLimit > 0) 
+
+		// set sleep time resolution to 2ms or device minimum (whichever's lower)
+		TIMECAPS tc;
+
+		if (timeGetDevCaps(&tc, sizeof(TIMECAPS)) == MMSYSERR_NOERROR)
 		{
-			if (nUseLightLimiter)
-			{
-				// set sleep time resolution to 2ms or device minimum
-				TIMECAPS tc;
-
-				if (timeGetDevCaps(&tc, sizeof(TIMECAPS)) == MMSYSERR_NOERROR)
-				{
-					UINT wTimerRes = min(max(tc.wPeriodMin, 2), tc.wPeriodMax);
-					timeBeginPeriod(wTimerRes);
-				}
-
-				DetourTransactionBegin();
-				DetourUpdateThread(GetCurrentThread());
-				DetourAttach(&(PVOID&)divaEngineUpdate, hookedEngineUpdateLight);
-				DetourTransactionCommit();
-			}
-			else
-			{
-				DetourTransactionBegin();
-				DetourUpdateThread(GetCurrentThread());
-				DetourAttach(&(PVOID&)divaEngineUpdate, hookedEngineUpdate);
-				DetourTransactionCommit();
-			}
+			UINT wTimerRes = min(max(tc.wPeriodMin, 2), tc.wPeriodMax);
+			timeBeginPeriod(wTimerRes);
 		}
+
+		setFramerateLimit(nFpsLimit);
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourAttach(&(PVOID&)divaEngineUpdate, hookedEngineUpdate);
+		DetourTransactionCommit();
 	}
 	return TRUE;
 }

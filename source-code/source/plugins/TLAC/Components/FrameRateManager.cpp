@@ -191,7 +191,7 @@ namespace TLAC::Components
 
 		*aetFrameDuration = 1.0f / GetGameFrameRate();
 
-		bool inGame = *(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME;
+		bool inGame = *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_DEMO;
 		if (inGame)
 		{
 			// enable dynamic framerate

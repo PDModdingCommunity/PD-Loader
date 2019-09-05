@@ -186,16 +186,24 @@ namespace TLAC::Components
 
 		*pvFrameRate = 60.0f * motionSpeedMultiplier;
 
-		// target framerate
-		*(float*)0x140eda6cc = *pvFrameRate;
 
 		*aetFrameDuration = 1.0f / GetGameFrameRate();
 
-		bool inGame = *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_DEMO;
-		if (inGame)
+		if (*(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_DEMO)
 		{
 			// enable dynamic framerate
 			*(bool*)0x140eda79c = true;
+
+			// target framerate
+			*(float*)0x140eda6cc = *pvFrameRate;
+		}
+		else if (*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_DATA_TEST)
+		{
+			// enable dynamic framerate
+			*(bool*)0x140eda79c = true;
+
+			// target framerate
+			*(float*)0x140eda6cc = 60.0f;
 		}
 		else
 		{

@@ -1,5 +1,6 @@
 #pragma once
 #include "EmulatorComponent.h"
+#include <vector>
 
 namespace TLAC::Components
 {
@@ -20,5 +21,6 @@ namespace TLAC::Components
 		float *aetFrameDuration;
 		float defaultAetFrameDuration;
 		float motionSpeedMultiplier = 5.0;
+		void InjectCode(void* address, const std::vector<uint8_t> data);
 	};
 }

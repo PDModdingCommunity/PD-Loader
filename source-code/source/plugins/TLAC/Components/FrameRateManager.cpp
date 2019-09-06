@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <windows.h>
 #include "../framework.h"
+#include <vector>
 
 namespace TLAC::Components
 {
@@ -30,96 +31,31 @@ namespace TLAC::Components
 		defaultAetFrameDuration = *aetFrameDuration;
 
 		// This const variable is stored inside a data segment so we don't want to throw any access violations
-		DWORD oldProtect, bck;
+		DWORD oldProtect;
 		VirtualProtect((void*)AET_FRAME_DURATION_ADDRESS, sizeof(float), PAGE_EXECUTE_READWRITE, &oldProtect);
 
 
 		// fix auto speed for high fps
-		VirtualProtect((BYTE*)0x140192d7b, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
-		*((BYTE*)0x140192d7b + 0) = 0x90;
-		*((BYTE*)0x140192d7b + 1) = 0x90;
-		*((BYTE*)0x140192d7b + 2) = 0x90;
-		VirtualProtect((BYTE*)0x140192d7b, 3, oldProtect, &bck);
+		InjectCode((void*)0x140192d7b, { 0x90, 0x90, 0x90 });
 
 
 		// fix edit PV AETs (thanks lyb)
-		VirtualProtect((BYTE*)0x140192D30, 8, PAGE_EXECUTE_READWRITE, &oldProtect); // MOVSS XMM0, dword ptr [0x140192f94]
-		*((BYTE*)0x140192D30 + 0) = 0xF3;
-		*((BYTE*)0x140192D30 + 1) = 0x0F;
-		*((BYTE*)0x140192D30 + 2) = 0x10;
-		*((BYTE*)0x140192D30 + 3) = 0x05;
-		*((BYTE*)0x140192D30 + 4) = 0x5C;
-		*((BYTE*)0x140192D30 + 5) = 0x02;
-		*((BYTE*)0x140192D30 + 6) = 0x00;
-		*((BYTE*)0x140192D30 + 7) = 0x00;
-		VirtualProtect((BYTE*)0x140192D30, 8, oldProtect, &bck);
-
+		InjectCode((void*)0x140192d30, { 0xF3, 0x0F, 0x10, 0x05, 0x5C, 0x02, 0x00, 0x00 }); // MOVSS XMM0, dword ptr [0x140192f94]
 
 		// fix ageage hair effect
-			VirtualProtect((BYTE*)0x14054352f, 5, PAGE_EXECUTE_READWRITE, &oldProtect); // CALL 0x140192d50 (getFrameSpeed)
-			*((BYTE*)0x14054352f + 0) = 0xE8;
-			*((BYTE*)0x14054352f + 1) = 0x1C;
-			*((BYTE*)0x14054352f + 2) = 0xF8;
-			*((BYTE*)0x14054352f + 3) = 0xC4;
-			*((BYTE*)0x14054352f + 4) = 0xFF;
-			VirtualProtect((BYTE*)0x14054352f, 5, oldProtect, &bck);
-
-			VirtualProtect((BYTE*)0x140543534, 4, PAGE_EXECUTE_READWRITE, &oldProtect); // MULSS XMM3, XMM0
-			*((BYTE*)0x140543534 + 0) = 0xF3;
-			*((BYTE*)0x140543534 + 1) = 0x0F;
-			*((BYTE*)0x140543534 + 2) = 0x59;
-			*((BYTE*)0x140543534 + 3) = 0xD8;
-			VirtualProtect((BYTE*)0x140543534, 4, oldProtect, &bck);
-
-			VirtualProtect((BYTE*)0x140543538, 2, PAGE_EXECUTE_READWRITE, &oldProtect); // JMP 0x1405434f0
-			*((BYTE*)0x140543538 + 0) = 0xEB;
-			*((BYTE*)0x140543538 + 1) = 0xB6;
-			VirtualProtect((BYTE*)0x140543538, 2, oldProtect, &bck);
-
+		InjectCode((void*)0x14054352f, { 0xE8, 0x1C, 0xF8, 0xC4, 0xFF }); // CALL 0x140192d50 (getFrameSpeed)
+		InjectCode((void*)0x140543534, { 0xF3, 0x0F, 0x59, 0xD8 });       // MULSS XMM3, XMM0
+		InjectCode((void*)0x140543538, { 0xEB, 0xB6 });                   // JMP 0x1405434f0
 
 		// fix wind effect
-			VirtualProtect((BYTE*)0x14053ca71, 2, PAGE_EXECUTE_READWRITE, &oldProtect); // JMP 0x14053cab2
-			*((BYTE*)0x14053ca71 + 0) = 0xEB;
-			*((BYTE*)0x14053ca71 + 1) = 0x3F;
-			VirtualProtect((BYTE*)0x14053ca71, 2, oldProtect, &bck);
+		InjectCode((void*)0x14053ca71, { 0xEB, 0x3F });                                     // JMP 0x14053cab2
+		InjectCode((void*)0x14053cab2, { 0xF3, 0x0F, 0x10, 0x05, 0xFA, 0x53, 0x46, 0x00 }); // MOVSS XMM0, dword ptr [0x1409a1eb4] (60.0f)
+		InjectCode((void*)0x14053caba, { 0xE9, 0x42, 0xFE, 0xFF, 0xFF });                   // JMP 0x14053c901
+		InjectCode((void*)0x14053c901, { 0xF3, 0x0F, 0x5E, 0x05, 0xC7, 0xDD, 0x99, 0x00 }); // DIVSS XMM0, dword ptr [0x140eda6d0] (framerate)
+		InjectCode((void*)0x14053c909, { 0xE9, 0x68, 0x01, 0x00, 0x00 });                   // JMP 0x14053ca76
 
-			VirtualProtect((BYTE*)0x14053cab2, 8, PAGE_EXECUTE_READWRITE, &oldProtect); // MOVSS XMM0, dword ptr [0x1409a1eb4] (60.0f)
-			*((BYTE*)0x14053cab2 + 0) = 0xF3;
-			*((BYTE*)0x14053cab2 + 1) = 0x0F;
-			*((BYTE*)0x14053cab2 + 2) = 0x10;
-			*((BYTE*)0x14053cab2 + 3) = 0x05;
-			*((BYTE*)0x14053cab2 + 4) = 0xFA;
-			*((BYTE*)0x14053cab2 + 5) = 0x53;
-			*((BYTE*)0x14053cab2 + 6) = 0x46;
-			*((BYTE*)0x14053cab2 + 7) = 0x00;
-			VirtualProtect((BYTE*)0x14053cab2, 8, oldProtect, &bck);
-
-			VirtualProtect((BYTE*)0x14053caba, 5, PAGE_EXECUTE_READWRITE, &oldProtect); // JMP 0x14053c901
-			*((BYTE*)0x14053caba + 0) = 0xE9;
-			*((BYTE*)0x14053caba + 1) = 0x42;
-			*((BYTE*)0x14053caba + 2) = 0xFE;
-			*((BYTE*)0x14053caba + 3) = 0xFF;
-			*((BYTE*)0x14053caba + 4) = 0xFF;
-			VirtualProtect((BYTE*)0x14053caba, 5, oldProtect, &bck);
-
-			VirtualProtect((BYTE*)0x14053c901, 8, PAGE_EXECUTE_READWRITE, &oldProtect); // DIVSS XMM0, dword ptr [0x140eda6d0] (framerate)
-			*((BYTE*)0x14053c901 + 0) = 0xF3;
-			*((BYTE*)0x14053c901 + 1) = 0x0F;
-			*((BYTE*)0x14053c901 + 2) = 0x5E;
-			*((BYTE*)0x14053c901 + 3) = 0x05;
-			*((BYTE*)0x14053c901 + 4) = 0xC7;
-			*((BYTE*)0x14053c901 + 5) = 0xDD;
-			*((BYTE*)0x14053c901 + 6) = 0x99;
-			*((BYTE*)0x14053c901 + 7) = 0x00;
-			VirtualProtect((BYTE*)0x14053c901, 8, oldProtect, &bck);
-
-			VirtualProtect((BYTE*)0x14053c909, 5, PAGE_EXECUTE_READWRITE, &oldProtect); // JMP 0x14053ca76
-			*((BYTE*)0x14053c909 + 0) = 0xE9;
-			*((BYTE*)0x14053c909 + 1) = 0x68;
-			*((BYTE*)0x14053c909 + 2) = 0x01;
-			*((BYTE*)0x14053c909 + 3) = 0x00;
-			*((BYTE*)0x14053c909 + 4) = 0x00;
-			VirtualProtect((BYTE*)0x14053c909, 5, oldProtect, &bck);
+		// fix snow effect
+		InjectCode((void*)0x14035ca68, { 0xF3, 0x0F, 0x5E, 0x05, 0x44, 0x54, 0x64, 0x00 }); // DIVSS XMM0, dword ptr [0x1409a1eb4] (60.0f)
 
 		
 		
@@ -127,73 +63,31 @@ namespace TLAC::Components
 
 		//// run motions at motionSpeedMultiplier x rate
 		//	// skip unncessary code to free code space
-		//	VirtualProtect((BYTE*)0x140194b2b, 2, PAGE_EXECUTE_READWRITE, &oldProtect); // JMP 0x140194b51
-		//	*((BYTE*)0x140194b2b + 0) = 0xEB;
-		//	*((BYTE*)0x140194b2b + 1) = 0x24;
-		//	VirtualProtect((BYTE*)0x140194b2b, 2, oldProtect, &bck);
+		//  InjectCode((void*)0x140194b2b, { 0xEB, 0x24 }); // JMP 0x140194b51
 
-
-		//	VirtualProtect((BYTE*)0x140194b2d, 5, PAGE_EXECUTE_READWRITE, &oldProtect); // CALL 0x140192d50
-		//	*((BYTE*)0x140194b2d + 0) = 0xE8;
-		//	*((BYTE*)0x140194b2d + 1) = 0x1E;
-		//	*((BYTE*)0x140194b2d + 2) = 0xE2;
-		//	*((BYTE*)0x140194b2d + 3) = 0xFF;
-		//	*((BYTE*)0x140194b2d + 4) = 0xFF;
-		//	VirtualProtect((BYTE*)0x140194b2d, 5, oldProtect, &bck);
-
-		//	VirtualProtect((BYTE*)0x140194b32, 10, PAGE_EXECUTE_READWRITE, &oldProtect); // MOV ECX, &motionSpeedMultiplier
-		//	*((BYTE*)0x140194b32 + 0) = 0x48;
-		//	*((BYTE*)0x140194b32 + 1) = 0xB9;
-		//	*((BYTE*)0x140194b32 + 2) = (uint64_t)&motionSpeedMultiplier & 0xFF;
-		//	*((BYTE*)0x140194b32 + 3) = ((uint64_t)&motionSpeedMultiplier >> 8) & 0xFF;
-		//	*((BYTE*)0x140194b32 + 4) = ((uint64_t)&motionSpeedMultiplier >> 16) & 0xFF;
-		//	*((BYTE*)0x140194b32 + 5) = ((uint64_t)&motionSpeedMultiplier >> 24) & 0xFF;
-		//	*((BYTE*)0x140194b32 + 6) = ((uint64_t)&motionSpeedMultiplier >> 32) & 0xFF;
-		//	*((BYTE*)0x140194b32 + 7) = ((uint64_t)&motionSpeedMultiplier >> 40) & 0xFF;
-		//	*((BYTE*)0x140194b32 + 8) = ((uint64_t)&motionSpeedMultiplier >> 48) & 0xFF;
-		//	*((BYTE*)0x140194b32 + 9) = ((uint64_t)&motionSpeedMultiplier >> 56) & 0xFF;
-		//	VirtualProtect((BYTE*)0x140194b32, 10, oldProtect, &bck);
-
-		//	VirtualProtect((BYTE*)0x140194b3c, 5, PAGE_EXECUTE_READWRITE, &oldProtect); // MOVD XMM1, dword ptr [ECX]
-		//	*((BYTE*)0x140194b3c + 0) = 0x66;
-		//	*((BYTE*)0x140194b3c + 1) = 0x67;
-		//	*((BYTE*)0x140194b3c + 2) = 0x0F;
-		//	*((BYTE*)0x140194b3c + 3) = 0x6E;
-		//	*((BYTE*)0x140194b3c + 4) = 0x09;
-		//	VirtualProtect((BYTE*)0x140194b3c, 5, oldProtect, &bck);
-
-		//	VirtualProtect((BYTE*)0x140194b41, 4, PAGE_EXECUTE_READWRITE, &oldProtect); // MULSS XMM0, XMM1
-		//	*((BYTE*)0x140194b41 + 0) = 0xF3;
-		//	*((BYTE*)0x140194b41 + 1) = 0x0F;
-		//	*((BYTE*)0x140194b41 + 2) = 0x59;
-		//	*((BYTE*)0x140194b41 + 3) = 0xC1;
-		//	VirtualProtect((BYTE*)0x140194b41, 4, oldProtect, &bck);
-
-		//	VirtualProtect((BYTE*)0x140194b45, 2, PAGE_EXECUTE_READWRITE, &oldProtect); // JMP 0x140194ae8
-		//	*((BYTE*)0x140194b45 + 0) = 0xEB;
-		//	*((BYTE*)0x140194b45 + 1) = 0xA1;
-		//	VirtualProtect((BYTE*)0x140194b45, 2, oldProtect, &bck);
-
+		//  InjectCode((void*)0x140194b2d, { 0xE8, 0x1E, 0xE2, 0xFF, 0xFF });  // CALL 0x140192d50
+		//  InjectCode((void*)0x140194b32, {                                   // MOV ECX, &motionSpeedMultiplier
+		//  	0x48,
+		//  	0xB9,
+		//  	(uint8_t)((uint64_t)&motionSpeedMultiplier & 0xFF),
+		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 8) & 0xFF),
+		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 16) & 0xFF),
+		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 24) & 0xFF),
+		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 32) & 0xFF),
+		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 40) & 0xFF),
+		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 48) & 0xFF),
+		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 56) & 0xFF),
+		//  });
+		//  InjectCode((void*)0x140194b3c, { 0x66, 0x67, 0x0F, 0x6E, 0x09 }); // MOVD XMM1, dword ptr [ECX]
+		//  InjectCode((void*)0x140194b41, { 0xF3, 0x0F, 0x59, 0xC1 });       // MULSS XMM0, XMM1
+		//  InjectCode((void*)0x140194b45, { 0xEB, 0xA1 });                   // JMP 0x140194ae8
 
 		//	// jump to new code
-		//	VirtualProtect((BYTE*)0x140194ae3, 2, PAGE_EXECUTE_READWRITE, &oldProtect); // JMP 0x140194b2d
-		//	*((BYTE*)0x140194ae3 + 0) = 0xEB;
-		//	*((BYTE*)0x140194ae3 + 1) = 0x48;
-		//	VirtualProtect((BYTE*)0x140194ae3, 2, oldProtect, &bck);
+		//  InjectCode((void*)0x140194ae3, { 0xEB, 0x48 }); // JMP 0x140194b2d
 
 
 		////	// trying to fix physics (fail)
-		////	VirtualProtect((BYTE*)0x14011d537, 9, PAGE_EXECUTE_READWRITE, &oldProtect); // change source to dword ptr [0x140b0d4f0]
-		////	*((BYTE*)0x14011d537 + 0) = 0xF3;
-		////	*((BYTE*)0x14011d537 + 1) = 0x0F;
-		////	*((BYTE*)0x14011d537 + 2) = 0x10;
-		////	*((BYTE*)0x14011d537 + 3) = 0x05;
-		////	*((BYTE*)0x14011d537 + 4) = 0xB1;
-		////	*((BYTE*)0x14011d537 + 5) = 0xFF;
-		////	*((BYTE*)0x14011d537 + 6) = 0x9E;
-		////	*((BYTE*)0x14011d537 + 7) = 0x00;
-		////	*((BYTE*)0x14011d537 + 8) = 0x90;
-		////	VirtualProtect((BYTE*)0x14011d537, 9, oldProtect, &bck);
+		////    InjectCode((void*)0x14011d537, { 0xF3, 0x0F, 0x10, 0x05, 0xB1, 0xFF, 0x9E, 0x00, 0x90 }); // change source to dword ptr [0x140b0d4f0]
 	}
 
 	void FrameRateManager::Update()
@@ -242,7 +136,7 @@ namespace TLAC::Components
 			// target framerate
 			*(float*)0x140eda6cc = *pvFrameRate;
 		}
-		else if (*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_DATA_TEST)
+		else
 		{
 			// enable dynamic framerate
 			*(bool*)0x140eda79c = true;
@@ -250,10 +144,15 @@ namespace TLAC::Components
 			// target framerate
 			*(float*)0x140eda6cc = 60.0f;
 		}
-		else
-		{
-			// disable dynamic framerate
-			*(bool*)0x140eda79c = false;
-		}
+	}
+
+	void FrameRateManager::InjectCode(void* address, const std::vector<uint8_t> data)
+	{
+		const size_t byteCount = data.size() * sizeof(uint8_t);
+
+		DWORD oldProtect;
+		VirtualProtect(address, byteCount, PAGE_EXECUTE_READWRITE, &oldProtect);
+		memcpy(address, data.data(), byteCount);
+		VirtualProtect(address, byteCount, oldProtect, nullptr);
 	}
 }

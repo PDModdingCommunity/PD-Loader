@@ -19,6 +19,6 @@ namespace TLAC::Components
 		float *frameSpeed;
 		float *aetFrameDuration;
 		float defaultAetFrameDuration;
-		float motionSpeedMultiplier = 3.0;
+		float motionSpeedMultiplier = 5.0;
 	};
 }

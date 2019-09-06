@@ -76,6 +76,51 @@ namespace TLAC::Components
 			*((BYTE*)0x140543538 + 1) = 0xB6;
 			VirtualProtect((BYTE*)0x140543538, 2, oldProtect, &bck);
 
+
+		// fix wind effect
+			VirtualProtect((BYTE*)0x14053ca71, 2, PAGE_EXECUTE_READWRITE, &oldProtect); // JMP 0x14053cab2
+			*((BYTE*)0x14053ca71 + 0) = 0xEB;
+			*((BYTE*)0x14053ca71 + 1) = 0x3F;
+			VirtualProtect((BYTE*)0x14053ca71, 2, oldProtect, &bck);
+
+			VirtualProtect((BYTE*)0x14053cab2, 8, PAGE_EXECUTE_READWRITE, &oldProtect); // MOVSS XMM0, dword ptr [0x1409a1eb4] (60.0f)
+			*((BYTE*)0x14053cab2 + 0) = 0xF3;
+			*((BYTE*)0x14053cab2 + 1) = 0x0F;
+			*((BYTE*)0x14053cab2 + 2) = 0x10;
+			*((BYTE*)0x14053cab2 + 3) = 0x05;
+			*((BYTE*)0x14053cab2 + 4) = 0xFA;
+			*((BYTE*)0x14053cab2 + 5) = 0x53;
+			*((BYTE*)0x14053cab2 + 6) = 0x46;
+			*((BYTE*)0x14053cab2 + 7) = 0x00;
+			VirtualProtect((BYTE*)0x14053cab2, 8, oldProtect, &bck);
+
+			VirtualProtect((BYTE*)0x14053caba, 5, PAGE_EXECUTE_READWRITE, &oldProtect); // JMP 0x14053c901
+			*((BYTE*)0x14053caba + 0) = 0xE9;
+			*((BYTE*)0x14053caba + 1) = 0x42;
+			*((BYTE*)0x14053caba + 2) = 0xFE;
+			*((BYTE*)0x14053caba + 3) = 0xFF;
+			*((BYTE*)0x14053caba + 4) = 0xFF;
+			VirtualProtect((BYTE*)0x14053caba, 5, oldProtect, &bck);
+
+			VirtualProtect((BYTE*)0x14053c901, 8, PAGE_EXECUTE_READWRITE, &oldProtect); // DIVSS XMM0, dword ptr [0x140eda6d0] (framerate)
+			*((BYTE*)0x14053c901 + 0) = 0xF3;
+			*((BYTE*)0x14053c901 + 1) = 0x0F;
+			*((BYTE*)0x14053c901 + 2) = 0x5E;
+			*((BYTE*)0x14053c901 + 3) = 0x05;
+			*((BYTE*)0x14053c901 + 4) = 0xC7;
+			*((BYTE*)0x14053c901 + 5) = 0xDD;
+			*((BYTE*)0x14053c901 + 6) = 0x99;
+			*((BYTE*)0x14053c901 + 7) = 0x00;
+			VirtualProtect((BYTE*)0x14053c901, 8, oldProtect, &bck);
+
+			VirtualProtect((BYTE*)0x14053c909, 5, PAGE_EXECUTE_READWRITE, &oldProtect); // JMP 0x14053ca76
+			*((BYTE*)0x14053c909 + 0) = 0xE9;
+			*((BYTE*)0x14053c909 + 1) = 0x68;
+			*((BYTE*)0x14053c909 + 2) = 0x01;
+			*((BYTE*)0x14053c909 + 3) = 0x00;
+			*((BYTE*)0x14053c909 + 4) = 0x00;
+			VirtualProtect((BYTE*)0x14053c909, 5, oldProtect, &bck);
+
 		
 		
 		// below are patches for the alternate method (breaks physics)

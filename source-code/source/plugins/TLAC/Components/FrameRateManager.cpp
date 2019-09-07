@@ -39,6 +39,9 @@ namespace TLAC::Components
 		InjectCode((void*)0x140192d7b, { 0x90, 0x90, 0x90 });
 
 
+		// fix AETs
+		InjectCode((void*)0x140170394, { 0xF3, 0x0F, 0x5E, 0x05, 0x34, 0xA3, 0xD6, 0x00 }); // DIVSS XMM0, dword ptr [0x140eda6d0] (framerate)
+
 		// fix edit PV AETs (thanks lyb)
 		InjectCode((void*)0x140192d30, { 0xF3, 0x0F, 0x10, 0x05, 0x5C, 0x02, 0x00, 0x00 }); // MOVSS XMM0, dword ptr [0x140192f94]
 
@@ -53,10 +56,6 @@ namespace TLAC::Components
 		InjectCode((void*)0x14053caba, { 0xE9, 0x42, 0xFE, 0xFF, 0xFF });                   // JMP 0x14053c901
 		InjectCode((void*)0x14053c901, { 0xF3, 0x0F, 0x5E, 0x05, 0xC7, 0xDD, 0x99, 0x00 }); // DIVSS XMM0, dword ptr [0x140eda6d0] (framerate)
 		InjectCode((void*)0x14053c909, { 0xE9, 0x68, 0x01, 0x00, 0x00 });                   // JMP 0x14053ca76
-
-		// fix snow effect
-		InjectCode((void*)0x14035ca68, { 0xF3, 0x0F, 0x5E, 0x05, 0x44, 0x54, 0x64, 0x00 }); // DIVSS XMM0, dword ptr [0x1409a1eb4] (60.0f)
-
 		
 		
 		// below are patches for the alternate method (breaks physics)
@@ -120,13 +119,17 @@ namespace TLAC::Components
 
 
 
-
 		// this way breaks some anim speeds, but they're fixable
+		// *aetFrameDuration = 1.0f / GetGameFrameRate();
 
-		*pvFrameRate = 60.0f * motionSpeedMultiplier;
-
-
-		*aetFrameDuration = 1.0f / GetGameFrameRate();
+		if (*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME)
+		{
+			*pvFrameRate = 60.0f * motionSpeedMultiplier;
+		}
+		else
+		{
+			*pvFrameRate = 60.0f;
+		}
 
 		if (*(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_DEMO)
 		{
@@ -135,6 +138,11 @@ namespace TLAC::Components
 
 			// target framerate
 			*(float*)0x140eda6cc = *pvFrameRate;
+
+			// trying to fix meltdown's water
+			//if ((uint64_t*)0x1411943f8 != nullptr)
+				//*(float*)(*(uint64_t*)0x1411943f8 + 0x1c) = (60.0f / GetGameFrameRate()) / 15.0f;
+				//*(float*)(*(uint64_t*)0x1411943f8 + 0x10) = *(float*)(*(uint64_t*)0x1411943f8);
 		}
 		else
 		{

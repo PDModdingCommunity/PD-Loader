@@ -17,6 +17,8 @@ namespace TLAC::Components
 	class TouchSliderEmulator : public EmulatorComponent
 	{
 	public:
+		static TouchSliderEmulator* LatestInstance;
+
 		Input::Binding* LeftSideSlideLeft;
 		Input::Binding* LeftSideSlideRight;
 
@@ -33,6 +35,14 @@ namespace TLAC::Components
 		virtual void UpdateInput() override;
 
 		virtual void OnFocusLost() override;
+
+		bool isSliderTouched()
+		{
+			for (int i = 0; i < 32; i++)
+				if (sliderState->SensorTouched[i].IsTouched) return true;
+
+			return false;
+		}
 
 	private:
 		ComponentsManager* componentsManager;

@@ -4,6 +4,7 @@
 #include "../../FileSystem/ConfigFile.h"
 #include "../../framework.h"
 #include "../../Components/GameTargets/TargetInspector.h"
+#include "../../Components/Input/TouchSliderEmulator.h"
 
 namespace TLAC::Input
 {
@@ -232,8 +233,7 @@ namespace TLAC::Input
 					ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
 					vibration.wLeftMotorSpeed = 8000; // use any value between 0-65535 here
 					vibration.wRightMotorSpeed = 4000; // use any value between 0-65535 here
-					//XInputSetState(xc_pref, &vibration);
-					//printf("1");
+					if (TLAC::Components::TouchSliderEmulator::LatestInstance->isSliderTouched()) XInputSetState(xc_pref, &vibration);
 				}
 				else
 				{
@@ -241,7 +241,7 @@ namespace TLAC::Input
 					ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
 					vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
 					vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
-					//XInputSetState(xc_pref, &vibration);
+					XInputSetState(xc_pref, &vibration);
 					//printf("0");
 				}
 

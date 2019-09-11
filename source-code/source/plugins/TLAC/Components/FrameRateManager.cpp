@@ -5,11 +5,16 @@
 #include <windows.h>
 #include "../framework.h"
 #include <vector>
+#include <codecvt>
 
 namespace TLAC::Components
 {
 	FrameRateManager::FrameRateManager()
 	{
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+		std::wstring configPath = converter.from_bytes((TLAC::framework::GetModuleDirectory() + "/config.ini").c_str());
+		float nMotionRate = GetPrivateProfileIntW(L"graphics", L"frm.motion.rate", 500, configPath.c_str());
+		motionSpeedMultiplier = nMotionRate / 100.0f;
 	}
 
 	FrameRateManager::~FrameRateManager()

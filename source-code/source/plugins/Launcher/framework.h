@@ -162,8 +162,8 @@ ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"no_error", PATCHES_SECTION, CONFIG_FILE, L"Disable Error Banner", L"Disable the error banner on the attract screen.", true, false),
 	new BooleanOption(L"hardware_slider", PATCHES_SECTION, CONFIG_FILE, L"Use Hardware Slider", L"Enable this if using a real arcade slider.\n(set the slider to port COM11)", false, false),
 
-	new NumericOption(L"Enhanced_Stage_Manager", GRAPHICS_SECTION, CONFIG_FILE, L"Number of stages:", L"Set the number of stages (0 = default).", 0, 0, INT_MAX),
-	new BooleanOption(L"Enhanced_Stage_Manager_Encore", PATCHES_SECTION, CONFIG_FILE, L"Encore", L"Enable encore stages.", true, false),
+	new NumericOption(L"Enhanced_Stage_Manager", PATCHES_SECTION, CONFIG_FILE, L"Number of stages:", L"Set the number of stages (0 = default).", 0, 0, INT_MAX),
+	new BooleanOption(L"Enhanced_Stage_Manager_Encore", PATCHES_SECTION, CONFIG_FILE, L"Encore Stages", L"Enable encore stages.", true, false),
 
 	new BooleanOption(L"skip", LAUNCHER_SECTION, CONFIG_FILE, L"Skip Launcher", L"Forces the launcher to be skipped, you can also use the --launch parameter instead of this.", false, false),
 
@@ -171,6 +171,8 @@ ConfigOptionBase* optionsArray[] = {
 	
 	new NumericOption(L"FPS.Limit", GRAPHICS_SECTION, CONFIG_FILE, L"FPS Limit:", L"Allows you to set a frame rate cap. Set to -1 to unlock the frame rate.", 60, -1, INT_MAX),
 	new BooleanOption(L"FPS.Limit.LightMode", GRAPHICS_SECTION, CONFIG_FILE, L"Use Lightweight Limiter", L"Makes the FPS limiter use less CPU.\nMay have less consistent performance.", true, false),
+
+	new NumericOption(L"frm.motion.rate", GRAPHICS_SECTION, CONFIG_FILE, L"FRM Motion Rate:", L"Sets the motion rate (multiplier percentage) for the FrameRateManager component.\nLarger=smoother, but more CPU intensive.", 500, 1, INT_MAX),
 
 	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"Command Line:", L"Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.", L"", false),
 };

@@ -99,10 +99,10 @@ namespace TLAC::Components
 		// this alterante way makes physics slowmo, but overall may be better if that's fixed
 
 		//// target framerate
-		//*(float*)0x140eda6cc = 60.0f;
+		//*(float*)AUTO_FRAMESPEED_TARGET_FRAMERATE_ADDRESS = 60.0f;
 
 		//// enable dynamic framerate
-		//*(bool*)0x140eda79c = true;
+		//*(bool*)USE_AUTO_FRAMESPEED_ADDRESS = true;
 
 		//*pvFrameRate = 60.0f;
 
@@ -139,10 +139,10 @@ namespace TLAC::Components
 		if (*(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_DEMO)
 		{
 			// enable dynamic framerate
-			*(bool*)0x140eda79c = true;
+			*(bool*)USE_AUTO_FRAMESPEED_ADDRESS = true;
 
 			// target framerate
-			*(float*)0x140eda6cc = *pvFrameRate;
+			*(float*)AUTO_FRAMESPEED_TARGET_FRAMERATE_ADDRESS = *pvFrameRate;
 
 			// trying to fix meltdown's water
 			//if ((uint64_t*)0x1411943f8 != nullptr)
@@ -152,10 +152,10 @@ namespace TLAC::Components
 		else
 		{
 			// enable dynamic framerate
-			*(bool*)0x140eda79c = true;
+			*(bool*)USE_AUTO_FRAMESPEED_ADDRESS = true;
 
 			// target framerate
-			*(float*)0x140eda6cc = 60.0f;
+			*(float*)AUTO_FRAMESPEED_TARGET_FRAMERATE_ADDRESS = 60.0f;
 		}
 	}
 

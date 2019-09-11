@@ -19,8 +19,11 @@ namespace TLAC::Components
 {
 	const std::string KEY_CONFIG_FILE_NAME = "keyconfig.ini";
 
+	TouchSliderEmulator* TouchSliderEmulator::LatestInstance;
+
 	TouchSliderEmulator::TouchSliderEmulator()
 	{
+		LatestInstance = this;
 	}
 
 	TouchSliderEmulator::~TouchSliderEmulator()

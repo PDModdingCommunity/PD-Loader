@@ -49,5 +49,6 @@ namespace TLAC::Input
 		void SetTapStates(BYTE keycode, float elapsed);
 
 		int xinput_num;
+		bool rumble;
 	};
 }

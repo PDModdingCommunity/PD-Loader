@@ -74,8 +74,8 @@ int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 			HDC hDev = wglGetCurrentDC(); // get handle to current opengl device context
 			HWND hWnd = WindowFromDC(hDev); // convert it to a window handle
 
-			SetWindowLongPtr(hWnd, GWL_STYLE, WS_POPUP + WS_VISIBLE); // set popup style (no border)
-			SetWindowPos(hWnd, HWND_TOP, wndX, wndY, nWidth, nHeight, 0); // adjust position to apply new style
+			SetWindowLongPtr(hWnd, GWL_STYLE, WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN); // set no border (visible to ensure something is shown immediately)
+			SetWindowPos(hWnd, HWND_TOP, wndX, wndY, nWidth, nHeight, SWP_FRAMECHANGED); // adjust position to apply new style
 
 			printf("[Render Manager] Borderless mode.\n");
 		}
@@ -142,7 +142,7 @@ __int64 __fastcall limiterFuncLight(__int64 a1)
 			nanoseconds timeDifference = (timeNow - sleepUntil);
 			if (timeDifference > sleepWindow) // no need for abs because it doesn't matter if this is early
 			{
-				printf("FPS LIMITER SLEEP TIME OUTSIDE ALLOWED WINDOW\n", timeDifference.count());
+				printf("FPS LIMITER SLEEP TIME OUTSIDE ALLOWED WINDOW\n");
 				printf(" Target sleep until time: %lld, Actual time: %lld\n", sleepUntil.time_since_epoch().count(), timeNow.time_since_epoch().count());
 				printf(" (Difference: %lld, Window: %lld)\n", timeDifference.count(), sleepWindow.count());
 			}

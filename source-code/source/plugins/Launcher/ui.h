@@ -44,6 +44,12 @@ namespace Launcher {
 				PrependFile("[playerdata]\n", PLAYERDATA_FILE);
 			}
 
+			// if keyconfig.ini has no section name, add one
+			if (!IsLineInFile("[keyconfig]", KEYCONFIG_FILE))
+			{
+				PrependFile("[keyconfig]\n", KEYCONFIG_FILE);
+			}
+
 
 			this->panel_ScreenRes->SuspendLayout();
 

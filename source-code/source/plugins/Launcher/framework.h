@@ -46,12 +46,16 @@ LPCWSTR COMPONENTS_FILE = COMPONENTS_FILE_STRING.c_str();
 wstring PLAYERDATA_FILE_STRING = PLUGINS_DIR + L"\\playerdata.ini";
 LPCWSTR PLAYERDATA_FILE = PLAYERDATA_FILE_STRING.c_str();
 
+wstring KEYCONFIG_FILE_STRING = PLUGINS_DIR + L"\\keyconfig.ini";
+LPCWSTR KEYCONFIG_FILE = KEYCONFIG_FILE_STRING.c_str();
+
 LPCWSTR PATCHES_SECTION = L"patches";
 LPCWSTR GRAPHICS_SECTION = L"graphics";
 LPCWSTR RESOLUTION_SECTION = L"resolution";
 LPCWSTR LAUNCHER_SECTION = L"launcher";
 LPCWSTR COMPONENTS_SECTION = L"components";
 LPCWSTR PLAYERDATA_SECTION = L"playerdata";
+LPCWSTR KEYCONFIG_SECTION = L"keyconfig";
 
 int nSkipLauncher = GetPrivateProfileIntW(L"launcher", L"skip", FALSE, CONFIG_FILE);
 
@@ -176,6 +180,10 @@ ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"FPS.Limit.LightMode", GRAPHICS_SECTION, CONFIG_FILE, L"Use Lightweight Limiter", L"Makes the FPS limiter use less CPU.\nMay have less consistent performance.", true, false),
 	new NumericOption(L"FPS.Limit", GRAPHICS_SECTION, CONFIG_FILE, L"FPS Limit:", L"Allows you to set a frame rate cap. Set to -1 to unlock the frame rate.", 60, -1, INT_MAX),
 	new NumericOption(L"frm.motion.rate", GRAPHICS_SECTION, CONFIG_FILE, L"FRM Motion Rate:", L"Sets the motion rate (fps) for the Frame Rate Manager component.\nLarger values should be smoother, but more CPU intensive and possibly buggier.", 300, 1, INT_MAX),
+	new OptionMetaSpacer(8),
+
+	new BooleanOption(L"rumble", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Rumble", L"Enables rumble during chainslides.", true, true),
+	new NumericOption(L"xinput_preferred", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Controller Num:", L"Sets the preferred XInput controller.\nIf unavailable, the next connected controller is used.", 0, 0, 3),
 	new OptionMetaSpacer(8),
 
 	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"Command Line:", L"Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.", L"", false),

@@ -53,7 +53,7 @@ namespace TLAC::FileSystem
 
 		// check for BOM
 		std::getline(fileStream, line);
-		if (line.size() >= 3 & line.rfind("\xEF\xBB\xBF", 0) == 0)
+		if (line.size() >= 3 && line.rfind("\xEF\xBB\xBF", 0) == 0)
 			fileStream.seekg(3);
 		else
 			fileStream.seekg(0);
@@ -74,6 +74,6 @@ namespace TLAC::FileSystem
 
 	bool ConfigFile::IsComment(const std::string &line)
 	{
-		return line.size() <= 0 || line[0] == '#' || line[0] == '[' || (line.size() >= 2 & line.rfind("//", 0) == 0);
+		return line.size() <= 0 || line[0] == '#' || line[0] == '[' || (line.size() >= 2 && line.rfind("//", 0) == 0);
 	}
 }

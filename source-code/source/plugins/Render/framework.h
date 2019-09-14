@@ -35,6 +35,8 @@ int nIntResHeight = GetPrivateProfileIntW(L"resolution", L"r.height", 720, CONFI
 int nBitDepth = GetPrivateProfileIntW(L"resolution", L"bitdepth", 32, CONFIG_FILE);
 int nRefreshRate = GetPrivateProfileIntW(L"resolution", L"refreshrate", 60, CONFIG_FILE);
 
+int nPopupBorderless = GetPrivateProfileIntW(L"resolution", L"borderless.popup", TRUE, CONFIG_FILE);
+
 int nFpsLimit = GetPrivateProfileIntW(L"graphics", L"fps.limit", 60, CONFIG_FILE);
 int nUseLightLimiter = GetPrivateProfileIntW(L"graphics", L"fps.limit.lightmode", TRUE, CONFIG_FILE);
 int nVerboseLimiter = GetPrivateProfileIntW(L"graphics", L"fps.limit.verbose", FALSE, CONFIG_FILE);

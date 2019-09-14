@@ -172,6 +172,7 @@ ConfigOptionBase* optionsArray[] = {
 
 	new BooleanOption(L"TAA", GRAPHICS_SECTION, CONFIG_FILE, L"TAA", L"Temporal Anti-Aliasing", true, false),
 	new BooleanOption(L"MLAA", GRAPHICS_SECTION, CONFIG_FILE, L"MLAA", L"Morphological Anti-Aliasing", true, false),
+	new BooleanOption(L"borderless.popup", RESOLUTION_SECTION, CONFIG_FILE, L"Popup Borderless Mode", L"Makes borderless mode use a popup window.\nPerformance may increase and latency should decrease, but screenshots may not work as expected.", true, false),
 	new BooleanOption(L"FPS.Limit.LightMode", GRAPHICS_SECTION, CONFIG_FILE, L"Use Lightweight Limiter", L"Makes the FPS limiter use less CPU.\nMay have less consistent performance.", true, false),
 	new NumericOption(L"FPS.Limit", GRAPHICS_SECTION, CONFIG_FILE, L"FPS Limit:", L"Allows you to set a frame rate cap. Set to -1 to unlock the frame rate.", 60, -1, INT_MAX),
 	new NumericOption(L"frm.motion.rate", GRAPHICS_SECTION, CONFIG_FILE, L"FRM Motion Rate:", L"Sets the motion rate (fps) for the Frame Rate Manager component.\nLarger values should be smoother, but more CPU intensive and possibly buggier.", 300, 1, INT_MAX),

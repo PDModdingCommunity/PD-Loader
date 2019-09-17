@@ -233,6 +233,8 @@ ConfigOptionBase* componentsArray[] = {
 	new BooleanOption(L"debug_component", COMPONENTS_SECTION, COMPONENTS_FILE, L"Debug Component", L"Allows for changing game state (F4-F8 keys), using dev GUI and tests, and speeding up 2d animations/menus (hold SHIFT+TAB).", false, true),
 
 	new BooleanOption(L"target_inspector", COMPONENTS_SECTION, COMPONENTS_FILE, L"Target Inspector", L"Enables hold transfers.", false, true),
+
+	new BooleanOption(L"score_saver", COMPONENTS_SECTION, COMPONENTS_FILE, L"Score Saver", L"Saves high scores to plugins/scores.ini.", false, true),
 };
 
 bool IsLineInFile(LPCSTR searchLine, LPCWSTR fileName)

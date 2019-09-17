@@ -12,6 +12,7 @@
 #include "CameraController.h"
 #include "DebugComponent.h"
 #include "ScaleComponent.h"
+#include "ScoreSaver.h"
 #include "GameTargets/TargetInspector.h"
 
 using ConfigFile = TLAC::FileSystem::ConfigFile;
@@ -41,6 +42,7 @@ namespace TLAC::Components
 			new FrameRateManager(),
 			new FastLoader(),
 			new ScaleComponent(),
+			new ScoreSaver(),
 			new StageManager(),
 			new CameraController(),
 			new DebugComponent(),

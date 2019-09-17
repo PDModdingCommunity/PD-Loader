@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -195,6 +195,7 @@
     <ClInclude Include="Components\PlayerData.h" />
     <ClInclude Include="Components\PlayerDataManager.h" />
     <ClInclude Include="Components\ScaleComponent.h" />
+    <ClInclude Include="Components\ScoreSaver.h" />
     <ClInclude Include="Components\StageManager.h" />
     <ClInclude Include="Components\SysTimer.h" />
     <ClInclude Include="Constants.h" />
@@ -246,6 +247,7 @@
     <ClCompile Include="Components\Input\TouchSliderState.cpp" />
     <ClCompile Include="Components\PlayerDataManager.cpp" />
     <ClCompile Include="Components\ScaleComponent.cpp" />
+    <ClCompile Include="Components\ScoreSaver.cpp" />
     <ClCompile Include="Components\StageManager.cpp" />
     <ClCompile Include="Components\SysTimer.cpp" />
     <ClCompile Include="dllmain.cpp" />

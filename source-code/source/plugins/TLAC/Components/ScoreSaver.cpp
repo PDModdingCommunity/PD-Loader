@@ -25,9 +25,9 @@ namespace TLAC::Components
 		return "score_saver";
 	}
 
-	char ScoreSaver::selHighScore[9] = "39393939";
-	char ScoreSaver::selHighPct1[4] = "39";
-	char ScoreSaver::selHighPct2[3] = "39";
+	char ScoreSaver::selHighScore[12] = "--------(-)";
+	char ScoreSaver::selHighPct1[4] = "---";
+	char ScoreSaver::selHighPct2[3] = "--";
 	void(__stdcall* ScoreSaver::divaInitResults)(void* cls) = (void(__stdcall*)(void* cls))RESULTS_INIT_ADDRESS;
 	void ScoreSaver::Initialize(ComponentsManager*)
 	{
@@ -80,11 +80,64 @@ namespace TLAC::Components
 		InjectCode((void*)0x1405bfdc2, { 0x4c, 0x8b, 0xce }); // MOV  R9, RSI
 		InjectCode((void*)0x1405bfdc5, { 0x4c, 0x8d, 0x05, 0x90, 0x5b, 0x3e, 0x00 }); // LEA  R8, [0x1409a595c]
 
+		// override font to song name font for larger character set
+		InjectCode((void*)0x1405bfa9d, { 0x11 });
+		//InjectCode((void*)0x1405bfb80, { 0x11 });
+		//InjectCode((void*)0x1405bfb9c, { 0x11 });
+
 
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(PVOID&)ScoreSaver::divaInitResults, (PVOID)(ScoreSaver::hookedInitResults));
 		DetourTransactionCommit();
+	}
+
+	bool ScoreSaver::checkExistingScoreValid(int pv, int difficulty, int isEx)
+	{
+		WCHAR keyBase[32]; // needs to be big enough to store pv.999.diff.4.ex
+		WCHAR key[32]; // needs to be big enough to store pv.999.diff.4.challengescore
+
+		const WCHAR section[] = L"scores";
+
+		if (isEx == 0)
+			swprintf(keyBase, 32, L"pv.%03d.diff.%01d", pv, difficulty);
+		else
+			swprintf(keyBase, 32, L"pv.%03d.diff.%01d.ex", pv, difficulty);
+
+
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"score");
+		int score = GetPrivateProfileIntW(section, key, 0, configPath);
+		
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"notecounts");
+		WCHAR countsBufW[32];
+		char countsBufA[32];
+		int cntHitTypes[2] = { 0, 0 };
+		GetPrivateProfileStringW(section, key, L"", countsBufW, 32, configPath);
+		WideCharToMultiByte(CP_UTF8, 0, countsBufW, -1, countsBufA, 32, NULL, NULL);
+		std::vector<std::string> countToks = TLAC::Utilities::Split(countsBufA, ",");
+		if (countToks.size() >= 2)
+		{
+			cntHitTypes[0] = atoi(countToks[0].c_str());
+			cntHitTypes[1] = atoi(countToks[1].c_str());
+		}
+
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"percent");
+		int percent = GetPrivateProfileIntW(section, key, 0, configPath);
+
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"combo");
+		int combo = GetPrivateProfileIntW(section, key, 0, configPath);
+
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
+		int allTimeRank = GetPrivateProfileIntW(section, key, 0, configPath);
+
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
+		int clearRank = GetPrivateProfileIntW(section, key, 0, configPath);
+
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
+		int expectedCheck = GetPrivateProfileIntW(section, key, -1, configPath);
+
+
+		return expectedCheck == (int)(((short)score ^ ((short)cntHitTypes[0] << 16) ^ ((short)cntHitTypes[1]) ^ ((short)percent << 16) ^ ((short)combo)) * clearRank + (allTimeRank * clearRank));
 	}
 	
 	void ScoreSaver::hookedInitResults(void* cls)
@@ -114,8 +167,6 @@ namespace TLAC::Components
 		int percent = *(int*)(resultBase + 0x190);
 		int slideScore = *(int*)(resultBase + 0x194);
 		
-		int checkField = ((short)score ^ ((short)cntHitTypes[0] << 16) ^ ((short)cntHitTypes[1]) ^ ((short)percent << 16) ^ ((short)combo)) * clearRank;
-
 		WCHAR songName[256];
 		//std::string utf8song = *(std::string*)(CURRENT_SONG_NAME_ADDRESS);
 		uint64_t songnamelen = *(uint64_t*)(CURRENT_SONG_NAME_ADDRESS + 0x18);
@@ -137,55 +188,88 @@ namespace TLAC::Components
 		swprintf(key, 32, L"%ls.%ls", keyBase, L"score");
 		int oldScore = GetPrivateProfileIntW(section, key, 0, configPath);
 
-		if (score <= oldScore)
-			return;
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
+		int oldAlltimeRank = GetPrivateProfileIntW(section, key, 0, configPath);
+		int allTimeRank = clearRank > oldAlltimeRank ? clearRank : oldAlltimeRank;
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"challengescore");
-		swprintf(val, 32, L"%d", challengeScore);
-		WritePrivateProfileStringW(section, key, val, configPath);
+		bool oldScoreValid = true;
+		if (!checkExistingScoreValid(pvNum, pvDifficulty, pvDifficultyIsEx))
+		{
+			oldScore = 0; // ensure new score is written
+			allTimeRank = clearRank; // don't trust old all-time clear rank, use a new one
+			oldScoreValid = false;
+		}
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"combo");
-		swprintf(val, 32, L"%d", combo);
-		WritePrivateProfileStringW(section, key, val, configPath);
+		if (score > oldScore)
+		{
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
+			swprintf(val, 32, L"%d", allTimeRank);
+			WritePrivateProfileStringW(section, key, val, configPath);
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"holdscore");
-		swprintf(val, 32, L"%d", holdScore);
-		WritePrivateProfileStringW(section, key, val, configPath);
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"challengescore");
+			swprintf(val, 32, L"%d", challengeScore);
+			WritePrivateProfileStringW(section, key, val, configPath);
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"modifier");
-		swprintf(val, 32, L"%d", modifier);
-		WritePrivateProfileStringW(section, key, val, configPath);
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"combo");
+			swprintf(val, 32, L"%d", combo);
+			WritePrivateProfileStringW(section, key, val, configPath);
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"name");
-		WritePrivateProfileStringW(section, key, songName, configPath);
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"holdscore");
+			swprintf(val, 32, L"%d", holdScore);
+			WritePrivateProfileStringW(section, key, val, configPath);
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"notecounts");
-		swprintf(val, 32, L"%d,%d,%d,%d,%d", cntHitTypes[0], cntHitTypes[1], cntHitTypes[2], cntHitTypes[3], cntHitTypes[4]);
-		WritePrivateProfileStringW(section, key, val, configPath);
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"modifier");
+			swprintf(val, 32, L"%d", modifier);
+			WritePrivateProfileStringW(section, key, val, configPath);
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"notepercents");
-		swprintf(val, 32, L"%d,%d,%d,%d,%d", pctHitTypes[0], pctHitTypes[1], pctHitTypes[2], pctHitTypes[3], pctHitTypes[4]);
-		WritePrivateProfileStringW(section, key, val, configPath);
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"name");
+			WritePrivateProfileStringW(section, key, songName, configPath);
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"percent");
-		swprintf(val, 32, L"%d", percent);
-		WritePrivateProfileStringW(section, key, val, configPath);
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"notecounts");
+			swprintf(val, 32, L"%d,%d,%d,%d,%d", cntHitTypes[0], cntHitTypes[1], cntHitTypes[2], cntHitTypes[3], cntHitTypes[4]);
+			WritePrivateProfileStringW(section, key, val, configPath);
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
-		swprintf(val, 32, L"%d", clearRank);
-		WritePrivateProfileStringW(section, key, val, configPath);
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"notepercents");
+			swprintf(val, 32, L"%d,%d,%d,%d,%d", pctHitTypes[0], pctHitTypes[1], pctHitTypes[2], pctHitTypes[3], pctHitTypes[4]);
+			WritePrivateProfileStringW(section, key, val, configPath);
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"score");
-		swprintf(val, 32, L"%d", score);
-		WritePrivateProfileStringW(section, key, val, configPath);
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"percent");
+			swprintf(val, 32, L"%d", percent);
+			WritePrivateProfileStringW(section, key, val, configPath);
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"slidescore");
-		swprintf(val, 32, L"%d", slideScore);
-		WritePrivateProfileStringW(section, key, val, configPath);
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
+			swprintf(val, 32, L"%d", clearRank);
+			WritePrivateProfileStringW(section, key, val, configPath);
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
-		swprintf(val, 32, L"%d", checkField);
-		WritePrivateProfileStringW(section, key, val, configPath);
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"score");
+			swprintf(val, 32, L"%d", score);
+			WritePrivateProfileStringW(section, key, val, configPath);
+
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"slidescore");
+			swprintf(val, 32, L"%d", slideScore);
+			WritePrivateProfileStringW(section, key, val, configPath);
+
+			int checkField = ((short)score ^ ((short)cntHitTypes[0] << 16) ^ ((short)cntHitTypes[1]) ^ ((short)percent << 16) ^ ((short)combo)) * clearRank + (allTimeRank * clearRank);
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
+			swprintf(val, 32, L"%d", checkField);
+			WritePrivateProfileStringW(section, key, val, configPath);
+		}
+		else if (oldScoreValid && allTimeRank > oldAlltimeRank)
+		{
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
+			swprintf(val, 32, L"%d", allTimeRank);
+			WritePrivateProfileStringW(section, key, val, configPath);
+
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
+			int oldClearRank = GetPrivateProfileIntW(section, key, 0, configPath);
+
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
+			int oldCheck = GetPrivateProfileIntW(section, key, -1, configPath);
+			
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
+			swprintf(val, 32, L"%d", oldCheck - (oldAlltimeRank * oldClearRank) + (allTimeRank * oldClearRank));
+			WritePrivateProfileStringW(section, key, val, configPath);
+		}
 	}
 
 	void ScoreSaver::Update()
@@ -214,46 +298,61 @@ namespace TLAC::Components
 
 
 		swprintf(key, 32, L"%ls.%ls", keyBase, L"score");
-		int score = GetPrivateProfileIntW(section, key, 0, configPath);
+		int score = GetPrivateProfileIntW(section, key, -1, configPath);
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"notecounts");
-		WCHAR countsBufW[32];
-		char countsBufA[32];
-		int cntHitTypes[2] = { 0, 0 };
-		GetPrivateProfileStringW(section, key, L"", countsBufW, 32, configPath);
-		WideCharToMultiByte(CP_UTF8, 0, countsBufW, -1, countsBufA, 32, NULL, NULL);
-		std::vector<std::string> countToks = TLAC::Utilities::Split(countsBufA, ",");
-		if (countToks.size() >= 2)
+		if (score < 0)
 		{
-			cntHitTypes[0] = atoi(countToks[0].c_str());
-			cntHitTypes[1] = atoi(countToks[1].c_str());
+			snprintf(selHighScore, sizeof(selHighScore), "--------(-)");
+			snprintf(selHighPct1, sizeof(selHighPct1), "---");
+			snprintf(selHighPct2, sizeof(selHighPct2), "--");
+			return;
 		}
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"percent");
-		int percent = GetPrivateProfileIntW(section, key, 0, configPath);
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"combo");
-		int combo = GetPrivateProfileIntW(section, key, 0, configPath);
-
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
-		int clearRank = GetPrivateProfileIntW(section, key, 0, configPath);
-
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
-		int expectedCheck = GetPrivateProfileIntW(section, key, -1, configPath);
-
-
-		if (expectedCheck == (int)(((short)score ^ ((short)cntHitTypes[0] << 16) ^ ((short)cntHitTypes[1]) ^ ((short)percent << 16) ^ ((short)combo)) * clearRank))
+		if (checkExistingScoreValid(currentPv, currentDifficulty, currentDifficultyIsEx))
 		{
 			if (score > 99999999)
 				score = 99999999;
 
-			snprintf(selHighScore, sizeof(selHighScore), "%d", score);
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"percent");
+			int percent = GetPrivateProfileIntW(section, key, 0, configPath);
+
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
+			int allTimeRank = GetPrivateProfileIntW(section, key, 0, configPath);
+
+			char allTimeRankLetter[2] = "-";
+			switch (allTimeRank)
+			{
+			case 0: // misstake
+				allTimeRankLetter[0] = '-';
+				break;
+			case 1: // cheap
+				allTimeRankLetter[0] = '-';
+				break;
+			case 2: // clear
+				allTimeRankLetter[0] = 'C';
+				break;
+			case 3: // great
+				allTimeRankLetter[0] = 'G';
+				break;
+			case 4: // excellent
+				allTimeRankLetter[0] = 'E';
+				break;
+			case 5: // perfect
+				allTimeRankLetter[0] = 'P';
+				break;
+			default:
+				allTimeRankLetter[0] = '-';
+				break;
+			}
+
+			snprintf(selHighScore, sizeof(selHighScore), "%d(%s)", score, allTimeRankLetter);
 			snprintf(selHighPct1, sizeof(selHighPct1), "%d", percent / 100);
-			snprintf(selHighPct2, sizeof(selHighPct2), "%d", percent % 100);
+			snprintf(selHighPct2, sizeof(selHighPct2), "%02d", percent % 100);
 		}
 		else
 		{
-			snprintf(selHighScore, sizeof(selHighScore), "--------");
+			snprintf(selHighScore, sizeof(selHighScore), "--------(-)");
 			snprintf(selHighPct1, sizeof(selHighPct1), "---");
 			snprintf(selHighPct2, sizeof(selHighPct2), "--");
 		}

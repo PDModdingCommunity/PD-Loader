@@ -22,9 +22,10 @@ namespace TLAC::Components
 		static void(__stdcall* divaInitResults)(void* cls);
 		static void hookedInitResults(void* cls);
 		static void InjectCode(void* address, const std::vector<uint8_t> data);
+		static bool checkExistingScoreValid(int pv, int difficulty, int isEx);
 
 		static WCHAR configPath[256];
-		static char selHighScore[9];
+		static char selHighScore[12];
 		static char selHighPct1[4];
 		static char selHighPct2[3];
 

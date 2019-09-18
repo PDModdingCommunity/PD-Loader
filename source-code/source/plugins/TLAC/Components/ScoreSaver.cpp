@@ -28,7 +28,7 @@ namespace TLAC::Components
 	char ScoreSaver::selHighScore[12] = "--------(-)";
 	char ScoreSaver::selHighPct1[4] = "---";
 	char ScoreSaver::selHighPct2[3] = "--";
-	void(__stdcall* ScoreSaver::divaInitResults)(void* cls) = (void(__stdcall*)(void* cls))RESULTS_INIT_ADDRESS;
+	bool(__stdcall* ScoreSaver::divaInitResults)(void* cls) = (bool(__stdcall*)(void* cls))RESULTS_INIT_ADDRESS;
 	void ScoreSaver::Initialize(ComponentsManager*)
 	{
 		// replace code that loads personal high scores on pv select screen with code that loads custom strings
@@ -146,15 +146,15 @@ namespace TLAC::Components
 		return expectedCheck == (int)(((short)score ^ ((short)cntHitTypes[0] << 16) ^ ((short)cntHitTypes[1]) ^ ((short)percent << 16) ^ ((short)combo)) * clearRank + (allTimeRank * clearRank));
 	}
 	
-	void ScoreSaver::hookedInitResults(void* cls)
+	bool ScoreSaver::hookedInitResults(void* cls)
 	{
-		divaInitResults(cls);
+		bool result = divaInitResults(cls);
 				
 		int clearRank = *(int*)(RESULTS_BASE_ADDRESS + 0xe8);
 		int insurance = *(int*)(GAME_INFO_ADDRESS + 0x14);
 		
 		if (clearRank < 2 || insurance !=0)
-			return;
+			return result;
 
 		// get the base for this specific set of results
 		uint64_t resultBase = *(uint64_t*)(RESULTS_BASE_ADDRESS + 0x100);
@@ -276,6 +276,8 @@ namespace TLAC::Components
 			swprintf(val, 32, L"%d", oldCheck - (oldAlltimeRank * oldClearRank) + (allTimeRank * oldClearRank));
 			WritePrivateProfileStringW(section, key, val, configPath);
 		}
+
+		return result;
 	}
 
 	void ScoreSaver::Update()

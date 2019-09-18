@@ -19,8 +19,8 @@ namespace TLAC::Components
 		virtual void UpdateInput() override;
 
 	private:
-		static void(__stdcall* divaInitResults)(void* cls);
-		static void hookedInitResults(void* cls);
+		static bool(__stdcall* divaInitResults)(void* cls);
+		static bool hookedInitResults(void* cls);
 		static void InjectCode(void* address, const std::vector<uint8_t> data);
 		static bool checkExistingScoreValid(int pv, int difficulty, int isEx);
 

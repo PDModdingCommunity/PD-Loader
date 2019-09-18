@@ -85,6 +85,12 @@ namespace TLAC::Components
 		//InjectCode((void*)0x1405bfb80, { 0x11 });
 		//InjectCode((void*)0x1405bfb9c, { 0x11 });
 
+		// move score text upwards because of shifted size
+		// WARNING: HARDCODED POSITION
+		InjectCode((void*)0x1405bfab4, { 0x48, 0xb8,  0x00, 0x00, 0x95, 0x44, 0x00, 0x00, 0x0e, 0x44 }); // MOV  RAX, 0x440f400044950000
+		InjectCode((void*)0x1405bfabe, { 0x48, 0x89, 0x44, 0x25, 0xb4 }); // MOV  qword ptr [RBP + -0x4c], RAX
+		InjectCode((void*)0x1405bfac3, { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
 
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());

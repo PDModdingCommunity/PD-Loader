@@ -151,7 +151,7 @@ namespace TLAC::Components
 		bool result = divaInitResults(cls);
 				
 		int clearRank = *(int*)(RESULTS_BASE_ADDRESS + 0xe8);
-		int insurance = *(int*)(GAME_INFO_ADDRESS + 0x14);
+		byte insurance = *(byte*)(GAME_INFO_ADDRESS + 0x14);
 		
 		if (clearRank < 2 || insurance !=0)
 			return result;

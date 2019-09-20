@@ -9,9 +9,23 @@
 
 namespace TLAC::Components
 {
+	static char emptySelHighScore[12] = "--------(-)";
+	static char emptySelHighPct1[4] = "---";
+	static char emptySelHighPct2[3] = "--";
+	static char protectedSelHighScore[12] = "-PROTECTED-";
+	static char protectedSelHighPct1[4] = "---";
+	static char protectedSelHighPct2[3] = "--";
+	char ScoreSaver::selHighScore[12];
+	char ScoreSaver::selHighPct1[4];
+	char ScoreSaver::selHighPct2[3];
+
 	WCHAR ScoreSaver::configPath[256];
 	ScoreSaver::ScoreSaver()
 	{
+		strcpy_s(selHighScore, sizeof(selHighScore), emptySelHighScore);
+		strcpy_s(selHighPct1, sizeof(selHighPct1), emptySelHighPct1);
+		strcpy_s(selHighPct2, sizeof(selHighPct2), emptySelHighPct2);
+
 		std::string utf8path = TLAC::framework::GetModuleDirectory() + "/scores.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, configPath, 256);
 	}
@@ -25,9 +39,6 @@ namespace TLAC::Components
 		return "score_saver";
 	}
 
-	char ScoreSaver::selHighScore[12] = "--------(-)";
-	char ScoreSaver::selHighPct1[4] = "---";
-	char ScoreSaver::selHighPct2[3] = "--";
 	bool(__stdcall* ScoreSaver::divaInitResults)(void* cls) = (bool(__stdcall*)(void* cls))RESULTS_INIT_ADDRESS;
 	void ScoreSaver::Initialize(ComponentsManager*)
 	{
@@ -96,6 +107,11 @@ namespace TLAC::Components
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(PVOID&)ScoreSaver::divaInitResults, (PVOID)(ScoreSaver::hookedInitResults));
 		DetourTransactionCommit();
+
+
+		// build the score cache
+		UpdateScoreCache();
+		UpdateClearCounts();
 	}
 
 	bool ScoreSaver::checkExistingScoreValid(int pv, int difficulty, int isEx)
@@ -153,7 +169,7 @@ namespace TLAC::Components
 		int clearRank = *(int*)(RESULTS_BASE_ADDRESS + 0xe8);
 		byte insurance = *(byte*)(GAME_INFO_ADDRESS + 0x14);
 		
-		if (clearRank < 2 || insurance !=0)
+		if (clearRank < 2 || insurance != 0)
 			return result;
 
 		// get the base for this specific set of results
@@ -277,6 +293,9 @@ namespace TLAC::Components
 			WritePrivateProfileStringW(section, key, val, configPath);
 		}
 
+		UpdateSingleScoreCacheEntry(pvNum, pvDifficulty, pvDifficultyIsEx);
+		UpdateClearCounts();
+
 		return result;
 	}
 
@@ -285,51 +304,42 @@ namespace TLAC::Components
 		int pvNum = *(int*)SELPV_CURRENT_SONG_ADDRESS;
 		int diff = *(int*)(GAME_INFO_ADDRESS);
 		int diffIsEx = *(int*)(GAME_INFO_ADDRESS + 0x4);
+		byte insurance = *(byte*)(GAME_INFO_ADDRESS + 0x14);
 
-		if (pvNum == currentPv && diff == currentDifficulty && diffIsEx == currentDifficultyIsEx)
+		if (pvNum == currentPv && diff == currentDifficulty && diffIsEx == currentDifficultyIsEx && insurance == currentInsurance)
 			return;
 		
 		currentPv = pvNum;
 		currentDifficulty = diff;
 		currentDifficultyIsEx = diffIsEx;
+		currentInsurance = insurance;
 
-
-		WCHAR keyBase[32]; // needs to be big enough to store pv.999.diff.4.ex
-		WCHAR key[32]; // needs to be big enough to store pv.999.diff.4.challengescore
-
-		const WCHAR section[] = L"scores";
-
-		if (currentDifficultyIsEx == 0)
-			swprintf(keyBase, 32, L"pv.%03d.diff.%01d", currentPv, currentDifficulty);
-		else
-			swprintf(keyBase, 32, L"pv.%03d.diff.%01d.ex", currentPv, currentDifficulty);
-
-
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"score");
-		int score = GetPrivateProfileIntW(section, key, -1, configPath);
-
-		if (score < 0)
+		if (insurance != 0)
 		{
-			snprintf(selHighScore, sizeof(selHighScore), "--------(-)");
-			snprintf(selHighPct1, sizeof(selHighPct1), "---");
-			snprintf(selHighPct2, sizeof(selHighPct2), "--");
+			strcpy_s(selHighScore, sizeof(selHighScore), protectedSelHighScore);
+			strcpy_s(selHighPct1, sizeof(selHighPct1), protectedSelHighPct1);
+			strcpy_s(selHighPct2, sizeof(selHighPct2), protectedSelHighPct2);
 			return;
 		}
 
+		if (currentPv < 0 || currentDifficulty < 0 || currentDifficultyIsEx < 0 || currentPv > 999 || currentDifficulty > 3 || currentDifficultyIsEx > 1)
+			return;
 
-		if (checkExistingScoreValid(currentPv, currentDifficulty, currentDifficultyIsEx))
+		CachedScoreInfo info = ScoreCache[currentPv][currentDifficulty][currentDifficultyIsEx];
+
+		if (info.score < 0)
 		{
-			if (score > 99999999)
-				score = 99999999;
-
-			swprintf(key, 32, L"%ls.%ls", keyBase, L"percent");
-			int percent = GetPrivateProfileIntW(section, key, 0, configPath);
-
-			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
-			int allTimeRank = GetPrivateProfileIntW(section, key, 0, configPath);
+			strcpy_s(selHighScore, sizeof(selHighScore), emptySelHighScore);
+			strcpy_s(selHighPct1, sizeof(selHighPct1), emptySelHighPct1);
+			strcpy_s(selHighPct2, sizeof(selHighPct2), emptySelHighPct2);
+		}
+		else
+		{
+			if (info.score > 99999999)
+				info.score = 99999999;
 
 			char allTimeRankLetter[2] = "-";
-			switch (allTimeRank)
+			switch (info.rank)
 			{
 			case 0: // misstake
 				allTimeRankLetter[0] = '-';
@@ -354,15 +364,9 @@ namespace TLAC::Components
 				break;
 			}
 
-			snprintf(selHighScore, sizeof(selHighScore), "%d(%s)", score, allTimeRankLetter);
-			snprintf(selHighPct1, sizeof(selHighPct1), "%d", percent / 100);
-			snprintf(selHighPct2, sizeof(selHighPct2), "%02d", percent % 100);
-		}
-		else
-		{
-			snprintf(selHighScore, sizeof(selHighScore), "--------(-)");
-			snprintf(selHighPct1, sizeof(selHighPct1), "---");
-			snprintf(selHighPct2, sizeof(selHighPct2), "--");
+			snprintf(selHighScore, sizeof(selHighScore), "%d(%s)", info.score, allTimeRankLetter);
+			snprintf(selHighPct1, sizeof(selHighPct1), "%d", info.percent / 100);
+			snprintf(selHighPct2, sizeof(selHighPct2), "%02d", info.percent % 100);
 		}
 	}
 
@@ -379,5 +383,93 @@ namespace TLAC::Components
 		VirtualProtect(address, byteCount, PAGE_EXECUTE_READWRITE, &oldProtect);
 		memcpy(address, data.data(), byteCount);
 		VirtualProtect(address, byteCount, oldProtect, nullptr);
+	}
+
+	ScoreSaver::CachedScoreInfo ScoreSaver::ScoreCache[1000][4][2];
+	void ScoreSaver::UpdateSingleScoreCacheEntry(int pvNum, int diff, int exDiff)
+	{
+		if (pvNum < 0 || diff < 0 || exDiff < 0 || pvNum > 999 || diff > 3 || exDiff > 1)
+			return;
+
+
+		WCHAR keyBase[32]; // needs to be big enough to store pv.999.diff.4.ex
+		WCHAR key[32]; // needs to be big enough to store pv.999.diff.4.challengescore
+
+		const WCHAR section[] = L"scores";
+
+		if (exDiff == 0)
+			swprintf(keyBase, 32, L"pv.%03d.diff.%01d", pvNum, diff);
+		else
+			swprintf(keyBase, 32, L"pv.%03d.diff.%01d.ex", pvNum, diff);
+
+
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"score");
+		int score = GetPrivateProfileIntW(section, key, -1, configPath);
+
+		if (score >= 0 && checkExistingScoreValid(pvNum, diff, exDiff))
+		{
+			if (score > 99999999)
+				score = 99999999;
+
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"percent");
+			int percent = GetPrivateProfileIntW(section, key, 0, configPath);
+
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
+			int allTimeRank = GetPrivateProfileIntW(section, key, -1, configPath);
+
+			if (allTimeRank == -1) // fallback for old scores without alltimerank
+			{
+				swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
+				allTimeRank = GetPrivateProfileIntW(section, key, 0, configPath);
+			}
+
+			ScoreCache[pvNum][diff][exDiff] = { score, percent, allTimeRank };
+		}
+		else
+		{
+			ScoreCache[pvNum][diff][exDiff] = { -1, -1, -1 };
+		}
+	}
+
+	void ScoreSaver::UpdateScoreCache()
+	{
+		for (int pvNum = 0; pvNum < 1000; pvNum++)
+		{
+			for (int diff = 0; diff < 4; diff++)
+			{
+				for (int exDiff = 0; exDiff < 2; exDiff++)
+				{
+					UpdateSingleScoreCacheEntry(pvNum, diff, exDiff);
+				}
+			}
+		}
+	}
+
+	void ScoreSaver::UpdateClearCounts()
+	{
+		int* counts = (int*)SONG_CLEAR_COUNTS_ADDRESS;
+		for (int i = 0; i < 20; i++)
+		{
+			counts[i] = 0;
+		}
+
+		for (int pvNum = 0; pvNum < 1000; pvNum++)
+		{
+			for (int diff = 0; diff < 4; diff++)
+			{
+				CachedScoreInfo info = ScoreCache[pvNum][diff][0];
+				if (info.rank > 1 && info.rank <= 5) // at least clear and no greater than perfect
+				{
+					counts[diff * 4 + info.rank - 2] += 1;
+				}
+			}
+
+			// exex special case
+			CachedScoreInfo info = ScoreCache[pvNum][3][1];
+			if (info.rank > 1 && info.rank <= 5) // at least clear and no greater than perfect
+			{
+				counts[4 * 4 + info.rank - 2] += 1;
+			}
+		}
 	}
 }

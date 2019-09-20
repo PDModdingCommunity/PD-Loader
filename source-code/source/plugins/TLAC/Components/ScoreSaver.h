@@ -18,6 +18,18 @@ namespace TLAC::Components
 		virtual void Update() override;
 		virtual void UpdateInput() override;
 
+		struct CachedScoreInfo
+		{
+			int score;
+			int percent;
+			int rank;
+		};
+		static CachedScoreInfo ScoreCache[1000][4][2]; // 1000 slots * 4 difficulties * ex or not
+
+		static void UpdateScoreCache();
+		static void UpdateSingleScoreCacheEntry(int pvNum, int diff, int exDiff);
+		static void UpdateClearCounts();
+
 	private:
 		static bool(__stdcall* divaInitResults)(void* cls);
 		static bool hookedInitResults(void* cls);
@@ -28,9 +40,10 @@ namespace TLAC::Components
 		static char selHighScore[12];
 		static char selHighPct1[4];
 		static char selHighPct2[3];
-
+		
 		int currentPv;
 		int currentDifficulty;
 		int currentDifficultyIsEx;
+		byte currentInsurance;
 	};
 }

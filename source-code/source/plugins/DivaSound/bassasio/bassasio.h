@@ -122,7 +122,7 @@ DWORD(WINAPI* BASS_ASIO_GetVersion)() = (DWORD(WINAPI*)())GetProcAddress(bassAsi
 BOOL(WINAPI* BASS_ASIO_Init)(int device, DWORD flags) = (BOOL(WINAPI*)(int device, DWORD flags))GetProcAddress(bassAsioModule, "BASS_ASIO_Init");
 BOOL(WINAPI* BASS_ASIO_Free)() = (BOOL(WINAPI*)())GetProcAddress(bassAsioModule, "BASS_ASIO_Free");
 // BOOL BASSASIODEF(BASS_ASIO_Lock)(BOOL lock);
-// BOOL BASSASIODEF(BASS_ASIO_SetNotify)(ASIONOTIFYPROC *proc, void *user);
+BOOL(WINAPI* BASS_ASIO_SetNotify)(ASIONOTIFYPROC *proc, void *user) = (BOOL(WINAPI*)(ASIONOTIFYPROC *proc, void *user))GetProcAddress(bassAsioModule, "BASS_ASIO_SetNotify");
 BOOL(WINAPI* BASS_ASIO_ControlPanel)() = (BOOL(WINAPI*)())GetProcAddress(bassAsioModule, "BASS_ASIO_ControlPanel");
 BOOL(WINAPI* BASS_ASIO_GetInfo)(BASS_ASIO_INFO *info) = (BOOL(WINAPI*)(BASS_ASIO_INFO *info))GetProcAddress(bassAsioModule, "BASS_ASIO_GetInfo");
 BOOL(WINAPI* BASS_ASIO_CheckRate)(double rate) = (BOOL(WINAPI*)(double rate))GetProcAddress(bassAsioModule, "BASS_ASIO_CheckRate");

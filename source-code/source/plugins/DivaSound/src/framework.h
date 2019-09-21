@@ -78,8 +78,8 @@ struct initClass {
 
 	audioMixer* mixer;
 	
-	HANDLE hCallback;
-	int32_t idk;
+	HANDLE* hCallback;
+	int32_t breakDword;
 };
 #pragma pack(pop)
 
@@ -106,11 +106,11 @@ struct initClass {
 // cls + 0x30 = IMMDevice *pDevice (default device)
 // cls + 0x38 = IAudioClient *pAudioClient
 //
-// cls + 0x40 = buffer size in frames (null with old method)
+// cls + 0x40 = buffer size in frames
 //
-// cls + 0x48 = IAudioRenderClient *pRenderClient (null with old method)
+// cls + 0x48 = IAudioRenderClient *pRenderClient
 //
-// cls + 0x50 = HANDLE hEvent (for original WASAPI buffer timing) (null with old method)
+// cls + 0x50 = HANDLE hEvent (for original WASAPI buffer timing)
 //
 // cls + 0x58 = number of output channels
 // cls + 0x60 = audio sample rate
@@ -118,7 +118,9 @@ struct initClass {
 //
 // cls + 0x70 = pointer to mixer class
 //
-// cls + 0x78 = HANDLE hCallback (handle to original callback thread) (null with old method)
+// cls + 0x78 = HANDLE* hCallback (handle to original callback thread)
+//
+// cls + 0x80 = break flag dword (becomes 1 on exit)
 
 
 initClass *divaAudCls;
@@ -162,11 +164,3 @@ std::wstring DirPath() {
 
 std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\DivaSound.ini";
 LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
-
-const CLSID CLSID_MMDeviceEnumerator = __uuidof(MMDeviceEnumerator);
-const IID IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
-const IID IID_IAudioClient = __uuidof(IAudioClient);
-
-#define SAFE_RELEASE(punk)  \
-              if ((punk) != NULL)  \
-                { (punk)->Release(); (punk) = NULL; }

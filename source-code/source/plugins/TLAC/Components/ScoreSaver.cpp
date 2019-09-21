@@ -471,5 +471,13 @@ namespace TLAC::Components
 				counts[4 * 4 + info.rank - 2] += 1;
 			}
 		}
+
+		// perfects count as clears for <= excellent, etc
+		for (int diff = 0; diff < 5; diff++)
+		{
+			counts[diff * 4 + 2] += counts[diff * 4 + 3];
+			counts[diff * 4 + 1] += counts[diff * 4 + 2];
+			counts[diff * 4 + 0] += counts[diff * 4 + 1];
+		}
 	}
 }

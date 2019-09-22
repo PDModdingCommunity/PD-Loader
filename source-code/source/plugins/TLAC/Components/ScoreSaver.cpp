@@ -11,10 +11,13 @@
 namespace TLAC::Components
 {
 	WCHAR ScoreSaver::configPath[256];
+	WCHAR ScoreSaver::rival_configPath[256];
 	ScoreSaver::ScoreSaver()
 	{
 		std::string utf8path = TLAC::framework::GetModuleDirectory() + "/scores.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, configPath, 256);
+		utf8path = TLAC::framework::GetModuleDirectory() + "/rivalscores.ini";
+		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, rival_configPath, 256);
 	}
 
 	ScoreSaver::~ScoreSaver()
@@ -307,23 +310,75 @@ namespace TLAC::Components
 			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
 			if (cachedScore == nullptr)
 			{
-				ScoreCache[diff].push_back({ pvNum, exDiff }); // minimum needed to find it
+				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
 				cachedScore = GetCachedScore(pvNum, diff, exDiff);
 			}
-			if (cachedScore != nullptr)
-			{
-				cachedScore->score = score;
-				cachedScore->percent = percent;
-				cachedScore->clearRank = allTimeRank;
-				cachedScore->optionA = 0;
-				cachedScore->optionB = 0;
-				cachedScore->optionC = 0;
-			}
+			cachedScore->score = score;
+			cachedScore->percent = percent;
+			cachedScore->clearRank = allTimeRank;
 		}
 		else
 		{
 			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
-			if (cachedScore != nullptr)
+			if (cachedScore != nullptr && cachedScore->rival_score <= 0) // only remove it if no rival score is set too
+				ScoreCache[diff].erase(std::remove(ScoreCache[diff].begin(), ScoreCache[diff].end(), *cachedScore), ScoreCache[diff].end());
+		}
+
+		// update begin and end vars from game
+		if (ScoreCache[diff].size() > 0)
+		{
+			ScoreCache[diff].shrink_to_fit();
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = &*ScoreCache[diff].begin();
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = &*ScoreCache[diff].end();
+		}
+		else
+		{
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = nullptr;
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = nullptr;
+		}
+	}
+
+	void ScoreSaver::UpdateSingleScoreCacheRivalEntry(int pvNum, int diff, int exDiff)
+	{
+		if (pvNum < 0 || diff < 0 || exDiff < 0 || pvNum > 999 || diff > 3 || exDiff > 1)
+			return;
+
+
+		WCHAR keyBase[32]; // needs to be big enough to store pv.999.diff.4.ex
+		WCHAR key[32]; // needs to be big enough to store pv.999.diff.4.challengescore
+
+		const WCHAR section[] = L"scores";
+
+		if (exDiff == 0)
+			swprintf(keyBase, 32, L"pv.%03d.diff.%01d", pvNum, diff);
+		else
+			swprintf(keyBase, 32, L"pv.%03d.diff.%01d.ex", pvNum, diff);
+
+
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"score");
+		int score = GetPrivateProfileIntW(section, key, -1, rival_configPath);
+
+		if (score >= 0)
+		{
+			if (score > 99999999)
+				score = 99999999;
+
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"percent");
+			int percent = GetPrivateProfileIntW(section, key, 0, rival_configPath);
+
+			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			if (cachedScore == nullptr)
+			{
+				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
+				cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			}
+			cachedScore->rival_score = score;
+			cachedScore->rival_percent = percent;
+		}
+		else
+		{
+			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			if (cachedScore != nullptr && cachedScore->score <= 0) // only remove it if no regular score is set too
 				ScoreCache[diff].erase(std::remove(ScoreCache[diff].begin(), ScoreCache[diff].end(), *cachedScore), ScoreCache[diff].end());
 		}
 
@@ -350,6 +405,7 @@ namespace TLAC::Components
 				for (int exDiff = 0; exDiff < 2; exDiff++)
 				{
 					UpdateSingleScoreCacheEntry(pvNum, diff, exDiff);
+					UpdateSingleScoreCacheRivalEntry(pvNum, diff, exDiff);
 				}
 			}
 		}

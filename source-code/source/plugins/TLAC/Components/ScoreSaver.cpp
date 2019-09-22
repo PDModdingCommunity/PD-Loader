@@ -22,6 +22,11 @@ namespace TLAC::Components
 
 	ScoreSaver::~ScoreSaver()
 	{
+		for (int diff = 0; diff < 4; diff++)
+		{
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = 0;
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = 0;
+		}
 	}
 
 	const char* ScoreSaver::GetDisplayName()
@@ -333,8 +338,8 @@ namespace TLAC::Components
 		}
 		else
 		{
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = nullptr;
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = nullptr;
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = 0;
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = 0;
 		}
 	}
 
@@ -366,12 +371,22 @@ namespace TLAC::Components
 			swprintf(key, 32, L"%ls.%ls", keyBase, L"percent");
 			int percent = GetPrivateProfileIntW(section, key, 0, rival_configPath);
 
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
+			int allTimeRank = GetPrivateProfileIntW(section, key, -1, rival_configPath);
+
+			if (allTimeRank == -1) // fallback for old scores without alltimerank
+			{
+				swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
+				allTimeRank = GetPrivateProfileIntW(section, key, 0, rival_configPath);
+			}
+
 			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
 			if (cachedScore == nullptr)
 			{
 				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
 				cachedScore = GetCachedScore(pvNum, diff, exDiff);
 			}
+			cachedScore->rival_clearRank = allTimeRank;
 			cachedScore->rival_score = score;
 			cachedScore->rival_percent = percent;
 		}
@@ -391,8 +406,8 @@ namespace TLAC::Components
 		}
 		else
 		{
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = nullptr;
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = nullptr;
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = 0;
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = 0;
 		}
 	}
 

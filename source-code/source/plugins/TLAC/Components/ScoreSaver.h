@@ -26,7 +26,8 @@ namespace TLAC::Components
 			int clearRank;        // +0xac: clear rank
 			int score;            // +0xb0: score
 			int percent;          // +0xb4: best percent
-			byte paddingB8[0x18]; // ???
+			byte paddingB8[0x14]; // ???
+			int rival_clearRank;  // +0xcc: rival clear rank?
 			int rival_score;      // +0xd0: rival score
 			int rival_percent;    // +0xd4: rival percent
 			byte paddingD8[0x8];  // ???

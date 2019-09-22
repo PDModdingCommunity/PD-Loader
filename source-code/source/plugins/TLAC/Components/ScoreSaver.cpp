@@ -5,27 +5,14 @@
 #include <stdio.h>
 #include <windows.h>
 #include <detours.h>
+#include <algorithm>
 #pragma comment(lib, "detours.lib")
 
 namespace TLAC::Components
 {
-	static char emptySelHighScore[12] = "--------(-)";
-	static char emptySelHighPct1[4] = "---";
-	static char emptySelHighPct2[3] = "--";
-	static char protectedSelHighScore[12] = "-PROTECTED-";
-	static char protectedSelHighPct1[4] = "---";
-	static char protectedSelHighPct2[3] = "--";
-	char ScoreSaver::selHighScore[12];
-	char ScoreSaver::selHighPct1[4];
-	char ScoreSaver::selHighPct2[3];
-
 	WCHAR ScoreSaver::configPath[256];
 	ScoreSaver::ScoreSaver()
 	{
-		strcpy_s(selHighScore, sizeof(selHighScore), emptySelHighScore);
-		strcpy_s(selHighPct1, sizeof(selHighPct1), emptySelHighPct1);
-		strcpy_s(selHighPct2, sizeof(selHighPct2), emptySelHighPct2);
-
 		std::string utf8path = TLAC::framework::GetModuleDirectory() + "/scores.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, configPath, 256);
 	}
@@ -42,67 +29,6 @@ namespace TLAC::Components
 	bool(__stdcall* ScoreSaver::divaInitResults)(void* cls) = (bool(__stdcall*)(void* cls))RESULTS_INIT_ADDRESS;
 	void ScoreSaver::Initialize(ComponentsManager*)
 	{
-		// replace code that loads personal high scores on pv select screen with code that loads custom strings
-
-		InjectCode((void*)0x1405bfb23, { // MOV  R9, &ScoreSaver::selHighScore
-			0x49,
-			0xb9,
-			(uint8_t)((uint64_t)&selHighScore & 0xFF),
-			(uint8_t)(((uint64_t)&selHighScore >> 8) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighScore >> 16) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighScore >> 24) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighScore >> 32) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighScore >> 40) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighScore >> 48) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighScore >> 56) & 0xFF),
-		});
-		InjectCode((void*)0x1405bfb2d, { 0x4c, 0x8d, 0x05, 0x28, 0x5e, 0x3e, 0x00 }); // LEA  R8, [0x1409a595c]
-		InjectCode((void*)0x1405bfb34, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
-
-		InjectCode((void*)0x1405bfc42, { // MOV  RDI, &selHighPct1
-			0x48,
-			0xbf,
-			(uint8_t)((uint64_t)&selHighPct1 & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct1 >> 8) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct1 >> 16) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct1 >> 24) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct1 >> 32) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct1 >> 40) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct1 >> 48) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct1 >> 56) & 0xFF),
-		});
-		InjectCode((void*)0x1405bfc4c, { 0xeb, 0x09 }); // JMP  0x1405bfc57
-		InjectCode((void*)0x1405bfc69, { 0x4c, 0x8b, 0xcf }); // MOV  R9, RDI
-		InjectCode((void*)0x1405bfc6c, { 0x4c, 0x8d, 0x05, 0xe9, 0x5c, 0x3e, 0x00 }); // LEA  R8, [0x1409a595c]
-
-		InjectCode((void*)0x1405bfd98, { // MOV  RSI, &selHighPct2
-			0x48,
-			0xbe,
-			(uint8_t)((uint64_t)&selHighPct2 & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct2 >> 8) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct2 >> 16) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct2 >> 24) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct2 >> 32) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct2 >> 40) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct2 >> 48) & 0xFF),
-			(uint8_t)(((uint64_t)&selHighPct2 >> 56) & 0xFF),
-		});
-		InjectCode((void*)0x1405bfda2, { 0xeb, 0x0c }); // JMP  0x1405bfdb0
-		InjectCode((void*)0x1405bfdc2, { 0x4c, 0x8b, 0xce }); // MOV  R9, RSI
-		InjectCode((void*)0x1405bfdc5, { 0x4c, 0x8d, 0x05, 0x90, 0x5b, 0x3e, 0x00 }); // LEA  R8, [0x1409a595c]
-
-		// override font to song name font for larger character set
-		InjectCode((void*)0x1405bfa9d, { 0x11 });
-		//InjectCode((void*)0x1405bfb80, { 0x11 });
-		//InjectCode((void*)0x1405bfb9c, { 0x11 });
-
-		// move score text upwards because of shifted size
-		// WARNING: HARDCODED POSITION
-		InjectCode((void*)0x1405bfab4, { 0x48, 0xb8,  0x00, 0x00, 0x95, 0x44, 0x00, 0x00, 0x0e, 0x44 }); // MOV  RAX, 0x440f400044950000
-		InjectCode((void*)0x1405bfabe, { 0x48, 0x89, 0x44, 0x25, 0xb4 }); // MOV  qword ptr [RBP + -0x4c], RAX
-		InjectCode((void*)0x1405bfac3, { 0x90, 0x90, 0x90, 0x90, 0x90 });
-
-
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(PVOID&)ScoreSaver::divaInitResults, (PVOID)(ScoreSaver::hookedInitResults));
@@ -301,73 +227,7 @@ namespace TLAC::Components
 
 	void ScoreSaver::Update()
 	{
-		int pvNum = *(int*)SELPV_CURRENT_SONG_ADDRESS;
-		int diff = *(int*)(GAME_INFO_ADDRESS);
-		int diffIsEx = *(int*)(GAME_INFO_ADDRESS + 0x4);
-		byte insurance = *(byte*)(GAME_INFO_ADDRESS + 0x14);
-
-		if (pvNum == currentPv && diff == currentDifficulty && diffIsEx == currentDifficultyIsEx && insurance == currentInsurance)
-			return;
-		
-		currentPv = pvNum;
-		currentDifficulty = diff;
-		currentDifficultyIsEx = diffIsEx;
-		currentInsurance = insurance;
-
-		if (insurance != 0)
-		{
-			strcpy_s(selHighScore, sizeof(selHighScore), protectedSelHighScore);
-			strcpy_s(selHighPct1, sizeof(selHighPct1), protectedSelHighPct1);
-			strcpy_s(selHighPct2, sizeof(selHighPct2), protectedSelHighPct2);
-			return;
-		}
-
-		if (currentPv < 0 || currentDifficulty < 0 || currentDifficultyIsEx < 0 || currentPv > 999 || currentDifficulty > 3 || currentDifficultyIsEx > 1)
-			return;
-
-		CachedScoreInfo info = ScoreCache[currentPv][currentDifficulty][currentDifficultyIsEx];
-
-		if (info.score < 0)
-		{
-			strcpy_s(selHighScore, sizeof(selHighScore), emptySelHighScore);
-			strcpy_s(selHighPct1, sizeof(selHighPct1), emptySelHighPct1);
-			strcpy_s(selHighPct2, sizeof(selHighPct2), emptySelHighPct2);
-		}
-		else
-		{
-			if (info.score > 99999999)
-				info.score = 99999999;
-
-			char allTimeRankLetter[2] = "-";
-			switch (info.rank)
-			{
-			case 0: // misstake
-				allTimeRankLetter[0] = '-';
-				break;
-			case 1: // cheap
-				allTimeRankLetter[0] = '-';
-				break;
-			case 2: // clear
-				allTimeRankLetter[0] = 'C';
-				break;
-			case 3: // great
-				allTimeRankLetter[0] = 'G';
-				break;
-			case 4: // excellent
-				allTimeRankLetter[0] = 'E';
-				break;
-			case 5: // perfect
-				allTimeRankLetter[0] = 'P';
-				break;
-			default:
-				allTimeRankLetter[0] = '-';
-				break;
-			}
-
-			snprintf(selHighScore, sizeof(selHighScore), "%d(%s)", info.score, allTimeRankLetter);
-			snprintf(selHighPct1, sizeof(selHighPct1), "%d", info.percent / 100);
-			snprintf(selHighPct2, sizeof(selHighPct2), "%02d", info.percent % 100);
-		}
+		return;
 	}
 
 	void ScoreSaver::UpdateInput()
@@ -385,7 +245,28 @@ namespace TLAC::Components
 		VirtualProtect(address, byteCount, oldProtect, nullptr);
 	}
 
-	ScoreSaver::CachedScoreInfo ScoreSaver::ScoreCache[1000][4][2];
+	std::vector<ScoreSaver::DivaScore> ScoreSaver::ScoreCache[4] = { // * 4 difficulties
+		{},
+		{},
+		{},
+		{}
+	};
+	ScoreSaver::DivaScore* ScoreSaver::GetCachedScore(int pvNum, int diff, int exDiff)
+	{
+		ScoreSaver::DivaScore* outptr = nullptr;
+
+		if (pvNum < 0 || diff < 0 || exDiff < 0 || pvNum > 999 || diff > 3 || exDiff > 1)
+			return outptr;
+		
+		for (DivaScore &scoreinfo : ScoreCache[diff])
+		{
+			if (scoreinfo.pvNum == pvNum && scoreinfo.exDifficulty == exDiff)
+				return &scoreinfo;
+		}
+
+		return nullptr;
+	}
+
 	void ScoreSaver::UpdateSingleScoreCacheEntry(int pvNum, int diff, int exDiff)
 	{
 		if (pvNum < 0 || diff < 0 || exDiff < 0 || pvNum > 999 || diff > 3 || exDiff > 1)
@@ -423,11 +304,40 @@ namespace TLAC::Components
 				allTimeRank = GetPrivateProfileIntW(section, key, 0, configPath);
 			}
 
-			ScoreCache[pvNum][diff][exDiff] = { score, percent, allTimeRank };
+			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			if (cachedScore == nullptr)
+			{
+				ScoreCache[diff].push_back({ pvNum, exDiff }); // minimum needed to find it
+				cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			}
+			if (cachedScore != nullptr)
+			{
+				cachedScore->score = score;
+				cachedScore->percent = percent;
+				cachedScore->clearRank = allTimeRank;
+				cachedScore->optionA = 0;
+				cachedScore->optionB = 0;
+				cachedScore->optionC = 0;
+			}
 		}
 		else
 		{
-			ScoreCache[pvNum][diff][exDiff] = { -1, -1, -1 };
+			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			if (cachedScore != nullptr)
+				ScoreCache[diff].erase(std::remove(ScoreCache[diff].begin(), ScoreCache[diff].end(), *cachedScore), ScoreCache[diff].end());
+		}
+
+		// update begin and end vars from game
+		if (ScoreCache[diff].size() > 0)
+		{
+			ScoreCache[diff].shrink_to_fit();
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = &*ScoreCache[diff].begin();
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = &*ScoreCache[diff].end();
+		}
+		else
+		{
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = nullptr;
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = nullptr;
 		}
 	}
 
@@ -453,22 +363,23 @@ namespace TLAC::Components
 			counts[i] = 0;
 		}
 
-		for (int pvNum = 0; pvNum < 1000; pvNum++)
+		for (int diff = 0; diff < 4; diff++)
 		{
-			for (int diff = 0; diff < 4; diff++)
+			for (DivaScore &scoreinfo : ScoreCache[diff])
 			{
-				CachedScoreInfo info = ScoreCache[pvNum][diff][0];
-				if (info.rank > 1 && info.rank <= 5) // at least clear and no greater than perfect
+				if (scoreinfo.clearRank > 1 && scoreinfo.clearRank <= 5 && scoreinfo.exDifficulty == 0) // at least clear and no greater than perfect and not ex
 				{
-					counts[diff * 4 + info.rank - 2] += 1;
+					counts[diff * 4 + scoreinfo.clearRank - 2] += 1;
 				}
 			}
+		}
 
-			// exex special case
-			CachedScoreInfo info = ScoreCache[pvNum][3][1];
-			if (info.rank > 1 && info.rank <= 5) // at least clear and no greater than perfect
+		// exex special case
+		for (DivaScore &scoreinfo : ScoreCache[3])
+		{
+			if (scoreinfo.clearRank > 1 && scoreinfo.clearRank <= 5 && scoreinfo.exDifficulty == 1) // at least clear and no greater than perfect and IS ex
 			{
-				counts[4 * 4 + info.rank - 2] += 1;
+				counts[4 * 4 + scoreinfo.clearRank - 2] += 1;
 			}
 		}
 

@@ -30,11 +30,10 @@ namespace TLAC::Components
 			int rival_clearRank;  // +0xcc: rival clear rank?
 			int rival_score;      // +0xd0: rival score
 			int rival_percent;    // +0xd4: rival percent
-			byte paddingD8[0x8];  // ???
-			byte optionA;         // +0xe0: gamemode options
+			byte paddingD8[0x9];  // ???
+			byte optionA;         // +0xe1: gamemode options
 			byte optionB;
 			byte optionC;
-			byte paddingE3;       // total length is 0xe4
 
 			inline bool operator==(const DivaScore& cmp)
 			{
@@ -92,15 +91,18 @@ namespace TLAC::Components
 				*(byte*)((uint64_t)this + 0xe2) = 0;
 				*(byte*)((uint64_t)this + 0xe3) = 0;
 			}
+			DivaScore()
+			{
+				DivaScore(0, 0);
+			}
 		};
 
 
-		static std::vector<ScoreSaver::DivaScore> ScoreCache[4]; // * 4 difficulties
+		static DivaScore ScoreCache[4][1000][2]; // 4 difficulties * 1000 pvs * extra or not
 
 		static void UpdateScoreCache();
 		static void UpdateSingleScoreCacheEntry(int pvNum, int diff, int exDiff);
 		static void UpdateSingleScoreCacheRivalEntry(int pvNum, int diff, int exDiff);
-		static DivaScore* GetCachedScore(int pvNum, int diff, int exDiff);
 		static void UpdateClearCounts();
 
 	private:
@@ -108,6 +110,7 @@ namespace TLAC::Components
 		static bool hookedInitResults(void* cls);
 		static void InjectCode(void* address, const std::vector<uint8_t> data);
 		static bool checkExistingScoreValid(int pv, int difficulty, int isEx);
+		static int calculateCheck(int score, int cntCools, int cntFines, int percent, int combo, int clearRank, int allTimeRank, int allTimeModifiers, int allTimePercent);
 
 		static WCHAR configPath[256];
 		static WCHAR rival_configPath[256];

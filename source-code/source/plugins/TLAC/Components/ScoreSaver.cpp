@@ -163,16 +163,37 @@ namespace TLAC::Components
 		swprintf(key, 32, L"%ls.%ls", keyBase, L"score");
 		int oldScore = GetPrivateProfileIntW(section, key, 0, configPath);
 
+
 		swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
-		int oldAlltimeRank = GetPrivateProfileIntW(section, key, 0, configPath);
+		int oldAlltimeRank = GetPrivateProfileIntW(section, key, -1, configPath);
+
+		if (oldAlltimeRank == -1) // fallback for old scores without alltimerank
+		{
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
+			oldAlltimeRank = GetPrivateProfileIntW(section, key, 0, configPath);
+		}
 		int allTimeRank = clearRank > oldAlltimeRank ? clearRank : oldAlltimeRank;
 
+
 		swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimemodifiers");
-		int oldAlltimeModifiers = GetPrivateProfileIntW(section, key, 0, configPath);
+		int oldAlltimeModifiers = GetPrivateProfileIntW(section, key, -1, configPath);
+
+		if (oldAlltimeModifiers == -1) // fallback for old scores without alltimemodifiers
+		{
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"modifier");
+			oldAlltimeModifiers = GetPrivateProfileIntW(section, key, 0, configPath);
+			oldAlltimeModifiers = oldAlltimeModifiers > 0 ? 1 << (oldAlltimeModifiers - 1) : 0;
+		}
 		int allTimeModifiers = oldAlltimeModifiers | ((clearRank > 1 && modifier > 0) ? (1 << (modifier - 1)) : 0); // use clearRank to not update if didn't clear
 
+
 		swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimepercent");
-		int oldAlltimePercent = GetPrivateProfileIntW(section, key, 0, configPath);
+		int oldAlltimePercent = GetPrivateProfileIntW(section, key, -1, configPath);
+		if (oldAlltimePercent == -1) // fallback for old scores without alltimepercent
+		{
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"percent");
+			oldAlltimePercent = GetPrivateProfileIntW(section, key, 0, configPath);
+		}
 		int allTimePercent = percent > oldAlltimePercent ? percent : oldAlltimePercent;
 
 		bool oldScoreValid = true;

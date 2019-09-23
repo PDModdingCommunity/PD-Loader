@@ -129,7 +129,7 @@ namespace TLAC::Components
 				{
 					DWORD oldProtect, bck;
 					VirtualProtect((BYTE*)0x00000001405BC8E6, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
-					*((BYTE*)0x00000001405BC8E6 + 0) = 0x01;
+					*((BYTE*)0x00000001405BC8E6 + 0) = 0x00;
 					VirtualProtect((BYTE*)0x00000001405BC8E6, 3, oldProtect, &bck);
 
 					VirtualProtect((BYTE*)0x00000001405CBBA3, 8, PAGE_EXECUTE_READWRITE, &oldProtect);

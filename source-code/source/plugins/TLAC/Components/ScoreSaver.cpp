@@ -42,16 +42,22 @@ namespace TLAC::Components
 		DetourAttach(&(PVOID&)ScoreSaver::divaInitResults, (PVOID)(ScoreSaver::hookedInitResults));
 		DetourTransactionCommit();
 
-
 		// build the score cache
 		UpdateScoreCache();
 		UpdateClearCounts();
+
+		// update score begin and end vars from game
+		for (int diff = 0; diff < 4; diff++)
+		{
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = &ScoreCache[diff][0][0];
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = &ScoreCache[diff][1000][0]; // deliberately use 1000 to get past end of cache
+		}
 	}
 
 	bool ScoreSaver::checkExistingScoreValid(int pv, int difficulty, int isEx)
 	{
-		WCHAR keyBase[32]; // needs to be big enough to store pv.999.diff.4.ex
-		WCHAR key[32]; // needs to be big enough to store pv.999.diff.4.challengescore
+		WCHAR keyBase[32]; // needs to be big enough to store pv.999.diff.3.ex
+		WCHAR key[32]; // needs to be big enough to store pv.999.diff.3.alltimemodifiers
 
 		const WCHAR section[] = L"scores";
 
@@ -83,17 +89,30 @@ namespace TLAC::Components
 		swprintf(key, 32, L"%ls.%ls", keyBase, L"combo");
 		int combo = GetPrivateProfileIntW(section, key, 0, configPath);
 
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
+		int clearRank = GetPrivateProfileIntW(section, key, 0, configPath);
+
 		swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
 		int allTimeRank = GetPrivateProfileIntW(section, key, 0, configPath);
 
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
-		int clearRank = GetPrivateProfileIntW(section, key, 0, configPath);
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimemodifiers");
+		int allTimeModifiers = GetPrivateProfileIntW(section, key, 0, configPath);
+
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimepercent");
+		int allTimePercent = GetPrivateProfileIntW(section, key, 0, configPath);
 
 		swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
 		int expectedCheck = GetPrivateProfileIntW(section, key, -1, configPath);
 
+		return expectedCheck == calculateCheck(score, cntHitTypes[0], cntHitTypes[1], percent, combo, clearRank, allTimeRank, allTimeModifiers, allTimePercent);
+	}
 
-		return expectedCheck == (int)(((short)score ^ ((short)cntHitTypes[0] << 16) ^ ((short)cntHitTypes[1]) ^ ((short)percent << 16) ^ ((short)combo)) * clearRank + (allTimeRank * clearRank));
+	int ScoreSaver::calculateCheck(int score, int cntCools, int cntFines, int percent, int combo, int clearRank, int allTimeRank, int allTimeModifiers, int allTimePercent)
+	{
+		int checkField = ((short)score ^ ((short)cntCools << 16) ^ ((short)cntFines) ^ ((short)percent << 16) ^ ((short)combo)) * clearRank;
+		checkField += (allTimeRank * clearRank); // first extension
+		checkField ^= (allTimeModifiers * allTimePercent);
+		return checkField;
 	}
 	
 	bool ScoreSaver::hookedInitResults(void* cls)
@@ -103,7 +122,7 @@ namespace TLAC::Components
 		int clearRank = *(int*)(RESULTS_BASE_ADDRESS + 0xe8);
 		byte insurance = *(byte*)(GAME_INFO_ADDRESS + 0x14);
 		
-		if (clearRank < 2 || insurance != 0)
+		if (insurance != 0)
 			return result;
 
 		// get the base for this specific set of results
@@ -130,8 +149,8 @@ namespace TLAC::Components
 		MultiByteToWideChar(CP_UTF8, 0, utf8song, -1, songName, 256);
 
 
-		WCHAR keyBase[32]; // needs to be big enough to store pv.999.diff.4.ex
-		WCHAR key[32]; // needs to be big enough to store pv.999.diff.4.challengescore
+		WCHAR keyBase[32]; // needs to be big enough to store pv.999.diff.3.ex
+		WCHAR key[32]; // needs to be big enough to store pv.999.diff.3.alltimemodifiers
 		WCHAR val[32]; // needs to be big enough to store five <=four digit ints (with comma separators)
 
 		const WCHAR section[] = L"scores";
@@ -148,16 +167,34 @@ namespace TLAC::Components
 		int oldAlltimeRank = GetPrivateProfileIntW(section, key, 0, configPath);
 		int allTimeRank = clearRank > oldAlltimeRank ? clearRank : oldAlltimeRank;
 
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimemodifiers");
+		int oldAlltimeModifiers = GetPrivateProfileIntW(section, key, 0, configPath);
+		int allTimeModifiers = oldAlltimeModifiers | ((clearRank > 1 && modifier > 0) ? (1 << (modifier - 1)) : 0); // use clearRank to not update if didn't clear
+
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimepercent");
+		int oldAlltimePercent = GetPrivateProfileIntW(section, key, 0, configPath);
+		int allTimePercent = percent > oldAlltimePercent ? percent : oldAlltimePercent;
+
 		bool oldScoreValid = true;
 		if (!checkExistingScoreValid(pvNum, pvDifficulty, pvDifficultyIsEx))
 		{
 			oldScore = 0; // ensure new score is written
 			allTimeRank = clearRank; // don't trust old all-time clear rank, use a new one
+			allTimeModifiers = ((clearRank > 1 && modifier > 0) ? (1 << (modifier - 1)) : 0); // don't trust old all-time modifiers, use a new one
+			allTimePercent = percent; // don't trust old all-time percent, use a new one
 			oldScoreValid = false;
 		}
 
-		if (score > oldScore)
+		if (clearRank > 1 && score > oldScore)
 		{
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimemodifiers");
+			swprintf(val, 32, L"%d", allTimeModifiers);
+			WritePrivateProfileStringW(section, key, val, configPath);
+
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimepercent");
+			swprintf(val, 32, L"%d", allTimePercent);
+			WritePrivateProfileStringW(section, key, val, configPath);
+
 			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
 			swprintf(val, 32, L"%d", allTimeRank);
 			WritePrivateProfileStringW(section, key, val, configPath);
@@ -205,26 +242,46 @@ namespace TLAC::Components
 			swprintf(val, 32, L"%d", slideScore);
 			WritePrivateProfileStringW(section, key, val, configPath);
 
-			int checkField = ((short)score ^ ((short)cntHitTypes[0] << 16) ^ ((short)cntHitTypes[1]) ^ ((short)percent << 16) ^ ((short)combo)) * clearRank + (allTimeRank * clearRank);
+			int checkField = calculateCheck(score, cntHitTypes[0], cntHitTypes[1], percent, combo, clearRank, allTimeRank, allTimeModifiers, allTimePercent);
 			swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
 			swprintf(val, 32, L"%d", checkField);
 			WritePrivateProfileStringW(section, key, val, configPath);
 		}
-		else if (oldScoreValid && allTimeRank > oldAlltimeRank)
+		else // if (oldScoreValid)
 		{
-			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
-			swprintf(val, 32, L"%d", allTimeRank);
-			WritePrivateProfileStringW(section, key, val, configPath);
+			if (allTimeRank != oldAlltimeRank) // first extension
+			{
+				swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
+				swprintf(val, 32, L"%d", allTimeRank);
+				WritePrivateProfileStringW(section, key, val, configPath);
 
-			swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
-			int oldClearRank = GetPrivateProfileIntW(section, key, 0, configPath);
+				swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
+				int oldClearRank = GetPrivateProfileIntW(section, key, 0, configPath);
 
-			swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
-			int oldCheck = GetPrivateProfileIntW(section, key, -1, configPath);
-			
-			swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
-			swprintf(val, 32, L"%d", oldCheck - (oldAlltimeRank * oldClearRank) + (allTimeRank * oldClearRank));
-			WritePrivateProfileStringW(section, key, val, configPath);
+				swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
+				int oldCheck = GetPrivateProfileIntW(section, key, 0, configPath);
+
+				swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
+				swprintf(val, 32, L"%d", oldCheck - (oldAlltimeRank * oldClearRank) + (allTimeRank * oldClearRank));
+				WritePrivateProfileStringW(section, key, val, configPath);
+			}
+			if (allTimeModifiers != oldAlltimeModifiers || allTimePercent != oldAlltimePercent) // second extension
+			{
+				swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimemodifiers");
+				swprintf(val, 32, L"%d", allTimeModifiers);
+				WritePrivateProfileStringW(section, key, val, configPath);
+
+				swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimepercent");
+				swprintf(val, 32, L"%d", allTimePercent);
+				WritePrivateProfileStringW(section, key, val, configPath);
+
+				swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
+				int oldCheck = GetPrivateProfileIntW(section, key, 0, configPath);
+
+				swprintf(key, 32, L"%ls.%ls", keyBase, L"check");
+				swprintf(val, 32, L"%d", oldCheck ^ (oldAlltimeModifiers * oldAlltimePercent) ^ (allTimeModifiers * allTimePercent));
+				WritePrivateProfileStringW(section, key, val, configPath);
+			}
 		}
 
 		UpdateSingleScoreCacheEntry(pvNum, pvDifficulty, pvDifficultyIsEx);
@@ -253,36 +310,15 @@ namespace TLAC::Components
 		VirtualProtect(address, byteCount, oldProtect, nullptr);
 	}
 
-	std::vector<ScoreSaver::DivaScore> ScoreSaver::ScoreCache[4] = { // * 4 difficulties
-		{},
-		{},
-		{},
-		{}
-	};
-	ScoreSaver::DivaScore* ScoreSaver::GetCachedScore(int pvNum, int diff, int exDiff)
-	{
-		ScoreSaver::DivaScore* outptr = nullptr;
-
-		if (pvNum < 0 || diff < 0 || exDiff < 0 || pvNum > 999 || diff > 3 || exDiff > 1)
-			return outptr;
-		
-		for (DivaScore &scoreinfo : ScoreCache[diff])
-		{
-			if (scoreinfo.pvNum == pvNum && scoreinfo.exDifficulty == exDiff)
-				return &scoreinfo;
-		}
-
-		return nullptr;
-	}
-
+	ScoreSaver::DivaScore ScoreSaver::ScoreCache[4][1000][2]; // 4 difficulties * 1000 pvs * extra or not
 	void ScoreSaver::UpdateSingleScoreCacheEntry(int pvNum, int diff, int exDiff)
 	{
 		if (pvNum < 0 || diff < 0 || exDiff < 0 || pvNum > 999 || diff > 3 || exDiff > 1)
 			return;
 
 
-		WCHAR keyBase[32]; // needs to be big enough to store pv.999.diff.4.ex
-		WCHAR key[32]; // needs to be big enough to store pv.999.diff.4.challengescore
+		WCHAR keyBase[32]; // needs to be big enough to store pv.999.diff.3.ex
+		WCHAR key[32]; // needs to be big enough to store pv.999.diff.3.alltimemodifiers
 
 		const WCHAR section[] = L"scores";
 
@@ -291,17 +327,23 @@ namespace TLAC::Components
 		else
 			swprintf(keyBase, 32, L"pv.%03d.diff.%01d.ex", pvNum, diff);
 
-
-		swprintf(key, 32, L"%ls.%ls", keyBase, L"score");
-		int score = GetPrivateProfileIntW(section, key, -1, configPath);
-
-		if (score >= 0 && checkExistingScoreValid(pvNum, diff, exDiff))
+		
+		if (checkExistingScoreValid(pvNum, diff, exDiff))
 		{
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"score");
+			int score = GetPrivateProfileIntW(section, key, 0, configPath);
+
 			if (score > 99999999)
 				score = 99999999;
 
-			swprintf(key, 32, L"%ls.%ls", keyBase, L"percent");
-			int percent = GetPrivateProfileIntW(section, key, 0, configPath);
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimepercent");
+			int percent = GetPrivateProfileIntW(section, key, -1, configPath);
+
+			if (percent == -1) // fallback for old scores without alltimepercent
+			{
+				swprintf(key, 32, L"%ls.%ls", keyBase, L"percent");
+				percent = GetPrivateProfileIntW(section, key, 0, configPath);
+			}
 
 			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
 			int allTimeRank = GetPrivateProfileIntW(section, key, -1, configPath);
@@ -309,37 +351,26 @@ namespace TLAC::Components
 			if (allTimeRank == -1) // fallback for old scores without alltimerank
 			{
 				swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
-				allTimeRank = GetPrivateProfileIntW(section, key, 0, configPath);
+				allTimeRank = GetPrivateProfileIntW(section, key, -1, configPath);
 			}
 
-			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
-			if (cachedScore == nullptr)
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimemodifiers");
+			int modifiers = GetPrivateProfileIntW(section, key, -1, configPath);
+
+			if (modifiers == -1) // fallback for old scores without alltimemodifiers
 			{
-				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
-				cachedScore = GetCachedScore(pvNum, diff, exDiff);
+				swprintf(key, 32, L"%ls.%ls", keyBase, L"modifier");
+				modifiers = GetPrivateProfileIntW(section, key, 0, configPath);
+				modifiers = modifiers > 0 ? 1 << (modifiers - 1) : 0;
 			}
+
+			DivaScore* cachedScore = &ScoreCache[diff][pvNum][exDiff];
 			cachedScore->score = score;
 			cachedScore->percent = percent;
 			cachedScore->clearRank = allTimeRank;
-		}
-		else
-		{
-			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
-			if (cachedScore != nullptr && cachedScore->rival_score <= 0) // only remove it if no rival score is set too
-				ScoreCache[diff].erase(std::remove(ScoreCache[diff].begin(), ScoreCache[diff].end(), *cachedScore), ScoreCache[diff].end());
-		}
-
-		// update begin and end vars from game
-		if (ScoreCache[diff].size() > 0)
-		{
-			ScoreCache[diff].shrink_to_fit();
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = &*ScoreCache[diff].begin();
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = &*ScoreCache[diff].end();
-		}
-		else
-		{
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = 0;
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = 0;
+			if (modifiers & 1) cachedScore->optionA = 1;
+			if (modifiers & 2) cachedScore->optionB = 1;
+			if (modifiers & 4) cachedScore->optionC = 1;
 		}
 	}
 
@@ -349,8 +380,8 @@ namespace TLAC::Components
 			return;
 
 
-		WCHAR keyBase[32]; // needs to be big enough to store pv.999.diff.4.ex
-		WCHAR key[32]; // needs to be big enough to store pv.999.diff.4.challengescore
+		WCHAR keyBase[32]; // needs to be big enough to store pv.999.diff.3.ex
+		WCHAR key[32]; // needs to be big enough to store pv.999.diff.3.alltimemodifiers
 
 		const WCHAR section[] = L"scores";
 
@@ -361,54 +392,33 @@ namespace TLAC::Components
 
 
 		swprintf(key, 32, L"%ls.%ls", keyBase, L"score");
-		int score = GetPrivateProfileIntW(section, key, -1, rival_configPath);
+		int score = GetPrivateProfileIntW(section, key, 0, rival_configPath);
 
-		if (score >= 0)
+		if (score > 99999999)
+			score = 99999999;
+
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimepercent");
+		int percent = GetPrivateProfileIntW(section, key, -1, rival_configPath);
+
+		if (percent == -1) // fallback for old scores without alltimepercent
 		{
-			if (score > 99999999)
-				score = 99999999;
-
 			swprintf(key, 32, L"%ls.%ls", keyBase, L"percent");
-			int percent = GetPrivateProfileIntW(section, key, 0, rival_configPath);
-
-			swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
-			int allTimeRank = GetPrivateProfileIntW(section, key, -1, rival_configPath);
-
-			if (allTimeRank == -1) // fallback for old scores without alltimerank
-			{
-				swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
-				allTimeRank = GetPrivateProfileIntW(section, key, 0, rival_configPath);
-			}
-
-			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
-			if (cachedScore == nullptr)
-			{
-				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
-				cachedScore = GetCachedScore(pvNum, diff, exDiff);
-			}
-			cachedScore->rival_clearRank = allTimeRank;
-			cachedScore->rival_score = score;
-			cachedScore->rival_percent = percent;
+			percent = GetPrivateProfileIntW(section, key, 0, rival_configPath);
 		}
-		else
+
+		swprintf(key, 32, L"%ls.%ls", keyBase, L"alltimerank");
+		int allTimeRank = GetPrivateProfileIntW(section, key, -1, rival_configPath);
+
+		if (allTimeRank == -1) // fallback for old scores without alltimerank
 		{
-			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
-			if (cachedScore != nullptr && cachedScore->score <= 0) // only remove it if no regular score is set too
-				ScoreCache[diff].erase(std::remove(ScoreCache[diff].begin(), ScoreCache[diff].end(), *cachedScore), ScoreCache[diff].end());
+			swprintf(key, 32, L"%ls.%ls", keyBase, L"rank");
+			allTimeRank = GetPrivateProfileIntW(section, key, -1, rival_configPath);
 		}
 
-		// update begin and end vars from game
-		if (ScoreCache[diff].size() > 0)
-		{
-			ScoreCache[diff].shrink_to_fit();
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = &*ScoreCache[diff].begin();
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = &*ScoreCache[diff].end();
-		}
-		else
-		{
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = 0;
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = 0;
-		}
+		DivaScore* cachedScore = &ScoreCache[diff][pvNum][exDiff];
+		cachedScore->rival_clearRank = allTimeRank;
+		cachedScore->rival_score = score;
+		cachedScore->rival_percent = percent;
 	}
 
 	void ScoreSaver::UpdateScoreCache()
@@ -419,6 +429,7 @@ namespace TLAC::Components
 			{
 				for (int exDiff = 0; exDiff < 2; exDiff++)
 				{
+					ScoreCache[diff][pvNum][exDiff] = DivaScore(pvNum, exDiff);
 					UpdateSingleScoreCacheEntry(pvNum, diff, exDiff);
 					UpdateSingleScoreCacheRivalEntry(pvNum, diff, exDiff);
 				}
@@ -436,8 +447,9 @@ namespace TLAC::Components
 
 		for (int diff = 0; diff < 4; diff++)
 		{
-			for (DivaScore &scoreinfo : ScoreCache[diff])
+			for (int pvNum = 0; pvNum < 1000; pvNum++)
 			{
+				DivaScore &scoreinfo = ScoreCache[diff][pvNum][0];
 				if (scoreinfo.clearRank > 1 && scoreinfo.clearRank <= 5 && scoreinfo.exDifficulty == 0) // at least clear and no greater than perfect and not ex
 				{
 					counts[diff * 4 + scoreinfo.clearRank - 2] += 1;
@@ -446,9 +458,10 @@ namespace TLAC::Components
 		}
 
 		// exex special case
-		for (DivaScore &scoreinfo : ScoreCache[3])
+		for (int pvNum = 0; pvNum < 1000; pvNum++)
 		{
-			if (scoreinfo.clearRank > 1 && scoreinfo.clearRank <= 5 && scoreinfo.exDifficulty == 1) // at least clear and no greater than perfect and IS ex
+			DivaScore &scoreinfo = ScoreCache[3][pvNum][1];
+			if (scoreinfo.clearRank > 1 && scoreinfo.clearRank <= 5 && scoreinfo.exDifficulty == 1) // at least clear and no greater than perfect and not ex
 			{
 				counts[4 * 4 + scoreinfo.clearRank - 2] += 1;
 			}

@@ -22,15 +22,15 @@ namespace TLAC::Components
 		{
 			int pvNum;
 			int exDifficulty;
-			byte padding08[0xa4]; // ???
+			byte padding08[0xa4]; // ??? -- seems to be 6*6 ints (0x90 bytes) for modules + 5 ints (0x14 bytes) for skin and button se
 			int clearRank;        // +0xac: clear rank
 			int score;            // +0xb0: score
 			int percent;          // +0xb4: best percent
-			byte paddingB8[0x14]; // ???
+			byte paddingB8[0x14]; // ??? -- challenge_kind, chain_challenge_flag, chain_challenge_num, chain_challenge_max, challenge_ng_flag
 			int rival_clearRank;  // +0xcc: rival clear rank?
 			int rival_score;      // +0xd0: rival score
 			int rival_percent;    // +0xd4: rival percent
-			byte paddingD8[0x9];  // ???
+			byte paddingD8[0x9];  // ??? -- interim_ranking int?
 			byte optionA;         // +0xe1: gamemode options
 			byte optionB;
 			byte optionC;

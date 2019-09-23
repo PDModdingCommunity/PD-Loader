@@ -229,12 +229,15 @@ namespace TLAC::Components
 		config.TryGetValue("level_name", &customPlayerData->LevelName);
 
 		customPlayerData->LevelPlateId = config.GetIntegerValue("level_plate_id");
+		customPlayerData->LevelPlateEffect = config.GetIntegerValue("level_plate_effect");
 		customPlayerData->SkinEquip = config.GetIntegerValue("skin_equip");
 		customPlayerData->BtnSeEquip = config.GetIntegerValue("btn_se_equip");
 		customPlayerData->SlideSeEquip = config.GetIntegerValue("slide_se_equip");
 		customPlayerData->ChainslideSeEquip = config.GetIntegerValue("chainslide_se_equip");
+		customPlayerData->SlidertouchSeEquip = config.GetIntegerValue("slidertouch_se_equip");
 		customPlayerData->ShowExcellentClearBorder = config.GetBooleanValue("border_excellent");
 		customPlayerData->ShowGreatClearBorder = config.GetBooleanValue("border_great");
+		customPlayerData->ShowRivalClearBorder = config.GetBooleanValue("border_rival");
 		customPlayerData->UseCard = config.GetBooleanValue("use_card");
 		customPlayerData->GameModifierOptions = config.GetBooleanValue("gamemode_options");
 		customPlayerData->ActionSE = config.GetBooleanValue("act_toggle");
@@ -310,14 +313,16 @@ namespace TLAC::Components
 		};
 
 		setIfNotEqual(&playerData->level_plate_id, customPlayerData->LevelPlateId, 0);
+		setIfNotEqual(&playerData->level_plate_effect, customPlayerData->LevelPlateEffect, 0);
 		setIfNotEqual(&playerData->skin_equip, customPlayerData->SkinEquip, 0);
 		setIfNotEqual(&playerData->btn_se_equip, customPlayerData->BtnSeEquip, -1);
 		setIfNotEqual(&playerData->slide_se_equip, customPlayerData->SlideSeEquip, -1);
 		setIfNotEqual(&playerData->chainslide_se_equip, customPlayerData->ChainslideSeEquip, -1);
+		setIfNotEqual(&playerData->slidertouch_se_equip, customPlayerData->SlidertouchSeEquip, -1);
 		setIfNotEqual(&playerData->act_toggle, customPlayerData->ActionSE, 1);
 
 		// Display clear borders on the progress bar
-		*(byte*)(PLAYER_DATA_ADDRESS + 0xD94) = (customPlayerData->ShowExcellentClearBorder << 1) | (customPlayerData->ShowGreatClearBorder);
+		*(byte*)(PLAYER_DATA_ADDRESS + 0xD94) = (customPlayerData->ShowRivalClearBorder << 2) | (customPlayerData->ShowExcellentClearBorder << 1) | (customPlayerData->ShowGreatClearBorder);
 		
 		playerData->use_card = customPlayerData->UseCard; // required to allow for module selection
 

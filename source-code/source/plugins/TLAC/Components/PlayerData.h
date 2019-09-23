@@ -78,7 +78,7 @@ struct PlayerData
 	int32_t field_11C;
 	int32_t field_120;
 	int32_t level_plate_id;
-	int32_t field_128;
+	int32_t level_plate_effect;
 	int32_t vocaloid_point;
 	int32_t hp_vol;
 	int32_t act_toggle;

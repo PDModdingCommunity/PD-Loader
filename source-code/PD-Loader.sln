@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fakedll", "source\fakedll\f
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DivaSound", "source\plugins\DivaSound\DivaSound.vcxproj", "{EE1A551A-49A0-40F2-8C2E-862D0AE55B43}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DivaMovie", "source\plugins\DivaMovie\DivaMovie.vcxproj", "{1994C586-F73B-4EF2-BA3E-2A0FC3034B1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -79,6 +81,12 @@ Global
 		{EE1A551A-49A0-40F2-8C2E-862D0AE55B43}.Release|x64.ActiveCfg = Release|x64
 		{EE1A551A-49A0-40F2-8C2E-862D0AE55B43}.Release|x64.Build.0 = Release|x64
 		{EE1A551A-49A0-40F2-8C2E-862D0AE55B43}.Release|x86.ActiveCfg = Release|x64
+		{1994C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x64.ActiveCfg = Debug|x64
+		{1994C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x64.Build.0 = Debug|x64
+		{1994C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x86.ActiveCfg = Debug|x64
+		{1994C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.ActiveCfg = Release|x64
+		{1994C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.Build.0 = Release|x64
+		{1994C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

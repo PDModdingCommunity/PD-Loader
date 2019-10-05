@@ -86,7 +86,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\dependencies\detours\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\dependencies\detours\include;..\..\..\dependencies\PluginConfigApi</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\..\dependencies\detours\lib</AdditionalLibraryDirectories>
@@ -112,7 +112,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\dependencies\detours\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\dependencies\detours\include;..\..\..\dependencies\PluginConfigApi</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

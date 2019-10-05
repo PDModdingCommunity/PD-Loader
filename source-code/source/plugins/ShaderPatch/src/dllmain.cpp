@@ -2,7 +2,7 @@
 #include <windows.h>
 
 #include "framework.h"
-//#include "PluginConfigApi.h"
+#include "PluginConfigApi.h"
 #include "detours.h"
 #pragma comment(lib, "detours.lib")
 
@@ -250,7 +250,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		DetourTransactionCommit();
 
 		loadGpuName();
-		printf("[ShaderPatch] Detected GPU: %s\n", gpuName);
+		printf("[ShaderPatch] Detected GPU: %s\n", gpuName.c_str());
 		//Sleep(2000);
 
 		LoadConfig();
@@ -259,14 +259,66 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 }
 
 
-//using namespace PluginConfig;
-//
-//extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
-//{
-//	return L"ShaderPatch";
-//}
-//
-//extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
-//{
-//	return L"Automatically patches shaders";
-//}
+using namespace PluginConfig;
+
+extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
+{
+	return L"ShaderPatch";
+}
+
+extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
+{
+	return L"Automatically patches shaders";
+}
+
+std::vector<PluginConfigOption> configVec;
+extern "C" __declspec(dllexport) PluginConfigArray GetPluginOptions(void)
+{
+	LoadConfig();
+
+	for (std::map<std::string, std::string>::iterator iter = configMap.begin(); iter != configMap.end(); ++iter)
+	{
+		std::string k = iter->first;
+		std::string v = iter->second;
+
+		if (k.size() < 6 || k.substr(k.size() - 5, 4) != "_val")
+		{
+			WCHAR utf16key[128];
+			WCHAR utf16val[128];
+
+			// count values to approximate the group size
+			int valNum = 0;
+			int valCount = 0;
+			std::string valKey;
+			while (valNum++, valKey = k + "_val" + std::to_string(valNum),
+				configMap.find(valKey) != configMap.end()) // loop until there's no more config values set
+			{
+				valCount++;
+			}
+
+
+			MultiByteToWideChar(CP_UTF8, 0, k.c_str(), -1, utf16key, 128);
+
+			configVec.push_back({ CONFIG_GROUP_START, new PluginConfigGroupData{ _wcsdup(utf16key), 45 + valCount * 25 } });
+			configVec.push_back({ CONFIG_BOOLEAN, new PluginConfigBooleanData{ _wcsdup(utf16key), L"config", CONFIG_FILE, L"Enable", L"", false, false } });
+
+
+			valNum = 0;
+			while (valNum++, valKey = k + "_val" + std::to_string(valNum),
+				configMap.find(valKey) != configMap.end()) // loop until there's no more config values set
+			{
+				MultiByteToWideChar(CP_UTF8, 0, valKey.c_str(), -1, utf16key, 128);
+				MultiByteToWideChar(CP_UTF8, 0, configMap[valKey].c_str(), -1, utf16val, 128);
+
+				std::wstring name = std::wstring(L"Value ") + std::to_wstring(valNum) + L":";
+				configVec.push_back({ CONFIG_STRING, new PluginConfigStringData{ _wcsdup(utf16key), L"config", CONFIG_FILE, _wcsdup(name.c_str()), L"", _wcsdup(utf16val), false } });
+			}
+
+
+			configVec.push_back({ CONFIG_GROUP_END, NULL });
+			configVec.push_back({ CONFIG_SPACER, new PluginConfigSpacerData{ 10 } });
+		}
+	}
+
+	return PluginConfigArray{ (int)configVec.size(), &configVec[0] };
+}

@@ -149,12 +149,9 @@ void LoadConfig()
 		else if (section == "config")
 		{
 			equalSplit[1] = TrimString(equalSplit[1], " \t");
-			if (equalSplit[1] != "0") // ignore when == 0 to allow disabling via checkbox
-			{
-				// force cfg key to lower because ini shouldn't be case sensitive
-				std::transform(equalSplit[0].begin(), equalSplit[0].end(), equalSplit[0].begin(), ::tolower);
-				configMap.insert(std::pair<std::string, std::string>(equalSplit[0], equalSplit[1]));
-			}
+			// force cfg key to lower because ini shouldn't be case sensitive
+			std::transform(equalSplit[0].begin(), equalSplit[0].end(), equalSplit[0].begin(), ::tolower);
+			configMap.insert(std::pair<std::string, std::string>(equalSplit[0], equalSplit[1]));
 		}
 	}
 
@@ -196,7 +193,8 @@ void hookedLoadFromFarcThunk(FArchivedFile** ppFile)
 		}
 
 		bool cfgMatches = false;
-		if (patch.cfg.length() == 0 || configMap.find(patch.cfg) != configMap.end())
+		if (patch.cfg.length() == 0 || // patch has no config setting
+			(configMap.find(patch.cfg) != configMap.end() && configMap[patch.cfg] != "0")) // patch has a toggle and is not set to 0
 		{
 			cfgMatches = true;
 		}
@@ -208,9 +206,15 @@ void hookedLoadFromFarcThunk(FArchivedFile** ppFile)
 
 			modifiedStr = std::regex_replace(modifiedStr, patch.dataRegex, patch.dataReplace);
 
-			if (patch.cfg.length() > 0)
+			if (patch.cfg.length() > 0) // patch has a config setting
 			{
-				modifiedStr = StringReplace(modifiedStr, "<cfg>", configMap[patch.cfg]);
+				int valNum = 0;
+				std::string valKey;
+				while (valNum++, valKey = patch.cfg + "_val" + std::to_string(valNum),
+					configMap.find(valKey) != configMap.end()) // loop until there's no more config values set
+				{
+					modifiedStr = StringReplace(modifiedStr, "<val" + std::to_string(valNum) + ">", configMap[valKey]);
+				}
 			}
 		}
 	}

@@ -52,7 +52,7 @@ namespace PluginConfig
 		for (int i = 0; i < in.len; i++)
 		{
 			// basic check for validity
-			if (in.options[i].data == nullptr)
+			if (in.options[i].data == nullptr && in.options[i].cfgType != CONFIG_GROUP_END)
 				break;
 
 			outvec.push_back(GetConfigOption(in.options[i]));

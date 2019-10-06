@@ -85,6 +85,8 @@ void LoadConfig()
 
 	std::string line;
 	std::string section = "patches";
+	std::string lastComment;
+	bool isInComment = false;
 
 	// check for BOM
 	std::getline(fileStream, line);
@@ -95,7 +97,27 @@ void LoadConfig()
 
 	while (std::getline(fileStream, line))
 	{
-		if (line.size() <= 0 || line[0] == '#' || (line.size() >= 2 && line.rfind("//", 0) == 0))
+		// detect comments first to make comment exit logic easier
+		int commentStartPos;
+		if ((commentStartPos = 1, line.size() >= 1 && line[0] == '#') || (commentStartPos = 2, line.size() >= 2 && line.rfind("//", 0) == 0))
+		{
+			line.erase(0, commentStartPos);
+			line = TrimString(line, " \t");
+			if (isInComment)
+			{
+				lastComment += "\n" + line;
+			}
+			else
+			{
+				lastComment = line;
+				isInComment = true;
+			}
+			continue;
+		}
+
+		isInComment = false;
+
+		if (line.size() <= 0) // skip empty lines
 			continue;
 
 		if (line[0] == '[') // section name
@@ -148,10 +170,11 @@ void LoadConfig()
 		}
 		else if (section == "config")
 		{
-			equalSplit[1] = TrimString(equalSplit[1], " \t");
 			// force cfg key to lower because ini shouldn't be case sensitive
 			std::transform(equalSplit[0].begin(), equalSplit[0].end(), equalSplit[0].begin(), ::tolower);
-			configMap.insert(std::pair<std::string, std::string>(equalSplit[0], equalSplit[1]));
+			equalSplit[1] = TrimString(equalSplit[1], " \t");
+
+			configMap.insert(std::pair<std::string, strpair>(equalSplit[0], strpair(equalSplit[1], lastComment)));
 		}
 	}
 
@@ -194,7 +217,7 @@ void hookedLoadFromFarcThunk(FArchivedFile** ppFile)
 
 		bool cfgMatches = false;
 		if (patch.cfg.length() == 0 || // patch has no config setting
-			(configMap.find(patch.cfg) != configMap.end() && configMap[patch.cfg] != "0")) // patch has a toggle and is not set to 0
+			(configMap.find(patch.cfg) != configMap.end() && configMap[patch.cfg].first != "0")) // patch has a toggle and is not set to 0
 		{
 			cfgMatches = true;
 		}
@@ -213,7 +236,7 @@ void hookedLoadFromFarcThunk(FArchivedFile** ppFile)
 				while (valNum++, valKey = patch.cfg + "_val" + std::to_string(valNum),
 					configMap.find(valKey) != configMap.end()) // loop until there's no more config values set
 				{
-					modifiedStr = StringReplace(modifiedStr, "<val" + std::to_string(valNum) + ">", configMap[valKey]);
+					modifiedStr = StringReplace(modifiedStr, "<val" + std::to_string(valNum) + ">", configMap[valKey].first);
 				}
 			}
 		}
@@ -276,15 +299,17 @@ extern "C" __declspec(dllexport) PluginConfigArray GetPluginOptions(void)
 {
 	LoadConfig();
 
-	for (std::map<std::string, std::string>::iterator iter = configMap.begin(); iter != configMap.end(); ++iter)
+	for (std::map<std::string, strpair>::iterator iter = configMap.begin(); iter != configMap.end(); ++iter)
 	{
 		std::string k = iter->first;
-		std::string v = iter->second;
+		std::string v = iter->second.first;
+		std::string c = iter->second.second;
 
 		if (k.size() < 6 || k.substr(k.size() - 5, 4) != "_val")
 		{
 			WCHAR utf16key[128];
 			WCHAR utf16val[128];
+			WCHAR utf16tooltip[512];
 
 			// count values to approximate the group size
 			int valNum = 0;
@@ -298,9 +323,10 @@ extern "C" __declspec(dllexport) PluginConfigArray GetPluginOptions(void)
 
 
 			MultiByteToWideChar(CP_UTF8, 0, k.c_str(), -1, utf16key, 128);
+			MultiByteToWideChar(CP_UTF8, 0, c.c_str(), -1, utf16tooltip, 512);
 
 			configVec.push_back({ CONFIG_GROUP_START, new PluginConfigGroupData{ _wcsdup(utf16key), 45 + valCount * 25 } });
-			configVec.push_back({ CONFIG_BOOLEAN, new PluginConfigBooleanData{ _wcsdup(utf16key), L"config", CONFIG_FILE, L"Enable", L"", false, false } });
+			configVec.push_back({ CONFIG_BOOLEAN, new PluginConfigBooleanData{ _wcsdup(utf16key), L"config", CONFIG_FILE, L"Enable", _wcsdup(utf16tooltip), false, false } });
 
 
 			valNum = 0;
@@ -308,10 +334,11 @@ extern "C" __declspec(dllexport) PluginConfigArray GetPluginOptions(void)
 				configMap.find(valKey) != configMap.end()) // loop until there's no more config values set
 			{
 				MultiByteToWideChar(CP_UTF8, 0, valKey.c_str(), -1, utf16key, 128);
-				MultiByteToWideChar(CP_UTF8, 0, configMap[valKey].c_str(), -1, utf16val, 128);
+				MultiByteToWideChar(CP_UTF8, 0, configMap[valKey].first.c_str(), -1, utf16val, 128);
+				MultiByteToWideChar(CP_UTF8, 0, configMap[valKey].second.c_str(), -1, utf16tooltip, 512);
 
 				std::wstring name = std::wstring(L"Value ") + std::to_wstring(valNum) + L":";
-				configVec.push_back({ CONFIG_STRING, new PluginConfigStringData{ _wcsdup(utf16key), L"config", CONFIG_FILE, _wcsdup(name.c_str()), L"", _wcsdup(utf16val), false } });
+				configVec.push_back({ CONFIG_STRING, new PluginConfigStringData{ _wcsdup(utf16key), L"config", CONFIG_FILE, _wcsdup(name.c_str()), _wcsdup(utf16tooltip), _wcsdup(utf16val), false } });
 			}
 
 

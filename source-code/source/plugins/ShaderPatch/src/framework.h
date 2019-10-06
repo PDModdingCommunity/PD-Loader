@@ -19,7 +19,8 @@ struct ShaderPatchInfo {
 
 std::vector<ShaderPatchInfo> patchesVec;
 
-std::map<std::string, std::string> configMap;
+typedef std::pair<std::string, std::string> strpair;
+std::map<std::string, strpair> configMap;
 
 #pragma pack(push, 1)
 struct MsString {

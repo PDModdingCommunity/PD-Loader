@@ -118,18 +118,26 @@ void LoadConfig()
 		isInComment = false;
 
 		if (line.size() <= 0) // skip empty lines
+		{
+			lastComment = ""; // consume the last comment
 			continue;
+		}
 
 		if (line[0] == '[') // section name
 		{
 			size_t endIdx = line.find(']');
 			section = line.substr(1, endIdx - 1);
 			std::transform(section.begin(), section.end(), section.begin(), ::tolower);
+			lastComment = ""; // consume the last comment
 			continue;
 		}
 
 		std::vector<std::string> equalSplit = SplitString(line, "=");
-		if (equalSplit.size() < 2) continue;
+		if (equalSplit.size() < 2)
+		{
+			lastComment = ""; // consume the last comment
+			continue;
+		}
 
 		if (section == "patches")
 		{
@@ -165,6 +173,7 @@ void LoadConfig()
 					patch.dataReplace = rule;
 				}
 			}
+			lastComment = ""; // consume the last comment
 
 			patchesVec.push_back(patch);
 		}
@@ -175,6 +184,7 @@ void LoadConfig()
 			equalSplit[1] = TrimString(equalSplit[1], " \t");
 
 			configMap.insert(std::pair<std::string, strpair>(equalSplit[0], strpair(equalSplit[1], lastComment)));
+			lastComment = ""; // consume the last comment
 		}
 	}
 
@@ -309,7 +319,7 @@ extern "C" __declspec(dllexport) PluginConfigArray GetPluginOptions(void)
 		{
 			WCHAR utf16key[128];
 			WCHAR utf16val[128];
-			WCHAR utf16tooltip[512];
+			WCHAR utf16comment[512];
 
 			// count values to approximate the group size
 			int valNum = 0;
@@ -323,10 +333,11 @@ extern "C" __declspec(dllexport) PluginConfigArray GetPluginOptions(void)
 
 
 			MultiByteToWideChar(CP_UTF8, 0, k.c_str(), -1, utf16key, 128);
-			MultiByteToWideChar(CP_UTF8, 0, c.c_str(), -1, utf16tooltip, 512);
+			MultiByteToWideChar(CP_UTF8, 0, c.c_str(), -1, utf16comment, 512);
+			LPCWSTR ttDup = _wcsdup(utf16comment);
 
 			configVec.push_back({ CONFIG_GROUP_START, new PluginConfigGroupData{ _wcsdup(utf16key), 45 + valCount * 25 } });
-			configVec.push_back({ CONFIG_BOOLEAN, new PluginConfigBooleanData{ _wcsdup(utf16key), L"config", CONFIG_FILE, L"Enable", _wcsdup(utf16tooltip), false, false } });
+			configVec.push_back({ CONFIG_BOOLEAN, new PluginConfigBooleanData{ _wcsdup(utf16key), L"config", CONFIG_FILE, L"Enable", ttDup, false, false } });
 
 
 			valNum = 0;
@@ -335,10 +346,19 @@ extern "C" __declspec(dllexport) PluginConfigArray GetPluginOptions(void)
 			{
 				MultiByteToWideChar(CP_UTF8, 0, valKey.c_str(), -1, utf16key, 128);
 				MultiByteToWideChar(CP_UTF8, 0, configMap[valKey].first.c_str(), -1, utf16val, 128);
-				MultiByteToWideChar(CP_UTF8, 0, configMap[valKey].second.c_str(), -1, utf16tooltip, 512);
 
-				std::wstring name = std::wstring(L"Value ") + std::to_wstring(valNum) + L":";
-				configVec.push_back({ CONFIG_STRING, new PluginConfigStringData{ _wcsdup(utf16key), L"config", CONFIG_FILE, _wcsdup(name.c_str()), _wcsdup(utf16tooltip), _wcsdup(utf16val), false } });
+				std::wstring name;
+				if (configMap[valKey].second.size() > 0)
+				{
+					MultiByteToWideChar(CP_UTF8, 0, configMap[valKey].second.c_str(), -1, utf16comment, 512);
+					name = utf16comment;
+					name += L":";
+;				}
+				else
+				{
+					name = std::wstring(L"Value ") + std::to_wstring(valNum) + L":";
+				}
+				configVec.push_back({ CONFIG_STRING, new PluginConfigStringData{ _wcsdup(utf16key), L"config", CONFIG_FILE, _wcsdup(name.c_str()), ttDup, _wcsdup(utf16val), false } });
 			}
 
 

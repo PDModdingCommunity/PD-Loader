@@ -165,4 +165,12 @@ namespace PluginConfig
 		PluginConfigOption* options;
 	};
 #pragma pack(pop)
+
+	// note: this is actually the build date of PluginConfigApi -- make sure this isn't cached for CI
+	extern "C" __declspec(dllexport) LPCWSTR GetBuildDate(void)
+	{
+		WCHAR utf16buf[128];
+		MultiByteToWideChar(CP_UTF8, 0, __DATE__, -1, utf16buf, 128);
+		return _wcsdup(utf16buf);
+	}
 }

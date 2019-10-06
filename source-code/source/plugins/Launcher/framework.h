@@ -311,6 +311,7 @@ struct PluginInfo {
 	std::wstring filename;
 	std::wstring name;
 	std::wstring description;
+	std::wstring builddate;
 	std::vector<ConfigOptionBase*> configopts;
 };
 std::vector<PluginInfo> LoadPlugins()
@@ -341,6 +342,7 @@ std::vector<PluginInfo> LoadPlugins()
 
 					auto nameFunc = (LPCWSTR(*)())GetProcAddress(thisplugin.handle, "GetPluginName");
 					auto descFunc = (LPCWSTR(*)())GetProcAddress(thisplugin.handle, "GetPluginDescription");
+					auto dateFunc = (LPCWSTR(*)())GetProcAddress(thisplugin.handle, "GetBuildDate");
 					auto optsFunc = (PluginConfig::PluginConfigArray(*)())GetProcAddress(thisplugin.handle, "GetPluginOptions");
 
 					if (nameFunc != NULL)
@@ -352,6 +354,13 @@ std::vector<PluginInfo> LoadPlugins()
 						thisplugin.description = descFunc();
 					else
 						thisplugin.description = (thisplugin.filename + L" Plugin").c_str();
+
+					if (dateFunc != NULL)
+						thisplugin.builddate = dateFunc();
+					else
+						thisplugin.builddate = L"Unknown";
+
+					thisplugin.description += L"\n\nVersion: " + thisplugin.builddate;
 
 					if (optsFunc != NULL)
 						thisplugin.configopts = PluginConfig::GetConfigOptionVec(optsFunc());

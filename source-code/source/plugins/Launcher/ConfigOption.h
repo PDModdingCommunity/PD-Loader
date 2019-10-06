@@ -517,9 +517,9 @@ public:
 		textbox->Scale(ScaleWidth, ScaleHeight);
 		
 		// disable editing for utf8 mode because the ANSI hack used may not work correctly
-		if (_useUtf8) {
-			textbox->Enabled = false;
-		}
+		//if (_useUtf8) {
+		//	textbox->Enabled = false;
+		//}
 
 		tooltip->SetToolTip(label, gcnew String(_description));
 		tooltip->SetToolTip(textbox, gcnew String(_description));
@@ -540,8 +540,8 @@ public:
 	virtual void SaveOption()
 	{
 		// disable saving for utf8 mode because the ANSI hack used may not work correctly
-		if (_useUtf8)
-			return;
+		//if (_useUtf8)
+		//	return;
 
 		System::String^ tempSysStr;
 		std::wstring tempWStr;
@@ -714,10 +714,10 @@ public:
 		combobox->Scale(ScaleWidth, ScaleHeight);
 
 		// disable editing for utf8 mode because the ANSI hack used may not work correctly
-		if (_useUtf8) {
-			label->Enabled = false;
-			combobox->Enabled = false;
-		}
+		//if (_useUtf8) {
+		//	label->Enabled = false;
+		//	combobox->Enabled = false;
+		//}
 
 		tooltip->SetToolTip(label, gcnew String(_description));
 		tooltip->SetToolTip(combobox, gcnew String(_description));
@@ -741,8 +741,8 @@ public:
 	virtual void SaveOption()
 	{
 		// disable saving for utf8 mode because the ANSI hack used may not work correctly
-		if (_useUtf8)
-			return;
+		//if (_useUtf8)
+		//	return;
 
 		System::String^ tempSysStr;
 		std::wstring tempWStr;

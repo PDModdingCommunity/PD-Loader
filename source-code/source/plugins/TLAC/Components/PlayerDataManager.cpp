@@ -8,6 +8,16 @@
 
 const std::string PLAYER_DATA_FILE_NAME = "playerdata.ini";
 
+void InjectCode(void* address, const std::vector<uint8_t> data)
+{
+	const size_t byteCount = data.size() * sizeof(uint8_t);
+
+	DWORD oldProtect;
+	VirtualProtect(address, byteCount, PAGE_EXECUTE_READWRITE, &oldProtect);
+	memcpy(address, data.data(), byteCount);
+	VirtualProtect(address, byteCount, oldProtect, nullptr);
+}
+
 namespace TLAC::Components
 {
 	PlayerDataManager::PlayerDataManager()
@@ -38,10 +48,19 @@ namespace TLAC::Components
 	{
 		ApplyCustomData();
 
-		if (false && Input::Keyboard::GetInstance()->IsTapped(VK_F12))
+		/*if (false && Input::Keyboard::GetInstance()->IsTapped(VK_F12))
 		{
 			printf("[TLAC] PlayerDataManager::Update(): Loading config...\n");
 			LoadConfig();
+		}*/
+		if (!customPlayerData->UseCard)
+		{
+			DWORD oldProtect, bck;
+			// allow modifier modes to work without use_card
+			InjectCode((void*)0x00000001405CB14A, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
+			InjectCode((void*)0x0000000140136CFA, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
+				// enable module selector without use_card
+			InjectCode((void*)0x00000001405C513B, { 0x01 });
 		}
 		if (moduleCardWorkaround) {
 			int* pvId = (int*)0x00000001418054C4;
@@ -195,7 +214,7 @@ namespace TLAC::Components
 			*(byte*)(MODSELECTOR_CHECK_FUNCTION_ERRRET_ADDRESS + 0x1) = 0x01;
 		}
 		VirtualProtect((void*)MODSELECTOR_CHECK_FUNCTION_ERRRET_ADDRESS, sizeof(byte) * 2, oldProtect, &oldProtect);
-
+		
 		// fix annoying behavior of closing after changing module or item (don't yet know the reason, maybe NW/Card checks)
 		{
 			VirtualProtect((void*)MODSELECTOR_CLOSE_AFTER_MODULE, sizeof(uint8_t), PAGE_EXECUTE_READWRITE, &oldProtect);

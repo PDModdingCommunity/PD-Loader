@@ -1129,6 +1129,7 @@ Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, Too
 		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
 		ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
 		ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		outpanel->Font = gcnew Drawing::Font(outpanel->Font->FontFamily, outpanel->Font->SizeInPoints * ScaleHeight);
 	}
 
 	int curX = 12;

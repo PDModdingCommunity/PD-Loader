@@ -238,6 +238,7 @@ void hookedLoadFromFarcThunk(FArchivedFile** ppFile)
 				modifiedStr = std::string(file.data, file.dataSize);
 
 			modifiedStr = std::regex_replace(modifiedStr, patch.dataRegex, patch.dataReplace);
+			modifiedStr = StringReplace(modifiedStr, "<fname>", file.fileName.GetCharBuf());
 
 			if (patch.cfg.length() > 0) // patch has a config setting
 			{

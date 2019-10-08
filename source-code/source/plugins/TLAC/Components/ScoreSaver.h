@@ -3,6 +3,7 @@
 #include "../Constants.h"
 #include <windows.h>
 #include <vector>
+#include <thread>
 
 namespace TLAC::Components
 {
@@ -109,10 +110,12 @@ namespace TLAC::Components
 		static bool(__stdcall* divaInitResults)(void* cls);
 		static bool hookedInitResults(void* cls);
 		static void InjectCode(void* address, const std::vector<uint8_t> data);
+		static void initCache();
 		static bool checkExistingScoreValid(int pv, int difficulty, int isEx);
 		static int calculateCheck(int score, int cntCools, int cntFines, int percent, int combo, int clearRank, int allTimeRank, int allTimeModifiers, int allTimePercent);
 
 		static WCHAR configPath[256];
 		static WCHAR rival_configPath[256];
+		static std::thread initThread;
 	};
 }

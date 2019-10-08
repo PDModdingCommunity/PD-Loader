@@ -151,7 +151,7 @@ ref class PluginConfigHandler
 public:
 	Form^ form;
 
-	PluginConfigHandler(Panel^ optspanel, String^ title)
+	PluginConfigHandler(Panel^ optspanel, String^ title, float btnScaleSize)
 	{
 		form = gcnew Form();
 
@@ -168,10 +168,13 @@ public:
 		form->BackColor = Drawing::Color::FromArgb(64, 64, 64);
 		form->ForeColor = Drawing::Color::White;
 
+		form->Font = optspanel->Font;
+
 		optspanel->Left = 0;
 		optspanel->Top = 0;
 
 		Button^ OkBtn = gcnew Button();
+		OkBtn->Scale(btnScaleSize);
 		OkBtn->Text = L"OK";
 		OkBtn->Left = 4;
 		OkBtn->Top = optspanel->Bottom + 4;
@@ -517,9 +520,9 @@ public:
 		textbox->Scale(ScaleWidth, ScaleHeight);
 		
 		// disable editing for utf8 mode because the ANSI hack used may not work correctly
-		if (_useUtf8) {
-			textbox->Enabled = false;
-		}
+		//if (_useUtf8) {
+		//	textbox->Enabled = false;
+		//}
 
 		tooltip->SetToolTip(label, gcnew String(_description));
 		tooltip->SetToolTip(textbox, gcnew String(_description));
@@ -540,8 +543,8 @@ public:
 	virtual void SaveOption()
 	{
 		// disable saving for utf8 mode because the ANSI hack used may not work correctly
-		if (_useUtf8)
-			return;
+		//if (_useUtf8)
+		//	return;
 
 		System::String^ tempSysStr;
 		std::wstring tempWStr;
@@ -714,10 +717,10 @@ public:
 		combobox->Scale(ScaleWidth, ScaleHeight);
 
 		// disable editing for utf8 mode because the ANSI hack used may not work correctly
-		if (_useUtf8) {
-			label->Enabled = false;
-			combobox->Enabled = false;
-		}
+		//if (_useUtf8) {
+		//	label->Enabled = false;
+		//	combobox->Enabled = false;
+		//}
 
 		tooltip->SetToolTip(label, gcnew String(_description));
 		tooltip->SetToolTip(combobox, gcnew String(_description));
@@ -741,8 +744,8 @@ public:
 	virtual void SaveOption()
 	{
 		// disable saving for utf8 mode because the ANSI hack used may not work correctly
-		if (_useUtf8)
-			return;
+		//if (_useUtf8)
+		//	return;
 
 		System::String^ tempSysStr;
 		std::wstring tempWStr;
@@ -1088,9 +1091,11 @@ public:
 		if (_configopts.size() > 0)
 		{
 			ToolTip^ paneltooltip = gcnew ToolTip();
-			Panel^ configPanel = MakePanel((Col2Left + Col2Width + 64), 250, _configopts, paneltooltip, hasChanged);
+			Panel^ configPanel = MakePanel((Col2Left + Col2Width + 76), 250, _configopts, paneltooltip, hasChanged);
 			configPanel->Scale(ScaleWidth, ScaleHeight);
-			PluginConfigHandler^ confighandler = gcnew PluginConfigHandler(configPanel, gcnew String(_friendlyName) + " Options");
+			if (RootForm)
+				configPanel->Font = RootForm->Font;
+			PluginConfigHandler^ confighandler = gcnew PluginConfigHandler(configPanel, gcnew String(_friendlyName) + " Options", ScaleHeight);
 			button->Click += gcnew System::EventHandler(confighandler, &PluginConfigHandler::OpenForm);
 
 			panel->Controls->Add(button);
@@ -1143,11 +1148,12 @@ Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, Too
 		{
 			OptionMetaGroupStart* groupData = (OptionMetaGroupStart*)(cfg[i]);
 			GroupBox^ groupbox = gcnew GroupBox();
-			groupbox->Width = width - (ScaleWidth * 8);
-			groupbox->Height = ScaleHeight * groupData->_height;
+			groupbox->Width = width - (ScaleWidth * 28);
+			groupbox->Height = ScaleHeight * (groupData->_height);
 			groupbox->Left = ScaleWidth * 4;
 			groupbox->Top = ScaleHeight * curY;
 			groupbox->Text = gcnew String(groupData->_friendlyName);
+			groupbox->ForeColor = Drawing::Color::White;
 
 			// find the end of this group by simple iteration keeping track of indent level
 			int level = 1;
@@ -1163,9 +1169,9 @@ Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, Too
 					break;
 			}
 
-			Panel^ groupPanel = MakePanel(groupbox->Width - (ScaleWidth * 8), groupbox->Height - (ScaleHeight * 10), std::vector<ConfigOptionBase*>(&(cfg[i + 1]), &(cfg[endidx])), tooltip, hasChanged);
-			groupPanel->Left = ScaleWidth * 12;
-			groupPanel->Top = ScaleHeight * (curY + 8);
+			Panel^ groupPanel = MakePanel(groupbox->Width - (ScaleWidth * 12), groupbox->Height - (ScaleHeight * 20), std::vector<ConfigOptionBase*>(&(cfg[i + 1]), &(cfg[endidx])), tooltip, hasChanged);
+			groupPanel->Left = ScaleWidth * 2;
+			groupPanel->Top = ScaleHeight * 14;
 
 			groupbox->Controls->Add(groupPanel);
 			outpanel->Controls->Add(groupbox);

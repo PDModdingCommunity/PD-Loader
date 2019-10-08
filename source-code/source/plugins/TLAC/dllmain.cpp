@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "Constants.h"
 #include "framework.h"
+#include "pluginconfig.h"
 #include "Input/Mouse/Mouse.h"
 #include "Input/Xinput/Xinput.h"
 #include "Input/Keyboard/Keyboard.h"

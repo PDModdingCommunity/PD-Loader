@@ -311,6 +311,7 @@ struct PluginInfo {
 	std::wstring filename;
 	std::wstring name;
 	std::wstring description;
+	std::wstring builddate;
 	std::vector<ConfigOptionBase*> configopts;
 };
 std::vector<PluginInfo> LoadPlugins()
@@ -341,6 +342,7 @@ std::vector<PluginInfo> LoadPlugins()
 
 					auto nameFunc = (LPCWSTR(*)())GetProcAddress(thisplugin.handle, "GetPluginName");
 					auto descFunc = (LPCWSTR(*)())GetProcAddress(thisplugin.handle, "GetPluginDescription");
+					auto dateFunc = (LPCWSTR(*)())GetProcAddress(thisplugin.handle, "GetBuildDate");
 					auto optsFunc = (PluginConfig::PluginConfigArray(*)())GetProcAddress(thisplugin.handle, "GetPluginOptions");
 
 					if (nameFunc != NULL)
@@ -352,6 +354,13 @@ std::vector<PluginInfo> LoadPlugins()
 						thisplugin.description = descFunc();
 					else
 						thisplugin.description = (thisplugin.filename + L" Plugin").c_str();
+
+					if (dateFunc != NULL)
+						thisplugin.builddate = dateFunc();
+					else
+						thisplugin.builddate = L"Unknown";
+
+					thisplugin.description += L"\n\nVersion: " + thisplugin.builddate;
 
 					if (optsFunc != NULL)
 						thisplugin.configopts = PluginConfig::GetConfigOptionVec(optsFunc());
@@ -395,3 +404,16 @@ void(WINAPI * cuInit)(unsigned int flags) = (void(WINAPI*)(unsigned int flags))G
 // needed to close the OpenGL window (freeglut only)
 HMODULE glutModule = LoadLibraryW(L"glut32.dll");
 void(__stdcall * glutMainLoopEventDynamic)() = (void(__stdcall*)())GetProcAddress(glutModule, "glutMainLoopEvent");
+
+
+using namespace PluginConfig;
+
+extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
+{
+	return L"Launcher";
+}
+
+extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
+{
+	return L"PD Launcher is the window you currently have open.\nYou can disable it if you want, but you'll need to edit config.ini if you ever want to re-enable it.";
+}

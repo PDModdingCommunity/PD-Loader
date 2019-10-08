@@ -11,6 +11,8 @@
 
 #include <chrono>
 
+#include "PluginConfigApi.h"
+
 using namespace std::chrono;
 
 int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
@@ -238,3 +240,15 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	return TRUE;
 }
 
+
+using namespace PluginConfig;
+
+extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
+{
+	return L"Render";
+}
+
+extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
+{
+	return L"Applies window mode/size and FPS limiting.";
+}

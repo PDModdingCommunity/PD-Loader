@@ -99,7 +99,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>..\..\..\dependencies\detours\include;..\..\..\dependencies\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\detours\include;..\..\..\dependencies\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,7 +139,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>..\..\..\dependencies\detours\include;..\..\..\dependencies\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\detours\include;..\..\..\dependencies\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -225,6 +225,7 @@
     <ClInclude Include="Input\Mouse\MouseState.h" />
     <ClInclude Include="Input\Xinput\Xinput.h" />
     <ClInclude Include="Input\Xinput\XinputState.h" />
+    <ClInclude Include="pluginconfig.h" />
     <ClInclude Include="Utilities\EnumBitwiseOperations.h" />
     <ClInclude Include="Utilities\Math.h" />
     <ClInclude Include="Utilities\Operations.h" />

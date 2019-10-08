@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <sstream>
 #include <iomanip>
+#include "PluginConfigApi.h"
 
 void InjectCode(void* address, const std::vector<uint8_t> data);
 void ApplyPatches();
@@ -316,4 +317,17 @@ void InjectCode(void* address, const std::vector<uint8_t> data)
 	VirtualProtect(address, byteCount, PAGE_EXECUTE_READWRITE, &oldProtect);
 	memcpy(address, data.data(), byteCount);
 	VirtualProtect(address, byteCount, oldProtect, nullptr);
+}
+
+
+using namespace PluginConfig;
+
+extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
+{
+	return L"Patches";
+}
+
+extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
+{
+	return L"Applies patches/tweaks to the game before it starts.\nThis plugin is required.";
 }

@@ -58,7 +58,7 @@ namespace Launcher {
 			int screenresY = 3;
 			for (ConfigOptionBase* option : screenResolutionArray)
 			{
-				option->hasChanged = ConfigHasChanged;
+				option->hasChanged = ResolutionConfigChanged;
 				screenresY += option->AddToPanel(panel_ScreenRes, 12, screenresY, toolTip1);
 			}
 			((ComboBox^)ComboBox::FromHandle(DisplayModeDropdown->mainControlHandle))->SelectedIndexChanged += gcnew System::EventHandler(this, &ui::DisplayTypeChangedHandler);
@@ -74,7 +74,7 @@ namespace Launcher {
 			int intresY = 3;
 			for (ConfigOptionBase* option : internalResolutionArray)
 			{
-				option->hasChanged = ConfigHasChanged;
+				option->hasChanged = ResolutionConfigChanged;
 				intresY += option->AddToPanel(panel_IntRes, 12, intresY, toolTip1);
 			}
 			((CheckBox^)CheckBox::FromHandle(InternalResolutionCheckbox->mainControlHandle))->CheckedChanged += gcnew System::EventHandler(this, &ui::InternalResEnabledChangedHandler);
@@ -90,7 +90,7 @@ namespace Launcher {
 			int optionsY = 3;
 			for (ConfigOptionBase* option : optionsArray)
 			{
-				option->hasChanged = ConfigHasChanged;
+				option->hasChanged = OptionsConfigChanged;
 				optionsY += option->AddToPanel(panel_Patches, 12, optionsY, toolTip1);
 			}
 			this->panel_Patches->ResumeLayout(false);
@@ -105,7 +105,7 @@ namespace Launcher {
 			int playerdataY = 3;
 			for (ConfigOptionBase* option : playerdataArray)
 			{
-				option->hasChanged = ConfigHasChanged;
+				option->hasChanged = PlayerdataConfigChanged;
 				playerdataY += option->AddToPanel(panel_Playerdata, 12, playerdataY, toolTip1);
 			}
 			this->panel_Playerdata->ResumeLayout(false);
@@ -119,7 +119,7 @@ namespace Launcher {
 			int componentsY = 3;
 			for (ConfigOptionBase* component : componentsArray)
 			{
-				component->hasChanged = ConfigHasChanged;
+				component->hasChanged = ComponentsConfigChanged;
 				componentsY += component->AddToPanel(panel_Components, 12, componentsY, toolTip1);
 			}
 			this->panel_Components->ResumeLayout(false);
@@ -134,7 +134,7 @@ namespace Launcher {
 			int pluginsY = 3;
 			for (ConfigOptionBase* option : AllPluginOpts)
 			{
-				option->hasChanged = ConfigHasChanged;
+				option->hasChanged = new bool(false);
 				pluginsY += option->AddToPanel(panel_Plugins, 12, pluginsY, toolTip1);
 			}
 			this->panel_Plugins->ResumeLayout(false);
@@ -559,38 +559,61 @@ namespace Launcher {
 
 		}
 #pragma endregion
-private: System::Void SaveSettings() {	
-	for (ConfigOptionBase* option : screenResolutionArray)
+private: System::Void SaveSettings() {
+	if (*ResolutionConfigChanged)
 	{
-		option->SaveOption();
+		for (ConfigOptionBase* option : screenResolutionArray)
+		{
+			option->SaveOption();
+		}
+
+		for (ConfigOptionBase* option : internalResolutionArray)
+		{
+			option->SaveOption();
+		}
+
+		*ResolutionConfigChanged = false;
 	}
 
-	for (ConfigOptionBase* option : internalResolutionArray)
+	if (*OptionsConfigChanged)
 	{
-		option->SaveOption();
+		for (ConfigOptionBase* option : optionsArray)
+		{
+			option->SaveOption();
+		}
+
+		*OptionsConfigChanged = false;
 	}
 
-	for (ConfigOptionBase* option : optionsArray)
+	if (*PlayerdataConfigChanged)
 	{
-		option->SaveOption();
+		for (ConfigOptionBase* option : playerdataArray)
+		{
+			option->SaveOption();
+		}
+
+		*PlayerdataConfigChanged = false;
 	}
 
-	for (ConfigOptionBase* option : playerdataArray)
+	if (*ComponentsConfigChanged)
 	{
-		option->SaveOption();
-	}
+		for (ConfigOptionBase* component : componentsArray)
+		{
+			component->SaveOption();
+		}
 
-	for (ConfigOptionBase* component : componentsArray)
-	{
-		component->SaveOption();
+		*ComponentsConfigChanged = false;
 	}
 
 	for (ConfigOptionBase* option : AllPluginOpts)
 	{
-		option->SaveOption();
-	}
+		if (*(option->hasChanged))
+		{
+			option->SaveOption();
+		}
 
-	*ConfigHasChanged = false;
+		*(option->hasChanged) = false;
+	}
 }
 private: System::Void Ui_Load(System::Object^ sender, System::EventArgs^ e){
 }
@@ -655,7 +678,7 @@ private: System::Void DisplayTypeChangedHandler(System::Object^ sender, System::
 	}
 }
 private: System::Void Ui_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
-	if (!*ConfigHasChanged)
+	if (!AnyConfigChanged())
 		return;
 
 	switch (SkinnedMessageBox::Show(this, "Do you want to save your settings?", "PD Launcher", MessageBoxButtons::YesNoCancel, MessageBoxIcon::Question))
@@ -689,10 +712,21 @@ private: System::Void Ui_KeyDown(System::Object^ sender, System::Windows::Forms:
 	if (e->KeyCode == Keys::Escape) this->Close();
 }
 
-private: bool* ConfigHasChanged = new bool(false);/*
+private: bool* ResolutionConfigChanged = new bool(false);
+		 bool* OptionsConfigChanged = new bool(false);
+		 bool* PlayerdataConfigChanged = new bool(false);
+		 bool* ComponentsConfigChanged = new bool(false);
 
-private: System::Void ConfigChanged(System::Object^ sender, System::EventArgs^ e) {
-	*ConfigHasChanged = true;
-}*/
+private: bool AnyConfigChanged() {
+	if (*ResolutionConfigChanged || *OptionsConfigChanged || *PlayerdataConfigChanged || *ComponentsConfigChanged)
+		return true; // fast case
+
+	for (ConfigOptionBase* option : AllPluginOpts)
+	{
+		if (*(option->hasChanged)) return true; // slow case for iterating over individual plugins
+	}
+
+	return false;
+}
 };
 }

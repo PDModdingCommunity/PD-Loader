@@ -195,6 +195,9 @@
     <ClInclude Include="Components\ScoreSaver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="pluginconfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

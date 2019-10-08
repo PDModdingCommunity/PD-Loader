@@ -1,4 +1,5 @@
 #include "ScoreSaver.h"
+#include "GameState.h"
 #include "../Constants.h"
 #include "../framework.h"
 #include "../Utilities/Operations.h"
@@ -22,11 +23,6 @@ namespace TLAC::Components
 
 	ScoreSaver::~ScoreSaver()
 	{
-		for (int diff = 0; diff < 4; diff++)
-		{
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = 0;
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = 0;
-		}
 	}
 
 	const char* ScoreSaver::GetDisplayName()
@@ -34,14 +30,8 @@ namespace TLAC::Components
 		return "score_saver";
 	}
 
-	bool(__stdcall* ScoreSaver::divaInitResults)(void* cls) = (bool(__stdcall*)(void* cls))RESULTS_INIT_ADDRESS;
-	void ScoreSaver::Initialize(ComponentsManager*)
+	void ScoreSaver::initCache()
 	{
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		DetourAttach(&(PVOID&)ScoreSaver::divaInitResults, (PVOID)(ScoreSaver::hookedInitResults));
-		DetourTransactionCommit();
-
 		// build the score cache
 		UpdateScoreCache();
 		UpdateClearCounts();
@@ -52,6 +42,18 @@ namespace TLAC::Components
 			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = &ScoreCache[diff][0][0];
 			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = &ScoreCache[diff][1000][0]; // deliberately use 1000 to get past end of cache
 		}
+	}
+
+	bool(__stdcall* ScoreSaver::divaInitResults)(void* cls) = (bool(__stdcall*)(void* cls))RESULTS_INIT_ADDRESS;
+	std::thread ScoreSaver::initThread;
+	void ScoreSaver::Initialize(ComponentsManager*)
+	{
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourAttach(&(PVOID&)ScoreSaver::divaInitResults, (PVOID)(ScoreSaver::hookedInitResults));
+		DetourTransactionCommit();
+
+		initThread = std::thread(initCache);
 	}
 
 	bool ScoreSaver::checkExistingScoreValid(int pv, int difficulty, int isEx)
@@ -313,7 +315,12 @@ namespace TLAC::Components
 
 	void ScoreSaver::Update()
 	{
-		return;
+		if (*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_SELECTOR && initThread.joinable())
+		{
+			// it's actually fine to let the init happen in the background after reaching game state, but this is probably safer
+			printf("[ScoreSaver] Waiting for initialisation...");
+			initThread.join();
+		}
 	}
 
 	void ScoreSaver::UpdateInput()

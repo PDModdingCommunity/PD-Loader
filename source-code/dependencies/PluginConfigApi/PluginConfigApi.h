@@ -1,3 +1,7 @@
+/*
+PD Loader Launcher Plugin Information Structs
+*/
+
 #pragma once
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #include <windows.h>

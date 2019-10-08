@@ -1,0 +1,52 @@
+version: '{build}'
+image: Visual Studio 2019
+configuration:
+- Release
+- Debug
+platform: x64
+build:
+  project: source-code/PD-Loader.sln
+  verbosity: minimal
+after_build:
+- cmd: >-
+    md %TMP%\full\
+
+    md %TMP%\full\plugins\
+
+    md %TMP%\full\ram\
+
+    md %TMP%\full\ram\databank\
+
+
+    md %TMP%\update\
+
+    md %TMP%\update\plugins\
+
+
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dnsapi.dll %TMP%\update\
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\update\plugins\
+
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dnsapi.dll %TMP%\full\
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\full\plugins\
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\glut32.dll %TMP%\full\
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\*.* %TMP%\full\plugins\
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\ram\databank\*.dat %TMP%\full\ram\databank\
+
+
+
+    cd %TMP%\full\
+
+    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AppVeyor.zip *
+
+    cd %TMP%\update\
+
+    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-Update-AppVeyor.zip *
+artifacts:
+- path: PD-Loader-*.zip

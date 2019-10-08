@@ -200,7 +200,13 @@ namespace Launcher {
 					this->labelGPU->LinkColor = System::Drawing::Color::Lime;
 				}
 			}
-			else if (gpuModel->StartsWith("G") || gpuModel->StartsWith("NV"))
+			else if (gpuModel->StartsWith("G") && version[0] >= '4')
+			{
+				this->labelGPU->Text += "Issues: GPU too new.\n(Click for more information)";
+				GPUIssueText = "It looks like your GPU may be too new. Good news: the game should be capable of running, but shader patches (probably needed) don't support it yet.\nYou will likely see lines/noise on important character shaders and some minor stage shaders.\nPlease report any issues so that ShaderPatch can be updated.";
+				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+			}
+			else if (gpuModel->StartsWith("G") || gpuModel->StartsWith("NV") || gpuModel->StartsWith("NB") || gpuModel->StartsWith("N10") || gpuModel->StartsWith("MCP"))
 			{
 				this->labelGPU->Text += "Issues: GPU too old! 3D rendering might be broken.\n(Click for more information)";
 				GPUIssueText = "Your GPU is very old and does not support rendering techniques used by the game.\nYou may be able to play, but graphics will likely have major issues.\nPlease upgrade to a GTX 600 series or later GPU.";

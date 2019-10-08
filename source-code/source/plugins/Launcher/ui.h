@@ -151,6 +151,7 @@ namespace Launcher {
 			int window = glutCreateWindow("glut"); // a context must be created to use glGetString
 
 			String^ vendor = gcnew String((char*)glGetString(GL_VENDOR));
+			vendor = vendor->Replace(" Corporation", ""); // this is useless..  remove it to help ensure the GPU type line fits
 			String^ renderer = gcnew String((char*)glGetString(GL_RENDERER));
 			String^ version = gcnew String((char*)glGetString(GL_VERSION));
 
@@ -376,9 +377,9 @@ namespace Launcher {
 			// labelGPU
 			// 
 			this->labelGPU->AutoSize = true;
-			this->labelGPU->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
-				static_cast<System::Int32>(static_cast<System::Byte>(64)));;
-			this->labelGPU->Location = System::Drawing::Point(12, 317);
+			this->labelGPU->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(80)), static_cast<System::Int32>(static_cast<System::Byte>(24)),
+				static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(24)));;
+			this->labelGPU->Location = System::Drawing::Point(12, 314);
 			this->labelGPU->MinimumSize = System::Drawing::Size(410, 20);
 			this->labelGPU->Name = L"labelGPU";
 			this->labelGPU->Size = System::Drawing::Size(410, 20);

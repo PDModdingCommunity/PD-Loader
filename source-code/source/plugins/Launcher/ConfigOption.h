@@ -151,7 +151,7 @@ ref class PluginConfigHandler
 public:
 	Form^ form;
 
-	PluginConfigHandler(Panel^ optspanel, String^ title)
+	PluginConfigHandler(Panel^ optspanel, String^ title, float btnScaleSize)
 	{
 		form = gcnew Form();
 
@@ -168,10 +168,13 @@ public:
 		form->BackColor = Drawing::Color::FromArgb(64, 64, 64);
 		form->ForeColor = Drawing::Color::White;
 
+		form->Font = optspanel->Font;
+
 		optspanel->Left = 0;
 		optspanel->Top = 0;
 
 		Button^ OkBtn = gcnew Button();
+		OkBtn->Scale(btnScaleSize);
 		OkBtn->Text = L"OK";
 		OkBtn->Left = 4;
 		OkBtn->Top = optspanel->Bottom + 4;
@@ -1090,7 +1093,9 @@ public:
 			ToolTip^ paneltooltip = gcnew ToolTip();
 			Panel^ configPanel = MakePanel((Col2Left + Col2Width + 76), 250, _configopts, paneltooltip, hasChanged);
 			configPanel->Scale(ScaleWidth, ScaleHeight);
-			PluginConfigHandler^ confighandler = gcnew PluginConfigHandler(configPanel, gcnew String(_friendlyName) + " Options");
+			if (RootForm)
+				configPanel->Font = RootForm->Font;
+			PluginConfigHandler^ confighandler = gcnew PluginConfigHandler(configPanel, gcnew String(_friendlyName) + " Options", ScaleHeight);
 			button->Click += gcnew System::EventHandler(confighandler, &PluginConfigHandler::OpenForm);
 
 			panel->Controls->Add(button);
@@ -1129,7 +1134,6 @@ Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, Too
 		Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
 		ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
 		ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
-		outpanel->Font = gcnew Drawing::Font(outpanel->Font->FontFamily, outpanel->Font->SizeInPoints * ScaleHeight);
 	}
 
 	int curX = 12;

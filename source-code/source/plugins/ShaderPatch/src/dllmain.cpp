@@ -3,6 +3,7 @@
 
 #include "framework.h"
 #include "PluginConfigApi.h"
+#include "GPUModel.h"
 #include "detours.h"
 #pragma comment(lib, "detours.lib")
 
@@ -29,51 +30,7 @@ void NopBytes(void* address, unsigned int num)
 }
 
 
-void loadGpuName()
-{
-	NvAPI_QueryInterface = (void*(*)(unsigned int offset))GetProcAddress(LoadLibrary("nvapi64.dll"), "nvapi_QueryInterface");
 
-	if (NvAPI_QueryInterface == nullptr)
-	{
-		gpuName = "Other";
-		return;
-	}
-
-	NvAPI_Initialize = (int(*)())NvAPI_QueryInterface(0x0150E828);
-	NvAPI_Unload = (int(*)()) NvAPI_QueryInterface(0xD22BDD7E);
-	NvAPI_EnumPhysicalGPUs = (int(*)(int64_t** handle, int* count))NvAPI_QueryInterface(0xE5AC921F);
-	NvAPI_GPU_GetShortName = (int(*)(int64_t* handle, char* name))NvAPI_QueryInterface(0xD988F0F3);
-
-	if (NvAPI_Initialize == nullptr ||
-		NvAPI_Unload == nullptr ||
-		NvAPI_EnumPhysicalGPUs == nullptr ||
-		NvAPI_GPU_GetShortName == nullptr)
-	{
-		gpuName = "Unknown";
-		return;
-	}
-
-	int64_t* hdlGpu[64] = { 0 };
-	int nGpu = 0;
-
-	NvAPI_Initialize();
-	NvAPI_EnumPhysicalGPUs(hdlGpu, &nGpu);
-
-	//printf("[ShaderPatch] nGpu: %d\n", nGpu);
-	if (nGpu < 1)
-	{
-		gpuName = "Unknown";
-		NvAPI_Unload();
-		return;
-	}
-
-	char nameBuf[64];
-	NvAPI_GPU_GetShortName(hdlGpu[0], nameBuf);
-	NvAPI_Unload();
-
-	gpuName = nameBuf;
-	return;
-}
 
 
 void LoadConfig()
@@ -283,7 +240,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		DetourAttach(&(PVOID&)loadFromFarcThunk, (PVOID)hookedLoadFromFarcThunk);
 		DetourTransactionCommit();
 
-		loadGpuName();
+		gpuName = GPUModel::getGpuName();
 		printf("[ShaderPatch] Detected GPU: %s\n", gpuName.c_str());
 		//Sleep(2000);
 

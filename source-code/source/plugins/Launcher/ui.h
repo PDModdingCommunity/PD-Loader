@@ -7,6 +7,7 @@
 #include <GL\GL.h>
 #include "SkinnedMessageBox.h"
 #include "PluginConfig.h"
+#include "GPUModel.h""
 
 namespace Launcher {
 
@@ -155,6 +156,8 @@ namespace Launcher {
 			String^ renderer = gcnew String((char*)glGetString(GL_RENDERER));
 			String^ version = gcnew String((char*)glGetString(GL_VERSION));
 
+			String^ gpuModel = gcnew String(GPUModel::getGpuName().c_str());
+
 			glutDestroyWindow(window); // destroy the window so it doesn't remain on screen
 			if (glutMainLoopEventDynamic != NULL) glutMainLoopEventDynamic(); // freeglut needs this
 
@@ -163,37 +166,51 @@ namespace Launcher {
 			this->labelGPU->Text += "OpenGL: " + version + "\n";
 
 			int linkStart = this->labelGPU->Text->Length;
-			if (!vendor->Contains("NVIDIA"))
+			if (!vendor->Contains("NVIDIA")) // check OpenGL renderer to get actual GPU being used for vendor check (ensure not running on iGPU)
 			{
 				this->labelGPU->Text += "Issues: NVIDIA GPU REQUIRED!";
-				GPUIssueText = "Your graphics card is not supported! Only NVIDIA GPUs can run the game.\nPlease use a GTX 600 series or later GPU.";
+				GPUIssueText = "Your graphics card is not supported! Only NVIDIA GPUs can run the game.\nPlease use a GTX 600 series or later GPU.\n\nIf you have a laptop with an NVIDIA GPU, you may need to set diva.exe to use it in NVIDIA Control Panel.";
 				this->labelGPU->LinkColor = System::Drawing::Color::Red;
 				SkinnedMessageBox::Show(this, GPUIssueText, "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 			}
-			else if (version[0] < '4')
-			{
-				this->labelGPU->Text += "Issues: GPU too old! 3D rendering might be broken.\n(Click for more information)";
-				GPUIssueText = "Your GPU is very old and does not support a recent enough version of OpenGL.\nPlease upgrade to a GTX 600 series or later GPU.";
-				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
-			}
-			else if (renderer->Contains("RTX") || renderer->Contains("GTX 16"))
+			else if (gpuModel->StartsWith("TU"))
 			{
 				this->labelGPU->Text += "Issues: Turing GPU detected! Possible noise.\n(Click for more information)";
-				GPUIssueText = "On Turing GPUs (RTX/GTX 1600), some of the important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
+				GPUIssueText = "On Turing GPUs (RTX/GTX 1600), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
 				this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
 			}
-			// these GPU names aren't exact, but they cover most generations reasonably well
-			else if (renderer->Contains("GTX 8") || renderer->Contains("GTX 9") || renderer->Contains("TITAN X") || renderer->Contains("GTX 10") || renderer->Contains("TITAN V"))
+			else if (gpuModel->StartsWith("GM") || gpuModel->StartsWith("GP") || gpuModel->StartsWith("GV"))
 			{
 				this->labelGPU->Text += "Issues: May have minor noise on some stages.\n(Click for more information)";
-				GPUIssueText = "On Maxwell GPUs (~GTX 900) or newer, some minor stage shaders create noise.\nWhile not certain, it is likely that your GPU is affected.\nPlease make sure the ShaderPatch plugin is enabled.";
+				GPUIssueText = "On Maxwell GPUs (~GTX 900) or newer, some minor stage shaders create noise.\nPlease make sure the ShaderPatch plugin is enabled.";
 				this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
 			}
-			else
+			else if (gpuModel->StartsWith("GF") || gpuModel->StartsWith("GK"))
 			{
-				this->labelGPU->Text += "Issues: None.";
-				GPUIssueText = "Your GPU should have no issues running the game.";
-				this->labelGPU->LinkColor = System::Drawing::Color::Lime;
+				if (version[0] < '4')
+				{
+					this->labelGPU->Text += "Issues: Driver too old.";
+					GPUIssueText = "Your GPU should have no issues running the game, but it looks like your OpenGL version is too old.\nA driver update should fix this.";
+					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+				}
+				else
+				{
+					this->labelGPU->Text += "Issues: None.";
+					GPUIssueText = "Your GPU should have no issues running the game.";
+					this->labelGPU->LinkColor = System::Drawing::Color::Lime;
+				}
+			}
+			else if (gpuModel->StartsWith("G") || gpuModel->StartsWith("NV"))
+			{
+				this->labelGPU->Text += "Issues: GPU too old! 3D rendering might be broken.\n(Click for more information)";
+				GPUIssueText = "Your GPU is very old and does not support rendering techniques used by the game.\nYou may be able to play, but graphics will likely have major issues.\nPlease upgrade to a GTX 600 series or later GPU.";
+				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+			}
+			else //if (gpuModel->Length == 0 || gpuModel->StartsWith("Unk") || gpuModel->StartsWith("Oth"))
+			{
+				this->labelGPU->Text += "Issues: Unable to detect GPU architecture.\n(Click for more information)";
+				GPUIssueText = "It looks like you have an NVIDIA GPU, but something went wrong while trying to determine your GPU's architecture (type).\nThis may be a caused by a bug, but it probably indicates potential issues.\nPlease make sure you have a GTX 600 series or later GPU. (GTX 400 series or later should also work)";
+				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
 			}
 			int linkEnd = this->labelGPU->Text->Length - linkStart;
 

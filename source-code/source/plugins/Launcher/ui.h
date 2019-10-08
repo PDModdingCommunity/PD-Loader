@@ -176,7 +176,7 @@ namespace Launcher {
 			else if (gpuModel->StartsWith("TU"))
 			{
 				this->labelGPU->Text += "Issues: Turing GPU detected! Possible noise.\n(Click for more information)";
-				GPUIssueText = "On Turing GPUs (RTX/GTX 1600), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
+				GPUIssueText = "On Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
 				this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
 			}
 			else if (gpuModel->StartsWith("GM") || gpuModel->StartsWith("GP") || gpuModel->StartsWith("GV"))

@@ -28,6 +28,7 @@ after_build:
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\update\plugins\
 
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\ShaderPatch.ini %TMP%\update\plugins\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dnsapi.dll %TMP%\full\
 

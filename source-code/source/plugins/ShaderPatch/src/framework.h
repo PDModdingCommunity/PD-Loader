@@ -54,15 +54,7 @@ struct FArchivedFile {
 
 void (__stdcall* loadFromFarcThunk)(FArchivedFile** file) = (void(__stdcall*)(FArchivedFile** file))0x1405e5991;
 
-
 std::string gpuName;
-void*(*NvAPI_QueryInterface)(unsigned int offset) = NULL;
-int(*NvAPI_Initialize)() = NULL;
-int(*NvAPI_Unload)() = NULL;
-int(*NvAPI_EnumPhysicalGPUs)(int64_t** handle, int* count) = NULL;
-int(*NvAPI_GPU_GetShortName)(int64_t* handle, char* name) = NULL;
-
-
 
 std::vector<std::string> SplitString(const std::string& str, const std::string& delim)
 {

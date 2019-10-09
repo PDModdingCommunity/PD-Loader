@@ -7,6 +7,7 @@
 #include <GL\GL.h>
 #include "SkinnedMessageBox.h"
 #include "PluginConfig.h"
+#include "GPUModel.h""
 
 namespace Launcher {
 
@@ -151,30 +152,76 @@ namespace Launcher {
 			int window = glutCreateWindow("glut"); // a context must be created to use glGetString
 
 			String^ vendor = gcnew String((char*)glGetString(GL_VENDOR));
+			vendor = vendor->Replace(" Corporation", ""); // this is useless..  remove it to help ensure the GPU type line fits
 			String^ renderer = gcnew String((char*)glGetString(GL_RENDERER));
 			String^ version = gcnew String((char*)glGetString(GL_VERSION));
+
+			String^ gpuModel = gcnew String(GPUModel::getGpuName().c_str());
 
 			glutDestroyWindow(window); // destroy the window so it doesn't remain on screen
 			if (glutMainLoopEventDynamic != NULL) glutMainLoopEventDynamic(); // freeglut needs this
 
-			this->labelGPU->Text = "Vendor: " + vendor + "\nRenderer: " + renderer + "\nOpenGL: " + version;
-			if (!vendor->Contains("NVIDIA"))
+			this->labelGPU->Text = "GPU Info:\n";
+			this->labelGPU->Text += vendor + " " + renderer + "\n";
+			this->labelGPU->Text += "OpenGL: " + version + "\n";
+
+			int linkStart = this->labelGPU->Text->Length;
+			if (!vendor->Contains("NVIDIA")) // check OpenGL renderer to get actual GPU being used for vendor check (ensure not running on iGPU)
 			{
-				this->labelGPU->Text += "\nIssues: NVIDIA GPU REQUIRED!";
-				this->labelGPU->ForeColor = System::Drawing::Color::Red;
-				SkinnedMessageBox::Show(this, "Your graphics card is not supported! Only NVIDIA GPUs are currently supported.", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+				this->labelGPU->Text += "Issues: NVIDIA GPU REQUIRED!";
+				GPUIssueText = "Your graphics card is not supported! Only NVIDIA GPUs can run the game.\nPlease use a GTX 600 series or later GPU.\n\nIf you have a laptop with an NVIDIA GPU, you may need to set diva.exe to use it in NVIDIA Control Panel.";
+				this->labelGPU->LinkColor = System::Drawing::Color::Red;
+				SkinnedMessageBox::Show(this, GPUIssueText, "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 			}
-			else if (version[0] < '4')
+			else if (gpuModel->StartsWith("TU"))
 			{
-				this->labelGPU->Text += "\nIssues: GPU too old! 3D rendering might be broken.";
-				this->labelGPU->ForeColor = System::Drawing::Color::Orange;
+				this->labelGPU->Text += "Issues: Turing GPU detected! Possible noise.\n(Click for more information)";
+				GPUIssueText = "On Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
+				this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
 			}
-			else if (renderer->Contains("RTX") || renderer->Contains("GTX 16"))
+			else if (gpuModel->StartsWith("GM") || gpuModel->StartsWith("GP") || gpuModel->StartsWith("GV"))
 			{
-				this->labelGPU->Text += "\nIssues: Turing GPU detected! Possible noise.";
-				this->labelGPU->ForeColor = System::Drawing::Color::Yellow;
+				this->labelGPU->Text += "Issues: May have minor noise on some stages.\n(Click for more information)";
+				GPUIssueText = "On Maxwell GPUs (~GTX 900) or newer, some minor stage shaders create noise.\nPlease make sure the ShaderPatch plugin is enabled.";
+				this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
 			}
-			else this->labelGPU->Text += "\nIssues: None.";
+			else if (gpuModel->StartsWith("GF") || gpuModel->StartsWith("GK"))
+			{
+				if (version[0] < '4')
+				{
+					this->labelGPU->Text += "Issues: Driver too old.";
+					GPUIssueText = "Your GPU should have no issues running the game, but it looks like your OpenGL version is too old.\nA driver update should fix this.";
+					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+				}
+				else
+				{
+					this->labelGPU->Text += "Issues: None.";
+					GPUIssueText = "Your GPU should have no issues running the game.";
+					this->labelGPU->LinkColor = System::Drawing::Color::Lime;
+				}
+			}
+			else if (version[0] >= '4' && gpuModel->Length > 0 && !gpuModel->StartsWith("Unk") && !gpuModel->StartsWith("Oth"))
+			{
+				this->labelGPU->Text += "Issues: GPU may be too new.\n(Click for more information)";
+				GPUIssueText = "It looks like your GPU may be too new. Only up to Turing (GTX 16xx/RTX 20xx) is currently supported.\nGood news: the game should be capable of running, but shader patches (probably needed) may not support it yet.\nYou will likely see lines/noise on important character shaders and some minor stage shaders.\nPlease report any issues so that ShaderPatch can be updated.";
+				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+			}
+			else if (gpuModel->StartsWith("G") || gpuModel->StartsWith("NV") || gpuModel->StartsWith("NB") || gpuModel->StartsWith("N10") || gpuModel->StartsWith("MCP"))
+			{
+				this->labelGPU->Text += "Issues: GPU too old! 3D rendering might be broken.\n(Click for more information)";
+				GPUIssueText = "Your GPU is very old and does not support rendering techniques used by the game.\nYou may be able to play, but graphics will likely have major issues.\nPlease upgrade to a GTX 600 series or later GPU.";
+				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+			}
+			else //if (gpuModel->Length == 0 || gpuModel->StartsWith("Unk") || gpuModel->StartsWith("Oth"))
+			{
+				this->labelGPU->Text += "Issues: Unable to detect GPU architecture.\n(Click for more information)";
+				GPUIssueText = "It looks like you have an NVIDIA GPU, but something went wrong while trying to determine your GPU's architecture (type).\nThis may be a caused by a bug, but it probably indicates potential issues.\nPlease make sure you have a GTX 600 series or later GPU. (GTX 400 series or later should also work)";
+				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+			}
+			int linkEnd = this->labelGPU->Text->Length - linkStart;
+
+			this->labelGPU->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &ui::LinkLabelLinkClickedGPUIssueHandler);
+			this->labelGPU->LinkArea = System::Windows::Forms::LinkArea(linkStart, linkEnd);
 		}
 
 	protected:
@@ -207,7 +254,7 @@ namespace Launcher {
 	private: System::Windows::Forms::ToolTip^  toolTip1;
 	private: System::Windows::Forms::Panel^  panel_ScreenRes;
 	private: System::Windows::Forms::Panel^  panel_IntRes;
-	private: System::Windows::Forms::Label^ labelGPU;
+	private: System::Windows::Forms::LinkLabel^ labelGPU;
 	private: System::Windows::Forms::Button^ button_Apply;
 
 
@@ -246,7 +293,7 @@ namespace Launcher {
 			this->panel_ScreenRes = (gcnew System::Windows::Forms::Panel());
 			this->tabControl = (gcnew System::Windows::Forms::TabControl());
 			this->tabPage_Resolution = (gcnew System::Windows::Forms::TabPage());
-			this->labelGPU = (gcnew System::Windows::Forms::Label());
+			this->labelGPU = (gcnew System::Windows::Forms::LinkLabel());
 			this->groupBox_InternalRes = (gcnew System::Windows::Forms::GroupBox());
 			this->panel_IntRes = (gcnew System::Windows::Forms::Panel());
 			this->tabPage_Patches = (gcnew System::Windows::Forms::TabPage());
@@ -353,8 +400,9 @@ namespace Launcher {
 			// labelGPU
 			// 
 			this->labelGPU->AutoSize = true;
-			this->labelGPU->ForeColor = System::Drawing::Color::Lime;
-			this->labelGPU->Location = System::Drawing::Point(12, 319);
+			this->labelGPU->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(80)), static_cast<System::Int32>(static_cast<System::Byte>(24)),
+				static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(24)));;
+			this->labelGPU->Location = System::Drawing::Point(12, 314);
 			this->labelGPU->MinimumSize = System::Drawing::Size(410, 20);
 			this->labelGPU->Name = L"labelGPU";
 			this->labelGPU->Size = System::Drawing::Size(410, 20);
@@ -727,6 +775,11 @@ private: bool AnyConfigChanged() {
 	}
 
 	return false;
+}
+
+private: String^ GPUIssueText;
+private: System::Void LinkLabelLinkClickedGPUIssueHandler(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
+	SkinnedMessageBox::Show(this, GPUIssueText, "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 }
 };
 }

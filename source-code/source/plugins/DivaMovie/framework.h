@@ -5,12 +5,28 @@
 #include <cstdio>
 #include <windows.h>
 #include <detours.h>
+#include <string>
 
-#if _DEBUG
+std::wstring ExePath() {
+	WCHAR buffer[MAX_PATH];
+	GetModuleFileNameW(NULL, buffer, MAX_PATH);
+	return std::wstring(buffer);
+}
+
+std::wstring DirPath() {
+	std::wstring exepath = ExePath();
+	std::wstring::size_type pos = exepath.find_last_of(L"\\/");
+	return exepath.substr(0, pos);
+}
+
+std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\DivaMovie.ini";
+LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
+
+//#if _DEBUG
 #define PRINT(value, ...) printf(value, __VA_ARGS__);
-#else
-#define PRINT(value, ...)
-#endif
+//#else
+//#define PRINT(value, ...)
+//#endif
 
 #define PROC_ADDRESS(libraryName, procName) \
 	GetProcAddress(LoadLibrary(TEXT(libraryName)), procName)

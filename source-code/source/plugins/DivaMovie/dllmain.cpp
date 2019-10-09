@@ -1,4 +1,5 @@
 #include "framework.h"
+#include "PluginConfigApi.h"
 
 #include <evr.h>
 
@@ -9,6 +10,8 @@
 #include <mfapi.h>
 #include <mferror.h>
 #include <mftransform.h>
+
+bool forceSoftwareDecoding;
 
 IDirect3DDeviceManager9* deviceManager;
 
@@ -124,14 +127,28 @@ end:
 
 VTABLE_HOOK(HRESULT, IMFTransform, ProcessMessage, MFT_MESSAGE_TYPE eMessage, ULONG_PTR ulParam)
 {
-	HRESULT result = originalProcessMessage(This, eMessage, ulParam);
-	if (eMessage == MFT_MESSAGE_SET_D3D_MANAGER && result == MF_E_UNSUPPORTED_D3D_TYPE)
+	if (forceSoftwareDecoding)
 	{
-		result = originalProcessMessage(This, eMessage, NULL);
-		if (SUCCEEDED(result))
+		if (eMessage == MFT_MESSAGE_SET_D3D_MANAGER) {
+			PRINT("[DivaMovie] Force Software Decoding enabled\n");
 			INSTALL_VTABLE_HOOK(This, ProcessOutput, 25);
+			return S_OK;
+		}
+		return originalProcessMessage(This, eMessage, ulParam);
 	}
-	return result;
+	else
+	{
+		HRESULT result = originalProcessMessage(This, eMessage, ulParam);
+		if (eMessage == MFT_MESSAGE_SET_D3D_MANAGER && result == MF_E_UNSUPPORTED_D3D_TYPE)
+		{
+			PRINT("[DivaMovie] This system does not support DXVA hardware decoding\n");
+			result = originalProcessMessage(This, eMessage, NULL);
+			if (SUCCEEDED(result))
+				INSTALL_VTABLE_HOOK(This, ProcessOutput, 25);
+		}
+		return result;
+	}
+	
 }
 
 HOOK(void*, IMFTransformInitializer, 0x140420B90, void* a1, void* a2, IMFTransform** transform)
@@ -158,13 +175,37 @@ HOOK(HRESULT, DXVA2CreateDirect3DDeviceManager, PROC_ADDRESS("dxva2.dll", "DXVA2
 	return result;
 }
 
+void loadConfig() {
+	forceSoftwareDecoding = GetPrivateProfileIntW(L"general", L"force_software_decoding", 0, CONFIG_FILE) > 0 ? true : false;
+}
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
 	if (ul_reason_for_call == DLL_PROCESS_ATTACH)
 	{
+		loadConfig();
 		INSTALL_HOOK(DXVA2CreateDirect3DDeviceManager);
 		INSTALL_HOOK(IMFTransformInitializer);
 	}
 
 	return TRUE;
+}
+
+PluginConfig::PluginConfigOption config[] = {
+	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"force_software_decoding", L"general", CONFIG_FILE, L"Force Software Decoding", L"Use software decoding even on systems that support DXVA hardware decoding.", false } },
+};
+
+extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
+{
+	return L"DivaMovie";
+}
+
+extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
+{
+	return L"DivaMovie Plugin by Skyth\n\nDivaMovie enables movies on systems that does not support DXVA hardware decoding.";
+}
+
+extern "C" __declspec(dllexport) PluginConfig::PluginConfigArray GetPluginOptions(void)
+{
+	return PluginConfig::PluginConfigArray{ _countof(config), config };
 }

@@ -200,7 +200,7 @@ namespace Launcher {
 					this->labelGPU->LinkColor = System::Drawing::Color::Lime;
 				}
 			}
-			else if (version[0] >= '4')
+			else if (version[0] >= '4' && gpuModel->Length > 0 && !gpuModel->StartsWith("Unk") && !gpuModel->StartsWith("Oth"))
 			{
 				this->labelGPU->Text += "Issues: GPU may be too new.\n(Click for more information)";
 				GPUIssueText = "It looks like your GPU may be too new. Only up to Turing (GTX 16xx/RTX 20xx) is currently supported.\nGood news: the game should be capable of running, but shader patches (probably needed) may not support it yet.\nYou will likely see lines/noise on important character shaders and some minor stage shaders.\nPlease report any issues so that ShaderPatch can be updated.";

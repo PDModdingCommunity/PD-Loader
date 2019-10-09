@@ -185,18 +185,24 @@ namespace Launcher {
 				GPUIssueText = "On Maxwell GPUs (~GTX 900) or newer, some minor stage shaders create noise.\nPlease make sure the ShaderPatch plugin is enabled.";
 				this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
 			}
-			else if (gpuModel->StartsWith("GF") || gpuModel->StartsWith("GK"))
+			else if (gpuModel->StartsWith("GK"))
+			{
+				this->labelGPU->Text += "Issues: None.";
+				GPUIssueText = "Your GPU should have no issues running the game.";
+				this->labelGPU->LinkColor = System::Drawing::Color::Lime;
+			}
+			else if (gpuModel->StartsWith("GF"))
 			{
 				if (version[0] < '4')
 				{
 					this->labelGPU->Text += "Issues: Driver too old.";
-					GPUIssueText = "Your GPU should have no issues running the game, but it looks like your OpenGL version is too old.\nA driver update should fix this.";
+					GPUIssueText = "Your GPU should be able to run the game, but it looks like your OpenGL version is too old.\nA driver update should fix this.";
 					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
 				}
 				else
 				{
-					this->labelGPU->Text += "Issues: None.";
-					GPUIssueText = "Your GPU should have no issues running the game.";
+					this->labelGPU->Text += "Issues: No known issues.";
+					GPUIssueText = "Your GPU should have no issues running the game, but it is older than the GPU the game was originally designed for (GTX 650 Ti).\nThere may be some issues with graphics.\nPlease report any issues so that they can be analysed and potentially fixed.";
 					this->labelGPU->LinkColor = System::Drawing::Color::Lime;
 				}
 			}

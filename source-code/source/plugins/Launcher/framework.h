@@ -57,7 +57,8 @@ LPCWSTR COMPONENTS_SECTION = L"components";
 LPCWSTR PLAYERDATA_SECTION = L"playerdata";
 LPCWSTR KEYCONFIG_SECTION = L"keyconfig";
 
-int nSkipLauncher = GetPrivateProfileIntW(L"launcher", L"skip", FALSE, CONFIG_FILE);
+int nSkipLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"skip", FALSE, CONFIG_FILE);
+int nNoGPUDialog = GetPrivateProfileIntW(LAUNCHER_SECTION, L"no_gpu_diaog", FALSE, CONFIG_FILE);
 
 
 std::vector<DEVMODEW> getScreenModes() {
@@ -186,6 +187,7 @@ ConfigOptionBase* optionsArray[] = {
 	new NumericOption(L"xinput_preferred", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Controller Num:", L"Sets the preferred XInput controller.\nIf unavailable, the next connected controller is used.", 0, 0, 3),
 	new OptionMetaSpacer(8),
 
+	new BooleanOption(L"no_gpu_diaog", LAUNCHER_SECTION, CONFIG_FILE, L"Disable GPU Warning", L"Disables the warning dialog for unsupported GPUs.", L"", false),
 	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"Command Line:", L"Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.", L"", false),
 };
 

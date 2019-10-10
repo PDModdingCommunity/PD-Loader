@@ -166,12 +166,13 @@ namespace Launcher {
 			this->labelGPU->Text += "OpenGL: " + version + "\n";
 
 			int linkStart = this->labelGPU->Text->Length;
+			bool showGpuDialog = false;
 			if (!vendor->Contains("NVIDIA")) // check OpenGL renderer to get actual GPU being used for vendor check (ensure not running on iGPU)
 			{
 				this->labelGPU->Text += "Issues: NVIDIA GPU REQUIRED!";
 				GPUIssueText = "Your graphics card is not supported! Only NVIDIA GPUs can run the game.\nPlease use a GTX 600 series or later GPU.\n\nIf you have a laptop with an NVIDIA GPU, you may need to set diva.exe to use it in NVIDIA Control Panel.";
 				this->labelGPU->LinkColor = System::Drawing::Color::Red;
-				SkinnedMessageBox::Show(this, GPUIssueText, "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+				showGpuDialog = true;
 			}
 			else if (gpuModel->StartsWith("TU"))
 			{
@@ -198,6 +199,7 @@ namespace Launcher {
 					this->labelGPU->Text += "Issues: Driver too old.";
 					GPUIssueText = "Your GPU should be able to run the game, but it looks like your OpenGL version is too old.\nA driver update should fix this.";
 					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+					showGpuDialog = true;
 				}
 				else
 				{
@@ -217,17 +219,22 @@ namespace Launcher {
 				this->labelGPU->Text += "Issues: GPU too old! 3D rendering might be broken.\n(Click for more information)";
 				GPUIssueText = "Your GPU is very old and does not support rendering techniques used by the game.\nYou may be able to play, but graphics will likely have major issues.\nPlease upgrade to a GTX 600 series or later GPU.";
 				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+				showGpuDialog = true;
 			}
 			else //if (gpuModel->Length == 0 || gpuModel->StartsWith("Unk") || gpuModel->StartsWith("Oth"))
 			{
 				this->labelGPU->Text += "Issues: Unable to detect GPU architecture.\n(Click for more information)";
 				GPUIssueText = "It looks like you have an NVIDIA GPU, but something went wrong while trying to determine your GPU's architecture (type).\nThis may be a caused by a bug, but it probably indicates potential issues.\nPlease make sure you have a GTX 600 series or later GPU. (GTX 400 series or later should also work)";
 				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+				showGpuDialog = true;
 			}
 			int linkEnd = this->labelGPU->Text->Length - linkStart;
 
 			this->labelGPU->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &ui::LinkLabelLinkClickedGPUIssueHandler);
 			this->labelGPU->LinkArea = System::Windows::Forms::LinkArea(linkStart, linkEnd);
+
+			if (showGpuDialog && !nNoGPUDialog)
+				SkinnedMessageBox::Show(this, GPUIssueText + "\n\nYou can disable this message from the options tab.", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 		}
 
 	protected:

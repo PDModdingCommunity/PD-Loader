@@ -161,12 +161,11 @@ namespace TLAC
 		if (!nTAA)
 		{
 			{
-				DWORD oldProtect, bck;
-				VirtualProtect((BYTE*)0x00000001411AB67C, 1, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((byte*)0x00000001411AB67C + 0) = 0x00;
-				VirtualProtect((BYTE*)0x00000001411AB67C, 1, oldProtect, &bck);
+				// set TAA var (shouldn't be needed but whatever)
+				*(byte*)0x00000001411AB67C = 0;
 			}
 			{
+				// make constructor/init not set TAA
 				DWORD oldProtect, bck;
 				VirtualProtect((BYTE*)0x00000001404AB11D, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
 				*((byte*)0x00000001404AB11D + 0) = 0x90;
@@ -174,28 +173,78 @@ namespace TLAC
 				*((byte*)0x00000001404AB11D + 2) = 0x90;
 				VirtualProtect((BYTE*)0x00000001404AB11D, 3, oldProtect, &bck);
 			}
-			/*
 			{
+				// not sure, but it's somewhere in TaskPvGame init
+				// just make it set TAA to 0 instead of 1 to avoid possible issues
 				DWORD oldProtect, bck;
-				VirtualProtect((BYTE*)0x00000001404A877F, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((byte*)0x00000001404A877F + 0) = 0x90;
-				*((byte*)0x00000001404A877F + 1) = 0x90;
-				*((byte*)0x00000001404A877F + 2) = 0x90;
-				*((byte*)0x00000001404A877F + 3) = 0x90;
-				VirtualProtect((BYTE*)0x00000001404A877F, 4, oldProtect, &bck);
+				VirtualProtect((BYTE*)0x00000001401063CE, 1, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((byte*)0x00000001401063CE + 0) = 0x00;
+				VirtualProtect((BYTE*)0x00000001401063CE, 1, oldProtect, &bck);
 			}
-			*/
+			{
+				// prevent re-enabling after taking photos
+				DWORD oldProtect, bck;
+				VirtualProtect((BYTE*)0x000000014048FBA9, 1, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((byte*)0x000000014048FBA9 + 0) = 0x00;
+				VirtualProtect((BYTE*)0x000000014048FBA9, 1, oldProtect, &bck);
+			}
 			printf("[TLAC] TAA disabled\n");
 		}
 		if (!nMLAA)
 		{
-			DWORD oldProtect, bck;
-			VirtualProtect((BYTE*)0x00000001411AB680, 1, PAGE_EXECUTE_READWRITE, &oldProtect);
-			*((byte*)0x00000001411AB680 + 0) = 0x00;
-			VirtualProtect((BYTE*)0x00000001411AB680, 1, oldProtect, &bck);
+			{
+				// set MLAA var (shouldn't be needed but whatever)
+				*(byte*)0x00000001411AB680 = 0;
+			}
+			{
+				// make constructor/init not set MLAA
+				DWORD oldProtect, bck;
+				VirtualProtect((BYTE*)0x00000001404AB11A, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((byte*)0x00000001404AB11A + 0) = 0x90;
+				*((byte*)0x00000001404AB11A + 1) = 0x90;
+				*((byte*)0x00000001404AB11A + 2) = 0x90;
+				VirtualProtect((BYTE*)0x00000001404AB11A, 3, oldProtect, &bck);
+			}
 
 			printf("[TLAC] MLAA disabled\n");
 		}
+		/*if (nMagFilter > -1)
+		{
+			{
+				// set MAG filter var
+				*(byte*)0x00000001411AC518 = nMagFilter;
+			}
+			{
+				// make constructor/init not set  MAG filter (1)
+				DWORD oldProtect, bck;
+				VirtualProtect((BYTE*)0x00000001404AB13C, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((byte*)0x00000001404AB13C + 0) = 0x90;
+				*((byte*)0x00000001404AB13C + 1) = 0x90;
+				*((byte*)0x00000001404AB13C + 2) = 0x90;
+				*((byte*)0x00000001404AB13C + 3) = 0x90;
+				*((byte*)0x00000001404AB13C + 4) = 0x90;
+				*((byte*)0x00000001404AB13C + 5) = 0x90;
+				VirtualProtect((BYTE*)0x00000001404AB13C, 6, oldProtect, &bck);
+			}
+			{
+				// make constructor/init not set  MAG filter (2)
+				DWORD oldProtect, bck;
+				VirtualProtect((BYTE*)0x00000001404A863F, 10, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((byte*)0x00000001404A863F + 0) = 0x90;
+				*((byte*)0x00000001404A863F + 1) = 0x90;
+				*((byte*)0x00000001404A863F + 2) = 0x90;
+				*((byte*)0x00000001404A863F + 3) = 0x90;
+				*((byte*)0x00000001404A863F + 4) = 0x90;
+				*((byte*)0x00000001404A863F + 5) = 0x90;
+				*((byte*)0x00000001404A863F + 6) = 0x90;
+				*((byte*)0x00000001404A863F + 7) = 0x90;
+				*((byte*)0x00000001404A863F + 8) = 0x90;
+				*((byte*)0x00000001404A863F + 9) = 0x90;
+				VirtualProtect((BYTE*)0x00000001404A863F, 10, oldProtect, &bck);
+			}
+
+			printf("[TLAC] MAG Filter set to %d\n", nMagFilter);
+		}*/
 	}
 
 	void Dispose()

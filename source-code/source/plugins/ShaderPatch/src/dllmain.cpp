@@ -127,6 +127,7 @@ void LoadConfig()
 				else if (rule.size() >= 3 && rule.rfind("to:", 0) == 0)
 				{
 					rule.erase(0, 3);
+					rule = StringReplace(rule, "\\n", "\n");
 					patch.dataReplace = rule;
 				}
 			}

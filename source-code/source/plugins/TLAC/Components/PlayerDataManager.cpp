@@ -4,19 +4,9 @@
 #include "../Constants.h"
 #include "../Input/Keyboard/Keyboard.h"
 #include "../FileSystem/ConfigFile.h"
-#include "../Constants.h"
+#include "../Utilities/Operations.h"
 
 const std::string PLAYER_DATA_FILE_NAME = "playerdata.ini";
-
-void InjectCode(void* address, const std::vector<uint8_t> data)
-{
-	const size_t byteCount = data.size() * sizeof(uint8_t);
-
-	DWORD oldProtect;
-	VirtualProtect(address, byteCount, PAGE_EXECUTE_READWRITE, &oldProtect);
-	memcpy(address, data.data(), byteCount);
-	VirtualProtect(address, byteCount, oldProtect, nullptr);
-}
 
 namespace TLAC::Components
 {
@@ -53,15 +43,10 @@ namespace TLAC::Components
 			printf("[TLAC] PlayerDataManager::Update(): Loading config...\n");
 			LoadConfig();
 		}*/
-		if (!customPlayerData->UseCard)
-		{
-			DWORD oldProtect, bck;
-			// allow modifier modes to work without use_card
-			InjectCode((void*)0x00000001405CB14A, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
-			InjectCode((void*)0x0000000140136CFA, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
-				// enable module selector without use_card
-			InjectCode((void*)0x00000001405C513B, { 0x01 });
-		}
+
+		// nas, I moved the patches back to patches because please..  at least don't apply it every frame when it's not necessary lol
+		// and reverting was the easiest way to undo that
+
 		if (moduleCardWorkaround) {
 			int* pvId = (int*)0x00000001418054C4;
 			int* modState = (int*)0x00000001411A9790;
@@ -262,6 +247,36 @@ namespace TLAC::Components
 		customPlayerData->ActionSE = config.GetBooleanValue("act_toggle");
 		moduleCardWorkaround = config.GetBooleanValue("module_card_workaround");
 
+		std::string* mylistString;
+		std::vector<std::string> mylistStringVec;
+
+		customPlayerData->Mylist[0].clear();
+		config.TryGetValue("mylist_A", &mylistString);
+		if (mylistString != nullptr)
+		{
+			for (std::string &pvStr : TLAC::Utilities::Split(*mylistString, ","))
+				customPlayerData->Mylist[0].push_back(atoi(pvStr.c_str()));
+			delete mylistString;
+		}
+
+		customPlayerData->Mylist[1].clear();
+		config.TryGetValue("mylist_B", &mylistString);
+		if (mylistString != nullptr)
+		{
+			for (std::string &pvStr : TLAC::Utilities::Split(*mylistString, ","))
+				customPlayerData->Mylist[1].push_back(atoi(pvStr.c_str()));
+			delete mylistString;
+		}
+
+		customPlayerData->Mylist[2].clear();
+		config.TryGetValue("mylist_C", &mylistString);
+		if (mylistString != nullptr)
+		{
+			for (std::string &pvStr : TLAC::Utilities::Split(*mylistString, ","))
+				customPlayerData->Mylist[2].push_back(atoi(pvStr.c_str()));
+			delete mylistString;
+		}
+
 		if (moduleCardWorkaround) {
 			if (!customPlayerData->UseCard)
 			{
@@ -341,7 +356,7 @@ namespace TLAC::Components
 		setIfNotEqual(&playerData->act_toggle, customPlayerData->ActionSE, 1);
 
 		// Display clear borders on the progress bar
-		*(byte*)(PLAYER_DATA_ADDRESS + 0xD94) = (customPlayerData->ShowRivalClearBorder << 2) | (customPlayerData->ShowExcellentClearBorder << 1) | (customPlayerData->ShowGreatClearBorder);
+		playerData->clear_border = (customPlayerData->ShowRivalClearBorder << 2) | (customPlayerData->ShowExcellentClearBorder << 1) | (customPlayerData->ShowGreatClearBorder);
 		
 		playerData->use_card = customPlayerData->UseCard; // required to allow for module selection
 
@@ -349,6 +364,13 @@ namespace TLAC::Components
 
 		memset((void*)MODULE_TABLE_START, 0xFF, 128);
 		memset((void*)ITEM_TABLE_START, 0xFF, 128);
+
+		playerData->mylistA_begin = customPlayerData->Mylist[0].begin()._Ptr;
+		playerData->mylistA_end = customPlayerData->Mylist[0].end()._Ptr;
+		playerData->mylistB_begin = customPlayerData->Mylist[1].begin()._Ptr;
+		playerData->mylistB_end = customPlayerData->Mylist[1].end()._Ptr;
+		playerData->mylistC_begin = customPlayerData->Mylist[2].begin()._Ptr;
+		playerData->mylistC_end = customPlayerData->Mylist[2].end()._Ptr;
 
 		if (customPlayerData->PlayerName != nullptr)
 		{

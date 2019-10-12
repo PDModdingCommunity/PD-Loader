@@ -64,6 +64,8 @@ namespace TLAC::FileSystem
 				continue;
 
 			auto splitline = Utilities::Split(line, "=");
+			if (splitline.size() < 2)
+				continue;
 
 			for (auto &line : splitline)
 				Utilities::Trim(line);

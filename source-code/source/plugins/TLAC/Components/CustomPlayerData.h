@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 namespace TLAC::Components
 {
@@ -20,5 +21,6 @@ namespace TLAC::Components
 		bool UseCard;
 		bool GameModifierOptions;
 		bool ActionSE;
+		std::vector<int> Mylist[3];
 	};
 }

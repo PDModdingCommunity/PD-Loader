@@ -140,6 +140,7 @@ void ApplyPatches() {
 	auto nNoTimerSprite = GetPrivateProfileIntW(L"patches", L"no_timer_sprite", TRUE, CONFIG_FILE);
 	auto nEStageManager = GetPrivateProfileIntW(L"patches", L"enhanced_stage_manager", 0, CONFIG_FILE);
 	auto nEStageManagerEncore = GetPrivateProfileIntW(L"patches", L"enhanced_stage_manager_encore", TRUE, CONFIG_FILE);
+	auto nUnlockPseudo = GetPrivateProfileIntW(L"patches", L"unlock_pseudo", FALSE, CONFIG_FILE);
 	auto nHardwareSlider = GetPrivateProfileIntW(L"patches", L"hardware_slider", FALSE, CONFIG_FILE);
 
 	// Replace the hardcoded videos with MP4s, if they exist
@@ -323,6 +324,15 @@ void ApplyPatches() {
 		ESM[2] = nEStageManagerEncore;
 
 		printf("[Patches] Enhanced Stage Manager enabled\n");
+	}
+	// Unlock PSEUDO modules (which will all default to Miku, unless we also patch them to match the first performer)
+	if (nUnlockPseudo)
+	{
+		InjectCode((void*)0x0000000140A21770, { 0x56, 0x4F, 0x43, 0x41, 0x4C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+		InjectCode((void*)0x0000000140A21780, { 0x56, 0x4F, 0x43, 0x41, 0x4C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+		InjectCode((void*)0x0000000140A21790, { 0x56, 0x4F, 0x43, 0x41, 0x4C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+		InjectCode((void*)0x0000000140A217A0, { 0x56, 0x4F, 0x43, 0x41, 0x4C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+		InjectCode((void*)0x0000000140A217B0, { 0x56, 0x4F, 0x43, 0x41, 0x4C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
 	}
 	// The original slider update needs to run for hardware sliders to work -- only patch it when using emulation
 	if (!nHardwareSlider)

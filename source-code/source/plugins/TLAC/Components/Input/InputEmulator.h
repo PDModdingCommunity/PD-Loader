@@ -32,6 +32,9 @@ namespace TLAC::Components
 		Input::Binding* LeftBinding;
 		Input::Binding* RightBinding;
 
+		Input::Binding* MenuLBinding;
+		Input::Binding* MenuRBinding;
+
 		InputEmulator();
 		~InputEmulator();
 

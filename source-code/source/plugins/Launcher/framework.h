@@ -174,6 +174,9 @@ ConfigOptionBase* optionsArray[] = {
 	new NumericOption(L"Enhanced_Stage_Manager", PATCHES_SECTION, CONFIG_FILE, L"Number of stages:", L"Set the number of stages (0 = default).", 0, 0, INT_MAX),
 	new OptionMetaSpacer(8),
 
+	new BooleanOption(L"unlock_pseudo", PATCHES_SECTION, CONFIG_FILE, L"Unlock PSEUDO modules (incomplete)", L"Lets you play any PV with any performer.\n(incomplete, recommended modules will default to Miku)", false, false),
+	new OptionMetaSpacer(8),
+
 	new BooleanOption(L"hardware_slider", PATCHES_SECTION, CONFIG_FILE, L"Use Hardware Slider", L"Enable this if using a real arcade slider.\n(set the slider to port COM11)", false, false),
 	new OptionMetaSpacer(8),
 

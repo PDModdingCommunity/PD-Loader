@@ -175,7 +175,8 @@ void ApplyPatches() {
 	// Use GLUT_CURSOR_RIGHT_ARROW instead of GLUT_CURSOR_NONE
 	if (nCursor)
 	{
-		InjectCode((void*)0x000000014019341B, { 0x00 });	
+		InjectCode((void*)0x000000014019341B, { 0x00 });
+		InjectCode((void*)0x00000001403012b5, { 0xeb }); // Disable debug cursor
 		printf("[Patches] Cursor enabled\n");
 	}
 	// Override status icon states to be invalid (hides them)

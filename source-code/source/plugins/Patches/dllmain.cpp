@@ -100,8 +100,6 @@ void ApplyPatches() {
 		// Force Hide IDs
 		{ (void*)0x00000001409A5918, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } },
 		{ (void*)0x00000001409A5928, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } },
-		// Freeze mode selection timer
-		{ (void*)0x0000000140566B9E, { 0x90, 0x90, 0x90 } },
 		// fix TouchReaction
 			// get some more space by optimizing this code for size
 			{ (void*)0x00000001406A1FE2,{ 0x7E } },                                            // MOVQ  XMM0,qword ptr [0x168 + RSP] (change to MOVQ)
@@ -138,6 +136,8 @@ void ApplyPatches() {
 	auto nNoMovies = GetPrivateProfileIntW(L"patches", L"no_movies", FALSE, CONFIG_FILE);
 	auto nMP4Movies = GetPrivateProfileIntW(L"patches", L"mp4_movies", FALSE, CONFIG_FILE);
 	auto nNoError = GetPrivateProfileIntW(L"patches", L"no_error", FALSE, CONFIG_FILE);
+	auto nNoTimer = GetPrivateProfileIntW(L"patches", L"no_timer", TRUE, CONFIG_FILE);
+	auto nNoTimerSprite = GetPrivateProfileIntW(L"patches", L"no_timer_sprite", TRUE, CONFIG_FILE);
 	auto nEStageManager = GetPrivateProfileIntW(L"patches", L"enhanced_stage_manager", 0, CONFIG_FILE);
 	auto nEStageManagerEncore = GetPrivateProfileIntW(L"patches", L"enhanced_stage_manager_encore", TRUE, CONFIG_FILE);
 	auto nHardwareSlider = GetPrivateProfileIntW(L"patches", L"hardware_slider", FALSE, CONFIG_FILE);
@@ -275,6 +275,22 @@ void ApplyPatches() {
 		// Disable Errors Banner
 		InjectCode((void*)0x00000001403B9E9B, { 0x90, 0x90 });
 		printf("[Patches] Errors Banner disabled\n");
+	}
+	// Disable timer
+	if (nNoTimer)
+	{
+		// Freeze mode selection timer
+		InjectCode((void*)0x0000000140566B9E, { 0x90, 0x90, 0x90 });
+
+		// Freeze PV selection timer
+		InjectCode((void*)0x00000001405BDFBF, { 0x90, 0x90, 0x90, 0x90 });
+	}
+	// Disable timer sprite
+	if (nNoTimerSprite)
+	{
+		InjectCode((void*)0x00000001409C075D, { 0x72 }); // time_loop -> time_roop
+		InjectCode((void*)0x0000000140A3D3F5, { 0x6E }); // time_in -> time_nn
+		InjectCode((void*)0x0000000140A3D3FF, { 0x70 }); // time_out -> time_oup
 	}
 	// Enhanced Stage Manager
 	if (nEStageManager > 0)

@@ -197,7 +197,6 @@
     <ClInclude Include="Components\ScaleComponent.h" />
     <ClInclude Include="Components\ScoreSaver.h" />
     <ClInclude Include="Components\StageManager.h" />
-    <ClInclude Include="Components\SysTimer.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="FileSystem\ConfigFile.h" />
     <ClInclude Include="FileSystem\TextFile.h" />
@@ -250,7 +249,6 @@
     <ClCompile Include="Components\ScaleComponent.cpp" />
     <ClCompile Include="Components\ScoreSaver.cpp" />
     <ClCompile Include="Components\StageManager.cpp" />
-    <ClCompile Include="Components\SysTimer.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="FileSystem\ConfigFile.cpp" />
     <ClCompile Include="FileSystem\TextFile.cpp" />

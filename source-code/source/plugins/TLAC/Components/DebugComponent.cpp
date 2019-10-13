@@ -166,6 +166,12 @@ namespace TLAC::Components
 
 		for (size_t i = 0; i < _countof(patches); i++)
 			InjectCode(patches[i].Address, patches[i].Data);
+
+		if (*(int*)0x000000014019341B == 0x00)
+		{
+			// Disable debug cursor
+			InjectCode((void*)0x00000001403012b5, { 0xeb });
+		}
 	}
 
 	void DebugComponent::SetConsoleForeground()

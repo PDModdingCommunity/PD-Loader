@@ -313,7 +313,7 @@ namespace TLAC::Components
 
 	void ScoreSaver::Update()
 	{
-		if (*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_SELECTOR)
+		if (*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && (*(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_SELECTOR || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_SEL))
 		{
 			if (initThread.joinable())
 			{

@@ -4,7 +4,6 @@
 #include "Input/InputEmulator.h"
 #include "Input/TouchSliderEmulator.h"
 #include "Input/TouchPanelEmulator.h"
-#include "SysTimer.h"
 #include "PlayerDataManager.h"
 #include "FrameRateManager.h"
 #include "FastLoader.h"
@@ -37,7 +36,6 @@ namespace TLAC::Components
 			new InputEmulator(),
 			new TouchSliderEmulator(),
 			new TouchPanelEmulator(),
-			new SysTimer(),
 			new PlayerDataManager(),
 			new FrameRateManager(),
 			new FastLoader(),

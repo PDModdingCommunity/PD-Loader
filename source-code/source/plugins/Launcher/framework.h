@@ -58,7 +58,7 @@ LPCWSTR PLAYERDATA_SECTION = L"playerdata";
 LPCWSTR KEYCONFIG_SECTION = L"keyconfig";
 
 int nSkipLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"skip", FALSE, CONFIG_FILE);
-int nNoGPUDialog = GetPrivateProfileIntW(LAUNCHER_SECTION, L"no_gpu_diaog", FALSE, CONFIG_FILE);
+int nNoGPUDialog = GetPrivateProfileIntW(LAUNCHER_SECTION, L"no_gpu_dialog", FALSE, CONFIG_FILE);
 
 
 std::vector<DEVMODEW> getScreenModes() {
@@ -165,6 +165,8 @@ ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"hide_pv_watermark", PATCHES_SECTION, CONFIG_FILE, L"Hide PV Watermark", L"Hide the watermark that's usually shown in PV viewing mode.", false, false),
 	new BooleanOption(L"no_lyrics", PATCHES_SECTION, CONFIG_FILE, L"Disable Lyrics", L"Disable showing lyrics.", false, false),
 	new BooleanOption(L"no_error", PATCHES_SECTION, CONFIG_FILE, L"Disable Error Banner", L"Disable the error banner on the attract screen.", true, false),
+	new BooleanOption(L"no_timer", PATCHES_SECTION, CONFIG_FILE, L"Freeze Timer", L"Disable the timer.", true, false),
+	new BooleanOption(L"no_timer_sprite", PATCHES_SECTION, CONFIG_FILE, L"Disable Timer Sprite", L"Disable the timer sprite.", true, false),
 	new DropdownOption(L"status_icons", PATCHES_SECTION, CONFIG_FILE, L"Status Icons:", L"Set the state of card reader and network status icons.", 3, std::vector<LPCWSTR>({ L"Default", L"Hidden", L"Error", L"OK", L"Partial OK" })),
 	new OptionMetaSpacer(8),
 
@@ -187,7 +189,7 @@ ConfigOptionBase* optionsArray[] = {
 	new NumericOption(L"xinput_preferred", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Controller Num:", L"Sets the preferred XInput controller.\nIf unavailable, the next connected controller is used.", 0, 0, 3),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"no_gpu_diaog", LAUNCHER_SECTION, CONFIG_FILE, L"Disable GPU Warning", L"Disables the warning dialog for unsupported GPUs.", L"", false),
+	new BooleanOption(L"no_gpu_dialog", LAUNCHER_SECTION, CONFIG_FILE, L"Disable GPU Warning", L"Disables the warning dialog for unsupported GPUs.", L"", false),
 	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"Command Line:", L"Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.", L"", false),
 };
 
@@ -220,8 +222,6 @@ ConfigOptionBase* componentsArray[] = {
 	new BooleanOption(L"input_emulator", COMPONENTS_SECTION, COMPONENTS_FILE, L"Input Emulator", L"Emulates input through keyboard and/or mouse.", false, true),
 	new BooleanOption(L"touch_slider_emulator", COMPONENTS_SECTION, COMPONENTS_FILE, L"Slider Emulator", L"Emulates slider through keyboard and/or mouse.", false, true),
 	new BooleanOption(L"touch_panel_emulator", COMPONENTS_SECTION, COMPONENTS_FILE, L"Touch Panel Emulator", L"Emulates touch panel through mouse.", false, true),
-
-	new BooleanOption(L"sys_timer", COMPONENTS_SECTION, COMPONENTS_FILE, L"Timer Freeze", L"Freezes the PV select timer at 39 seconds.", false, true),
 
 	new BooleanOption(L"player_data_manager", COMPONENTS_SECTION, COMPONENTS_FILE, L"Player Data Manager", L"Loads user-defined values into the PlayerData struct.\nRequired for modules and game mode modifiers.", false, true),
 

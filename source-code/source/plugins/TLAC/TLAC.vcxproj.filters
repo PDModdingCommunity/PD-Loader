@@ -54,9 +54,6 @@
     <ClInclude Include="Components\StageManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\SysTimer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Components\Input\InputBufferType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -228,9 +225,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\StageManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\SysTimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\Input\InputEmulator.cpp">

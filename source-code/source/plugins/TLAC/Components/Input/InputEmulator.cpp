@@ -12,6 +12,7 @@
 #include "../../Utilities/Operations.h"
 #include "../../Utilities/EnumBitwiseOperations.h"
 #include "../../FileSystem/ConfigFile.h"
+#include "../GameState.h"
 
 const std::string KEY_CONFIG_FILE_NAME = "keyconfig.ini";
 
@@ -67,6 +68,9 @@ namespace TLAC::Components
 		LeftBinding = new Binding();
 		RightBinding = new Binding();
 
+		MenuLBinding = new Binding();
+		MenuRBinding = new Binding();
+
 		FileSystem::ConfigFile configFile(framework::GetModuleDirectory(), KEY_CONFIG_FILE_NAME);
 		configFile.OpenRead();
 
@@ -79,6 +83,8 @@ namespace TLAC::Components
 		Config::BindConfigKeys(configFile.ConfigMap, "JVS_CIRCLE", *MaruBinding, { "D", "L" });
 		Config::BindConfigKeys(configFile.ConfigMap, "JVS_LEFT", *LeftBinding, { "Q", "U" });
 		Config::BindConfigKeys(configFile.ConfigMap, "JVS_RIGHT", *RightBinding, { "E", "O" });
+		Config::BindConfigKeys(configFile.ConfigMap, "MENU_L", *MenuLBinding, { "Left", "Up" });
+		Config::BindConfigKeys(configFile.ConfigMap, "MENU_R", *MenuRBinding, { "Down", "Right" });
 
 		mouseScrollPvSelection = configFile.GetBooleanValue("mouse_scroll_pv_selection");
 	}
@@ -229,6 +235,19 @@ namespace TLAC::Components
 	JvsButtons InputEmulator::GetJvsButtonsState(bool(*buttonTestFunc)(void*))
 	{
 		JvsButtons buttons = JVS_NONE;
+
+		if (!(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN) &&
+			buttonTestFunc(MenuLBinding))
+		{
+			buttons |= JVS_L;
+			return buttons;
+		}
+		if (!(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN) &&
+			buttonTestFunc(MenuRBinding))
+		{
+			buttons |= JVS_R;
+			return buttons;
+		}
 
 		if (buttonTestFunc(TestBinding))
 			buttons |= JVS_TEST;

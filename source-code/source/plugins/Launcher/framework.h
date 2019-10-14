@@ -61,6 +61,10 @@ int nSkipLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"skip", FALSE, CONF
 int nNoGPUDialog = GetPrivateProfileIntW(LAUNCHER_SECTION, L"no_gpu_dialog", FALSE, CONFIG_FILE);
 
 
+resolution getCurrentScreenResolution() {
+	return resolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+}
+
 std::vector<DEVMODEW> getScreenModes() {
 	static std::vector<DEVMODEW> outVec = std::vector<DEVMODEW>();
 
@@ -132,7 +136,7 @@ std::vector<DEVMODEW> screenModes = getScreenModes();
 
 
 DropdownOption* DisplayModeDropdown = new DropdownOption(L"display", RESOLUTION_SECTION, CONFIG_FILE, L"Display:", L"Sets the window/screen mode.", 0, std::vector<LPCWSTR>({ L"Windowed", L"Borderless", L"Fullscreen" }));
-ResolutionOption* DisplayResolutionOption = new ResolutionOption(L"width", L"height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the display resolution.", resolution(1280, 720), getScreenResolutionsVec(screenModes), true);
+ResolutionOption* DisplayResolutionOption = new ResolutionOption(L"width", L"height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the display resolution.", resolution(1280, 720), getScreenResolutionsVec(screenModes), true, RESOPT_INCLUDE_MATCH_SCREEN);
 
 ConfigOptionBase* screenResolutionArray[] = {
 	DisplayModeDropdown,
@@ -142,7 +146,7 @@ ConfigOptionBase* screenResolutionArray[] = {
 };
 
 BooleanOption* InternalResolutionCheckbox = new BooleanOption(L"r.enable", RESOLUTION_SECTION, CONFIG_FILE, L"Enable", L"Enable or disable custom internal resolution.", false, false);
-ResolutionOption* InternalResolutionOption = new ResolutionOption(L"r.width", L"r.height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the internal resolution (instead of 1280x720).", resolution(1920, 1080), std::vector<resolution>({ resolution(1,1), resolution(320,200), resolution(320,240), resolution(640,480), resolution(800,600), resolution(960,720), resolution(1360,768), resolution(1366,768), resolution(1600,900), resolution(1920,1080), resolution(2560,1440), resolution(3200,1800), resolution(3840,2160), resolution(5120,2880), resolution(6400,3600), resolution(7680,4320) }), true);
+ResolutionOption* InternalResolutionOption = new ResolutionOption(L"r.width", L"r.height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the internal resolution (instead of 1280x720).", resolution(1920, 1080), std::vector<resolution>({ resolution(1,1), resolution(320,240), resolution(426,240), resolution(640,480), resolution(854,480), resolution(960,540), resolution(1280,720),  resolution(1366,768), resolution(1600,900), resolution(1920,1080), resolution(2560,1440), resolution(3200,1800), resolution(3840,2160), resolution(5120,2880), resolution(7680,4320) }), true, RESOPT_INCLUDE_MATCH_WINDOW);
 
 ConfigOptionBase* internalResolutionArray[] = {
 	InternalResolutionCheckbox,

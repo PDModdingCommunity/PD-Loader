@@ -127,37 +127,10 @@ namespace TLAC
 	void InitializeExtraSettings()
 	{
 		const LPCTSTR RESOLUTION_CONFIG_FILE_NAME = _T(".\\config.ini");
-		auto nCustomRes = GetPrivateProfileIntW(L"resolution", L"r.enable", FALSE, RESOLUTION_CONFIG_FILE_NAME);
-		auto nCustomWidth = GetPrivateProfileIntW(L"resolution", L"r.width", NULL, RESOLUTION_CONFIG_FILE_NAME);
-		auto nCustomHeight = GetPrivateProfileIntW(L"resolution", L"r.height", NULL, RESOLUTION_CONFIG_FILE_NAME);
 		auto nTAA = GetPrivateProfileIntW(L"graphics", L"taa", TRUE, RESOLUTION_CONFIG_FILE_NAME);
 		auto nMLAA = GetPrivateProfileIntW(L"graphics", L"mlaa", TRUE, RESOLUTION_CONFIG_FILE_NAME);
 
-		if (nCustomRes)
-		{
-			printf("[TLAC] Custom internal resolution enabled\n");
-			printf("[TLAC] X: %d Y: %d\n", nCustomWidth, nCustomHeight);
-			// Requires -wqhd launch parameter or Render.dva plugin
-			{
-				DWORD oldProtect, bck;
-				VirtualProtect((BYTE*)0x00000001409B8B68, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((int*)0x00000001409B8B68) = nCustomWidth;
-				VirtualProtect((BYTE*)0x00000001409B8B68, 6, oldProtect, &bck);
-			}
-			{
-				DWORD oldProtect, bck;
-				VirtualProtect((BYTE*)0x00000001409B8B6C, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((int*)0x00000001409B8B6C) = nCustomHeight;
-				VirtualProtect((BYTE*)0x00000001409B8B6C, 6, oldProtect, &bck);
-			}
-
-			//*((int*)0x00000001409B8B6C) = maxHeight;
-			//*((int*)0x00000001409B8B14) = maxWidth;
-			//*((int*)0x00000001409B8B18) = maxHeight;
-
-			//*((int*)0x00000001409B8B1C) = maxWidth; // No parameters width?
-			//*((int*)0x00000001409B8B20) = maxHeight; // No parameters height?
-		}
+		
 		if (!nTAA)
 		{
 			{

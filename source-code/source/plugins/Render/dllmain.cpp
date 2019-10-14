@@ -21,7 +21,7 @@ int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 
 	// trick Optimus into switching to the NVIDIA GPU
 	if (cuInit != NULL) cuInit(0);
-
+	
 	if (nDisplay == 2) // fullscreen
 	{
 		char GameModeString[24];
@@ -236,6 +236,45 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(PVOID&)divaEngineUpdate, hookedEngineUpdate);
 		DetourTransactionCommit();
+
+		// if window is set to screen res, process that now so it can be used for auto internal res
+		if (nWidth == -1 || nHeight == -1)
+		{
+			nWidth = GetSystemMetrics(SM_CXSCREEN);
+			nHeight = GetSystemMetrics(SM_CYSCREEN);
+		}
+
+		if (nIntRes)
+		{
+			// if -1 use window resolution
+			if (nIntResWidth == -1 || nIntResHeight == -1)
+			{
+				nIntResWidth = nWidth;
+				nIntResHeight = nHeight;
+			}
+
+			printf("[Render] Custom internal resolution enabled\n");
+			printf("[Render] X: %d Y: %d\n", nIntResWidth, nIntResHeight);
+			{
+				DWORD oldProtect, bck;
+				VirtualProtect((BYTE*)0x00000001409B8B68, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((int*)0x00000001409B8B68) = nIntResWidth;
+				VirtualProtect((BYTE*)0x00000001409B8B68, 6, oldProtect, &bck);
+			}
+			{
+				DWORD oldProtect, bck;
+				VirtualProtect((BYTE*)0x00000001409B8B6C, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((int*)0x00000001409B8B6C) = nIntResHeight;
+				VirtualProtect((BYTE*)0x00000001409B8B6C, 6, oldProtect, &bck);
+			}
+
+			//*((int*)0x00000001409B8B6C) = maxHeight;
+			//*((int*)0x00000001409B8B14) = maxWidth;
+			//*((int*)0x00000001409B8B18) = maxHeight;
+
+			//*((int*)0x00000001409B8B1C) = maxWidth; // No parameters width?
+			//*((int*)0x00000001409B8B20) = maxHeight; // No parameters height?
+		}
 	}
 	return TRUE;
 }

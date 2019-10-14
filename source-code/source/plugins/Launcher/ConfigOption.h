@@ -49,6 +49,9 @@ class ConfigOptionBase;
 Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, ToolTip^ tooltip, bool* hasChanged);
 
 
+#define RESOPT_MATCH_WINDOW_TEXT "Match Window"
+#define RESOPT_MATCH_SCREEN_TEXT "Match Screen"
+
 ref class ComboboxValidation
 {
 public:
@@ -96,20 +99,23 @@ public:
 	{
 		System::String^ text = cb->Text;
 
+		if (text == RESOPT_MATCH_WINDOW_TEXT || text == RESOPT_MATCH_SCREEN_TEXT)
+			return;
+
 		cli::array<Char>^ digitsarray = gcnew cli::array<Char>{ L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7', L'8', L'9' };
 		System::Collections::Generic::List<Char>^ digitslist = gcnew System::Collections::Generic::List<Char>(digitsarray);
 
 		int numX = 0;
 
+		while (text->Length > 0 && text[0] != L'x' && !digitslist->Contains(text[0]))
+		{
+			text = text->Remove(0, 1);
+		}
+
 		if (text->Length <= 0)
 		{
 			cb->Text = "x";
 			return;
-		}
-
-		while (text->Length > 0 && text[0] != L'x' && !digitslist->Contains(text[0]))
-		{
-			text = text->Remove(0, 1);
 		}
 
 		if (text[0] == L'x')
@@ -865,6 +871,12 @@ public:
 };
 
 
+enum ResolutionOptionOpts
+{
+	RESOPT_INCLUDE_MATCH_WINDOW = 1,
+	RESOPT_INCLUDE_MATCH_SCREEN = 2
+};
+
 class ResolutionOption : public ConfigOptionBase
 {
 public:
@@ -872,8 +884,9 @@ public:
 	resolution _defaultVal;
 	std::vector<resolution> _valueResolutions;
 	bool _editable;
+	ResolutionOptionOpts _opts;
 
-	ResolutionOption(LPCWSTR iniVarName, LPCWSTR iniVarName2, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, resolution defaultVal, std::vector<resolution> valueResolutions, bool editable)
+	ResolutionOption(LPCWSTR iniVarName, LPCWSTR iniVarName2, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, resolution defaultVal, std::vector<resolution> valueResolutions, bool editable, ResolutionOptionOpts opts)
 	{
 		_iniVarName = iniVarName;
 		_iniVarName2 = iniVarName2;
@@ -884,6 +897,7 @@ public:
 		_defaultVal = defaultVal;
 		_valueResolutions = valueResolutions;
 		_editable = editable;
+		_opts = opts;
 	}
 
 	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
@@ -900,16 +914,27 @@ public:
 		label->AutoSize = true;
 		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
+		if (_opts & RESOPT_INCLUDE_MATCH_WINDOW)
+			combobox->Items->Add(RESOPT_MATCH_WINDOW_TEXT);
+		else if (_opts & RESOPT_INCLUDE_MATCH_SCREEN)
+			combobox->Items->Add(RESOPT_MATCH_SCREEN_TEXT);
+
 		for (resolution& choice : _valueResolutions) {
 			tempSysStr = Convert::ToInt32(choice.width).ToString() + L"x" + Convert::ToInt32(choice.height).ToString();
 			combobox->Items->Add(tempSysStr);
 		}
 
-		int width = GetPrivateProfileIntW(_iniSectionName, _iniVarName, -1, _iniFilePath);
-		int height = GetPrivateProfileIntW(_iniSectionName, _iniVarName2, -1, _iniFilePath);
-		if (width == -1 || height == -1) {
+		int width = GetPrivateProfileIntW(_iniSectionName, _iniVarName, -39, _iniFilePath);
+		int height = GetPrivateProfileIntW(_iniSectionName, _iniVarName2, -39, _iniFilePath);
+		if (width == -39 || height == -39) {
 			tempSysStr = Convert::ToInt32(_defaultVal.width).ToString() + L"x" + Convert::ToInt32(_defaultVal.height).ToString();
 			combobox->Text = tempSysStr;
+		}
+		else if (width == -1 || height == -1) { // -1 -> Match window/screen
+			if (_opts & RESOPT_INCLUDE_MATCH_WINDOW)
+				combobox->Text = RESOPT_MATCH_WINDOW_TEXT;
+			else if (_opts & RESOPT_INCLUDE_MATCH_SCREEN)
+				combobox->Text = RESOPT_MATCH_SCREEN_TEXT;
 		}
 		else {
 			tempSysStr = Convert::ToInt32(width).ToString() + L"x" + Convert::ToInt32(height).ToString();
@@ -968,6 +993,11 @@ public:
 		cli::array<String^>^ resolutionArray;
 
 		tempSysStr = ((ComboBox^)ComboBox::FromHandle(mainControlHandle))->Text;
+
+		// Match window/screen -> -1x-1
+		if (tempSysStr == RESOPT_MATCH_WINDOW_TEXT || tempSysStr == RESOPT_MATCH_SCREEN_TEXT)
+			tempSysStr = "-1x-1";
+
 		resolutionArray = tempSysStr->Split('x');
 
 		tempSysStr = resolutionArray[0];

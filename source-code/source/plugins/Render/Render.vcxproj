@@ -98,6 +98,8 @@
       </PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\freeglut\include;..\..\..\dependencies\detours\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

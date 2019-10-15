@@ -35,11 +35,13 @@ namespace TLAC::Components
 		return "score_saver";
 	}
 
+	bool ScoreSaver::initCacheFinished = false;
 	void ScoreSaver::initCache()
 	{
 		// build the score cache
 		UpdateScoreCache();
 		UpdateClearCounts();
+		initCacheFinished = true;
 	}
 
 	bool(__stdcall* ScoreSaver::divaInitResults)(void* cls) = (bool(__stdcall*)(void* cls))RESULTS_INIT_ADDRESS;
@@ -306,44 +308,58 @@ namespace TLAC::Components
 		}
 
 		UpdateSingleScoreCacheEntry(pvNum, pvDifficulty, pvDifficultyIsEx, true);
-		UpdateClearCounts();
+		if (initCacheFinished) // don't update clear counts if they're not ready yet
+			UpdateClearCounts();
+		if (didInitialAddressUpdate) // don't set the addresses if they're not ready yet
+			FixScoreCacheAddresses(pvDifficulty);
 
 		return result;
 	}
 
+	bool ScoreSaver::didInitialAddressUpdate = false;
 	void ScoreSaver::Update()
 	{
+		// the below stuff is only verified for operating in menus
 		if (*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && (*(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_SELECTOR || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_SEL))
 		{
-			if (initThread.joinable())
+			if (!didInitialAddressUpdate)
 			{
-				// it's actually fine to let the init happen in the background after reaching game state,
-				// but this is safer because it means the begin and end addresses aren't changed in a different thread
-				printf("[ScoreSaver] Waiting for initialisation...");
-				initThread.join();
-			}
-
-			int pvNum = *(int*)SELPV_CURRENT_SONG_ADDRESS;
-			int diff = *(int*)(GAME_INFO_ADDRESS);
-			int diffIsEx = *(int*)(GAME_INFO_ADDRESS + 0x4);
-			byte insurance = *(byte*)(GAME_INFO_ADDRESS + 0x14);
-
-			if (pvNum != currentPv || diff != currentDifficulty || diffIsEx != currentDifficultyIsEx || insurance == currentInsurance)
-			{
-				DivaScore* cachedScore = GetCachedScore(pvNum, diff, diffIsEx);
-				if (cachedScore == nullptr)
+				if (initCacheFinished) // check for initThread to be done
 				{
-					// create a score cache entry if none exists for current song
-					ScoreCache[diff].push_back(DivaScore(pvNum, diffIsEx));
-					// update score begin and end vars from game
-					*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = ScoreCache[diff].begin()._Ptr;
-					*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = ScoreCache[diff].end()._Ptr;
+					// fix the addresses here instead of doing it unsafely in initThread
+					FixScoreCacheAddresses(0);
+					FixScoreCacheAddresses(1);
+					FixScoreCacheAddresses(2);
+					FixScoreCacheAddresses(3);
+					didInitialAddressUpdate = true;
 				}
+			}
+			else
+			{
+				// it probably doesn't really matter whether the initial address update is done first if I add some locks,
+				// but I feel better knowing that there won't be multiple things racing to modify the vector
+				// this does mean that with a lot of scores you can beat the loading into the game, thus not getting the new record banner etc. after a song....
+				int pvNum = *(int*)SELPV_CURRENT_SONG_ADDRESS;
+				int diff = *(int*)(GAME_INFO_ADDRESS);
+				int diffIsEx = *(int*)(GAME_INFO_ADDRESS + 0x4);
+				byte insurance = *(byte*)(GAME_INFO_ADDRESS + 0x14);
 
-				currentPv = pvNum;
-				currentDifficulty = diff;
-				currentDifficultyIsEx = diffIsEx;
-				currentInsurance = insurance;
+				if (pvNum != currentPv || diff != currentDifficulty || diffIsEx != currentDifficultyIsEx || insurance == currentInsurance)
+				{
+					DivaScore* cachedScore = GetCachedScore(pvNum, diff, diffIsEx);
+					if (cachedScore == nullptr)
+					{
+						// create a score cache entry if none exists for current song
+						ScoreCache[diff].push_back(DivaScore(pvNum, diffIsEx));
+						// update score begin and end vars from game
+						FixScoreCacheAddresses(diff);
+					}
+
+					currentPv = pvNum;
+					currentDifficulty = diff;
+					currentDifficultyIsEx = diffIsEx;
+					currentInsurance = insurance;
+				}
 			}
 		}
 	}
@@ -441,10 +457,6 @@ namespace TLAC::Components
 			{
 				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
 				cachedScore = GetCachedScore(pvNum, diff, exDiff);
-
-				// update score begin and end vars from game
-				*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = ScoreCache[diff].begin()._Ptr;
-				*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = ScoreCache[diff].end()._Ptr;
 			}
 			if (cachedScore != nullptr)
 			{
@@ -519,10 +531,6 @@ namespace TLAC::Components
 			{
 				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
 				cachedScore = GetCachedScore(pvNum, diff, exDiff);
-
-				// update score begin and end vars from game
-				*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = ScoreCache[diff].begin()._Ptr;
-				*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = ScoreCache[diff].end()._Ptr;
 			}
 			if (cachedScore != nullptr)
 			{
@@ -531,6 +539,13 @@ namespace TLAC::Components
 				cachedScore->rival_percent = percent;
 			}
 		}
+	}
+
+	void ScoreSaver::FixScoreCacheAddresses(int diff)
+	{
+		// update score begin and end vars from game
+		*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = ScoreCache[diff].begin()._Ptr;
+		*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = ScoreCache[diff].end()._Ptr;
 	}
 
 	void ScoreSaver::UpdateScoreCache()

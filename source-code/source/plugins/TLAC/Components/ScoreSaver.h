@@ -104,6 +104,7 @@ namespace TLAC::Components
 		static void UpdateScoreCache();
 		static void UpdateSingleScoreCacheEntry(int pvNum, int diff, int exDiff, bool doDefaultsReset);
 		static void UpdateSingleScoreCacheRivalEntry(int pvNum, int diff, int exDiff);
+		static void FixScoreCacheAddresses(int diff); // only call this from the main thread
 		static DivaScore* GetCachedScore(int pvNum, int diff, int exDiff);
 		static void UpdateClearCounts();
 
@@ -123,5 +124,8 @@ namespace TLAC::Components
 		int currentDifficulty;
 		int currentDifficultyIsEx;
 		byte currentInsurance;
+
+		static bool initCacheFinished;
+		static bool didInitialAddressUpdate;
 	};
 }

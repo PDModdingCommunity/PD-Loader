@@ -27,6 +27,8 @@ after_build:
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dnsapi.dll %TMP%\update\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\update\plugins\
+    
+    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\update\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\ShaderPatch.ini %TMP%\update\plugins\
     
@@ -35,6 +37,8 @@ after_build:
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dnsapi.dll %TMP%\full\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\full\plugins\
+
+    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\full\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\glut32.dll %TMP%\full\
 

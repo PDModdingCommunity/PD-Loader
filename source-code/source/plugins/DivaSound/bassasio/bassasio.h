@@ -113,9 +113,9 @@ user   : The 'user' parameter given when calling BASS_ASIO_SetNotify */
 HMODULE bassAsioModule = LoadLibraryW(L"bassasio.dll");
 
 DWORD(WINAPI* BASS_ASIO_GetVersion)() = (DWORD(WINAPI*)())GetProcAddress(bassAsioModule, "BASS_ASIO_GetVersion");
-// BOOL BASSASIODEF(BASS_ASIO_SetUnicode)(BOOL unicode);
+BOOL(WINAPI* BASS_ASIO_SetUnicode)(BOOL unicode) = (BOOL(WINAPI*)(BOOL unicode))GetProcAddress(bassAsioModule, "BASS_ASIO_SetUnicode");
 // DWORD BASSASIODEF(BASS_ASIO_ErrorGetCode)();
-// BOOL BASSASIODEF(BASS_ASIO_GetDeviceInfo)(DWORD device, BASS_ASIO_DEVICEINFO *info);
+BOOL(WINAPI* BASS_ASIO_GetDeviceInfo)(DWORD device, BASS_ASIO_DEVICEINFO *info) = (BOOL(WINAPI*)(DWORD device, BASS_ASIO_DEVICEINFO *info))GetProcAddress(bassAsioModule, "BASS_ASIO_GetDeviceInfo");
 // DWORD BASSASIODEF(BASS_ASIO_AddDevice)(const GUID *clsid, const char *driver, const char *name);
 // BOOL BASSASIODEF(BASS_ASIO_SetDevice)(DWORD device);
 // DWORD BASSASIODEF(BASS_ASIO_GetDevice)();

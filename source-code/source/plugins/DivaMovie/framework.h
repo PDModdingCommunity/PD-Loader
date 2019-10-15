@@ -71,8 +71,8 @@ LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
 	{ \
 		PRINT("[DivaMovie] %s failed (error code: 0x%08x)\n", #function, (unsigned int)result); \
 		goto end; \
-	} \
+	} /*\
 	else \
 	{ \
 		PRINT("[DivaMovie] %s succeeded\n", #function); \
-	}
+	}*/

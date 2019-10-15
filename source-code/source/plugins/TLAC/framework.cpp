@@ -37,4 +37,9 @@ namespace TLAC
 
 		return windowRect;
 	}
+
+	extern "C" __declspec(dllexport) void ChangeDivaWindowHandle(HWND hwnd) {
+		framework::DivaWindowHandle = hwnd;
+		return;
+	}
 }

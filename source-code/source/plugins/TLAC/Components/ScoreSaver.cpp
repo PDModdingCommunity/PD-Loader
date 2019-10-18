@@ -23,6 +23,11 @@ namespace TLAC::Components
 
 	ScoreSaver::~ScoreSaver()
 	{
+		for (int diff = 0; diff < 4; diff++)
+		{
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = 0;
+			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = 0;
+		}
 	}
 
 	const char* ScoreSaver::GetDisplayName()
@@ -30,18 +35,13 @@ namespace TLAC::Components
 		return "score_saver";
 	}
 
+	bool ScoreSaver::initCacheFinished = false;
 	void ScoreSaver::initCache()
 	{
 		// build the score cache
 		UpdateScoreCache();
 		UpdateClearCounts();
-
-		// update score begin and end vars from game
-		for (int diff = 0; diff < 4; diff++)
-		{
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = &ScoreCache[diff][0][0];
-			*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = &ScoreCache[diff][1000][0]; // deliberately use 1000 to get past end of cache
-		}
+		initCacheFinished = true;
 	}
 
 	bool(__stdcall* ScoreSaver::divaInitResults)(void* cls) = (bool(__stdcall*)(void* cls))RESULTS_INIT_ADDRESS;
@@ -307,19 +307,60 @@ namespace TLAC::Components
 			}
 		}
 
-		UpdateSingleScoreCacheEntry(pvNum, pvDifficulty, pvDifficultyIsEx);
-		UpdateClearCounts();
+		UpdateSingleScoreCacheEntry(pvNum, pvDifficulty, pvDifficultyIsEx, true);
+		if (initCacheFinished) // don't update clear counts if they're not ready yet
+			UpdateClearCounts();
+		if (didInitialAddressUpdate) // don't set the addresses if they're not ready yet
+			FixScoreCacheAddresses(pvDifficulty);
 
 		return result;
 	}
 
+	bool ScoreSaver::didInitialAddressUpdate = false;
 	void ScoreSaver::Update()
 	{
-		if (*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_SELECTOR && initThread.joinable())
+		// the below stuff is only verified for operating in menus
+		if (*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && (*(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_SELECTOR || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_SEL))
 		{
-			// it's actually fine to let the init happen in the background after reaching game state, but this is probably safer
-			printf("[ScoreSaver] Waiting for initialisation...");
-			initThread.join();
+			if (!didInitialAddressUpdate)
+			{
+				if (initCacheFinished) // check for initThread to be done
+				{
+					// fix the addresses here instead of doing it unsafely in initThread
+					FixScoreCacheAddresses(0);
+					FixScoreCacheAddresses(1);
+					FixScoreCacheAddresses(2);
+					FixScoreCacheAddresses(3);
+					didInitialAddressUpdate = true;
+				}
+			}
+			else
+			{
+				// it probably doesn't really matter whether the initial address update is done first if I add some locks,
+				// but I feel better knowing that there won't be multiple things racing to modify the vector
+				// this does mean that with a lot of scores you can beat the loading into the game, thus not getting the new record banner etc. after a song....
+				int pvNum = *(int*)SELPV_CURRENT_SONG_ADDRESS;
+				int diff = *(int*)(GAME_INFO_ADDRESS);
+				int diffIsEx = *(int*)(GAME_INFO_ADDRESS + 0x4);
+				byte insurance = *(byte*)(GAME_INFO_ADDRESS + 0x14);
+
+				if (pvNum != currentPv || diff != currentDifficulty || diffIsEx != currentDifficultyIsEx || insurance != currentInsurance)
+				{
+					DivaScore* cachedScore = GetCachedScore(pvNum, diff, diffIsEx);
+					if (cachedScore == nullptr)
+					{
+						// create a score cache entry if none exists for current song
+						ScoreCache[diff].push_back(DivaScore(pvNum, diffIsEx));
+						// update score begin and end vars from game
+						FixScoreCacheAddresses(diff);
+					}
+
+					currentPv = pvNum;
+					currentDifficulty = diff;
+					currentDifficultyIsEx = diffIsEx;
+					currentInsurance = insurance;
+				}
+			}
 		}
 	}
 
@@ -338,8 +379,27 @@ namespace TLAC::Components
 		VirtualProtect(address, byteCount, oldProtect, nullptr);
 	}
 
-	ScoreSaver::DivaScore ScoreSaver::ScoreCache[4][1000][2]; // 4 difficulties * 1000 pvs * extra or not
-	void ScoreSaver::UpdateSingleScoreCacheEntry(int pvNum, int diff, int exDiff)
+	std::vector<ScoreSaver::DivaScore> ScoreSaver::ScoreCache[4] = { // * 4 difficulties
+		{},
+		{},
+		{},
+		{}
+	};
+
+	ScoreSaver::DivaScore* ScoreSaver::GetCachedScore(int pvNum, int diff, int exDiff)
+	{
+		if (pvNum < 0 || diff < 0 || exDiff < 0 || pvNum > 999 || diff > 3 || exDiff > 1)
+			return nullptr;
+
+		for (DivaScore &scoreinfo : ScoreCache[diff])
+		{
+			if (scoreinfo.pvNum == pvNum && scoreinfo.exDifficulty == exDiff)
+				return &scoreinfo;
+		}
+
+		return nullptr;
+	}
+	void ScoreSaver::UpdateSingleScoreCacheEntry(int pvNum, int diff, int exDiff, bool doDefaultsReset)
 	{
 		if (pvNum < 0 || diff < 0 || exDiff < 0 || pvNum > 999 || diff > 3 || exDiff > 1)
 			return;
@@ -392,13 +452,34 @@ namespace TLAC::Components
 				modifiers = modifiers > 0 ? 1 << (modifiers - 1) : 0;
 			}
 
-			DivaScore* cachedScore = &ScoreCache[diff][pvNum][exDiff];
-			cachedScore->score = score;
-			cachedScore->percent = percent;
-			cachedScore->clearRank = allTimeRank;
-			if (modifiers & 1) cachedScore->optionA = 1;
-			if (modifiers & 2) cachedScore->optionB = 1;
-			if (modifiers & 4) cachedScore->optionC = 1;
+			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			if (cachedScore == nullptr)
+			{
+				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
+				cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			}
+			if (cachedScore != nullptr)
+			{
+				cachedScore->score = score;
+				cachedScore->percent = percent;
+				cachedScore->clearRank = allTimeRank;
+				if (modifiers & 1) cachedScore->optionA = 1;
+				if (modifiers & 2) cachedScore->optionB = 1;
+				if (modifiers & 4) cachedScore->optionC = 1;
+			}
+		}
+		else if (doDefaultsReset) // reset to defaults if not valid
+		{
+			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			if (cachedScore != nullptr)
+			{
+				cachedScore->score = 0;
+				cachedScore->percent = 0;
+				cachedScore->clearRank = -1;
+				cachedScore->optionA = 0;
+				cachedScore->optionB = 0;
+				cachedScore->optionC = 0;
+			}
 		}
 	}
 
@@ -443,10 +524,28 @@ namespace TLAC::Components
 			allTimeRank = GetPrivateProfileIntW(section, key, -1, rival_configPath);
 		}
 
-		DivaScore* cachedScore = &ScoreCache[diff][pvNum][exDiff];
-		cachedScore->rival_clearRank = allTimeRank;
-		cachedScore->rival_score = score;
-		cachedScore->rival_percent = percent;
+		if (score > 0 || percent > 0)
+		{
+			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			if (cachedScore == nullptr)
+			{
+				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
+				cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			}
+			if (cachedScore != nullptr)
+			{
+				cachedScore->rival_clearRank = allTimeRank;
+				cachedScore->rival_score = score;
+				cachedScore->rival_percent = percent;
+			}
+		}
+	}
+
+	void ScoreSaver::FixScoreCacheAddresses(int diff)
+	{
+		// update score begin and end vars from game
+		*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d0) = ScoreCache[diff].begin()._Ptr;
+		*(DivaScore**)(PLAYER_DATA_ADDRESS + diff * 0x18 + 0x5d8) = ScoreCache[diff].end()._Ptr;
 	}
 
 	void ScoreSaver::UpdateScoreCache()
@@ -457,8 +556,7 @@ namespace TLAC::Components
 			{
 				for (int exDiff = 0; exDiff < 2; exDiff++)
 				{
-					ScoreCache[diff][pvNum][exDiff] = DivaScore(pvNum, exDiff);
-					UpdateSingleScoreCacheEntry(pvNum, diff, exDiff);
+					UpdateSingleScoreCacheEntry(pvNum, diff, exDiff, false);
 					UpdateSingleScoreCacheRivalEntry(pvNum, diff, exDiff);
 				}
 			}
@@ -475,9 +573,8 @@ namespace TLAC::Components
 
 		for (int diff = 0; diff < 4; diff++)
 		{
-			for (int pvNum = 0; pvNum < 1000; pvNum++)
+			for (DivaScore &scoreinfo : ScoreCache[diff])
 			{
-				DivaScore &scoreinfo = ScoreCache[diff][pvNum][0];
 				if (scoreinfo.clearRank > 1 && scoreinfo.clearRank <= 5 && scoreinfo.exDifficulty == 0) // at least clear and no greater than perfect and not ex
 				{
 					counts[diff * 4 + scoreinfo.clearRank - 2] += 1;
@@ -486,10 +583,9 @@ namespace TLAC::Components
 		}
 
 		// exex special case
-		for (int pvNum = 0; pvNum < 1000; pvNum++)
+		for (DivaScore &scoreinfo : ScoreCache[3])
 		{
-			DivaScore &scoreinfo = ScoreCache[3][pvNum][1];
-			if (scoreinfo.clearRank > 1 && scoreinfo.clearRank <= 5 && scoreinfo.exDifficulty == 1) // at least clear and no greater than perfect and not ex
+			if (scoreinfo.clearRank > 1 && scoreinfo.clearRank <= 5 && scoreinfo.exDifficulty == 1) // at least clear and no greater than perfect and IS ex
 			{
 				counts[4 * 4 + scoreinfo.clearRank - 2] += 1;
 			}

@@ -99,11 +99,13 @@ namespace TLAC::Components
 		};
 
 
-		static DivaScore ScoreCache[4][1000][2]; // 4 difficulties * 1000 pvs * extra or not
+		static std::vector<ScoreSaver::DivaScore> ScoreCache[4]; // * 4 difficulties
 
 		static void UpdateScoreCache();
-		static void UpdateSingleScoreCacheEntry(int pvNum, int diff, int exDiff);
+		static void UpdateSingleScoreCacheEntry(int pvNum, int diff, int exDiff, bool doDefaultsReset);
 		static void UpdateSingleScoreCacheRivalEntry(int pvNum, int diff, int exDiff);
+		static void FixScoreCacheAddresses(int diff); // only call this from the main thread
+		static DivaScore* GetCachedScore(int pvNum, int diff, int exDiff);
 		static void UpdateClearCounts();
 
 	private:
@@ -117,5 +119,13 @@ namespace TLAC::Components
 		static WCHAR configPath[256];
 		static WCHAR rival_configPath[256];
 		static std::thread initThread;
+
+		int currentPv;
+		int currentDifficulty;
+		int currentDifficultyIsEx;
+		byte currentInsurance;
+
+		static bool initCacheFinished;
+		static bool didInitialAddressUpdate;
 	};
 }

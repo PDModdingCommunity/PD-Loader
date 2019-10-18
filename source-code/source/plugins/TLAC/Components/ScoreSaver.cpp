@@ -344,7 +344,7 @@ namespace TLAC::Components
 				int diffIsEx = *(int*)(GAME_INFO_ADDRESS + 0x4);
 				byte insurance = *(byte*)(GAME_INFO_ADDRESS + 0x14);
 
-				if (pvNum != currentPv || diff != currentDifficulty || diffIsEx != currentDifficultyIsEx || insurance == currentInsurance)
+				if (pvNum != currentPv || diff != currentDifficulty || diffIsEx != currentDifficultyIsEx || insurance != currentInsurance)
 				{
 					DivaScore* cachedScore = GetCachedScore(pvNum, diff, diffIsEx);
 					if (cachedScore == nullptr)

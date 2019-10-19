@@ -195,6 +195,9 @@
     <ClInclude Include="pluginconfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Pause.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -327,6 +330,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\ScoreSaver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Pause.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

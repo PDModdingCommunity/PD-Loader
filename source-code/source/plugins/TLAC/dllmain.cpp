@@ -19,6 +19,7 @@
 #pragma comment(lib, "detours.lib")
 
 void(__cdecl* divaEngineUpdate)() = (void(__cdecl*)())0x14018CC40;
+void(__cdecl* divaEngineFinishDraw)() = (void(__cdecl*)())ENGINE_FINISH_DRAW_ADDRESS;
 
 LRESULT CALLBACK MessageWindowProcessCallback(HWND, UINT, WPARAM, LPARAM);
 DWORD WINAPI WindowMessageDispatcher(LPVOID);
@@ -124,6 +125,11 @@ namespace TLAC
 
 		if (!HasWindowFocus && HadWindowFocus)
 			ComponentsManager.OnFocusLost();
+	}
+
+	void UpdatePostDraw()
+	{
+		ComponentsManager.UpdatePostDraw();
 	}
 
 	void InitializeExtraSettings()
@@ -342,6 +348,12 @@ void hookedEngineUpdate()
 	//divaEngineUpdate();
 }
 
+void hookedEngineFinishDraw()
+{
+	TLAC::UpdatePostDraw();
+	divaEngineFinishDraw();
+}
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
 	HWND consoleHandle = GetConsoleWindow();
@@ -361,6 +373,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(PVOID&)divaEngineUpdate, hookedEngineUpdate);
+		DetourTransactionCommit();
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourAttach(&(PVOID&)divaEngineFinishDraw, hookedEngineFinishDraw);
 		DetourTransactionCommit();
 
 		TLAC::InitializeExtraSettings();

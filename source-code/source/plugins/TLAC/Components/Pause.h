@@ -15,15 +15,24 @@ namespace TLAC::Components
 		virtual void Initialize(ComponentsManager*) override;
 		virtual void Update() override;
 		virtual void UpdatePostInput() override;
+		virtual void UpdatePostDraw() override;
 
+		static bool isPaused;
 	private:
-		bool isPaused;
-		bool isPauseKeyTapped();
-		void setPaused(bool pause);
-		std::vector<bool> streamPlayStates;
-		void InjectCode(void* address, const std::vector<uint8_t> data);
+		// this is a mess of static so that menuItems can work
+		static bool isPauseKeyTapped();
+		static void setPaused(bool pause);
+		static std::vector<bool> streamPlayStates;
+		static void InjectCode(void* address, const std::vector<uint8_t> data);
 
-		std::vector<uint8_t> origAetMovOp;
-		uint8_t* aetMovPatchAddress = (uint8_t*)0x1401703b3;
+		static std::vector<uint8_t> origAetMovOp;
+		static constexpr uint8_t* aetMovPatchAddress = (uint8_t*)0x1401703b3;
+
+		bool showUI = true;
+		unsigned int menuPos = 0;
+		static void unpause() { setPaused(false); };
+		std::vector<std::pair<std::string, void(*)()>> menuItems = {
+			std::pair<std::string, void(*)()>(std::string("RESUME"), &unpause),
+		};
 	};
 }

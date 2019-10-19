@@ -2,11 +2,16 @@
 #include "../Constants.h"
 #include "GameState.h"
 #include "Input/InputState.h"
+#include "GL\glut.h"
 #include <windows.h>
 #include <vector>
 
 namespace TLAC::Components
 {
+	bool Pause::isPaused = false;
+	std::vector<uint8_t> Pause::origAetMovOp;
+	std::vector<bool> Pause::streamPlayStates;
+
 	Pause::Pause()
 	{
 	}
@@ -42,8 +47,20 @@ namespace TLAC::Components
 			}
 			else
 			{
-				// swallow all button inputs if paused
 				InputState* inputState = (InputState*)(*(uint64_t*)INPUT_STATE_PTR_ADDRESS);
+
+				if (inputState->Tapped.Buttons & JVS_SQUARE)
+					showUI = !showUI;
+
+				if (inputState->Tapped.Buttons & JVS_L)
+					menuPos -= 1;
+
+				if (inputState->Tapped.Buttons & JVS_R)
+					menuPos += 1;
+
+				menuPos %= menuItems.size();
+
+				// swallow all button inputs if paused
 				inputState->Tapped.Buttons = JVS_NONE;
 				inputState->DoubleTapped.Buttons = JVS_NONE;
 				inputState->Down.Buttons = JVS_NONE;
@@ -62,6 +79,61 @@ namespace TLAC::Components
 					setPaused(true);
 				}
 			}
+		}
+	}
+
+	void Pause::UpdatePostDraw()
+	{
+		if (isPaused && showUI)
+		{
+			// this isn't imgui code, but I probably wouldn't have gotten this working properly if I didn't reference it, so...  umm...  yeah lol
+			glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
+
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glDisable(GL_CULL_FACE);
+			glDisable(GL_DEPTH_TEST);
+			glDisable(GL_LIGHTING);
+			glDisable(GL_COLOR_MATERIAL);
+
+			int width = glutGet(GLUT_WINDOW_WIDTH);
+			int height = glutGet(GLUT_WINDOW_HEIGHT);
+
+			glViewport(0, 0, width, height);
+			glMatrixMode(GL_PROJECTION);
+			glPushMatrix();
+			glLoadIdentity();
+			glOrtho(0, 1280, 720, 0, -1.0f, +1.0f);
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+			glLoadIdentity();
+
+			glBegin(GL_QUADS);
+			glBindTexture(GL_TEXTURE_2D, 0);
+
+			glColor4ub(0, 0, 0, 127);
+			glVertex2i(0, 0);
+			glVertex2i(1280, 0);
+			glVertex2i(1280, 720);
+			glVertex2i(0, 720);
+
+			glColor4ub(255, 255, 255, 127);
+			glVertex2i(560, 250);
+			glVertex2i(620, 250);
+			glVertex2i(620, 470);
+			glVertex2i(560, 470);
+			glVertex2i(660, 250);
+			glVertex2i(720, 250);
+			glVertex2i(720, 470);
+			glVertex2i(660, 470);
+
+			glEnd();
+
+			glMatrixMode(GL_MODELVIEW);
+			glPopMatrix();
+			glMatrixMode(GL_PROJECTION);
+			glPopMatrix();
+			glPopAttrib();
 		}
 	}
 

@@ -128,6 +128,7 @@
     <ClInclude Include="Components\Input\TouchPanelState.h" />
     <ClInclude Include="Components\Input\TouchSliderEmulator.h" />
     <ClInclude Include="Components\Input\TouchSliderState.h" />
+    <ClInclude Include="Components\Pause.h" />
     <ClInclude Include="Components\PlayerData.h" />
     <ClInclude Include="Components\PlayerDataManager.h" />
     <ClInclude Include="Components\ScaleComponent.h" />
@@ -181,6 +182,7 @@
     <ClCompile Include="Components\Input\TouchPanelEmulator.cpp" />
     <ClCompile Include="Components\Input\TouchSliderEmulator.cpp" />
     <ClCompile Include="Components\Input\TouchSliderState.cpp" />
+    <ClCompile Include="Components\Pause.cpp" />
     <ClCompile Include="Components\PlayerDataManager.cpp" />
     <ClCompile Include="Components\ScaleComponent.cpp" />
     <ClCompile Include="Components\ScoreSaver.cpp" />

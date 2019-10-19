@@ -101,6 +101,8 @@ namespace TLAC
 			ComponentsManager.UpdateInput();
 		}
 
+		ComponentsManager.UpdatePostInput();
+
 		if ((framework::inputDisable))
 		{
 			Input::Keyboard::GetInstance()->PollInput();

@@ -143,6 +143,14 @@ namespace TLAC::Components
 		}
 	}
 
+	void ComponentsManager::UpdateDrawSprites()
+	{
+		for (auto& component : components)
+		{
+			component->UpdateDrawSprites();
+		}
+	}
+
 	void ComponentsManager::UpdatePostDraw()
 	{
 		for (auto& component : components)

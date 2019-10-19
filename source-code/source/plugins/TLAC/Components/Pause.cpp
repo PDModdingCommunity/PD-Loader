@@ -1,8 +1,9 @@
 ﻿#include "Pause.h"
 #include "../Constants.h"
 #include "GameState.h"
+#include "DrawText.h"
 #include "Input/InputState.h"
-#include "GL\glut.h"
+#include "GL/glut.h"
 #include <windows.h>
 #include <vector>
 
@@ -41,7 +42,7 @@ namespace TLAC::Components
 		if (isPaused)
 		{
 			// exit pause if key is tapped or no longer in game somehow
-			if (isPauseKeyTapped() || *(GameState*)CURRENT_GAME_STATE_ADDRESS != GS_GAME || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS != SUB_GAME_MAIN)
+			if (isUnpauseKeyTapped() || *(GameState*)CURRENT_GAME_STATE_ADDRESS != GS_GAME || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS != SUB_GAME_MAIN)
 			{
 				setPaused(false);
 			}
@@ -59,6 +60,11 @@ namespace TLAC::Components
 					menuPos += 1;
 
 				menuPos %= menuItems.size();
+
+				// actually use released when unpausing from a face button so it doesn't trigger input
+				// (this can trigger an unpause too)
+				if (inputState->Released.Buttons & JVS_CIRCLE)
+					menuItems[menuPos].second();
 
 				// swallow all button inputs if paused
 				inputState->Tapped.Buttons = JVS_NONE;
@@ -79,6 +85,47 @@ namespace TLAC::Components
 					setPaused(true);
 				}
 			}
+		}
+	}
+
+	void Pause::UpdateDrawSprites()
+	{
+		if (isPaused && showUI)
+		{
+			FontInfo fontInfo(0x11);
+			fontInfo.setSize(menuTextSize, menuTextSize);
+			DrawTextParams dtParams(&fontInfo);
+
+			dtParams.strokeColour = 0xff000000;
+
+			dtParams.xBegin = menuX;
+			dtParams.yBegin = menuY - menuItemHeight * (menuItems.size() / 2.0);
+
+			for (int i = 0; i < menuItems.size(); i++)
+			{
+				std::pair<std::string, void(*)()> &item = menuItems[i];
+
+				if (i == menuPos)
+					dtParams.textColour = 0xffffff00;
+				else
+					dtParams.textColour = 0xffffffff;
+
+				dtParams.xCurrent = dtParams.xBegin;
+				dtParams.yCurrent = dtParams.yBegin;
+				drawText(&dtParams, 8, item.first);
+				dtParams.yBegin += menuItemHeight;
+			}
+
+			fontInfo.setSize(18, 18);
+
+			dtParams.xBegin = menuX;
+			dtParams.yBegin = 600;
+			dtParams.xCurrent = dtParams.xBegin;
+			dtParams.yCurrent = dtParams.yBegin;
+
+			dtParams.textColour = 0xffffffff;
+
+			drawTextW(&dtParams, 8, L"○:Select　×:Close　L/R:Move　□:Hide Menu");
 		}
 	}
 
@@ -111,24 +158,69 @@ namespace TLAC::Components
 			glBegin(GL_QUADS);
 			glBindTexture(GL_TEXTURE_2D, 0);
 
-			glColor4ub(0, 0, 0, 127);
+			glColor4ub(0, 0, 0, 64);
 			glVertex2i(0, 0);
 			glVertex2i(1280, 0);
 			glVertex2i(1280, 720);
 			glVertex2i(0, 720);
 
+			const int pauseWidth = 80;
+			const int pauseHeight = 110;
+			const int pauseGap = 20;
+			const int pausePosX = 32;
+			const int pausePosY = 32;
+
+			const int pauseX1 = pausePosX;
+			const int pauseX2 = pauseX1 + (pauseWidth - pauseGap) / 2;
+			const int pauseX3 = pauseX2 + pauseGap;
+			const int pauseX4 = pauseX1 + pauseWidth;
+
+			const int pauseY1 = pausePosY;
+			const int pauseY2 = pauseY1 + pauseHeight;
+
 			glColor4ub(255, 255, 255, 127);
-			glVertex2i(560, 250);
-			glVertex2i(620, 250);
-			glVertex2i(620, 470);
-			glVertex2i(560, 470);
-			glVertex2i(660, 250);
-			glVertex2i(720, 250);
-			glVertex2i(720, 470);
-			glVertex2i(660, 470);
+			glVertex2i(pauseX1, pauseY1);
+			glVertex2i(pauseX2, pauseY1);
+			glVertex2i(pauseX2, pauseY2);
+			glVertex2i(pauseX1, pauseY2);
+			glVertex2i(pauseX3, pauseY1);
+			glVertex2i(pauseX4, pauseY1);
+			glVertex2i(pauseX4, pauseY2);
+			glVertex2i(pauseX3, pauseY2);
 
 			glEnd();
+			glBegin(GL_QUAD_STRIP);
 
+			int selectBoxOrigin = menuY - menuItemHeight * (menuItems.size() / 2.0) - (menuItemHeight - menuTextSize) / 2;
+			int selectBoxPos = selectBoxOrigin + menuItemHeight * menuPos;
+			const int selectBoxWidth = 200;
+			const int selectBoxHeight = menuItemHeight;
+			const int selectBoxThickness = 2;
+
+			const int selectBoxX1 = menuX - selectBoxWidth / 2;
+			const int selectBoxX4 = selectBoxX1 + selectBoxWidth;
+			const int selectBoxX2 = selectBoxX1 + selectBoxThickness;
+			const int selectBoxX3 = selectBoxX4 - selectBoxThickness;
+
+			const int selectBoxY1 = selectBoxPos;
+			const int selectBoxY4 = selectBoxY1 + selectBoxHeight;
+			const int selectBoxY2 = selectBoxY1 + selectBoxThickness;
+			const int selectBoxY3 = selectBoxY4 - selectBoxThickness;
+
+			glColor4ub(0, 255, 255, 127);
+			glVertex2i(selectBoxX2, selectBoxY2);
+			glVertex2i(selectBoxX1, selectBoxY1);
+			glVertex2i(selectBoxX3, selectBoxY2);
+			glVertex2i(selectBoxX4, selectBoxY1);
+			glVertex2i(selectBoxX3, selectBoxY3);
+			glVertex2i(selectBoxX4, selectBoxY4);
+			glVertex2i(selectBoxX2, selectBoxY3);
+			glVertex2i(selectBoxX1, selectBoxY4);
+			glVertex2i(selectBoxX2, selectBoxY2);
+			glVertex2i(selectBoxX1, selectBoxY1);
+
+			glEnd();
+			
 			glMatrixMode(GL_MODELVIEW);
 			glPopMatrix();
 			glMatrixMode(GL_PROJECTION);
@@ -140,6 +232,13 @@ namespace TLAC::Components
 	bool Pause::isPauseKeyTapped()
 	{
 		return ((InputState*)(*(uint64_t*)INPUT_STATE_PTR_ADDRESS))->Tapped.Buttons & JVS_START;
+	}
+
+	bool Pause::isUnpauseKeyTapped()
+	{
+		// actually use released when unpausing from a face button so it doesn't trigger input
+		return ((InputState*)(*(uint64_t*)INPUT_STATE_PTR_ADDRESS))->Tapped.Buttons & JVS_START ||
+			((InputState*)(*(uint64_t*)INPUT_STATE_PTR_ADDRESS))->Released.Buttons & JVS_CROSS;
 	}
 
 	void Pause::setPaused(bool pause)

@@ -28,6 +28,7 @@ namespace TLAC::Components
 		void Update();
 		void UpdateInput();
 		void UpdatePostInput();
+		void UpdateDrawSprites();
 		void UpdatePostDraw();
 		void OnFocusGain();
 		void OnFocusLost();

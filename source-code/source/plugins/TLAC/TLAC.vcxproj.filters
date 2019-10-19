@@ -198,6 +198,9 @@
     <ClInclude Include="Components\Pause.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\DrawText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

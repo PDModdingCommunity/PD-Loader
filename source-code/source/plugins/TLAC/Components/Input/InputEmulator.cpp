@@ -13,6 +13,7 @@
 #include "../../Utilities/EnumBitwiseOperations.h"
 #include "../../FileSystem/ConfigFile.h"
 #include "../GameState.h"
+#include "../Pause.h"
 
 const std::string KEY_CONFIG_FILE_NAME = "keyconfig.ini";
 
@@ -236,13 +237,13 @@ namespace TLAC::Components
 	{
 		JvsButtons buttons = JVS_NONE;
 
-		if (!(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN) &&
+		if ((Pause::isPaused || !(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN)) &&
 			buttonTestFunc(MenuLBinding))
 		{
 			buttons |= JVS_L;
 			return buttons;
 		}
-		if (!(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN) &&
+		if ((Pause::isPaused || !(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN)) &&
 			buttonTestFunc(MenuRBinding))
 		{
 			buttons |= JVS_R;

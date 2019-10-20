@@ -2,6 +2,7 @@
 #include "../Constants.h"
 #include "EmulatorComponent.h"
 #include <vector>
+#include <chrono>
 
 namespace TLAC::Components
 {
@@ -24,7 +25,6 @@ namespace TLAC::Components
 	private:
 		// this is a mess of static so that menuItems can work
 		static bool isPauseKeyTapped();
-		static bool isUnpauseKeyTapped();
 		static std::vector<bool> streamPlayStates;
 		static void InjectCode(void* address, const std::vector<uint8_t> data);
 
@@ -43,6 +43,8 @@ namespace TLAC::Components
 		
 		static bool showUI;
 		static unsigned int menuPos;
+
+		static std::chrono::time_point<std::chrono::high_resolution_clock> menuItemSelectTime;
 
 		static void unpause() { setPaused(false); };
 		static void giveup() { giveUp = true; };

@@ -182,7 +182,7 @@ namespace TLAC::Components
 
 	enum drawTextFlags : uint32_t
 	{
-		DRAWTEXT_PARAGRAPH = 1, //?
+		DRAWTEXT_ENABLE_LAYOUT = 1, //?
 		DRAWTEXT_ALIGN_RIGHT = 2,
 		DRAWTEXT_ALIGN_CENTRE = 8,
 		DRAWTEXT_STROKE = 0x10000,

@@ -7,6 +7,7 @@
 #include "detours.h"
 #include <windows.h>
 #include <vector>
+#include <chrono>
 
 namespace TLAC::Components
 {
@@ -14,6 +15,7 @@ namespace TLAC::Components
 	bool Pause::giveUp = false;
 	bool Pause::showUI = true;
 	unsigned int Pause::menuPos = 0;
+	std::chrono::time_point<std::chrono::high_resolution_clock> Pause::menuItemSelectTime;
 	std::vector<uint8_t> Pause::origAetMovOp;
 	std::vector<uint8_t> Pause::origFramespeedOp;
 	std::vector<bool> Pause::streamPlayStates;
@@ -55,8 +57,8 @@ namespace TLAC::Components
 	{
 		if (isPaused)
 		{
-			// exit pause if key is tapped or no longer in game somehow
-			if (isUnpauseKeyTapped() || *(GameState*)CURRENT_GAME_STATE_ADDRESS != GS_GAME || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS != SUB_GAME_MAIN)
+			// always exit pause if key is tapped or no longer in game somehow
+			if (isPauseKeyTapped() || *(GameState*)CURRENT_GAME_STATE_ADDRESS != GS_GAME || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS != SUB_GAME_MAIN)
 			{
 				setPaused(false);
 			}
@@ -67,18 +69,31 @@ namespace TLAC::Components
 				if (inputState->Tapped.Buttons & JVS_SQUARE)
 					showUI = !showUI;
 
-				if (inputState->Tapped.Buttons & JVS_L)
-					menuPos -= 1;
+				// only process menu events when UI is visible
+				if (showUI)
+				{
+					if (inputState->Tapped.Buttons & JVS_L)
+					{
+						menuPos -= 1;
+						menuItemSelectTime = std::chrono::high_resolution_clock::now();
+					}
 
-				if (inputState->Tapped.Buttons & JVS_R)
-					menuPos += 1;
+					if (inputState->Tapped.Buttons & JVS_R)
+					{
+						menuPos += 1;
+						menuItemSelectTime = std::chrono::high_resolution_clock::now();
+					}
 
-				menuPos %= menuItems.size();
+					menuPos %= menuItems.size();
 
-				// actually use released when unpausing from a face button so it doesn't trigger input
-				// (this can trigger an unpause too)
-				if (inputState->Released.Buttons & JVS_CIRCLE)
-					menuItems[menuPos].second();
+					// use released when unpausing from X so it doesn't trigger input
+					if (inputState->Released.Buttons & JVS_CROSS)
+						setPaused(false);
+
+					// use released because this can trigger an unpause too
+					if (inputState->Released.Buttons & JVS_CIRCLE)
+						menuItems[menuPos].second();
+				}
 
 
 				// swallow all button inputs if paused
@@ -116,12 +131,13 @@ namespace TLAC::Components
 			// bg rect
 			RectangleBounds rect;
 			rect = { 0, 0, 1280, 720 };
-			dtParams.colour = 0x80000000;
-			dtParams.fillColour = 0x80000000;
+			dtParams.colour = 0xa0000000;
+			dtParams.fillColour = 0xa0000000;
 			fillRectangle(&dtParams, &rect);
 
 
 			// pause icon
+			/*
 			const int pauseWidth = 80;
 			const int pauseHeight = 110;
 			const int pauseGap = 20;
@@ -139,6 +155,7 @@ namespace TLAC::Components
 			fillRectangle(&dtParams, &rect);
 			rect = { pauseX2, pauseY1, pausePartWidth, pauseHeight };
 			fillRectangle(&dtParams, &rect);
+			*/
 
 
 			// selection cursor
@@ -179,9 +196,16 @@ namespace TLAC::Components
 				std::pair<std::string, void(*)()> &item = menuItems[i];
 
 				if (i == menuPos)
-					dtParams.colour = 0xffffff00;
+				{
+					const int duration = 1500000000; // 1.5s
+					std::chrono::nanoseconds cyclePos = (std::chrono::high_resolution_clock::now() - menuItemSelectTime) % std::chrono::nanoseconds(duration);
+					uint8_t alpha = (cosf(cyclePos.count() * 6.283185f / duration) * 0.15 + 0.85) * 255;
+					dtParams.colour = 0x00ffff00 | (alpha << 24);
+				}
 				else
+				{
 					dtParams.colour = 0xffffffff;
+				}
 
 				dtParams.xCurrent = dtParams.xBegin;
 				dtParams.yCurrent = dtParams.yBegin;
@@ -193,25 +217,30 @@ namespace TLAC::Components
 			// key legend
 			fontInfo.setSize(18, 18);
 
-			dtParams.xBegin = menuX;
-			dtParams.yBegin = 600;
+			dtParams.xBegin = 32;
+			dtParams.yBegin = 720 - 40;
 			dtParams.xCurrent = dtParams.xBegin;
 			dtParams.yCurrent = dtParams.yBegin;
 			dtParams.colour = 0xffffffff;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE), L"○:Select　×:Close　L/R:Move　□:Hide Menu");
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"L/R:Move　");
+			dtParams.colour = 0xff4040ff;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"○");
+			dtParams.colour = 0xffffffff;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Select　");
+			dtParams.colour = 0xffff8000;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"×");
+			dtParams.colour = 0xffffffff;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Close　");
+			dtParams.colour = 0xffc0c0ff;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"□");
+			dtParams.colour = 0xffffffff;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Hide Menu");
 		}
 	}
 
 	bool Pause::isPauseKeyTapped()
 	{
 		return ((InputState*)(*(uint64_t*)INPUT_STATE_PTR_ADDRESS))->Tapped.Buttons & JVS_START;
-	}
-
-	bool Pause::isUnpauseKeyTapped()
-	{
-		// actually use released when unpausing from a face button so it doesn't trigger input
-		return ((InputState*)(*(uint64_t*)INPUT_STATE_PTR_ADDRESS))->Tapped.Buttons & JVS_START ||
-			((InputState*)(*(uint64_t*)INPUT_STATE_PTR_ADDRESS))->Released.Buttons & JVS_CROSS;
 	}
 
 	void Pause::setPaused(bool pause)
@@ -240,6 +269,7 @@ namespace TLAC::Components
 
 			menuPos = 0;
 			showUI = true;
+			menuItemSelectTime = std::chrono::high_resolution_clock::now();
 		}
 		else
 		{

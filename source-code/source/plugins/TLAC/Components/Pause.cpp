@@ -11,10 +11,13 @@
 
 namespace TLAC::Components
 {
+	bool Pause::pause = false;
 	bool Pause::isPaused = false;
 	bool Pause::giveUp = false;
 	bool Pause::showUI = true;
 	unsigned int Pause::menuPos = 0;
+	unsigned int Pause::mainMenuPos = 0;
+	unsigned int Pause::menuSet = menuset_main;
 	std::chrono::time_point<std::chrono::high_resolution_clock> Pause::menuItemSelectTime;
 	std::vector<uint8_t> Pause::origAetMovOp;
 	std::vector<uint8_t> Pause::origFramespeedOp;
@@ -55,12 +58,41 @@ namespace TLAC::Components
 
 	void Pause::UpdatePostInput()
 	{
-		if (isPaused)
+		if (pause)
 		{
+			// enter pause mode on state transition
+			if (!isPaused)
+			{
+				((void(*)())DSC_PAUSE_FUNC_ADDRESS)();
+
+				InjectCode(aetMovPatchAddress, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
+				InjectCode(framespeedPatchAddress, { 0x0f, 0x57, 0xc0, 0xc3 }); // XORPS XMM0,XMM0; RET
+
+				uint64_t audioMixerAddr = *(uint64_t*)(AUDIO_MAIN_CLASS_ADDRESS + 0x70);
+				uint64_t audioStreamsAddress = *(uint64_t*)(audioMixerAddr + 0x18);;
+				int nAudioStreams = *(uint64_t*)(audioMixerAddr + 0x20);
+				for (int i = 0; i < nAudioStreams; i++)
+				{
+					uint32_t* playstate = (uint32_t*)(audioStreamsAddress + i * 0x50 + 0x18);
+					if (i < streamPlayStates.size())
+						streamPlayStates[i] = *playstate;
+					else
+						streamPlayStates.push_back(*playstate);
+
+					*playstate = 0;
+				}
+
+				menuPos = 0;
+				menuSet = menuset_main;
+				showUI = true;
+				menuItemSelectTime = std::chrono::high_resolution_clock::now();
+				isPaused = true;
+			}
+
 			// always exit pause if key is tapped or no longer in game somehow
 			if (isPauseKeyTapped() || *(GameState*)CURRENT_GAME_STATE_ADDRESS != GS_GAME || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS != SUB_GAME_MAIN)
 			{
-				setPaused(false);
+				pause = false;
 			}
 			else
 			{
@@ -84,15 +116,39 @@ namespace TLAC::Components
 						menuItemSelectTime = std::chrono::high_resolution_clock::now();
 					}
 
-					menuPos %= menuItems.size();
+					if (inputState->Tapped.Buttons & JVS_TRIANGLE)
+					{
+						if (menuSet != menuset_main)
+						{
+							menuSet = menuset_main;
+							menuPos = mainMenuPos;
+							menuItemSelectTime = std::chrono::high_resolution_clock::now();
+						}
+					}
+
+					menuPos %= menuItems[menuSet].size();
+
+					if (menuSet == menuset_main)
+						mainMenuPos = menuPos;
 
 					// use released when unpausing from X so it doesn't trigger input
 					if (inputState->Released.Buttons & JVS_CROSS)
-						setPaused(false);
+						pause = false;
 
 					// use released because this can trigger an unpause too
 					if (inputState->Released.Buttons & JVS_CIRCLE)
-						menuItems[menuPos].second();
+						menuItems[menuSet][menuPos].second();
+
+					if (menuSet == menuset_sevol)
+					{
+						PlayerData* playerdata = (PlayerData*)PLAYER_DATA_ADDRESS;
+						const char volformat[] = "%d";
+						size_t size = snprintf(nullptr, 0, volformat, playerdata->act_vol) + 1;
+						char* buf = new char[size];
+						snprintf(buf, size, volformat, playerdata->act_vol);
+						menuItems[menuset_sevol][1].first = buf;
+						delete[] buf;
+					}
 				}
 
 
@@ -107,12 +163,33 @@ namespace TLAC::Components
 		}
 		else
 		{
+			// exit pause mode on state transition
+			if (isPaused)
+			{
+				((void(*)())DSC_UNPAUSE_FUNC_ADDRESS)();
+
+				InjectCode(aetMovPatchAddress, origAetMovOp);
+				InjectCode(framespeedPatchAddress, origFramespeedOp);
+
+				uint64_t audioMixerAddr = *(uint64_t*)(AUDIO_MAIN_CLASS_ADDRESS + 0x70);
+				uint64_t audioStreamsAddress = *(uint64_t*)(audioMixerAddr + 0x18);;
+				int nAudioStreams = *(uint64_t*)(audioMixerAddr + 0x20);
+				for (int i = 0; i < nAudioStreams; i++)
+				{
+					uint32_t* playstate = (uint32_t*)(audioStreamsAddress + i * 0x50 + 0x18);
+					if (i < streamPlayStates.size())
+						*playstate = streamPlayStates[i];
+				}
+
+				isPaused = false;
+			}
+
 			// only enter pause if in game
 			if (*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN)
 			{
 				if (isPauseKeyTapped())
 				{
-					setPaused(true);
+					pause = true;
 				}
 			}
 		}
@@ -159,7 +236,7 @@ namespace TLAC::Components
 
 
 			// selection cursor
-			int selectBoxOrigin = menuY - menuItemHeight * (menuItems.size() / 2.0) - (menuItemHeight - menuTextSize) / 2;
+			int selectBoxOrigin = menuY - menuItemHeight * (menuItems[menuSet].size() / 2.0) - (menuItemHeight - menuTextSize) / 2;
 			int selectBoxPos = selectBoxOrigin + menuItemHeight * menuPos;
 			const float selectBoxWidth = 200;
 			const float selectBoxHeight = menuItemHeight;
@@ -189,11 +266,11 @@ namespace TLAC::Components
 			fontInfo.setSize(menuTextSize, menuTextSize);
 
 			dtParams.xBegin = menuX;
-			dtParams.yBegin = menuY - menuItemHeight * (menuItems.size() / 2.0);
+			dtParams.yBegin = menuY - menuItemHeight * (menuItems[menuSet].size() / 2.0);
 
-			for (int i = 0; i < menuItems.size(); i++)
+			for (int i = 0; i < menuItems[menuSet].size(); i++)
 			{
-				std::pair<std::string, void(*)()> &item = menuItems[i];
+				std::pair<std::string, void(*)()> &item = menuItems[menuSet][i];
 
 				if (i == menuPos)
 				{
@@ -223,18 +300,25 @@ namespace TLAC::Components
 			dtParams.yCurrent = dtParams.yBegin;
 			dtParams.colour = 0xffffffff;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"L/R:Move　");
-			dtParams.colour = 0xff4040ff;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"○");
-			dtParams.colour = 0xffffffff;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Select　");
-			dtParams.colour = 0xffff8000;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"×");
-			dtParams.colour = 0xffffffff;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Close　");
+			if (menuSet != menuset_main)
+			{
+				dtParams.colour = 0xff40ff40;
+				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"△");
+				dtParams.colour = 0xffffffff;
+				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Back　");
+			}
 			dtParams.colour = 0xffc0c0ff;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"□");
 			dtParams.colour = 0xffffffff;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Hide Menu");
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Hide Menu　");
+			dtParams.colour = 0xffff8020;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"×");
+			dtParams.colour = 0xffffffff;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Close　");
+			dtParams.colour = 0xff4040ff;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"○");
+			dtParams.colour = 0xffffffff;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Select");
 		}
 	}
 
@@ -243,69 +327,32 @@ namespace TLAC::Components
 		return ((InputState*)(*(uint64_t*)INPUT_STATE_PTR_ADDRESS))->Tapped.Buttons & JVS_START;
 	}
 
-	void Pause::setPaused(bool pause)
-	{
-		uint64_t audioMixerAddr = *(uint64_t*)(AUDIO_MAIN_CLASS_ADDRESS + 0x70);
-		uint64_t audioStreamsAddress = *(uint64_t*)(audioMixerAddr + 0x18);;
-		int nAudioStreams = *(uint64_t*)(audioMixerAddr + 0x20);
-
-		if (pause)
-		{
-			((void(*)())DSC_PAUSE_FUNC_ADDRESS)();
-
-			InjectCode(aetMovPatchAddress, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
-			InjectCode(framespeedPatchAddress, { 0x0f, 0x57, 0xc0, 0xc3 }); // XORPS XMM0,XMM0; RET
-
-			for (int i = 0; i < nAudioStreams; i++)
-			{
-				uint32_t* playstate = (uint32_t*)(audioStreamsAddress + i * 0x50 + 0x18);
-				if (i < streamPlayStates.size())
-					streamPlayStates[i] = *playstate;
-				else
-					streamPlayStates.push_back(*playstate);
-
-				*playstate = 0;
-			}
-
-			menuPos = 0;
-			showUI = true;
-			menuItemSelectTime = std::chrono::high_resolution_clock::now();
-		}
-		else
-		{
-			((void(*)())DSC_UNPAUSE_FUNC_ADDRESS)();
-
-			InjectCode(aetMovPatchAddress, origAetMovOp);
-			InjectCode(framespeedPatchAddress, origFramespeedOp);
-
-			for (int i = 0; i < nAudioStreams; i++)
-			{
-				uint32_t* playstate = (uint32_t*)(audioStreamsAddress + i * 0x50 + 0x18);
-				if (i < streamPlayStates.size())
-					*playstate = streamPlayStates[i];
-			}
-		}
-
-		isPaused = pause;
-	}
-
 	bool Pause::hookedGiveUpFunc(void* cls)
 	{
 		if (giveUp)
 		{
 			giveUp = false;
-			setPaused(false);
+			pause = false;
 			return true;
 		}
 		else
 		{
 			if (divaGiveUpFunc(cls))
 			{
-				setPaused(false);
+				pause = false;
 				return true;
 			}
 		}
 		return false;
+	}
+
+	void Pause::setSEVolume(int amount)
+	{
+		PlayerData* playerdata = (PlayerData*)PLAYER_DATA_ADDRESS;
+		playerdata->act_vol += amount;
+		if (playerdata->act_vol < 0) playerdata->act_vol = 0;
+		if (playerdata->act_vol > 100) playerdata->act_vol = 100;
+		playerdata->act_slide_vol = playerdata->act_vol;
 	}
 
 	void Pause::InjectCode(void* address, const std::vector<uint8_t> data)

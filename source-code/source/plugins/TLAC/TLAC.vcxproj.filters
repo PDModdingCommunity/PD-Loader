@@ -198,7 +198,7 @@
     <ClInclude Include="Components\Pause.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\DrawText.h">
+    <ClInclude Include="Components\Drawing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

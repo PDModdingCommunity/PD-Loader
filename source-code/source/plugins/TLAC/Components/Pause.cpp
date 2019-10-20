@@ -1,17 +1,23 @@
 ﻿#include "Pause.h"
 #include "../Constants.h"
 #include "GameState.h"
-#include "DrawText.h"
+#include "Drawing.h"
 #include "Input/InputState.h"
 #include "GL/glut.h"
+#include "detours.h"
 #include <windows.h>
 #include <vector>
 
 namespace TLAC::Components
 {
 	bool Pause::isPaused = false;
+	bool Pause::giveUp = false;
+	bool Pause::showUI = true;
+	unsigned int Pause::menuPos = 0;
 	std::vector<uint8_t> Pause::origAetMovOp;
+	std::vector<uint8_t> Pause::origFramespeedOp;
 	std::vector<bool> Pause::streamPlayStates;
+	bool(*divaGiveUpFunc)(void*) = (bool(*)(void* cls))GIVEUP_FUNC_ADDRESS;
 
 	Pause::Pause()
 	{
@@ -30,6 +36,14 @@ namespace TLAC::Components
 	{
 		origAetMovOp.resize(8);
 		memcpy(&origAetMovOp[0], aetMovPatchAddress, 8);
+
+		origFramespeedOp.resize(4);
+		memcpy(&origFramespeedOp[0], framespeedPatchAddress, 4);
+
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourAttach(&(PVOID&)divaGiveUpFunc, hookedGiveUpFunc);
+		DetourTransactionCommit();
 	}
 
 	void Pause::Update()
@@ -66,6 +80,7 @@ namespace TLAC::Components
 				if (inputState->Released.Buttons & JVS_CIRCLE)
 					menuItems[menuPos].second();
 
+
 				// swallow all button inputs if paused
 				inputState->Tapped.Buttons = JVS_NONE;
 				inputState->DoubleTapped.Buttons = JVS_NONE;
@@ -92,11 +107,69 @@ namespace TLAC::Components
 	{
 		if (isPaused && showUI)
 		{
+			// setup draw objects
 			FontInfo fontInfo(0x11);
-			fontInfo.setSize(menuTextSize, menuTextSize);
-			DrawTextParams dtParams(&fontInfo);
+			DrawParams dtParams(&fontInfo);
+			dtParams.layer = 0x19; // same as startup screen
 
-			dtParams.strokeColour = 0xff000000;
+
+			// bg rect
+			RectangleBounds rect;
+			rect = { 0, 0, 1280, 720 };
+			dtParams.colour = 0x80000000;
+			dtParams.fillColour = 0x80000000;
+			fillRectangle(&dtParams, &rect);
+
+
+			// pause icon
+			const int pauseWidth = 80;
+			const int pauseHeight = 110;
+			const int pauseGap = 20;
+			const int pausePosX = 32;
+			const int pausePosY = 32;
+			const int pausePartWidth = (pauseWidth - pauseGap) / 2;
+
+			const int pauseX1 = pausePosX;
+			const int pauseX2 = pausePosX + pausePartWidth + pauseGap;
+			const int pauseY1 = pausePosY;
+
+			dtParams.colour = 0x80ffffff;
+			dtParams.fillColour = 0x80ffffff;
+			rect = { pauseX1, pauseY1, pausePartWidth, pauseHeight };
+			fillRectangle(&dtParams, &rect);
+			rect = { pauseX2, pauseY1, pausePartWidth, pauseHeight };
+			fillRectangle(&dtParams, &rect);
+
+
+			// selection cursor
+			int selectBoxOrigin = menuY - menuItemHeight * (menuItems.size() / 2.0) - (menuItemHeight - menuTextSize) / 2;
+			int selectBoxPos = selectBoxOrigin + menuItemHeight * menuPos;
+			const float selectBoxWidth = 200;
+			const float selectBoxHeight = menuItemHeight;
+			const float selectBoxThickness = 2;
+
+			const float selectBoxX1 = menuX - selectBoxWidth / 2;
+			const float selectBoxX2 = selectBoxX1 + selectBoxWidth - selectBoxThickness;
+			const float selectBoxY1 = selectBoxPos;
+			const float selectBoxY2 = selectBoxY1 + selectBoxThickness;
+			const float selectBoxY3 = selectBoxY1 + selectBoxHeight - selectBoxThickness;
+			const float selectBoxSideHeight = selectBoxHeight - 2 * selectBoxThickness;
+
+			// dirty hack using fillRectangle to get thickness (idk how to set it or it isn't possible to with drawRectangle)
+			dtParams.colour = 0xc0ffff00;
+			dtParams.fillColour = 0xc0ffff00;
+			rect = { selectBoxX1, selectBoxY1, selectBoxWidth, selectBoxThickness }; // top
+			fillRectangle(&dtParams, &rect);
+			rect = { selectBoxX1, selectBoxY3, selectBoxWidth, selectBoxThickness }; // bottom
+			fillRectangle(&dtParams, &rect);
+			rect = { selectBoxX1, selectBoxY2, selectBoxThickness, selectBoxSideHeight };
+			fillRectangle(&dtParams, &rect);
+			rect = { selectBoxX2, selectBoxY2, selectBoxThickness, selectBoxSideHeight };
+			fillRectangle(&dtParams, &rect);
+
+
+			// menu
+			fontInfo.setSize(menuTextSize, menuTextSize);
 
 			dtParams.xBegin = menuX;
 			dtParams.yBegin = menuY - menuItemHeight * (menuItems.size() / 2.0);
@@ -106,126 +179,26 @@ namespace TLAC::Components
 				std::pair<std::string, void(*)()> &item = menuItems[i];
 
 				if (i == menuPos)
-					dtParams.textColour = 0xffffff00;
+					dtParams.colour = 0xffffff00;
 				else
-					dtParams.textColour = 0xffffffff;
+					dtParams.colour = 0xffffffff;
 
 				dtParams.xCurrent = dtParams.xBegin;
 				dtParams.yCurrent = dtParams.yBegin;
-				drawText(&dtParams, 8, item.first);
+				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE), item.first);
 				dtParams.yBegin += menuItemHeight;
 			}
 
+
+			// key legend
 			fontInfo.setSize(18, 18);
 
 			dtParams.xBegin = menuX;
 			dtParams.yBegin = 600;
 			dtParams.xCurrent = dtParams.xBegin;
 			dtParams.yCurrent = dtParams.yBegin;
-
-			dtParams.textColour = 0xffffffff;
-
-			drawTextW(&dtParams, 8, L"○:Select　×:Close　L/R:Move　□:Hide Menu");
-		}
-	}
-
-	void Pause::UpdatePostDraw()
-	{
-		if (isPaused && showUI)
-		{
-			// this isn't imgui code, but I probably wouldn't have gotten this working properly if I didn't reference it, so...  umm...  yeah lol
-			glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
-
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glDisable(GL_CULL_FACE);
-			glDisable(GL_DEPTH_TEST);
-			glDisable(GL_LIGHTING);
-			glDisable(GL_COLOR_MATERIAL);
-
-			int width = glutGet(GLUT_WINDOW_WIDTH);
-			int height = glutGet(GLUT_WINDOW_HEIGHT);
-
-			glViewport(0, 0, width, height);
-			glMatrixMode(GL_PROJECTION);
-			glPushMatrix();
-			glLoadIdentity();
-			glOrtho(0, 1280, 720, 0, -1.0f, +1.0f);
-			glMatrixMode(GL_MODELVIEW);
-			glPushMatrix();
-			glLoadIdentity();
-
-			glBegin(GL_QUADS);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			glColor4ub(0, 0, 0, 64);
-			glVertex2i(0, 0);
-			glVertex2i(1280, 0);
-			glVertex2i(1280, 720);
-			glVertex2i(0, 720);
-
-			const int pauseWidth = 80;
-			const int pauseHeight = 110;
-			const int pauseGap = 20;
-			const int pausePosX = 32;
-			const int pausePosY = 32;
-
-			const int pauseX1 = pausePosX;
-			const int pauseX2 = pauseX1 + (pauseWidth - pauseGap) / 2;
-			const int pauseX3 = pauseX2 + pauseGap;
-			const int pauseX4 = pauseX1 + pauseWidth;
-
-			const int pauseY1 = pausePosY;
-			const int pauseY2 = pauseY1 + pauseHeight;
-
-			glColor4ub(255, 255, 255, 127);
-			glVertex2i(pauseX1, pauseY1);
-			glVertex2i(pauseX2, pauseY1);
-			glVertex2i(pauseX2, pauseY2);
-			glVertex2i(pauseX1, pauseY2);
-			glVertex2i(pauseX3, pauseY1);
-			glVertex2i(pauseX4, pauseY1);
-			glVertex2i(pauseX4, pauseY2);
-			glVertex2i(pauseX3, pauseY2);
-
-			glEnd();
-			glBegin(GL_QUAD_STRIP);
-
-			int selectBoxOrigin = menuY - menuItemHeight * (menuItems.size() / 2.0) - (menuItemHeight - menuTextSize) / 2;
-			int selectBoxPos = selectBoxOrigin + menuItemHeight * menuPos;
-			const int selectBoxWidth = 200;
-			const int selectBoxHeight = menuItemHeight;
-			const int selectBoxThickness = 2;
-
-			const int selectBoxX1 = menuX - selectBoxWidth / 2;
-			const int selectBoxX4 = selectBoxX1 + selectBoxWidth;
-			const int selectBoxX2 = selectBoxX1 + selectBoxThickness;
-			const int selectBoxX3 = selectBoxX4 - selectBoxThickness;
-
-			const int selectBoxY1 = selectBoxPos;
-			const int selectBoxY4 = selectBoxY1 + selectBoxHeight;
-			const int selectBoxY2 = selectBoxY1 + selectBoxThickness;
-			const int selectBoxY3 = selectBoxY4 - selectBoxThickness;
-
-			glColor4ub(0, 255, 255, 127);
-			glVertex2i(selectBoxX2, selectBoxY2);
-			glVertex2i(selectBoxX1, selectBoxY1);
-			glVertex2i(selectBoxX3, selectBoxY2);
-			glVertex2i(selectBoxX4, selectBoxY1);
-			glVertex2i(selectBoxX3, selectBoxY3);
-			glVertex2i(selectBoxX4, selectBoxY4);
-			glVertex2i(selectBoxX2, selectBoxY3);
-			glVertex2i(selectBoxX1, selectBoxY4);
-			glVertex2i(selectBoxX2, selectBoxY2);
-			glVertex2i(selectBoxX1, selectBoxY1);
-
-			glEnd();
-			
-			glMatrixMode(GL_MODELVIEW);
-			glPopMatrix();
-			glMatrixMode(GL_PROJECTION);
-			glPopMatrix();
-			glPopAttrib();
+			dtParams.colour = 0xffffffff;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE), L"○:Select　×:Close　L/R:Move　□:Hide Menu");
 		}
 	}
 
@@ -249,10 +222,10 @@ namespace TLAC::Components
 
 		if (pause)
 		{
-			*(float*)FRAME_SPEED_ADDRESS = 0.0f; // todo: hook getFrameSpeed so this can't be screwed up
 			((void(*)())DSC_PAUSE_FUNC_ADDRESS)();
 
 			InjectCode(aetMovPatchAddress, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
+			InjectCode(framespeedPatchAddress, { 0x0f, 0x57, 0xc0, 0xc3 }); // XORPS XMM0,XMM0; RET
 
 			for (int i = 0; i < nAudioStreams; i++)
 			{
@@ -264,13 +237,16 @@ namespace TLAC::Components
 
 				*playstate = 0;
 			}
+
+			menuPos = 0;
+			showUI = true;
 		}
 		else
 		{
-			*(float*)FRAME_SPEED_ADDRESS = 1.0f;
 			((void(*)())DSC_UNPAUSE_FUNC_ADDRESS)();
 
 			InjectCode(aetMovPatchAddress, origAetMovOp);
+			InjectCode(framespeedPatchAddress, origFramespeedOp);
 
 			for (int i = 0; i < nAudioStreams; i++)
 			{
@@ -281,6 +257,25 @@ namespace TLAC::Components
 		}
 
 		isPaused = pause;
+	}
+
+	bool Pause::hookedGiveUpFunc(void* cls)
+	{
+		if (giveUp)
+		{
+			giveUp = false;
+			setPaused(false);
+			return true;
+		}
+		else
+		{
+			if (divaGiveUpFunc(cls))
+			{
+				setPaused(false);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	void Pause::InjectCode(void* address, const std::vector<uint8_t> data)

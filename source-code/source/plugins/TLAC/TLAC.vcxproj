@@ -111,7 +111,7 @@
     <ClInclude Include="Components\ComponentsManager.h" />
     <ClInclude Include="Components\CustomPlayerData.h" />
     <ClInclude Include="Components\DebugComponent.h" />
-    <ClInclude Include="Components\DrawText.h" />
+    <ClInclude Include="Components\Drawing.h" />
     <ClInclude Include="Components\EmulatorComponent.h" />
     <ClInclude Include="Components\FastLoader.h" />
     <ClInclude Include="Components\FrameRateManager.h" />

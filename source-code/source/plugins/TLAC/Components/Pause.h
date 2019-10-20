@@ -2,6 +2,7 @@
 #include "../Constants.h"
 #include "EmulatorComponent.h"
 #include "PlayerData.h"
+#include <string>
 #include <vector>
 #include <chrono>
 

@@ -18,7 +18,6 @@ namespace TLAC::Components
 		virtual void UpdateInput() {};
 		virtual void UpdatePostInput() {};
 		virtual void UpdateDrawSprites() {};
-		virtual void UpdatePostDraw() {};
 		virtual void OnFocusGain() {};
 		virtual void OnFocusLost() {};
 		

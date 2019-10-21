@@ -2,6 +2,7 @@
 #include "../Constants.h"
 #include "EmulatorComponent.h"
 #include "PlayerData.h"
+#include "Input/InputState.h"
 #include <string>
 #include <vector>
 #include <chrono>
@@ -31,6 +32,8 @@ namespace TLAC::Components
 
 		static bool isPaused; // tracks internal state
 
+		static void saveOldPatchOps();
+
 		static std::vector<uint8_t> origAetMovOp;
 		static constexpr uint8_t* aetMovPatchAddress = (uint8_t*)0x1401703b3;
 
@@ -40,6 +43,9 @@ namespace TLAC::Components
 		static bool hookedGiveUpFunc(void* cls);
 
 		static void setSEVolume(int amount);
+
+		static PlayerData* playerData;
+		static InputState* inputState;
 
 		static const int menuX = 640;
 		static const int menuY = 360;
@@ -55,15 +61,15 @@ namespace TLAC::Components
 
 		enum menusets
 		{
-			menuset_main = 0,
-			menuset_sevol = 1,
+			MENUSET_MAIN = 0,
+			MENUSET_SEVOL = 1,
 		};
 
-		static void mainmenu() { menuSet = menuset_main; menuPos = mainMenuPos; menuItemSelectTime = std::chrono::high_resolution_clock::now(); };
+		static void mainmenu() { menuSet = MENUSET_MAIN; menuPos = mainMenuPos; menuItemSelectTime = std::chrono::high_resolution_clock::now(); };
 		static void unpause() { pause = false; };
 		static void giveup() { giveUp = true; };
 
-		static void sevolmenu() { menuSet = menuset_sevol; menuPos = 1; menuItemSelectTime = std::chrono::high_resolution_clock::now(); };
+		static void sevolmenu() { menuSet = MENUSET_SEVOL; menuPos = 1; menuItemSelectTime = std::chrono::high_resolution_clock::now(); };
 		static void sevolplus() { setSEVolume(10); };
 		static void sevolminus() { setSEVolume(-10); };
 

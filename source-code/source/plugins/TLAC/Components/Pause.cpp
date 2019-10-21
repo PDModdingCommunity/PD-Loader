@@ -190,12 +190,10 @@ namespace TLAC::Components
 						*playstate = streamPlayStates[i];
 				}
 
-				/*
 				destroyAetLayer(triangleAet);
 				destroyAetLayer(squareAet);
 				destroyAetLayer(crossAet);
 				destroyAetLayer(circleAet);
-				*/
 
 				isPaused = false;
 			}
@@ -218,7 +216,7 @@ namespace TLAC::Components
 			// setup draw objects
 			FontInfo fontInfo(0x11);
 			DrawParams dtParams(&fontInfo);
-			dtParams.layer = 0x19; // same as startup screen
+			dtParams.layer = bgLayer;
 
 
 			// bg rect
@@ -251,6 +249,8 @@ namespace TLAC::Components
 			*/
 
 
+			dtParams.layer = contentLayer;
+
 			// selection cursor
 			int selectBoxOrigin = menuY - menuItemHeight * (menuItems[menuSet].size() / 2.0) - (menuItemHeight - menuTextSize) / 2;
 			int selectBoxPos = selectBoxOrigin + menuItemHeight * menuPos;
@@ -270,8 +270,7 @@ namespace TLAC::Components
 			// menu
 			fontInfo.setSize(menuTextSize, menuTextSize);
 
-			dtParams.xBegin = menuX;
-			dtParams.yBegin = menuY - menuItemHeight * (menuItems[menuSet].size() / 2.0);
+			dtParams.originLoc = { menuX, menuY - menuItemHeight * (menuItems[menuSet].size() / 2.0f) };
 
 			for (int i = 0; i < menuItems[menuSet].size(); i++)
 			{
@@ -289,56 +288,51 @@ namespace TLAC::Components
 					dtParams.colour = 0xffffffff;
 				}
 
-				dtParams.xCurrent = dtParams.xBegin;
-				dtParams.yCurrent = dtParams.yBegin;
+				dtParams.currentLoc = dtParams.originLoc;
 				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE), item.first);
-				dtParams.yBegin += menuItemHeight;
+				dtParams.originLoc.y += menuItemHeight;
 			}
 
 
 			// key legend
-			fontInfo.setSize(18, 18);
-
-			dtParams.xBegin = 32;
-			dtParams.yBegin = 720 - 40;
-			dtParams.xCurrent = dtParams.xBegin;
-			dtParams.yCurrent = dtParams.yBegin;
-			dtParams.colour = 0xffffffff;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"L/R:Move　");
-			if (menuSet != MENUSET_MAIN)
-			{
-				dtParams.colour = 0xff40ff40;
-				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"△");
-				dtParams.colour = 0xffffffff;
-				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Back　");
-			}
-			dtParams.colour = 0xffc0c0ff;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"□");
-			dtParams.colour = 0xffffffff;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Hide Menu　");
-			dtParams.colour = 0xffff8020;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"×");
-			dtParams.colour = 0xffffffff;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Close　");
-			dtParams.colour = 0xff4040ff;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"○");
-			dtParams.colour = 0xffffffff;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Select");
-
-			/*
 			destroyAetLayer(triangleAet);
 			destroyAetLayer(squareAet);
 			destroyAetLayer(crossAet);
 			destroyAetLayer(circleAet);
-			Point spriteLoc = { 64, 64 };
-			triangleAet = createAetLayer(0x19, CREATEAET_20000, "button_sankaku", &spriteLoc, 0, 1);
-			spriteLoc.x += 64;
-			squareAet = createAetLayer(0x19, CREATEAET_20000, "button_shikaku", &spriteLoc, 0, 1);
-			spriteLoc.x += 64;
-			crossAet = createAetLayer(0x19, CREATEAET_20000, "button_batsu", &spriteLoc, 0, 1);
-			spriteLoc.x += 64;
-			circleAet = createAetLayer(0x19, CREATEAET_20000, "button_maru", &spriteLoc, 0, 1);
-			*/
+
+			fontInfo.setSize(18, 18);
+			dtParams.originLoc = { 32, 720 - 40 };
+			dtParams.currentLoc = dtParams.originLoc;
+			const float spriteSize = 18;
+			const float halfSpriteSize = spriteSize / 2;
+			Point spriteLoc = { 0, dtParams.originLoc.y + halfSpriteSize };
+			Point spriteScale = { spriteSize / 64, spriteSize / 64 }; // just approximated
+
+			dtParams.colour = 0xffffffff;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"L/R:Move　");
+
+			if (menuSet != MENUSET_MAIN)
+			{
+				spriteLoc.x = dtParams.originLoc.x + halfSpriteSize;
+				triangleAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_sankaku", &spriteLoc, 0, 0, 0, 0, 0, &spriteScale, 0);
+				dtParams.originLoc.x += spriteSize;
+				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Back　");
+			}
+
+			spriteLoc.x = dtParams.originLoc.x + halfSpriteSize;
+			squareAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_shikaku", &spriteLoc, 0, 0, 0, 0, 0, &spriteScale, 0);
+			dtParams.originLoc.x += spriteSize;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Hide Menu　");
+
+			spriteLoc.x = dtParams.originLoc.x + halfSpriteSize;
+			crossAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_batsu", &spriteLoc, 0, 0, 0, 0, 0, &spriteScale, 0);
+			dtParams.originLoc.x += spriteSize;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Close　");
+
+			spriteLoc.x = dtParams.originLoc.x + halfSpriteSize;
+			circleAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_maru", &spriteLoc, 0, 0, 0, 0, 0, &spriteScale, 0);
+			dtParams.originLoc.x += spriteSize;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Select");
 		}
 	}
 

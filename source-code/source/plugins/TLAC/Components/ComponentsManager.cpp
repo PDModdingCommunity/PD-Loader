@@ -151,14 +151,6 @@ namespace TLAC::Components
 		}
 	}
 
-	void ComponentsManager::UpdatePostDraw()
-	{
-		for (auto& component : components)
-		{
-			component->UpdatePostDraw();
-		}
-	}
-
 	void ComponentsManager::OnFocusGain()
 	{
 		for (auto& component : components)

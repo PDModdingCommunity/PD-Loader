@@ -20,7 +20,6 @@
 
 void(__cdecl* divaEngineUpdate)() = (void(__cdecl*)())0x14018CC40;
 void(__cdecl* divaEngineDrawSprites)(void* addr, int idk) = (void(__cdecl*)(void* addr, int idk))ENGINE_DRAW_SPRITES_ADDRESS;
-void(__cdecl* divaEngineFinishDraw)() = (void(__cdecl*)())ENGINE_FINISH_DRAW_ADDRESS;
 
 LRESULT CALLBACK MessageWindowProcessCallback(HWND, UINT, WPARAM, LPARAM);
 DWORD WINAPI WindowMessageDispatcher(LPVOID);
@@ -131,11 +130,6 @@ namespace TLAC
 	void UpdateDrawSprites()
 	{
 		ComponentsManager.UpdateDrawSprites();
-	}
-
-	void UpdatePostDraw()
-	{
-		ComponentsManager.UpdatePostDraw();
 	}
 
 	void InitializeExtraSettings()
@@ -361,12 +355,6 @@ void hookedEngineDrawSprites(void* addr, int idk)
 		TLAC::UpdateDrawSprites();
 }
 
-void hookedEngineFinishDraw()
-{
-	TLAC::UpdatePostDraw();
-	divaEngineFinishDraw();
-}
-
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
 	HWND consoleHandle = GetConsoleWindow();
@@ -391,11 +379,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(PVOID&)divaEngineDrawSprites, hookedEngineDrawSprites);
-		DetourTransactionCommit();
-
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		DetourAttach(&(PVOID&)divaEngineFinishDraw, hookedEngineFinishDraw);
 		DetourTransactionCommit();
 
 		TLAC::InitializeExtraSettings();

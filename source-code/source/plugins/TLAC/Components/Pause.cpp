@@ -2,7 +2,6 @@
 #include "../Constants.h"
 #include "GameState.h"
 #include "Drawing.h"
-#include "Input/InputState.h"
 #include "GL/glut.h"
 #include "detours.h"
 #include <windows.h>
@@ -17,12 +16,14 @@ namespace TLAC::Components
 	bool Pause::showUI = true;
 	unsigned int Pause::menuPos = 0;
 	unsigned int Pause::mainMenuPos = 0;
-	unsigned int Pause::menuSet = menuset_main;
+	unsigned int Pause::menuSet = MENUSET_MAIN;
 	std::chrono::time_point<std::chrono::high_resolution_clock> Pause::menuItemSelectTime;
 	std::vector<uint8_t> Pause::origAetMovOp;
 	std::vector<uint8_t> Pause::origFramespeedOp;
 	std::vector<bool> Pause::streamPlayStates;
 	bool(*divaGiveUpFunc)(void*) = (bool(*)(void* cls))GIVEUP_FUNC_ADDRESS;
+	InputState* Pause::inputState;
+	PlayerData* Pause::playerData;
 
 	Pause::Pause()
 	{
@@ -37,13 +38,21 @@ namespace TLAC::Components
 		return "pause";
 	}
 
-	void Pause::Initialize(ComponentsManager*)
+	void Pause::saveOldPatchOps()
 	{
 		origAetMovOp.resize(8);
 		memcpy(&origAetMovOp[0], aetMovPatchAddress, 8);
 
 		origFramespeedOp.resize(4);
 		memcpy(&origFramespeedOp[0], framespeedPatchAddress, 4);
+	}
+
+	void Pause::Initialize(ComponentsManager*)
+	{
+		inputState = (InputState*)(*(uint64_t*)INPUT_STATE_PTR_ADDRESS);
+		playerData = (PlayerData*)PLAYER_DATA_ADDRESS;
+
+		saveOldPatchOps();
 
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
@@ -65,6 +74,7 @@ namespace TLAC::Components
 			{
 				((void(*)())DSC_PAUSE_FUNC_ADDRESS)();
 
+				saveOldPatchOps();
 				InjectCode(aetMovPatchAddress, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
 				InjectCode(framespeedPatchAddress, { 0x0f, 0x57, 0xc0, 0xc3 }); // XORPS XMM0,XMM0; RET
 
@@ -83,7 +93,7 @@ namespace TLAC::Components
 				}
 
 				menuPos = 0;
-				menuSet = menuset_main;
+				menuSet = MENUSET_MAIN;
 				showUI = true;
 				menuItemSelectTime = std::chrono::high_resolution_clock::now();
 				isPaused = true;
@@ -96,8 +106,6 @@ namespace TLAC::Components
 			}
 			else
 			{
-				InputState* inputState = (InputState*)(*(uint64_t*)INPUT_STATE_PTR_ADDRESS);
-
 				if (inputState->Tapped.Buttons & JVS_SQUARE)
 					showUI = !showUI;
 
@@ -118,9 +126,9 @@ namespace TLAC::Components
 
 					if (inputState->Tapped.Buttons & JVS_TRIANGLE)
 					{
-						if (menuSet != menuset_main)
+						if (menuSet != MENUSET_MAIN)
 						{
-							menuSet = menuset_main;
+							menuSet = MENUSET_MAIN;
 							menuPos = mainMenuPos;
 							menuItemSelectTime = std::chrono::high_resolution_clock::now();
 						}
@@ -128,7 +136,7 @@ namespace TLAC::Components
 
 					menuPos %= menuItems[menuSet].size();
 
-					if (menuSet == menuset_main)
+					if (menuSet == MENUSET_MAIN)
 						mainMenuPos = menuPos;
 
 					// use released when unpausing from X so it doesn't trigger input
@@ -139,14 +147,13 @@ namespace TLAC::Components
 					if (inputState->Released.Buttons & JVS_CIRCLE)
 						menuItems[menuSet][menuPos].second();
 
-					if (menuSet == menuset_sevol)
+					if (menuSet == MENUSET_SEVOL)
 					{
-						PlayerData* playerdata = (PlayerData*)PLAYER_DATA_ADDRESS;
 						const char volformat[] = "%d";
-						size_t size = snprintf(nullptr, 0, volformat, playerdata->act_vol) + 1;
+						size_t size = snprintf(nullptr, 0, volformat, playerData->act_vol) + 1;
 						char* buf = new char[size];
-						snprintf(buf, size, volformat, playerdata->act_vol);
-						menuItems[menuset_sevol][1].first = buf;
+						snprintf(buf, size, volformat, playerData->act_vol);
+						menuItems[MENUSET_SEVOL][1].first = buf;
 						delete[] buf;
 					}
 				}
@@ -300,7 +307,7 @@ namespace TLAC::Components
 			dtParams.yCurrent = dtParams.yBegin;
 			dtParams.colour = 0xffffffff;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"L/R:Move　");
-			if (menuSet != menuset_main)
+			if (menuSet != MENUSET_MAIN)
 			{
 				dtParams.colour = 0xff40ff40;
 				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"△");
@@ -324,7 +331,7 @@ namespace TLAC::Components
 
 	bool Pause::isPauseKeyTapped()
 	{
-		return ((InputState*)(*(uint64_t*)INPUT_STATE_PTR_ADDRESS))->Tapped.Buttons & JVS_START;
+		return inputState->Tapped.Buttons & JVS_START;
 	}
 
 	bool Pause::hookedGiveUpFunc(void* cls)
@@ -348,11 +355,10 @@ namespace TLAC::Components
 
 	void Pause::setSEVolume(int amount)
 	{
-		PlayerData* playerdata = (PlayerData*)PLAYER_DATA_ADDRESS;
-		playerdata->act_vol += amount;
-		if (playerdata->act_vol < 0) playerdata->act_vol = 0;
-		if (playerdata->act_vol > 100) playerdata->act_vol = 100;
-		playerdata->act_slide_vol = playerdata->act_vol;
+		playerData->act_vol += amount;
+		if (playerData->act_vol < 0) playerData->act_vol = 0;
+		if (playerData->act_vol > 100) playerData->act_vol = 100;
+		playerData->act_slide_vol = playerData->act_vol;
 	}
 
 	void Pause::InjectCode(void* address, const std::vector<uint8_t> data)

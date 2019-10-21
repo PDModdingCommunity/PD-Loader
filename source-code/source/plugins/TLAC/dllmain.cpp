@@ -19,7 +19,7 @@
 #pragma comment(lib, "detours.lib")
 
 void(__cdecl* divaEngineUpdate)() = (void(__cdecl*)())0x14018CC40;
-void(__cdecl* divaEngineDrawSprites)(void* addr, int idk) = (void(__cdecl*)(void* addr, int idk))ENGINE_DRAW_SPRITES_ADDRESS;
+void(__cdecl* divaEngineDraw2D)(void* addr) = (void(__cdecl*)(void* addr))ENGINE_DRAW_2D_ADDRESS;
 
 LRESULT CALLBACK MessageWindowProcessCallback(HWND, UINT, WPARAM, LPARAM);
 DWORD WINAPI WindowMessageDispatcher(LPVOID);
@@ -127,9 +127,9 @@ namespace TLAC
 			ComponentsManager.OnFocusLost();
 	}
 
-	void UpdateDrawSprites()
+	void UpdateDraw2D()
 	{
-		ComponentsManager.UpdateDrawSprites();
+		ComponentsManager.UpdateDraw2D();
 	}
 
 	void InitializeExtraSettings()
@@ -348,11 +348,10 @@ void hookedEngineUpdate()
 	//divaEngineUpdate();
 }
 
-void hookedEngineDrawSprites(void* addr, int idk)
+void hookedEngineDraw2D(void* addr)
 {
-	divaEngineDrawSprites(addr, idk);
-	if (idk == 0x0a)
-		TLAC::UpdateDrawSprites();
+	TLAC::UpdateDraw2D();
+	divaEngineDraw2D(addr);
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
@@ -378,7 +377,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		DetourAttach(&(PVOID&)divaEngineDrawSprites, hookedEngineDrawSprites);
+		DetourAttach(&(PVOID&)divaEngineDraw2D, hookedEngineDraw2D);
 		DetourTransactionCommit();
 
 		TLAC::InitializeExtraSettings();

@@ -209,7 +209,7 @@ namespace TLAC::Components
 		}
 	}
 
-	void Pause::UpdateDrawSprites()
+	void Pause::UpdateDraw2D()
 	{
 		if (isPaused && showUI)
 		{

@@ -41,10 +41,10 @@ namespace TLAC::Components
 	void Pause::saveOldPatchOps()
 	{
 		origAetMovOp.resize(8);
-		memcpy(&origAetMovOp[0], aetMovPatchAddress, 8);
+		memcpy(origAetMovOp.data(), aetMovPatchAddress, 8);
 
 		origFramespeedOp.resize(4);
-		memcpy(&origFramespeedOp[0], framespeedPatchAddress, 4);
+		memcpy(origFramespeedOp.data(), framespeedPatchAddress, 4);
 	}
 
 	void Pause::Initialize(ComponentsManager*)

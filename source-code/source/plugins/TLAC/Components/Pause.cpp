@@ -109,7 +109,17 @@ namespace TLAC::Components
 			else
 			{
 				if (inputState->Tapped.Buttons & JVS_SQUARE)
+				{
 					showUI = !showUI;
+					if (!showUI)
+					{
+						// clear these from the screen too
+						destroyAetLayer(triangleAet);
+						destroyAetLayer(squareAet);
+						destroyAetLayer(crossAet);
+						destroyAetLayer(circleAet);
+					}
+				}
 
 				// only process menu events when UI is visible
 				if (showUI)

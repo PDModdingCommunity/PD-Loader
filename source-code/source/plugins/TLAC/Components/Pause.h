@@ -51,18 +51,19 @@ namespace TLAC::Components
 		static const int menuY = 360;
 		static const int menuItemHeight = 36;
 		static const int menuTextSize = 24;
+
+		static const uint32_t bgLayer = 0x18;
+		static const uint32_t contentLayer = 0x19; // same as startup screen
 		
 		static bool showUI;
 		static unsigned int menuPos;
 		static unsigned int mainMenuPos; // syncs to menuPos when menuSet == menuset_main (used for restoring on back)
 		static unsigned int menuSet;
 
-		/*
 		int triangleAet;
 		int squareAet;
 		int crossAet;
 		int circleAet;
-		*/
 
 		static std::chrono::time_point<std::chrono::high_resolution_clock> menuItemSelectTime;
 

@@ -212,16 +212,16 @@ namespace TLAC::Components
 		float width;
 		float height;
 	};
-	void(*fillRectangle)(DrawParams* dtParam, RectangleBounds* rect) = (void(*)(DrawParams* dtParam, RectangleBounds* rect))0x140198d80;
+	void(*fillRectangle)(DrawParams* dtParam, const RectangleBounds* rect) = (void(*)(DrawParams* dtParam, const RectangleBounds* rect))0x140198d80;
 
 	// draws only a border -- use fillRectangle to fill contained pixels
-	void drawRectangle(DrawParams* dtParam, RectangleBounds* rect)
+	void drawRectangle(DrawParams* dtParam, const RectangleBounds* rect)
 	{
-		((void(*)(DrawParams*, RectangleBounds*))0x140198320)(dtParam, rect);
+		((void(*)(DrawParams*, const RectangleBounds*))0x140198320)(dtParam, rect);
 	}
 
 	// draws only a border -- use fillRectangle to fill contained pixels
-	void drawRectangle(DrawParams* dtParam, RectangleBounds* rect, float thickness)
+	void drawRectangle(DrawParams* dtParam, const RectangleBounds* rect, float thickness)
 	{
 		uint32_t oldFillColour = dtParam->fillColour;
 		dtParam->fillColour = dtParam->colour;
@@ -248,22 +248,22 @@ namespace TLAC::Components
 	};
 
 	// draw an aet layer (with all settings)
-	int createAetLayer(int32_t unk1, uint32_t drawLayer, createAetFlags flags, char* name, Point* loc, int32_t unk2, char* animation, char* animation2, float animationInTime, float animationOutTime, Point* scale, int32_t unk5)
+	int createAetLayer(int32_t unk1, uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, int32_t unk2, const char* animation, const char* animation2, float animationInTime, float animationOutTime, const Point* scale, int32_t unk5)
 	{
-		return ((int(*)(int32_t, uint32_t, createAetFlags, char*, Point*, int32_t, char*, char*, float, float, Point*, int32_t))0x14013be60)(unk1, drawLayer, flags, name, loc, unk2, animation, animation2, animationInTime, animationOutTime, scale, unk5);
+		return ((int(*)(int32_t, uint32_t, createAetFlags, const char*, const Point*, int32_t, const char*, const char*, float, float, const Point*, int32_t))0x14013be60)(unk1, drawLayer, flags, name, loc, unk2, animation, animation2, animationInTime, animationOutTime, scale, unk5);
 	}
 	// draw an aet layer (with animation timing override)
-	int createAetLayer(uint32_t drawLayer, createAetFlags flags, char* name, Point* loc, float animationInTime, float animationOutTime)
+	int createAetLayer(uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, float animationInTime, float animationOutTime)
 	{
 		return createAetLayer(3, drawLayer, flags, name, loc, 0, 0, 0, animationInTime, animationOutTime, 0, 0);
 	}
 	// draw an aet layer (with scale)
-	int createAetLayer(uint32_t drawLayer, createAetFlags flags, char* name, Point* loc, Point* scale)
+	int createAetLayer(uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, const Point* scale)
 	{
 		return createAetLayer(3, drawLayer, flags, name, loc, 0, 0, 0, -1, -1, scale, 0);
 	}
 	// draw an aet layer
-	int createAetLayer(uint32_t drawLayer, createAetFlags flags, char* name, Point* loc)
+	int createAetLayer(uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc)
 	{
 		return createAetLayer(3, drawLayer, flags, name, loc, 0, 0, 0, -1, -1, 0, 0);
 	}

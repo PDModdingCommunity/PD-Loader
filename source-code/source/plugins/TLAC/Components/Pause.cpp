@@ -251,24 +251,13 @@ namespace TLAC::Components
 			const float selectBoxHeight = menuItemHeight;
 			const float selectBoxThickness = 2;
 
-			const float selectBoxX1 = menuX - selectBoxWidth / 2;
-			const float selectBoxX2 = selectBoxX1 + selectBoxWidth - selectBoxThickness;
-			const float selectBoxY1 = selectBoxPos;
-			const float selectBoxY2 = selectBoxY1 + selectBoxThickness;
-			const float selectBoxY3 = selectBoxY1 + selectBoxHeight - selectBoxThickness;
-			const float selectBoxSideHeight = selectBoxHeight - 2 * selectBoxThickness;
+			const float selectBoxX = menuX - selectBoxWidth / 2;
+			const float selectBoxY = selectBoxPos;
 
-			// dirty hack using fillRectangle to get thickness (idk how to set it or it isn't possible to with drawRectangle)
+			rect = { selectBoxX, selectBoxY, selectBoxWidth, selectBoxHeight };
 			dtParams.colour = 0xc0ffff00;
 			dtParams.fillColour = 0xc0ffff00;
-			rect = { selectBoxX1, selectBoxY1, selectBoxWidth, selectBoxThickness }; // top
-			fillRectangle(&dtParams, &rect);
-			rect = { selectBoxX1, selectBoxY3, selectBoxWidth, selectBoxThickness }; // bottom
-			fillRectangle(&dtParams, &rect);
-			rect = { selectBoxX1, selectBoxY2, selectBoxThickness, selectBoxSideHeight };
-			fillRectangle(&dtParams, &rect);
-			rect = { selectBoxX2, selectBoxY2, selectBoxThickness, selectBoxSideHeight };
-			fillRectangle(&dtParams, &rect);
+			drawRectangle(&dtParams, &rect, selectBoxThickness);
 
 
 			// menu

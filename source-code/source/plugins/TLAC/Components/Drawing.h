@@ -211,6 +211,33 @@ namespace TLAC::Components
 		float height;
 	};
 	void(*fillRectangle)(DrawParams* dtParam, RectangleBounds* rect) = (void(*)(DrawParams* dtParam, RectangleBounds* rect))0x140198d80;
-	void(*drawRectangle)(DrawParams* dtParam, RectangleBounds* rect) = (void(*)(DrawParams* dtParam, RectangleBounds* rect))0x140198320;
+
+	// draws only a border -- use fillRectangle to fill contained pixels
+	void drawRectangle(DrawParams* dtParam, RectangleBounds* rect)
+	{
+		((void(*)(DrawParams*, RectangleBounds*))0x140198320)(dtParam, rect);
+	}
+
+	// draws only a border -- use fillRectangle to fill contained pixels
+	void drawRectangle(DrawParams* dtParam, RectangleBounds* rect, float thickness)
+	{
+		uint32_t oldFillColour = dtParam->fillColour;
+		dtParam->fillColour = dtParam->colour;
+
+		// yes this seems pretty dodgy, but sega does it this way so... I guess it's the only way
+		RectangleBounds tempRect = { rect->x, rect->y, thickness, rect->height }; // left side
+		fillRectangle(dtParam, &tempRect);
+
+		tempRect.x = rect->x + rect->width - thickness; // right side
+		fillRectangle(dtParam, &tempRect);
+
+		tempRect = { rect->x + thickness, rect->y, rect->width - (thickness * 2), thickness }; // top side
+		fillRectangle(dtParam, &tempRect);
+
+		tempRect.y = rect->y + rect->height - thickness; // left side
+		fillRectangle(dtParam, &tempRect);
+
+		dtParam->fillColour = oldFillColour;
+	}
 #pragma pack(pop)
 }

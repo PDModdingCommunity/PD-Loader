@@ -57,6 +57,13 @@ namespace TLAC::Components
 		static unsigned int mainMenuPos; // syncs to menuPos when menuSet == menuset_main (used for restoring on back)
 		static unsigned int menuSet;
 
+		/*
+		int triangleAet;
+		int squareAet;
+		int crossAet;
+		int circleAet;
+		*/
+
 		static std::chrono::time_point<std::chrono::high_resolution_clock> menuItemSelectTime;
 
 		enum menusets

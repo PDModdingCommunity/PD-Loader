@@ -190,6 +190,13 @@ namespace TLAC::Components
 						*playstate = streamPlayStates[i];
 				}
 
+				/*
+				destroyAetLayer(triangleAet);
+				destroyAetLayer(squareAet);
+				destroyAetLayer(crossAet);
+				destroyAetLayer(circleAet);
+				*/
+
 				isPaused = false;
 			}
 
@@ -317,6 +324,21 @@ namespace TLAC::Components
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"○");
 			dtParams.colour = 0xffffffff;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Select");
+
+			/*
+			destroyAetLayer(triangleAet);
+			destroyAetLayer(squareAet);
+			destroyAetLayer(crossAet);
+			destroyAetLayer(circleAet);
+			Point spriteLoc = { 64, 64 };
+			triangleAet = createAetLayer(0x19, CREATEAET_20000, "button_sankaku", &spriteLoc, 0, 1);
+			spriteLoc.x += 64;
+			squareAet = createAetLayer(0x19, CREATEAET_20000, "button_shikaku", &spriteLoc, 0, 1);
+			spriteLoc.x += 64;
+			crossAet = createAetLayer(0x19, CREATEAET_20000, "button_batsu", &spriteLoc, 0, 1);
+			spriteLoc.x += 64;
+			circleAet = createAetLayer(0x19, CREATEAET_20000, "button_maru", &spriteLoc, 0, 1);
+			*/
 		}
 	}
 

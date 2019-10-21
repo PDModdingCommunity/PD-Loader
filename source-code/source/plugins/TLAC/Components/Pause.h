@@ -35,10 +35,10 @@ namespace TLAC::Components
 		static void saveOldPatchOps();
 
 		static std::vector<uint8_t> origAetMovOp;
-		static constexpr uint8_t* aetMovPatchAddress = (uint8_t*)0x1401703b3;
+		static uint8_t* aetMovPatchAddress;
 
 		static std::vector<uint8_t> origFramespeedOp;
-		static constexpr uint8_t* framespeedPatchAddress = (uint8_t*)0x140192D50;
+		static uint8_t* framespeedPatchAddress;
 
 		static bool hookedGiveUpFunc(void* cls);
 

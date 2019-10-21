@@ -18,8 +18,10 @@ namespace TLAC::Components
 	unsigned int Pause::mainMenuPos = 0;
 	unsigned int Pause::menuSet = MENUSET_MAIN;
 	std::chrono::time_point<std::chrono::high_resolution_clock> Pause::menuItemSelectTime;
-	std::vector<uint8_t> Pause::origAetMovOp = {};
-	std::vector<uint8_t> Pause::origFramespeedOp = {};
+	std::vector<uint8_t> Pause::origAetMovOp;
+	uint8_t* Pause::aetMovPatchAddress = (uint8_t*)0x1401703b3;
+	std::vector<uint8_t> Pause::origFramespeedOp;
+	uint8_t* Pause::framespeedPatchAddress = (uint8_t*)0x140192D50;
 	std::vector<bool> Pause::streamPlayStates;
 	bool(*divaGiveUpFunc)(void*) = (bool(*)(void* cls))GIVEUP_FUNC_ADDRESS;
 	InputState* Pause::inputState;

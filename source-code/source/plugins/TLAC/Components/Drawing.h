@@ -239,5 +239,36 @@ namespace TLAC::Components
 
 		dtParam->fillColour = oldFillColour;
 	}
+
+	struct Point
+	{
+		float x;
+		float y;
+	};
+
+	enum createAetFlags : uint32_t
+	{
+		CREATEAET_20000 = 0x20000,
+	};
+
+	// draw an aet layer (with animation settings)
+	int createAetLayer(uint32_t drawLayer, createAetFlags flags, char* name, Point* loc, float animationVar1, float animationVar2)
+	{
+		return ((int(*)(uint32_t, createAetFlags, char*, Point*, float, float))0x14013c020)(drawLayer, flags, name, loc, animationVar1, animationVar2);
+	}
+	// draw an aet layer (with default animation)
+	int createAetLayer(uint32_t drawLayer, createAetFlags flags, char* name, Point* loc)
+	{
+		return createAetLayer(drawLayer, flags, name, loc, -1, -1);
+	}
+
+	void destroyAetLayer(int &layer)
+	{
+		if (layer != 0)
+		{
+			((void(*)(int layer))0x14019d570)(layer);
+			layer = 0;
+		}
+	}
 #pragma pack(pop)
 }

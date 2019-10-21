@@ -75,6 +75,7 @@ namespace TLAC::Components
 
 		static void mainmenu() { menuSet = MENUSET_MAIN; menuPos = mainMenuPos; menuItemSelectTime = std::chrono::high_resolution_clock::now(); };
 		static void unpause() { pause = false; };
+		static void restart() { ((void(*)(uint64_t))0x140675000)(PV_GAME_BASE_ADDRESS); }
 		static void giveup() { giveUp = true; };
 
 		static void sevolmenu() { menuSet = MENUSET_SEVOL; menuPos = 1; menuItemSelectTime = std::chrono::high_resolution_clock::now(); };
@@ -86,6 +87,7 @@ namespace TLAC::Components
 		std::vector<std::pair<std::string, void(*)()>> menuItems[2] = { 
 			{
 				std::pair<std::string, void(*)()>(std::string("RESUME"), &unpause),
+				std::pair<std::string, void(*)()>(std::string("RESTART"), &restart),
 				std::pair<std::string, void(*)()>(std::string("SE VOLUME"), &sevolmenu),
 				std::pair<std::string, void(*)()>(std::string("GIVE UP"), &giveup),
 			},

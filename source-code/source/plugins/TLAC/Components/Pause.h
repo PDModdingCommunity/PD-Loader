@@ -20,7 +20,7 @@ namespace TLAC::Components
 		virtual void Initialize(ComponentsManager*) override;
 		virtual void Update() override;
 		virtual void UpdatePostInput() override;
-		virtual void UpdateDrawSprites() override;
+		virtual void UpdateDraw2D() override;
 
 		static bool pause; // set pause to change pause state
 		static bool giveUp; // set give up to end current song

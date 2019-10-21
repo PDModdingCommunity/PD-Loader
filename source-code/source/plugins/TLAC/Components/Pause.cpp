@@ -314,23 +314,23 @@ namespace TLAC::Components
 			if (menuSet != MENUSET_MAIN)
 			{
 				spriteLoc.x = dtParams.originLoc.x + halfSpriteSize;
-				triangleAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_sankaku", &spriteLoc, 0, nullptr, nullptr, 0.0f, 0.0f, &spriteScale, 0);
+				triangleAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_sankaku", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, 0);
 				dtParams.originLoc.x += spriteSize;
 				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Back　");
 			}
 
 			spriteLoc.x = dtParams.originLoc.x + halfSpriteSize;
-			squareAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_shikaku", &spriteLoc, 0, nullptr, nullptr, 0.0f, 0.0f, &spriteScale, 0);
+			squareAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_shikaku", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, 0);
 			dtParams.originLoc.x += spriteSize;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Hide Menu　");
 
 			spriteLoc.x = dtParams.originLoc.x + halfSpriteSize;
-			crossAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_batsu", &spriteLoc, 0, nullptr, nullptr, 0.0f, 0.0f, &spriteScale, 0);
+			crossAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_batsu", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, 0);
 			dtParams.originLoc.x += spriteSize;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Close　");
 
 			spriteLoc.x = dtParams.originLoc.x + halfSpriteSize;
-			circleAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_maru", &spriteLoc, 0, nullptr, nullptr, 0.0f, 0.0f, &spriteScale, 0);
+			circleAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_maru", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, 0);
 			dtParams.originLoc.x += spriteSize;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Select");
 		}

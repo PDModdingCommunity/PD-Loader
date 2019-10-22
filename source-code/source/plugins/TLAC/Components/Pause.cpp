@@ -27,6 +27,25 @@ namespace TLAC::Components
 	InputState* Pause::inputState;
 	PlayerData* Pause::playerData;
 	JvsButtons Pause::filteredButtons;
+	std::vector<Pause::menuSet> Pause::menu = {
+		{
+			"PAUSED",
+			{
+				{ "RESUME", unpause, false },
+				//{ "RESTART", restart, false },
+				{ "SE VOLUME", sevolmenu, false },
+				{ "GIVE UP", giveup, false },
+			}
+		},
+		{
+			"SE VOLUME",
+			{
+				{ "+", sevolplus, true },
+				{ "XX", mainmenu, false },
+				{ "-", sevolminus, true },
+			}
+		},
+	};
 
 	Pause::Pause()
 	{
@@ -113,7 +132,11 @@ namespace TLAC::Components
 				if (inputState->Tapped.Buttons & JVS_SQUARE)
 				{
 					showUI = !showUI;
-					if (!showUI)
+					if (showUI)
+					{
+						menuItemMoveTime = std::chrono::high_resolution_clock::now(); // restart animations
+					}
+					else
 					{
 						// clear these from the screen too
 						destroyAetLayer(triangleAet);
@@ -278,9 +301,7 @@ namespace TLAC::Components
 
 				if (i == curMenuPos)
 				{
-					const int duration = 1500000000; // 1.5s
-					std::chrono::nanoseconds cyclePos = (std::chrono::high_resolution_clock::now() - menuItemMoveTime) % std::chrono::nanoseconds(duration);
-					uint8_t alpha = (cosf(cyclePos.count() * 6.283185f / duration) * 0.15 + 0.85) * 255;
+					uint8_t alpha = (cosf(getMenuAnimPos() * 6.283185f) * 0.15 + 0.85) * 255;
 					dtParams.colour = 0x00ffff00 | (alpha << 24);
 				}
 				else
@@ -366,6 +387,32 @@ namespace TLAC::Components
 		if (playerData->act_vol < 0) playerData->act_vol = 0;
 		if (playerData->act_vol > 100) playerData->act_vol = 100;
 		playerData->act_slide_vol = playerData->act_vol;
+	}
+
+	void Pause::setMenuPos(menusets set, int pos)
+	{
+		if (set >= 0 && set < menu.size())
+			curMenuSet = set;
+		else
+			curMenuSet = MENUSET_MAIN;
+
+		if (pos < 0)
+			pos = menu[curMenuSet].items.size() - 1;
+		else if (pos >= menu[curMenuSet].items.size())
+			pos = 0;
+
+		curMenuPos = pos;
+
+		if (curMenuSet == MENUSET_MAIN)
+			mainMenuPos = curMenuPos;
+
+		menuItemMoveTime = std::chrono::high_resolution_clock::now(); // restart animations
+	}
+
+	float Pause::getMenuAnimPos()
+	{
+		const int duration = 1500000000; // 1.5s
+		return (float)((std::chrono::high_resolution_clock::now() - menuItemMoveTime) % std::chrono::nanoseconds(duration)).count() / (float)duration;
 	}
 
 	void Pause::InjectCode(void* address, const std::vector<uint8_t> data)

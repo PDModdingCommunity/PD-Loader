@@ -47,6 +47,9 @@ namespace TLAC::Components
 		static PlayerData* playerData;
 		static InputState* inputState;
 
+		static const JvsButtons allButtons = (JvsButtons)(JVS_START | JVS_TRIANGLE | JVS_SQUARE | JVS_CROSS | JVS_CIRCLE | JVS_L | JVS_R); // deliberately only has control panel buttons
+		static JvsButtons filteredButtons;
+
 		static const int menuX = 640;
 		static const int menuY = 360;
 		static const int menuItemHeight = 36;

@@ -24,8 +24,9 @@ namespace TLAC::Components
 	uint8_t* Pause::framespeedPatchAddress = (uint8_t*)0x140192D50;
 	std::vector<bool> Pause::streamPlayStates;
 	bool(*divaGiveUpFunc)(void*) = (bool(*)(void* cls))GIVEUP_FUNC_ADDRESS;
-	InputState* Pause::inputState;
 	PlayerData* Pause::playerData;
+	InputState* Pause::inputState;
+	TouchSliderState* Pause::sliderState;
 	JvsButtons Pause::filteredButtons;
 	std::vector<Pause::menuSet> Pause::menu = {
 		{
@@ -73,6 +74,7 @@ namespace TLAC::Components
 	{
 		inputState = (InputState*)(*(uint64_t*)INPUT_STATE_PTR_ADDRESS);
 		playerData = (PlayerData*)PLAYER_DATA_ADDRESS;
+		sliderState = (TouchSliderState*)SLIDER_CTRL_TASK_ADDRESS;
 
 		saveOldPatchOps();
 
@@ -101,7 +103,7 @@ namespace TLAC::Components
 				InjectCode(framespeedPatchAddress, { 0x0f, 0x57, 0xc0, 0xc3 }); // XORPS XMM0,XMM0; RET
 
 				uint64_t audioMixerAddr = *(uint64_t*)(AUDIO_MAIN_CLASS_ADDRESS + 0x70);
-				uint64_t audioStreamsAddress = *(uint64_t*)(audioMixerAddr + 0x18);;
+				uint64_t audioStreamsAddress = *(uint64_t*)(audioMixerAddr + 0x18);
 				int nAudioStreams = *(uint64_t*)(audioMixerAddr + 0x20);
 				for (int i = 0; i < nAudioStreams; i++)
 				{
@@ -180,6 +182,11 @@ namespace TLAC::Components
 					}
 				}
 			}
+
+			// no slider while paused
+			// this is simpler than buttons because slider doesn't trigger on press, it triggers on movement
+			// (therefore per-button blocking isn't needed)
+			sliderState->ResetSensors();
 		}
 		else
 		{
@@ -222,14 +229,12 @@ namespace TLAC::Components
 			}
 		}
 
-
 		// swallow filtered button inputs
 		inputState->Tapped.Buttons = (JvsButtons)(inputState->Tapped.Buttons & ~filteredButtons);
 		inputState->DoubleTapped.Buttons = (JvsButtons)(inputState->DoubleTapped.Buttons & ~filteredButtons);
 		inputState->Down.Buttons = (JvsButtons)(inputState->Down.Buttons & ~filteredButtons);
 		inputState->Released.Buttons = (JvsButtons)(inputState->Released.Buttons & ~filteredButtons);
 		inputState->IntervalTapped.Buttons = (JvsButtons)(inputState->IntervalTapped.Buttons & ~filteredButtons);
-		// todo: slider
 	}
 
 	void Pause::UpdateDraw2D()
@@ -297,8 +302,6 @@ namespace TLAC::Components
 
 			for (int i = 0; i < menu[curMenuSet].items.size(); i++)
 			{
-				menuItem &item = menu[curMenuSet].items[i];
-
 				if (i == curMenuPos)
 				{
 					uint8_t alpha = (cosf(getMenuAnimPos() * 6.283185f) * 0.15 + 0.85) * 255;
@@ -310,7 +313,7 @@ namespace TLAC::Components
 				}
 
 				dtParams.currentLoc = dtParams.originLoc;
-				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE), item.name);
+				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE), menu[curMenuSet].items[i].name);
 				dtParams.originLoc.y += menuItemHeight;
 			}
 

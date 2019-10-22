@@ -3,6 +3,7 @@
 #include "EmulatorComponent.h"
 #include "PlayerData.h"
 #include "Input/InputState.h"
+#include "Input/TouchSliderState.h"
 #include <string>
 #include <vector>
 #include <chrono>
@@ -46,6 +47,7 @@ namespace TLAC::Components
 
 		static PlayerData* playerData;
 		static InputState* inputState;
+		static TouchSliderState* sliderState;
 
 		static const JvsButtons allButtons = (JvsButtons)(JVS_START | JVS_TRIANGLE | JVS_SQUARE | JVS_CROSS | JVS_CIRCLE | JVS_L | JVS_R); // deliberately only has control panel buttons
 		static JvsButtons filteredButtons;

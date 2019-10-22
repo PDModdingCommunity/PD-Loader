@@ -59,16 +59,13 @@ namespace TLAC::Components
 		static const uint32_t contentLayer = 0x19; // same as startup screen
 		
 		static bool showUI;
-		static unsigned int menuPos;
-		static unsigned int mainMenuPos; // syncs to menuPos when menuSet == menuset_main (used for restoring on back)
-		static unsigned int menuSet;
 
 		int triangleAet;
 		int squareAet;
 		int crossAet;
 		int circleAet;
 
-		static std::chrono::time_point<std::chrono::high_resolution_clock> menuItemSelectTime;
+		static std::chrono::time_point<std::chrono::high_resolution_clock> menuItemMoveTime; // used for animation
 
 		enum menusets
 		{
@@ -76,29 +73,80 @@ namespace TLAC::Components
 			MENUSET_SEVOL = 1,
 		};
 
-		static void mainmenu() { menuSet = MENUSET_MAIN; menuPos = mainMenuPos; menuItemSelectTime = std::chrono::high_resolution_clock::now(); };
+		struct menuItem
+		{
+			std::string name;
+			void(*callback)();
+			bool keyRepeat; // unimplemented
+
+			menuItem(std::string _name, void(*_callback)(), bool _keyRepeat)
+			{
+				name = _name;
+				callback = _callback;
+				keyRepeat = _keyRepeat;
+			}
+		};
+
+		struct menuSet
+		{
+			std::string name;
+			std::vector<menuItem> items;
+		};
+
+		static int curMenuPos;
+		static int mainMenuPos; // syncs to menuPos when menuSet == menuset_main (used for restoring on back)
+		static menusets curMenuSet;
+
+		static void mainmenu() { curMenuSet = MENUSET_MAIN; curMenuPos = mainMenuPos; menuItemMoveTime = std::chrono::high_resolution_clock::now(); };
 		static void unpause() { pause = false; };
 		//static void restart() { *(uint8_t*)0x140d0b538 = 1; unpause(); }
 		static void giveup() { giveUp = true; };
 
-		static void sevolmenu() { menuSet = MENUSET_SEVOL; menuPos = 1; menuItemSelectTime = std::chrono::high_resolution_clock::now(); };
+		static void sevolmenu() { curMenuSet = MENUSET_SEVOL; curMenuPos = 1; menuItemMoveTime = std::chrono::high_resolution_clock::now(); };
 		static void sevolplus() { setSEVolume(10); };
 		static void sevolminus() { setSEVolume(-10); };
 
 
 		// defined as an array now so submenus could be added
-		std::vector<std::pair<std::string, void(*)()>> menuItems[2] = { 
+		// not sure how to make this static for consistency so whatever
+		menuSet menu[2] = {
 			{
-				std::pair<std::string, void(*)()>(std::string("RESUME"), &unpause),
-				//std::pair<std::string, void(*)()>(std::string("RESTART"), &restart),
-				std::pair<std::string, void(*)()>(std::string("SE VOLUME"), &sevolmenu),
-				std::pair<std::string, void(*)()>(std::string("GIVE UP"), &giveup),
+				"PAUSED",
+				{
+					{ "RESUME", unpause, false },
+					//{ "RESTART", restart, false },
+					{ "SE VOLUME", sevolmenu, false },
+					{ "GIVE UP", giveup, false },
+				}
 			},
 			{
-				std::pair<std::string, void(*)()>(std::string("+"), &sevolplus),
-				std::pair<std::string, void(*)()>(std::string("XX"), &mainmenu),
-				std::pair<std::string, void(*)()>(std::string("-"), &sevolminus),
-			}
+				"SE VOLUME",
+				{
+					{ "+", sevolplus, true },
+					{ "XX", mainmenu, false },
+					{ "-", sevolminus, true },
+				}
+			},
 		};
+
+		void setMenuPos(menusets set, int pos)
+		{
+			if (set >= 0 && set < _countof(menu))
+				curMenuSet = set;
+			else
+				curMenuSet = MENUSET_MAIN;
+
+			if (pos < 0)
+				pos = menu[curMenuSet].items.size() - 1;
+			else if (pos >= menu[curMenuSet].items.size())
+				pos = 0;
+
+			curMenuPos = pos;
+
+			if (curMenuSet == MENUSET_MAIN)
+				mainMenuPos = curMenuPos;
+
+			menuItemMoveTime = std::chrono::high_resolution_clock::now();
+		}
 	};
 }

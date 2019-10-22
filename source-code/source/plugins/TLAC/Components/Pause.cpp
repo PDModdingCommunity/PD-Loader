@@ -26,6 +26,7 @@ namespace TLAC::Components
 	bool(*divaGiveUpFunc)(void*) = (bool(*)(void* cls))GIVEUP_FUNC_ADDRESS;
 	InputState* Pause::inputState;
 	PlayerData* Pause::playerData;
+	JvsButtons Pause::filteredButtons;
 
 	Pause::Pause()
 	{
@@ -93,6 +94,9 @@ namespace TLAC::Components
 
 					*playstate = 0;
 				}
+
+				// block all buttons from being passed to game
+				filteredButtons = allButtons;
 
 				menuPos = 0;
 				menuSet = MENUSET_MAIN;
@@ -169,15 +173,6 @@ namespace TLAC::Components
 						delete[] buf;
 					}
 				}
-
-
-				// swallow all button inputs if paused
-				inputState->Tapped.Buttons = JVS_NONE;
-				inputState->DoubleTapped.Buttons = JVS_NONE;
-				inputState->Down.Buttons = JVS_NONE;
-				inputState->Released.Buttons = JVS_NONE;
-				inputState->IntervalTapped.Buttons = JVS_NONE;
-				// todo: slider
 			}
 		}
 		else
@@ -208,6 +203,9 @@ namespace TLAC::Components
 				isPaused = false;
 			}
 
+			// buttons that have been tapped no longer need to be filtered (doing this with down broke retriggering)
+			filteredButtons = (JvsButtons)(filteredButtons & ~inputState->Tapped.Buttons);
+
 			// only enter pause if in game
 			if (*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN)
 			{
@@ -217,6 +215,15 @@ namespace TLAC::Components
 				}
 			}
 		}
+
+
+		// swallow filtered button inputs
+		inputState->Tapped.Buttons = (JvsButtons)(inputState->Tapped.Buttons & ~filteredButtons);
+		inputState->DoubleTapped.Buttons = (JvsButtons)(inputState->DoubleTapped.Buttons & ~filteredButtons);
+		inputState->Down.Buttons = (JvsButtons)(inputState->Down.Buttons & ~filteredButtons);
+		inputState->Released.Buttons = (JvsButtons)(inputState->Released.Buttons & ~filteredButtons);
+		inputState->IntervalTapped.Buttons = (JvsButtons)(inputState->IntervalTapped.Buttons & ~filteredButtons);
+		// todo: slider
 	}
 
 	void Pause::UpdateDraw2D()

@@ -248,9 +248,10 @@ namespace TLAC::Components
 	};
 
 	// draw an aet layer (with all settings)
-	int createAetLayer(int32_t unk1, uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, int32_t unk2, const char* animation, const char* animation2, float animationInTime, float animationOutTime, const Point* scale, int32_t unk5)
+	// aetSpeedCallback is actually a pointer to a class or struct with the callback address at offset +0x8
+	int createAetLayer(int32_t unk1, uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, int32_t unk2, const char* animation, const char* animation2, float animationInTime, float animationOutTime, const Point* scale, const void* aetSpeedCallback)
 	{
-		return ((int(*)(int32_t, uint32_t, createAetFlags, const char*, const Point*, int32_t, const char*, const char*, float, float, const Point*, int32_t))0x14013be60)(unk1, drawLayer, flags, name, loc, unk2, animation, animation2, animationInTime, animationOutTime, scale, unk5);
+		return ((int(*)(int32_t, uint32_t, createAetFlags, const char*, const Point*, int32_t, const char*, const char*, float, float, const Point*, const void*))0x14013be60)(unk1, drawLayer, flags, name, loc, unk2, animation, animation2, animationInTime, animationOutTime, scale, aetSpeedCallback);
 	}
 	// draw an aet layer (with animation timing override)
 	int createAetLayer(uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, float animationInTime, float animationOutTime)

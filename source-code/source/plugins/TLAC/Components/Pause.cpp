@@ -14,10 +14,10 @@ namespace TLAC::Components
 	bool Pause::isPaused = false;
 	bool Pause::giveUp = false;
 	bool Pause::showUI = true;
-	unsigned int Pause::menuPos = 0;
-	unsigned int Pause::mainMenuPos = 0;
-	unsigned int Pause::menuSet = MENUSET_MAIN;
-	std::chrono::time_point<std::chrono::high_resolution_clock> Pause::menuItemSelectTime;
+	int Pause::curMenuPos = 0;
+	int Pause::mainMenuPos = 0;
+	Pause::menusets Pause::curMenuSet = MENUSET_MAIN;
+	std::chrono::time_point<std::chrono::high_resolution_clock> Pause::menuItemMoveTime;
 	std::vector<uint8_t> Pause::origAetMovOp;
 	uint8_t* Pause::aetMovPatchAddress = (uint8_t*)0x1401703b3;
 	std::vector<uint8_t> Pause::origFramespeedOp;
@@ -98,10 +98,8 @@ namespace TLAC::Components
 				// block all buttons from being passed to game
 				filteredButtons = allButtons;
 
-				menuPos = 0;
-				menuSet = MENUSET_MAIN;
+				setMenuPos(MENUSET_MAIN, 0);
 				showUI = true;
-				menuItemSelectTime = std::chrono::high_resolution_clock::now();
 				isPaused = true;
 			}
 
@@ -129,47 +127,32 @@ namespace TLAC::Components
 				if (showUI)
 				{
 					if (inputState->Tapped.Buttons & JVS_L)
-					{
-						menuPos -= 1;
-						menuItemSelectTime = std::chrono::high_resolution_clock::now();
-					}
+						setMenuPos(curMenuSet, curMenuPos - 1);
 
 					if (inputState->Tapped.Buttons & JVS_R)
-					{
-						menuPos += 1;
-						menuItemSelectTime = std::chrono::high_resolution_clock::now();
-					}
+						setMenuPos(curMenuSet, curMenuPos + 1);
 
 					if (inputState->Tapped.Buttons & JVS_TRIANGLE)
 					{
-						if (menuSet != MENUSET_MAIN)
+						if (curMenuSet != MENUSET_MAIN)
 						{
-							menuSet = MENUSET_MAIN;
-							menuPos = mainMenuPos;
-							menuItemSelectTime = std::chrono::high_resolution_clock::now();
+							setMenuPos(MENUSET_MAIN, mainMenuPos);
 						}
 					}
-
-					menuPos %= menuItems[menuSet].size();
-
-					if (menuSet == MENUSET_MAIN)
-						mainMenuPos = menuPos;
-
-					// use released when unpausing from X so it doesn't trigger input
-					if (inputState->Released.Buttons & JVS_CROSS)
+					
+					if (inputState->Tapped.Buttons & JVS_CROSS)
 						pause = false;
 
-					// use released because this can trigger an unpause too
-					if (inputState->Released.Buttons & JVS_CIRCLE)
-						menuItems[menuSet][menuPos].second();
+					if (inputState->Tapped.Buttons & JVS_CIRCLE)
+						menu[curMenuSet].items[curMenuPos].callback();
 
-					if (menuSet == MENUSET_SEVOL)
+					if (curMenuSet == MENUSET_SEVOL)
 					{
 						const char volformat[] = "%d";
 						size_t size = snprintf(nullptr, 0, volformat, playerData->act_vol) + 1;
 						char* buf = new char[size];
 						snprintf(buf, size, volformat, playerData->act_vol);
-						menuItems[MENUSET_SEVOL][1].first = buf;
+						menu[MENUSET_SEVOL].items[1].name = buf;
 						delete[] buf;
 					}
 				}
@@ -269,8 +252,8 @@ namespace TLAC::Components
 			dtParams.layer = contentLayer;
 
 			// selection cursor
-			int selectBoxOrigin = menuY - menuItemHeight * (menuItems[menuSet].size() / 2.0) - (menuItemHeight - menuTextSize) / 2;
-			int selectBoxPos = selectBoxOrigin + menuItemHeight * menuPos;
+			int selectBoxOrigin = menuY - menuItemHeight * (menu[curMenuSet].items.size() / 2.0) - (menuItemHeight - menuTextSize) / 2;
+			int selectBoxPos = selectBoxOrigin + menuItemHeight * curMenuPos;
 			const float selectBoxWidth = 200;
 			const float selectBoxHeight = menuItemHeight;
 			const float selectBoxThickness = 2;
@@ -287,16 +270,16 @@ namespace TLAC::Components
 			// menu
 			fontInfo.setSize(menuTextSize, menuTextSize);
 
-			dtParams.originLoc = { menuX, menuY - menuItemHeight * (menuItems[menuSet].size() / 2.0f) };
+			dtParams.originLoc = { menuX, menuY - menuItemHeight * (menu[curMenuSet].items.size() / 2.0f) };
 
-			for (int i = 0; i < menuItems[menuSet].size(); i++)
+			for (int i = 0; i < menu[curMenuSet].items.size(); i++)
 			{
-				std::pair<std::string, void(*)()> &item = menuItems[menuSet][i];
+				menuItem &item = menu[curMenuSet].items[i];
 
-				if (i == menuPos)
+				if (i == curMenuPos)
 				{
 					const int duration = 1500000000; // 1.5s
-					std::chrono::nanoseconds cyclePos = (std::chrono::high_resolution_clock::now() - menuItemSelectTime) % std::chrono::nanoseconds(duration);
+					std::chrono::nanoseconds cyclePos = (std::chrono::high_resolution_clock::now() - menuItemMoveTime) % std::chrono::nanoseconds(duration);
 					uint8_t alpha = (cosf(cyclePos.count() * 6.283185f / duration) * 0.15 + 0.85) * 255;
 					dtParams.colour = 0x00ffff00 | (alpha << 24);
 				}
@@ -306,7 +289,7 @@ namespace TLAC::Components
 				}
 
 				dtParams.currentLoc = dtParams.originLoc;
-				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE), item.first);
+				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE), item.name);
 				dtParams.originLoc.y += menuItemHeight;
 			}
 
@@ -328,7 +311,7 @@ namespace TLAC::Components
 			dtParams.colour = 0xffffffff;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"L/R:Move　");
 
-			if (menuSet != MENUSET_MAIN)
+			if (curMenuSet != MENUSET_MAIN)
 			{
 				spriteLoc.x = dtParams.originLoc.x + halfSpriteSize;
 				triangleAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_sankaku", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, 0);

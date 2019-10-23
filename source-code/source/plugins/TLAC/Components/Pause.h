@@ -22,12 +22,14 @@ namespace TLAC::Components
 		virtual void Update() override;
 		virtual void UpdatePostInput() override;
 		virtual void UpdateDraw2D() override;
+		virtual void OnFocusLost() override;
 
 		static bool pause; // set pause to change pause state
 		static bool giveUp; // set give up to end current song
 	private:
 		// this is a mess of static so that menuItems can work
 		static bool isPauseKeyTapped();
+		static bool isInGame();
 		static std::vector<bool> streamPlayStates;
 		static void InjectCode(void* address, const std::vector<uint8_t> data);
 
@@ -62,10 +64,10 @@ namespace TLAC::Components
 		
 		static bool showUI;
 
-		int triangleAet;
-		int squareAet;
-		int crossAet;
-		int circleAet;
+		static int triangleAet;
+		static int squareAet;
+		static int crossAet;
+		static int circleAet;
 		
 		enum menusets
 		{

@@ -14,6 +14,10 @@ namespace TLAC::Components
 	bool Pause::isPaused = false;
 	bool Pause::giveUp = false;
 	bool Pause::showUI = true;
+	int Pause::triangleAet = 0;
+	int Pause::squareAet = 0;
+	int Pause::crossAet = 0;
+	int Pause::circleAet = 0;
 	int Pause::curMenuPos = 0;
 	int Pause::mainMenuPos = 0;
 	Pause::menusets Pause::curMenuSet = MENUSET_MAIN;
@@ -125,7 +129,7 @@ namespace TLAC::Components
 			}
 
 			// always exit pause if key is tapped or no longer in game somehow
-			if (isPauseKeyTapped() || *(GameState*)CURRENT_GAME_STATE_ADDRESS != GS_GAME || *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS != SUB_GAME_MAIN)
+			if (isPauseKeyTapped() || !isInGame())
 			{
 				pause = false;
 			}
@@ -221,7 +225,7 @@ namespace TLAC::Components
 			filteredButtons = (JvsButtons)(filteredButtons & ~inputState->Tapped.Buttons);
 
 			// only enter pause if in game
-			if (*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN)
+			if (isInGame())
 			{
 				if (isPauseKeyTapped())
 				{
@@ -357,9 +361,20 @@ namespace TLAC::Components
 		}
 	}
 
+	void Pause::OnFocusLost()
+	{
+		if (isInGame())
+			pause = true;
+	}
+
 	bool Pause::isPauseKeyTapped()
 	{
 		return inputState->Tapped.Buttons & JVS_START;
+	}
+
+	bool Pause::isInGame()
+	{
+		return *(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN;
 	}
 
 	bool Pause::hookedGiveUpFunc(void* cls)

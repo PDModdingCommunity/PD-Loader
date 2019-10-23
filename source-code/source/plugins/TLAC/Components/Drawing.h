@@ -91,7 +91,7 @@ namespace TLAC::Components
 		Point textCurrentLoc;
 		Point lineOriginLoc; // must be set for newlines to work as expected
 		uint8_t padding3c[0x4];
-		uint64_t unk40;
+		uint64_t lineLength; // in characters
 		FontInfo* font;
 		uint16_t unk50;
 
@@ -110,7 +110,7 @@ namespace TLAC::Components
 			unk28 = 0;
 			textCurrentLoc = { 0, 0 };
 			lineOriginLoc = { 0, 0 };
-			unk40 = 0;
+			lineLength = 0;
 			font = fi;
 			unk50 = 0x25a1;
 		}
@@ -187,6 +187,7 @@ namespace TLAC::Components
 	{
 		DRAWTEXT_ENABLE_XADVANCE = 1,
 		DRAWTEXT_ALIGN_RIGHT = 2,
+		DRAWTEXT_ALIGN_SCREEN_CENTRE = 4,
 		DRAWTEXT_ALIGN_CENTRE = 8,
 		DRAWTEXT_MEASURE = 0x200,
 		DRAWTEXT_SCALING_OPTIMISED = 0x400, // ? -- seems to be set if the requested font size doesn't match the original font, and the internal width/height 1 and 2 match
@@ -198,7 +199,6 @@ namespace TLAC::Components
 	{
 		((void(*)(DrawParams*, uint32_t, const char*, int64_t))0x140198500)(dtParam, flags, str.c_str(), str.length());
 	}
-
 	void drawTextW(DrawParams* dtParam, drawTextFlags flags, std::wstring str)
 	{
 		const wchar_t* ptrs[2];
@@ -207,7 +207,25 @@ namespace TLAC::Components
 
 		((void(*)(DrawParams*, uint32_t, const wchar_t**))0x140198380)(dtParam, flags, &ptrs[0]);
 	}
-	//void(*drawTextW)(DrawParams* dtParam, drawTextFlags flags, MsStringW str) = (void(*)(DrawParams* dtParam, drawTextFlags flags, MsStringW str))0x140198380;
+
+	void drawTextFormattedW(DrawParams* dtParam, drawTextFlags flags, std::wstring str)
+	{
+		const wchar_t* ptrs[2];
+		ptrs[0] = str.c_str();
+		ptrs[1] = (wchar_t*)((uint64_t)ptrs[0] + str.length() * 2);
+
+		((void(*)(uint32_t, const wchar_t**, DrawParams*))0x1404c2aa0)(flags, &ptrs[0], dtParam);
+	}
+
+	void drawTextWithSpritesW(DrawParams* dtParam, drawTextFlags flags, std::wstring str)
+	{
+		const wchar_t* ptrs[2];
+		ptrs[0] = str.c_str();
+		ptrs[1] = (wchar_t*)((uint64_t)ptrs[0] + str.length() * 2);
+
+		((void(*)(uint32_t, const wchar_t**, DrawParams*))0x1404c2cf0)(flags, &ptrs[0], dtParam);
+	}
+
 
 	struct RectangleBounds
 	{

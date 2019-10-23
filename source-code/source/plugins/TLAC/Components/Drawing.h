@@ -82,13 +82,14 @@ namespace TLAC::Components
 		uint32_t unk14;
 		uint32_t unk18;
 		uint32_t layer; // 8 seems similar to default but higher
-		                // 0x19 is startup screen
+						// 0x18 is below 0x19 but still seems to be above any game elements
+		                // 0x19 is startup screen (below dwgui)
 		                // I noticed some use different scaling
 		uint32_t unk20;
 		uint32_t unk24;
 		uint32_t unk28;
-		Point originLoc;
-		Point currentLoc;
+		Point textCurrentLoc;
+		Point lineOriginLoc; // must be set for newlines to work as expected
 		uint8_t padding3c[0x4];
 		uint64_t unk40;
 		FontInfo* font;
@@ -107,8 +108,8 @@ namespace TLAC::Components
 			unk20 = 0x0;
 			unk24 = 0xd;
 			unk28 = 0;
-			originLoc = { 0, 0 };
-			currentLoc = { 0, 0 };
+			textCurrentLoc = { 0, 0 };
+			lineOriginLoc = { 0, 0 };
 			unk40 = 0;
 			font = fi;
 			unk50 = 0x25a1;
@@ -184,7 +185,7 @@ namespace TLAC::Components
 
 	enum drawTextFlags : uint32_t
 	{
-		DRAWTEXT_ENABLE_LAYOUT = 1, //?
+		DRAWTEXT_ENABLE_XADVANCE = 1,
 		DRAWTEXT_ALIGN_RIGHT = 2,
 		DRAWTEXT_ALIGN_CENTRE = 8,
 		DRAWTEXT_STROKE = 0x10000,

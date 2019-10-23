@@ -157,16 +157,17 @@ namespace TLAC::Components
 					if (inputState->Tapped.Buttons & JVS_R)
 						setMenuPos(curMenuSet, curMenuPos + 1);
 
-					if (inputState->Tapped.Buttons & JVS_TRIANGLE)
+					if (inputState->Tapped.Buttons & JVS_CROSS)
 					{
-						if (curMenuSet != MENUSET_MAIN)
+						if (curMenuSet == MENUSET_MAIN)
+						{
+							pause = false;
+						}
+						else
 						{
 							setMenuPos(MENUSET_MAIN, mainMenuPos);
 						}
 					}
-					
-					if (inputState->Tapped.Buttons & JVS_CROSS)
-						pause = false;
 
 					if (inputState->Tapped.Buttons & JVS_CIRCLE)
 						menu[curMenuSet].items[curMenuPos].callback();
@@ -335,15 +336,7 @@ namespace TLAC::Components
 
 			dtParams.colour = 0xffffffff;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L"L/R:Move　");
-
-			if (curMenuSet != MENUSET_MAIN)
-			{
-				spriteLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize; // the aets are centered on their location, so fudge this a little
-				triangleAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_sankaku", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, nullptr);
-				dtParams.textCurrentLoc.x += spriteSize;
-				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Back　");
-			}
-
+			
 			spriteLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
 			squareAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_shikaku", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, nullptr);
 			dtParams.textCurrentLoc.x += spriteSize;
@@ -352,8 +345,11 @@ namespace TLAC::Components
 			spriteLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
 			crossAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_batsu", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, nullptr);
 			dtParams.textCurrentLoc.x += spriteSize;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Close　");
-
+			if (curMenuSet == MENUSET_MAIN)
+				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Close　");
+			else
+				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Back　");
+			
 			spriteLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
 			circleAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_maru", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, nullptr);
 			dtParams.textCurrentLoc.x += spriteSize;

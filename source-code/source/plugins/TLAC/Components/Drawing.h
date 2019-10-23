@@ -75,7 +75,7 @@ namespace TLAC::Components
 	{
 		uint32_t colour; // RGBA byte array?, so set as 0xAABBGGRR
 		uint32_t fillColour; // ?? RGBA byte array?, so set as 0xAABBGGRR
-		uint8_t unk08;
+		uint8_t unk08; // seems to enable DRAWTEXT_MEASURE
 		uint8_t unk09[0x3];
 		uint32_t unk0c;
 		uint32_t unk10;
@@ -188,6 +188,9 @@ namespace TLAC::Components
 		DRAWTEXT_ENABLE_XADVANCE = 1,
 		DRAWTEXT_ALIGN_RIGHT = 2,
 		DRAWTEXT_ALIGN_CENTRE = 8,
+		DRAWTEXT_MEASURE = 0x200,
+		DRAWTEXT_SCALING_OPTIMISED = 0x400, // ? -- seems to be set if the requested font size doesn't match the original font, and the internal width/height 1 and 2 match
+											// maybe it's just required for any scaling though
 		DRAWTEXT_STROKE = 0x10000,
 	};
 

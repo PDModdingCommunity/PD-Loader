@@ -251,10 +251,15 @@ namespace TLAC::Components
 			DrawParams dtParams(&fontInfo);
 			dtParams.layer = bgLayer;
 
+			// get aspect ratio
+			float aspect = *(float*)UI_ASPECT_RATIO;
+
 
 			// bg rect
+			float bgWidth = aspect * 720 + 2; // add a couple of pixels to protect against rounding errors
+			float bgLeft = -(bgWidth - 1280) / 2; // 0,0 is in the corner of a 720p view.. half of the extra over 1280 wide is the horizontal offset to centre the bg
 			RectangleBounds rect;
-			rect = { 0, 0, 1280, 720 };
+			rect = { bgLeft, 0, bgWidth, 720 };
 			dtParams.colour = 0xa0000000;
 			dtParams.fillColour = 0xa0000000;
 			fillRectangle(&dtParams, &rect);
@@ -330,8 +335,14 @@ namespace TLAC::Components
 			destroyAetLayer(crossAet);
 			destroyAetLayer(circleAet);
 
+			float textLeft;
+			if (aspect > 16.0f / 9.0f)
+				textLeft = 32;
+			else
+				textLeft = (1280 - bgWidth) / 2 + 32; // 0,0 is in the corner of a 720p view.. half of the difference to 1280 wide is the horizontal offset to the window corner
+
 			fontInfo.setSize(18, 18);
-			dtParams.textCurrentLoc = { 32, 720 - 40 };
+			dtParams.textCurrentLoc = { textLeft, 720 - 40 };
 			dtParams.lineOriginLoc = dtParams.textCurrentLoc;
 			const float spriteSize = 18;
 			const float halfSpriteSize = spriteSize / 2;

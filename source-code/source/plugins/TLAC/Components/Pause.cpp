@@ -290,8 +290,12 @@ namespace TLAC::Components
 			dtParams.layer = contentLayer;
 
 			// selection cursor
-			int selectBoxOrigin = menuY - menuItemHeight * (menu[curMenuSet].items.size() / 2.0) - (menuItemHeight - menuTextSize) / 2;
-			int selectBoxPos = selectBoxOrigin + menuItemHeight * curMenuPos;
+			int menuOrigin = menuY - menuItemHeight * (menu[curMenuSet].items.size() / 2.0);
+			if (curMenuSet != MENUSET_MAIN)
+			{
+				menuOrigin += menuItemHeight * 0.4;
+			}
+			int selectBoxPos = menuOrigin - (menuItemHeight - menuTextSize) / 2 + menuItemHeight * curMenuPos;
 			const float selectBoxWidth = 200;
 			const float selectBoxHeight = menuItemHeight;
 			const float selectBoxThickness = 2;
@@ -307,9 +311,19 @@ namespace TLAC::Components
 
 			// menu
 			fontInfo.setSize(menuTextSize, menuTextSize);
-
-			dtParams.textCurrentLoc = { menuX, menuY - menuItemHeight * (menu[curMenuSet].items.size() / 2.0f) };
+			
+			dtParams.textCurrentLoc = { menuX, (float)menuOrigin };
 			dtParams.lineOriginLoc = dtParams.textCurrentLoc;
+
+			if (curMenuSet != MENUSET_MAIN)
+			{
+				dtParams.textCurrentLoc.y -= menuItemHeight * 1.333f;
+				dtParams.lineOriginLoc.y = dtParams.textCurrentLoc.y;
+				dtParams.colour = 0xffffffff;
+				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE | DRAWTEXT_STROKE), menu[curMenuSet].name);
+				dtParams.textCurrentLoc.y += menuItemHeight * 1.333f;
+				dtParams.lineOriginLoc.y = dtParams.textCurrentLoc.y;
+			}
 
 			for (int i = 0; i < menu[curMenuSet].items.size(); i++)
 			{
@@ -327,7 +341,7 @@ namespace TLAC::Components
 				dtParams.textCurrentLoc.y += menuItemHeight;
 				dtParams.lineOriginLoc = dtParams.textCurrentLoc;
 			}
-			
+						
 
 			// key legend
 			destroyAetLayer(triangleAet);

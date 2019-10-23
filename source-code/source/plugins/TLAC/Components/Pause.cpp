@@ -298,7 +298,8 @@ namespace TLAC::Components
 			// menu
 			fontInfo.setSize(menuTextSize, menuTextSize);
 
-			dtParams.originLoc = { menuX, menuY - menuItemHeight * (menu[curMenuSet].items.size() / 2.0f) };
+			dtParams.textCurrentLoc = { menuX, menuY - menuItemHeight * (menu[curMenuSet].items.size() / 2.0f) };
+			dtParams.lineOriginLoc = dtParams.textCurrentLoc;
 
 			for (int i = 0; i < menu[curMenuSet].items.size(); i++)
 			{
@@ -312,11 +313,11 @@ namespace TLAC::Components
 					dtParams.colour = 0xffffffff;
 				}
 
-				dtParams.currentLoc = dtParams.originLoc;
 				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE), menu[curMenuSet].items[i].name);
-				dtParams.originLoc.y += menuItemHeight;
+				dtParams.textCurrentLoc.y += menuItemHeight;
+				dtParams.lineOriginLoc = dtParams.textCurrentLoc;
 			}
-
+			
 
 			// key legend
 			destroyAetLayer(triangleAet);
@@ -325,38 +326,38 @@ namespace TLAC::Components
 			destroyAetLayer(circleAet);
 
 			fontInfo.setSize(18, 18);
-			dtParams.originLoc = { 32, 720 - 40 };
-			dtParams.currentLoc = dtParams.originLoc;
+			dtParams.textCurrentLoc = { 32, 720 - 40 };
+			dtParams.lineOriginLoc = dtParams.textCurrentLoc;
 			const float spriteSize = 18;
 			const float halfSpriteSize = spriteSize / 2;
-			Point spriteLoc = { 0, dtParams.originLoc.y + halfSpriteSize };
+			Point spriteLoc = { 0, dtParams.textCurrentLoc.y + halfSpriteSize }; // the aets are centered on their location, so fudge this a little
 			const Point spriteScale = { spriteSize / 64, spriteSize / 64 }; // just approximated
 
 			dtParams.colour = 0xffffffff;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L"L/R:Move　");
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L"L/R:Move　");
 
 			if (curMenuSet != MENUSET_MAIN)
 			{
-				spriteLoc.x = dtParams.originLoc.x + halfSpriteSize;
+				spriteLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize; // the aets are centered on their location, so fudge this a little
 				triangleAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_sankaku", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, nullptr);
-				dtParams.originLoc.x += spriteSize;
-				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Back　");
+				dtParams.textCurrentLoc.x += spriteSize;
+				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Back　");
 			}
 
-			spriteLoc.x = dtParams.originLoc.x + halfSpriteSize;
+			spriteLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
 			squareAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_shikaku", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, nullptr);
-			dtParams.originLoc.x += spriteSize;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Hide Menu　");
+			dtParams.textCurrentLoc.x += spriteSize;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Hide Menu　");
 
-			spriteLoc.x = dtParams.originLoc.x + halfSpriteSize;
+			spriteLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
 			crossAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_batsu", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, nullptr);
-			dtParams.originLoc.x += spriteSize;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Close　");
+			dtParams.textCurrentLoc.x += spriteSize;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Close　");
 
-			spriteLoc.x = dtParams.originLoc.x + halfSpriteSize;
+			spriteLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
 			circleAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_maru", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, nullptr);
-			dtParams.originLoc.x += spriteSize;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_LAYOUT), L":Select");
+			dtParams.textCurrentLoc.x += spriteSize;
+			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Select");
 		}
 	}
 

@@ -333,22 +333,23 @@ namespace TLAC::Components
 				selResultAet4 = createAetLayer(selResultFile, dtParams.layer, CREATEAET_20000, "window_in", aetLoc, 0, nullptr, nullptr, animPos, animPos, aetScale, 0);
 			}
 			*/
+			
 			dtParams.colour = 0xffffff00;
 			drawPolyline(&dtParams, {
 				{ 537, 255 },
-				{ 793, 255 },
-				{ 759, 453 },
-				{ 744, 465 },
-				{ 487, 465 },
+				{ 794, 255 },
+				{ 759, 454 },
+				{ 744, 466 },
+				{ 487, 466 },
 				{ 522, 267 },
 				{ 537, 255 },
 			});
 			drawPolyline(&dtParams, {
 				{ 537 - .7f, 255 - 2 },
-				{ 793 + 2.38f, 255 - 2 },
-				{ 759 + 2.1f, 453 + 1.15f },
-				{ 744 + .7f, 465 + 2 },
-				{ 487 - 2.38f, 465 + 2 },
+				{ 794 + 2.38f, 255 - 2 },
+				{ 759 + 2.1f, 454 + 1.15f },
+				{ 744 + .7f, 466 + 2 },
+				{ 487 - 2.38f, 466 + 2 },
 				{ 522 - 2.1f, 267 - 1.15f },
 				{ 537 - .7f, 255 - 2 },
 			});
@@ -358,14 +359,14 @@ namespace TLAC::Components
 				{ 774, 265 },
 				{ 770, 286 },
 				{ 764, 286 },
-				{ 737, 434 },
-				{ 743, 434 },
-				{ 739, 455 },
-				{ 733, 462 },
-				{ 513, 462 },
-				{ 507, 455 },
-				{ 511, 434 },
-				{ 517, 434 },
+				{ 737, 435 },
+				{ 743, 435 },
+				{ 739, 456 },
+				{ 733, 463 },
+				{ 513, 463 },
+				{ 507, 456 },
+				{ 511, 435 },
+				{ 517, 435 },
 				{ 544, 286 },
 				{ 538, 286 },
 				{ 542, 265 },
@@ -373,42 +374,59 @@ namespace TLAC::Components
 			});
 
 
+			const float slant = 35.0f / 199.0f;
 			// selection cursor
-			int menuOrigin = menuY - menuItemTotalHeight * (menu[curMenuSet].items.size() / 2.0) + menuItemTotalHeight / 2 - menuTextSize / 2;
+			int menuOriginY = menuY - menuItemTotalHeight * (menu[curMenuSet].items.size() / 2.0) + menuItemTotalHeight / 2 - menuTextSize / 2;
 			if (curMenuSet != MENUSET_MAIN)
 			{
-				menuOrigin += menuItemTotalHeight * 1.2 / 2;
+				menuOriginY += menuItemTotalHeight * 1.2 / 2;
 			}
-			int selectBoxPos = menuOrigin - (menuItemHeight - menuTextSize) / 2 + menuItemTotalHeight * curMenuPos;
+			int menuOriginX = menuX + (menuY - menuOriginY + menuTextSize / 2) * slant;
 			const float selectBoxWidth = 150;
 			const float selectBoxHeight = menuItemHeight;
 			const float selectBoxThickness = 2;
 
-			const float selectBoxX = menuX - selectBoxWidth / 2;
-			const float selectBoxY = selectBoxPos;
+			float selectBoxX = menuOriginX - (menuItemTotalHeight * curMenuPos * slant) - selectBoxWidth / 2;
+			float selectBoxY = menuOriginY - (menuItemHeight - menuTextSize) / 2 + menuItemTotalHeight * curMenuPos;
 
-			rect = { selectBoxX, selectBoxY, selectBoxWidth, selectBoxHeight };
+			//rect = { selectBoxX, selectBoxY, selectBoxWidth, selectBoxHeight };
 			dtParams.colour = 0xc0ffff00;
 			dtParams.fillColour = 0xc0ffff00;
-			drawRectangle(&dtParams, rect, selectBoxThickness);
+			//drawRectangle(&dtParams, rect, selectBoxThickness);
+			drawPolyline(&dtParams, {
+				{ selectBoxX + (selectBoxHeight - 8) * slant + 8 * 15 / 12, selectBoxY },
+				{ selectBoxX + selectBoxWidth, selectBoxY },
+				{ selectBoxX + selectBoxWidth - (selectBoxHeight - 8) * slant, selectBoxY + selectBoxHeight - 8 },
+				{ selectBoxX + selectBoxWidth - (selectBoxHeight - 8) * slant - 8 * 15 / 12, selectBoxY + selectBoxHeight },
+				{ selectBoxX, selectBoxY + selectBoxHeight },
+				{ selectBoxX + (selectBoxHeight - 8) * slant, selectBoxY + 8 },
+				{ selectBoxX + (selectBoxHeight - 8) * slant + 8 * 15 / 12, selectBoxY },
+			});
+			drawPolyline(&dtParams, {
+				{ selectBoxX + (selectBoxHeight - 8) * slant + 8 * 15 / 12 - .7f, selectBoxY - 2 },
+				{ selectBoxX + selectBoxWidth + 2.38f, selectBoxY - 2 },
+				{ selectBoxX + selectBoxWidth - (selectBoxHeight - 8) * slant + 2.1f, selectBoxY + selectBoxHeight - 8 + 1.15f },
+				{ selectBoxX + selectBoxWidth - (selectBoxHeight - 8) * slant - 8 * 15 / 12 + .7f, selectBoxY + selectBoxHeight + 2 },
+				{ selectBoxX - 2.38f, selectBoxY + selectBoxHeight + 2 },
+				{ selectBoxX + (selectBoxHeight - 8) * slant - 2.1f, selectBoxY + 8 - 1.15f },
+				{ selectBoxX + (selectBoxHeight - 8) * slant + 8 * 15 / 12 - .7f, selectBoxY - 2 },
+			});
 
 
 			// menu
 			fontInfo.setSize(menuTextSize, menuTextSize);
-			
-			dtParams.textCurrentLoc = { menuX, (float)menuOrigin };
-			dtParams.lineOriginLoc = dtParams.textCurrentLoc;
 
 			if (curMenuSet != MENUSET_MAIN)
 			{
-				dtParams.textCurrentLoc.y -= menuItemTotalHeight * 1.2f;
+				dtParams.textCurrentLoc = { menuX + 90 * slant, menuY - 90 };
 				dtParams.lineOriginLoc.y = dtParams.textCurrentLoc.y;
 				dtParams.colour = 0xffffffff;
 				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE | DRAWTEXT_STROKE), menu[curMenuSet].name);
-				dtParams.textCurrentLoc.y += menuItemTotalHeight * 1.2f;
-				dtParams.lineOriginLoc.y = dtParams.textCurrentLoc.y;
 			}
-
+			
+			dtParams.textCurrentLoc = { (float)menuOriginX, (float)menuOriginY };
+			dtParams.lineOriginLoc = dtParams.textCurrentLoc;
+			
 			for (int i = 0; i < menu[curMenuSet].items.size(); i++)
 			{
 				if (i == curMenuPos)
@@ -422,6 +440,7 @@ namespace TLAC::Components
 				}
 
 				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE), menu[curMenuSet].items[i].name);
+				dtParams.textCurrentLoc.x -= (menuItemTotalHeight * slant);
 				dtParams.textCurrentLoc.y += menuItemTotalHeight;
 				dtParams.lineOriginLoc = dtParams.textCurrentLoc;
 			}

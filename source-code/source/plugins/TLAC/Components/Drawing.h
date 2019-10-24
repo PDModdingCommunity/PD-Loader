@@ -121,68 +121,6 @@ namespace TLAC::Components
 		}
 	};
 
-	/* struct MsString {
-		union {
-			char* string_ptr;
-			char string_buf[16];
-		};
-		uint64_t len;
-		uint64_t bufsize;
-
-		char* GetCharBuf()
-		{
-			if (bufsize > 0xf && string_ptr != nullptr)
-				return string_ptr;
-			else
-				return string_buf;
-		};
-
-		void SetCharBuf(char* newcontent)
-		{
-			len = strlen(newcontent);
-			bufsize = len;
-			if (len > 0xf)
-			{
-				string_ptr = strdup(newcontent);
-			}
-			else
-			{
-				strcpy_s(string_buf, newcontent);
-			}
-		}
-	}; */
-
-	/* struct MsStringW {
-		union {
-			wchar_t* string_ptr;
-			wchar_t string_buf[8];
-		};
-		uint64_t len;
-		uint64_t bufsize;
-
-		wchar_t* GetCharBuf()
-		{
-			if (bufsize > 0x7 && string_ptr != nullptr)
-				return string_ptr;
-			else
-				return string_buf;
-		};
-
-		void SetCharBuf(wchar_t* newcontent)
-		{
-			len = wcslen(newcontent);
-			bufsize = len;
-			if (len > 0xf)
-			{
-				string_ptr = wcsdup(newcontent);
-			}
-			else
-			{
-				wcscpy_s(string_buf, newcontent);
-			}
-		}
-	}; */
-
 	enum drawTextFlags : uint32_t
 	{
 		DRAWTEXT_ENABLE_XADVANCE = 1,
@@ -264,6 +202,129 @@ namespace TLAC::Components
 		dtParam->fillColour = oldFillColour;
 	}
 
+
+
+	struct MsString {
+		union {
+			char* string_ptr;
+			char string_buf[16];
+		};
+		uint64_t len;
+		uint64_t bufsize;
+
+		char* GetCharBuf()
+		{
+			if (bufsize > 0xf && string_ptr != nullptr)
+				return string_ptr;
+			else
+				return string_buf;
+		};
+
+		void SetCharBuf(char* newcontent)
+		{
+			len = strlen(newcontent);
+			bufsize = len;
+			if (len > 0xf)
+			{
+				string_ptr = _strdup(newcontent);
+			}
+			else
+			{
+				strcpy_s(string_buf, newcontent);
+			}
+		}
+	};
+
+	/* struct MsStringW {
+	union {
+	wchar_t* string_ptr;
+	wchar_t string_buf[8];
+	};
+	uint64_t len;
+	uint64_t bufsize;
+
+	wchar_t* GetCharBuf()
+	{
+	if (bufsize > 0x7 && string_ptr != nullptr)
+	return string_ptr;
+	else
+	return string_buf;
+	};
+
+	void SetCharBuf(wchar_t* newcontent)
+	{
+	len = wcslen(newcontent);
+	bufsize = len;
+	if (len > 0xf)
+	{
+	string_ptr = wcsdup(newcontent);
+	}
+	else
+	{
+	wcscpy_s(string_buf, newcontent);
+	}
+	}
+	}; */
+
+	struct AetDebugFileInfo
+	{
+		MsString name1;
+		int32_t gameId;
+		char unk[4]; // seems to be some kind of mode prefix (eg. "GAM_")
+		MsString name2; // same as name1???
+		MsString filename;
+		int32_t dbId1; // not sure what the db ids are...  this one might be a position
+		int32_t dbId12;
+	};
+
+	struct AetFileInfo
+	{
+		int32_t id1;
+		char unk1[4]; // seems to be some kind of mode prefix (eg. "GAM_")
+		int32_t id2; // same as id1???
+		int32_t unk2;
+		MsString name;
+		int32_t unk3;
+		int32_t unk4; // might be related to sprites?
+	};
+
+	/*
+	int findAetDebugFileId(std::string name)
+	{
+		AetDebugFileInfo* aetArray = *(AetDebugFileInfo**)AET_DEBUG_ARRAY_POINTER_ADDRESS;
+		AetDebugFileInfo* aetArrayEndAddress = *(AetDebugFileInfo**)(AET_DEBUG_ARRAY_POINTER_ADDRESS + 0x08);
+
+		int id = 0;
+		while (&aetArray[id] < aetArrayEndAddress)
+		{
+			if (name == aetArray[id].name2.GetCharBuf()) // dwgui enum uses name2, so this should too I guess
+				return aetArray[id].gameId;
+			else
+				id++;
+		}
+		return -1;
+	}
+	*/
+	// gets a file ID for use with createAetLayer
+	// returns -1 if the file was not found
+	// note: names are a little different to in 2dauth test -- it seems like they have "_MAIN" appended
+
+	int findAetFileId(std::string name)
+	{
+		AetFileInfo* aetArray = *(AetFileInfo**)AET_ARRAY_POINTER_ADDRESS;
+		AetFileInfo* aetArrayEndAddress = *(AetFileInfo**)(AET_ARRAY_POINTER_ADDRESS + 0x08);
+
+		int id = 0;
+		while (&aetArray[id] < aetArrayEndAddress)
+		{
+			if (name == aetArray[id].name.GetCharBuf()) // dwgui enum uses name2, so this should too I guess
+				return aetArray[id].id1;
+			else
+				id++;
+		}
+		return -1;
+	}
+
 	enum createAetFlags : uint32_t
 	{
 		CREATEAET_20000 = 0x20000,
@@ -271,24 +332,24 @@ namespace TLAC::Components
 
 	// draw an aet layer (with all settings)
 	// aetSpeedCallback is actually a pointer to a class or struct with the callback address at offset +0x8
-	int createAetLayer(int32_t unk1, uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, int32_t unk2, const char* animation, const char* animation2, float animationInTime, float animationOutTime, const Point* scale, const void* aetSpeedCallback)
+	int createAetLayer(int32_t fileId, uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, int32_t unk2, const char* animation, const char* animation2, float animationInTime, float animationOutTime, const Point* scale, const void* aetSpeedCallback)
 	{
-		return ((int(*)(int32_t, uint32_t, createAetFlags, const char*, const Point*, int32_t, const char*, const char*, float, float, const Point*, const void*))0x14013be60)(unk1, drawLayer, flags, name, loc, unk2, animation, animation2, animationInTime, animationOutTime, scale, aetSpeedCallback);
+		return ((int(*)(int32_t, uint32_t, createAetFlags, const char*, const Point*, int32_t, const char*, const char*, float, float, const Point*, const void*))0x14013be60)(fileId, drawLayer, flags, name, loc, unk2, animation, animation2, animationInTime, animationOutTime, scale, aetSpeedCallback);
 	}
 	// draw an aet layer (with animation timing override)
-	int createAetLayer(uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, float animationInTime, float animationOutTime)
+	int createAetLayer(int32_t fileId, uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, float animationInTime, float animationOutTime)
 	{
-		return createAetLayer(3, drawLayer, flags, name, loc, 0, 0, 0, animationInTime, animationOutTime, 0, 0);
+		return createAetLayer(fileId, drawLayer, flags, name, loc, 0, 0, 0, animationInTime, animationOutTime, 0, 0);
 	}
 	// draw an aet layer (with scale)
-	int createAetLayer(uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, const Point* scale)
+	int createAetLayer(int32_t fileId, uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, const Point* scale)
 	{
-		return createAetLayer(3, drawLayer, flags, name, loc, 0, 0, 0, -1, -1, scale, 0);
+		return createAetLayer(fileId, drawLayer, flags, name, loc, 0, 0, 0, -1, -1, scale, 0);
 	}
 	// draw an aet layer
-	int createAetLayer(uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc)
+	int createAetLayer(int32_t fileId, uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc)
 	{
-		return createAetLayer(3, drawLayer, flags, name, loc, 0, 0, 0, -1, -1, 0, 0);
+		return createAetLayer(fileId, drawLayer, flags, name, loc, 0, 0, 0, -1, -1, 0, 0);
 	}
 
 	void destroyAetLayer(int &layer)

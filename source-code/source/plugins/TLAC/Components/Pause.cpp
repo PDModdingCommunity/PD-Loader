@@ -14,6 +14,7 @@ namespace TLAC::Components
 	bool Pause::isPaused = false;
 	bool Pause::giveUp = false;
 	bool Pause::showUI = true;
+	int Pause::keyWinAet = 0;
 	int Pause::triangleAet = 0;
 	int Pause::squareAet = 0;
 	int Pause::crossAet = 0;
@@ -145,6 +146,7 @@ namespace TLAC::Components
 					else
 					{
 						// clear these from the screen too
+						destroyAetLayer(keyWinAet);
 						destroyAetLayer(triangleAet);
 						destroyAetLayer(squareAet);
 						destroyAetLayer(crossAet);
@@ -213,6 +215,7 @@ namespace TLAC::Components
 						*playstate = streamPlayStates[i];
 				}
 
+				destroyAetLayer(keyWinAet);
 				destroyAetLayer(triangleAet);
 				destroyAetLayer(squareAet);
 				destroyAetLayer(crossAet);
@@ -250,6 +253,8 @@ namespace TLAC::Components
 			FontInfo fontInfo(0x11);
 			DrawParams dtParams(&fontInfo);
 			dtParams.layer = bgLayer;
+			Point aetScale = { 0.66667, 0.7 };
+			Point aetLoc = { (1280 - aetScale.x * 1280) / 2, (720 - aetScale.y * 720) / 2 };
 
 			// get aspect ratio
 			float aspect = *(float*)UI_ASPECT_RATIO;
@@ -288,6 +293,21 @@ namespace TLAC::Components
 
 
 			dtParams.layer = contentLayer;
+
+			// bg box
+			/*
+			static int keyWinFile = 0;
+			if (keyWinFile == 0)
+			{
+				keyWinFile = findAetFileId("AET_KEY_WIN_MAIN");
+				//printf("keyWinFile: %d\n", keyWinFile);
+			}
+
+			destroyAetLayer(keyWinAet);
+			if (keyWinFile != -1)
+				keyWinAet = createAetLayer(keyWinFile, dtParams.layer, CREATEAET_20000, "win_in", &aetLoc, 0, nullptr, nullptr, 4.6, 4.6, &aetScale, 0);
+			*/
+
 
 			// selection cursor
 			int menuOrigin = menuY - menuItemHeight * (menu[curMenuSet].items.size() / 2.0);
@@ -360,27 +380,27 @@ namespace TLAC::Components
 			dtParams.lineOriginLoc = dtParams.textCurrentLoc;
 			const float spriteSize = 18;
 			const float halfSpriteSize = spriteSize / 2;
-			Point spriteLoc = { 0, dtParams.textCurrentLoc.y + halfSpriteSize }; // the aets are centered on their location, so fudge this a little
-			const Point spriteScale = { spriteSize / 64, spriteSize / 64 }; // just approximated
+			aetLoc = { 0, dtParams.textCurrentLoc.y + halfSpriteSize }; // the aets are centered on their location, so fudge this a little
+			aetScale = { spriteSize / 64, spriteSize / 64 }; // just approximated
 
 			dtParams.colour = 0xffffffff;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L"L/R:Move　");
 			
-			spriteLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
-			squareAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_shikaku", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, nullptr);
+			aetLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
+			squareAet = createAetLayer(3, dtParams.layer, CREATEAET_20000, "button_shikaku", &aetLoc, 0, nullptr, nullptr, 0, 0, &aetScale, nullptr);
 			dtParams.textCurrentLoc.x += spriteSize;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Hide Menu　");
 
-			spriteLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
-			crossAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_batsu", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, nullptr);
+			aetLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
+			crossAet = createAetLayer(3, dtParams.layer, CREATEAET_20000, "button_batsu", &aetLoc, 0, nullptr, nullptr, 0, 0, &aetScale, nullptr);
 			dtParams.textCurrentLoc.x += spriteSize;
 			if (curMenuSet == MENUSET_MAIN)
 				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Close　");
 			else
 				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Back　");
 			
-			spriteLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
-			circleAet = createAetLayer(3, 0x19, CREATEAET_20000, "button_maru", &spriteLoc, 0, nullptr, nullptr, 0, 0, &spriteScale, nullptr);
+			aetLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
+			circleAet = createAetLayer(3, dtParams.layer, CREATEAET_20000, "button_maru", &aetLoc, 0, nullptr, nullptr, 0, 0, &aetScale, nullptr);
 			dtParams.textCurrentLoc.x += spriteSize;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Select");
 		}

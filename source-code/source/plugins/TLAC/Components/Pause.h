@@ -58,6 +58,8 @@ namespace TLAC::Components
 		static const int menuX = 640;
 		static const int menuY = 360;
 		static const int menuItemHeight = 36;
+		static const int menuItemPadding = 12;
+		static const int menuItemTotalHeight = menuItemHeight + menuItemPadding;
 		static const int menuTextSize = 24;
 
 		static const uint32_t bgLayer = 0x18;
@@ -65,7 +67,10 @@ namespace TLAC::Components
 		
 		static bool showUI;
 
-		static int keyWinAet;
+		static int selResultAet1;
+		static int selResultAet2;
+		static int selResultAet3;
+		static int selResultAet4;
 		static int triangleAet;
 		static int squareAet;
 		static int crossAet;

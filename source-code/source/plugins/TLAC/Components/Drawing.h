@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include <string>
+#include <vector>
 
 namespace TLAC::Components
 {
@@ -9,6 +10,13 @@ namespace TLAC::Components
 	{
 		float x;
 		float y;
+	};
+	struct RectangleBounds
+	{
+		float x;
+		float y;
+		float width;
+		float height;
 	};
 
 	struct RawFont
@@ -75,12 +83,9 @@ namespace TLAC::Components
 	{
 		uint32_t colour; // RGBA byte array?, so set as 0xAABBGGRR
 		uint32_t fillColour; // ?? RGBA byte array?, so set as 0xAABBGGRR
-		uint8_t unk08; // seems to enable DRAWTEXT_MEASURE
+		uint8_t clip;
 		uint8_t unk09[0x3];
-		uint32_t unk0c;
-		uint32_t unk10;
-		uint32_t unk14;
-		uint32_t unk18;
+		RectangleBounds clipRect;
 		uint32_t layer; // 8 seems similar to default but higher
 						// 0x18 is below 0x19 but still seems to be above any game elements
 		                // 0x19 is startup screen (below dwgui)
@@ -99,11 +104,8 @@ namespace TLAC::Components
 		{
 			colour = 0xffffffff;
 			fillColour = 0xff808080; // except it's not?
-			unk08 = 0;
-			unk0c = 0;
-			unk10 = 0;
-			unk14 = 0;
-			unk18 = 0;
+			clip = 0;
+			clipRect = { 0, 0, 0, 0 };
 			layer = 0x7;
 			unk20 = 0x0;
 			unk24 = 0xd;
@@ -127,7 +129,7 @@ namespace TLAC::Components
 		DRAWTEXT_ALIGN_RIGHT = 2,
 		DRAWTEXT_ALIGN_SCREEN_CENTRE = 4,
 		DRAWTEXT_ALIGN_CENTRE = 8,
-		DRAWTEXT_MEASURE = 0x200,
+		DRAWTEXT_ENABLE_CLIP = 0x200,
 		DRAWTEXT_SCALING_OPTIMISED = 0x400, // ? -- seems to be set if the requested font size doesn't match the original font, and the internal width/height 1 and 2 match
 											// maybe it's just required for any scaling though
 		DRAWTEXT_STROKE = 0x10000,
@@ -165,43 +167,51 @@ namespace TLAC::Components
 	}
 
 
-	struct RectangleBounds
-	{
-		float x;
-		float y;
-		float width;
-		float height;
-	};
-	void(*fillRectangle)(DrawParams* dtParam, const RectangleBounds* rect) = (void(*)(DrawParams* dtParam, const RectangleBounds* rect))0x140198d80;
+	void(*fillRectangle)(DrawParams* dtParam, const RectangleBounds &rect) = (void(*)(DrawParams* dtParam, const RectangleBounds &rect))0x140198d80;
 
 	// draws only a border -- use fillRectangle to fill contained pixels
-	void drawRectangle(DrawParams* dtParam, const RectangleBounds* rect)
+	void drawRectangle(DrawParams* dtParam, const RectangleBounds &rect)
 	{
-		((void(*)(DrawParams*, const RectangleBounds*))0x140198320)(dtParam, rect);
+		((void(*)(DrawParams*, const RectangleBounds&))0x140198320)(dtParam, rect);
 	}
 
 	// draws only a border -- use fillRectangle to fill contained pixels
-	void drawRectangle(DrawParams* dtParam, const RectangleBounds* rect, float thickness)
+	void drawRectangle(DrawParams* dtParam, const RectangleBounds &rect, float thickness)
 	{
 		uint32_t oldFillColour = dtParam->fillColour;
 		dtParam->fillColour = dtParam->colour;
 
 		// yes this seems pretty dodgy, but sega does it this way so... I guess it's the only way
-		RectangleBounds tempRect = { rect->x, rect->y, thickness, rect->height }; // left side
-		fillRectangle(dtParam, &tempRect);
+		RectangleBounds tempRect = { rect.x, rect.y, thickness, rect.height }; // left side
+		fillRectangle(dtParam, tempRect);
 
-		tempRect.x = rect->x + rect->width - thickness; // right side
-		fillRectangle(dtParam, &tempRect);
+		tempRect.x = rect.x + rect.width - thickness; // right side
+		fillRectangle(dtParam, tempRect);
 
-		tempRect = { rect->x + thickness, rect->y, rect->width - (thickness * 2), thickness }; // top side
-		fillRectangle(dtParam, &tempRect);
+		tempRect = { rect.x + thickness, rect.y, rect.width - (thickness * 2), thickness }; // top side
+		fillRectangle(dtParam, tempRect);
 
-		tempRect.y = rect->y + rect->height - thickness; // left side
-		fillRectangle(dtParam, &tempRect);
+		tempRect.y = rect.y + rect.height - thickness; // left side
+		fillRectangle(dtParam, tempRect);
 
 		dtParam->fillColour = oldFillColour;
 	}
 
+	
+	void drawLine(DrawParams* dtParam, const Point &p1, const Point &p2)
+	{
+		((void(*)(DrawParams*, const RectangleBounds&))0x140198080)(dtParam, { p1.x, p1.y, p2.x, p2.y });
+	}
+	// draw from the top left corner of rect to the bottom left
+	void drawLine(DrawParams* dtParam, const RectangleBounds &rect)
+	{
+		drawLine(dtParam, { rect.x, rect.y }, { rect.x + rect.width, rect.y + rect.height });
+	}
+
+	void drawPolyline(DrawParams* dtParam, const std::vector<Point> points)
+	{
+		((void(*)(DrawParams*, const Point*, uint64_t))0x1401980e0)(dtParam, points.data(), points.size());
+	}
 
 
 	struct MsString {
@@ -332,24 +342,24 @@ namespace TLAC::Components
 
 	// draw an aet layer (with all settings)
 	// aetSpeedCallback is actually a pointer to a class or struct with the callback address at offset +0x8
-	int createAetLayer(int32_t fileId, uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, int32_t unk2, const char* animation, const char* animation2, float animationInTime, float animationOutTime, const Point* scale, const void* aetSpeedCallback)
+	int createAetLayer(int32_t fileId, uint32_t drawLayer, createAetFlags flags, const char* name, const Point &loc, int32_t unk2, const char* animation, const char* animation2, float animationInTime, float animationOutTime, const Point &scale, const void* aetSpeedCallback)
 	{
-		return ((int(*)(int32_t, uint32_t, createAetFlags, const char*, const Point*, int32_t, const char*, const char*, float, float, const Point*, const void*))0x14013be60)(fileId, drawLayer, flags, name, loc, unk2, animation, animation2, animationInTime, animationOutTime, scale, aetSpeedCallback);
+		return ((int(*)(int32_t, uint32_t, createAetFlags, const char*, const Point&, int32_t, const char*, const char*, float, float, const Point&, const void*))0x14013be60)(fileId, drawLayer, flags, name, loc, unk2, animation, animation2, animationInTime, animationOutTime, scale, aetSpeedCallback);
 	}
 	// draw an aet layer (with animation timing override)
-	int createAetLayer(int32_t fileId, uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, float animationInTime, float animationOutTime)
+	int createAetLayer(int32_t fileId, uint32_t drawLayer, createAetFlags flags, const char* name, const Point &loc, float animationInTime, float animationOutTime)
 	{
-		return createAetLayer(fileId, drawLayer, flags, name, loc, 0, 0, 0, animationInTime, animationOutTime, 0, 0);
+		return createAetLayer(fileId, drawLayer, flags, name, loc, 0, 0, 0, animationInTime, animationOutTime, *(Point*)0, 0);
 	}
 	// draw an aet layer (with scale)
-	int createAetLayer(int32_t fileId, uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc, const Point* scale)
+	int createAetLayer(int32_t fileId, uint32_t drawLayer, createAetFlags flags, const char* name, const Point &loc, const Point &scale)
 	{
 		return createAetLayer(fileId, drawLayer, flags, name, loc, 0, 0, 0, -1, -1, scale, 0);
 	}
 	// draw an aet layer
-	int createAetLayer(int32_t fileId, uint32_t drawLayer, createAetFlags flags, const char* name, const Point* loc)
+	int createAetLayer(int32_t fileId, uint32_t drawLayer, createAetFlags flags, const char* name, const Point &loc)
 	{
-		return createAetLayer(fileId, drawLayer, flags, name, loc, 0, 0, 0, -1, -1, 0, 0);
+		return createAetLayer(fileId, drawLayer, flags, name, loc, 0, 0, 0, -1, -1, *(Point*)0, 0);
 	}
 
 	void destroyAetLayer(int &layer)

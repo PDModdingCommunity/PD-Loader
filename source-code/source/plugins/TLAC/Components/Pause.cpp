@@ -14,7 +14,10 @@ namespace TLAC::Components
 	bool Pause::isPaused = false;
 	bool Pause::giveUp = false;
 	bool Pause::showUI = true;
-	int Pause::keyWinAet = 0;
+	int Pause::selResultAet1 = 0;
+	int Pause::selResultAet2 = 0;
+	int Pause::selResultAet3 = 0;
+	int Pause::selResultAet4 = 0;
 	int Pause::triangleAet = 0;
 	int Pause::squareAet = 0;
 	int Pause::crossAet = 0;
@@ -146,7 +149,12 @@ namespace TLAC::Components
 					else
 					{
 						// clear these from the screen too
-						destroyAetLayer(keyWinAet);
+						/*
+						destroyAetLayer(selResultAet1);
+						destroyAetLayer(selResultAet2);
+						destroyAetLayer(selResultAet3);
+						destroyAetLayer(selResultAet4);
+						*/
 						destroyAetLayer(triangleAet);
 						destroyAetLayer(squareAet);
 						destroyAetLayer(crossAet);
@@ -206,7 +214,7 @@ namespace TLAC::Components
 				InjectCode(framespeedPatchAddress, origFramespeedOp);
 
 				uint64_t audioMixerAddr = *(uint64_t*)(AUDIO_MAIN_CLASS_ADDRESS + 0x70);
-				uint64_t audioStreamsAddress = *(uint64_t*)(audioMixerAddr + 0x18);;
+				uint64_t audioStreamsAddress = *(uint64_t*)(audioMixerAddr + 0x18);
 				int nAudioStreams = *(uint64_t*)(audioMixerAddr + 0x20);
 				for (int i = 0; i < nAudioStreams; i++)
 				{
@@ -215,7 +223,12 @@ namespace TLAC::Components
 						*playstate = streamPlayStates[i];
 				}
 
-				destroyAetLayer(keyWinAet);
+				/*
+				destroyAetLayer(selResultAet1);
+				destroyAetLayer(selResultAet2);
+				destroyAetLayer(selResultAet3);
+				destroyAetLayer(selResultAet4);
+				*/
 				destroyAetLayer(triangleAet);
 				destroyAetLayer(squareAet);
 				destroyAetLayer(crossAet);
@@ -253,7 +266,7 @@ namespace TLAC::Components
 			FontInfo fontInfo(0x11);
 			DrawParams dtParams(&fontInfo);
 			dtParams.layer = bgLayer;
-			Point aetScale = { 0.66667, 0.7 };
+			Point aetScale = { 0.65, 0.65 };
 			Point aetLoc = { (1280 - aetScale.x * 1280) / 2, (720 - aetScale.y * 720) / 2 };
 
 			// get aspect ratio
@@ -265,8 +278,8 @@ namespace TLAC::Components
 			float bgLeft = -(bgWidth - 1280) / 2; // 0,0 is in the corner of a 720p view.. half of the extra over 1280 wide is the horizontal offset to centre the bg
 			RectangleBounds rect;
 			rect = { bgLeft, 0, bgWidth, 720 };
-			dtParams.colour = 0xa0000000;
-			dtParams.fillColour = 0xa0000000;
+			dtParams.colour = 0xc0000000;
+			dtParams.fillColour = dtParams.colour;
 			fillRectangle(&dtParams, rect);
 
 
@@ -296,27 +309,78 @@ namespace TLAC::Components
 
 			// bg box
 			/*
-			static int keyWinFile = 0;
-			if (keyWinFile == 0)
+			static int selResultFile = 0;
+			if (selResultFile == 0)
 			{
-				keyWinFile = findAetFileId("AET_KEY_WIN_MAIN");
+				//keyWinFile = findAetFileId("AET_KEY_WIN_MAIN");
+				selResultFile = findAetFileId("AET_SEL_RESULT_MAIN");
 				//printf("keyWinFile: %d\n", keyWinFile);
 			}
 
-			destroyAetLayer(keyWinAet);
-			if (keyWinFile != -1)
-				keyWinAet = createAetLayer(keyWinFile, dtParams.layer, CREATEAET_20000, "win_in", &aetLoc, 0, nullptr, nullptr, 4.6, 4.6, &aetScale, 0);
+			destroyAetLayer(selResultAet1);
+			destroyAetLayer(selResultAet2);
+			destroyAetLayer(selResultAet3);
+			destroyAetLayer(selResultAet4);
+			if (selResultFile != -1)
+			{
+				//keyWinAet = createAetLayer(keyWinFile, dtParams.layer, CREATEAET_20000, "win_in", aetLoc, 0, nullptr, nullptr, 3.7, 3.7, aetScale, 0);
+				aetScale = { 0.47f, 0.47f };
+				aetLoc = { (1280 - aetScale.x * 1280) / 2, (720 - aetScale.y * 720) / 2 + 72 * aetScale.y };
+				float animPos = 7.2;
+				selResultAet1 = createAetLayer(selResultFile, dtParams.layer, CREATEAET_20000, "window_in", aetLoc, 0, nullptr, nullptr, animPos, animPos, aetScale, 0);
+				selResultAet2 = createAetLayer(selResultFile, dtParams.layer, CREATEAET_20000, "window_in", aetLoc, 0, nullptr, nullptr, animPos, animPos, aetScale, 0);
+				selResultAet3 = createAetLayer(selResultFile, dtParams.layer, CREATEAET_20000, "window_in", aetLoc, 0, nullptr, nullptr, animPos, animPos, aetScale, 0);
+				selResultAet4 = createAetLayer(selResultFile, dtParams.layer, CREATEAET_20000, "window_in", aetLoc, 0, nullptr, nullptr, animPos, animPos, aetScale, 0);
+			}
 			*/
+			dtParams.colour = 0xffffff00;
+			drawPolyline(&dtParams, {
+				{ 537, 255 },
+				{ 793, 255 },
+				{ 759, 453 },
+				{ 744, 465 },
+				{ 487, 465 },
+				{ 522, 267 },
+				{ 537, 255 },
+			});
+			drawPolyline(&dtParams, {
+				{ 537 - .7f, 255 - 2 },
+				{ 793 + 2.38f, 255 - 2 },
+				{ 759 + 2.1f, 453 + 1.15f },
+				{ 744 + .7f, 465 + 2 },
+				{ 487 - 2.38f, 465 + 2 },
+				{ 522 - 2.1f, 267 - 1.15f },
+				{ 537 - .7f, 255 - 2 },
+			});
+			drawPolyline(&dtParams, {
+				{ 548, 258 },
+				{ 768, 258 },
+				{ 774, 265 },
+				{ 770, 286 },
+				{ 764, 286 },
+				{ 737, 434 },
+				{ 743, 434 },
+				{ 739, 455 },
+				{ 733, 462 },
+				{ 513, 462 },
+				{ 507, 455 },
+				{ 511, 434 },
+				{ 517, 434 },
+				{ 544, 286 },
+				{ 538, 286 },
+				{ 542, 265 },
+				{ 548, 258 },
+			});
 
 
 			// selection cursor
-			int menuOrigin = menuY - menuItemHeight * (menu[curMenuSet].items.size() / 2.0);
+			int menuOrigin = menuY - menuItemTotalHeight * (menu[curMenuSet].items.size() / 2.0) + menuItemTotalHeight / 2 - menuTextSize / 2;
 			if (curMenuSet != MENUSET_MAIN)
 			{
-				menuOrigin += menuItemHeight * 0.4;
+				menuOrigin += menuItemTotalHeight * 1.2 / 2;
 			}
-			int selectBoxPos = menuOrigin - (menuItemHeight - menuTextSize) / 2 + menuItemHeight * curMenuPos;
-			const float selectBoxWidth = 200;
+			int selectBoxPos = menuOrigin - (menuItemHeight - menuTextSize) / 2 + menuItemTotalHeight * curMenuPos;
+			const float selectBoxWidth = 150;
 			const float selectBoxHeight = menuItemHeight;
 			const float selectBoxThickness = 2;
 
@@ -337,11 +401,11 @@ namespace TLAC::Components
 
 			if (curMenuSet != MENUSET_MAIN)
 			{
-				dtParams.textCurrentLoc.y -= menuItemHeight * 1.333f;
+				dtParams.textCurrentLoc.y -= menuItemTotalHeight * 1.2f;
 				dtParams.lineOriginLoc.y = dtParams.textCurrentLoc.y;
 				dtParams.colour = 0xffffffff;
 				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE | DRAWTEXT_STROKE), menu[curMenuSet].name);
-				dtParams.textCurrentLoc.y += menuItemHeight * 1.333f;
+				dtParams.textCurrentLoc.y += menuItemTotalHeight * 1.2f;
 				dtParams.lineOriginLoc.y = dtParams.textCurrentLoc.y;
 			}
 
@@ -358,7 +422,7 @@ namespace TLAC::Components
 				}
 
 				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE), menu[curMenuSet].items[i].name);
-				dtParams.textCurrentLoc.y += menuItemHeight;
+				dtParams.textCurrentLoc.y += menuItemTotalHeight;
 				dtParams.lineOriginLoc = dtParams.textCurrentLoc;
 			}
 						

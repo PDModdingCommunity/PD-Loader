@@ -2,6 +2,7 @@
 #include "../Constants.h"
 #include "EmulatorComponent.h"
 #include "PlayerData.h"
+#include "GameState.h"
 #include "Input/InputState.h"
 #include "Input/TouchSliderState.h"
 #include <string>
@@ -64,6 +65,7 @@ namespace TLAC::Components
 		
 		static bool showUI;
 
+		static int keyWinAet;
 		static int triangleAet;
 		static int squareAet;
 		static int crossAet;
@@ -103,7 +105,7 @@ namespace TLAC::Components
 
 		static void mainmenu() { setMenuPos(MENUSET_MAIN, mainMenuPos); };
 		static void unpause() { pause = false; };
-		//static void restart() { *(uint8_t*)0x140d0b538 = 1; unpause(); }
+		//static void restart() { *(uint8_t*)0x140d0b512 = 2; ((void(*)(uint64_t))0x140127a30)(0x140d0b510); ((void(*)(uint64_t))0x140674e20)(PV_GAME_BASE_ADDRESS); /* *(uint8_t*)0x140d0b512 = 1; *(uint8_t*)0x140d0b513 = 1; *(int32_t*)0x140d0b534 = 0; ((void(*)(uint64_t))0x140127a30)(0x140d0b510); */ unpause(); }
 		static void giveup() { giveUp = true; };
 
 		static void sevolmenu() { setMenuPos(MENUSET_SEVOL, 1); };

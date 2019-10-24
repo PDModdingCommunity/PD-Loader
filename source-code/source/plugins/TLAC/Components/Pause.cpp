@@ -267,7 +267,7 @@ namespace TLAC::Components
 			rect = { bgLeft, 0, bgWidth, 720 };
 			dtParams.colour = 0xa0000000;
 			dtParams.fillColour = 0xa0000000;
-			fillRectangle(&dtParams, &rect);
+			fillRectangle(&dtParams, rect);
 
 
 			// pause icon
@@ -326,7 +326,7 @@ namespace TLAC::Components
 			rect = { selectBoxX, selectBoxY, selectBoxWidth, selectBoxHeight };
 			dtParams.colour = 0xc0ffff00;
 			dtParams.fillColour = 0xc0ffff00;
-			drawRectangle(&dtParams, &rect, selectBoxThickness);
+			drawRectangle(&dtParams, rect, selectBoxThickness);
 
 
 			// menu
@@ -387,12 +387,12 @@ namespace TLAC::Components
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L"L/R:Move　");
 			
 			aetLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
-			squareAet = createAetLayer(3, dtParams.layer, CREATEAET_20000, "button_shikaku", &aetLoc, 0, nullptr, nullptr, 0, 0, &aetScale, nullptr);
+			squareAet = createAetLayer(3, dtParams.layer, CREATEAET_20000, "button_shikaku", aetLoc, 0, nullptr, nullptr, 0, 0, aetScale, nullptr);
 			dtParams.textCurrentLoc.x += spriteSize;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Hide Menu　");
 
 			aetLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
-			crossAet = createAetLayer(3, dtParams.layer, CREATEAET_20000, "button_batsu", &aetLoc, 0, nullptr, nullptr, 0, 0, &aetScale, nullptr);
+			crossAet = createAetLayer(3, dtParams.layer, CREATEAET_20000, "button_batsu", aetLoc, 0, nullptr, nullptr, 0, 0, aetScale, nullptr);
 			dtParams.textCurrentLoc.x += spriteSize;
 			if (curMenuSet == MENUSET_MAIN)
 				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Close　");
@@ -400,7 +400,7 @@ namespace TLAC::Components
 				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Back　");
 			
 			aetLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
-			circleAet = createAetLayer(3, dtParams.layer, CREATEAET_20000, "button_maru", &aetLoc, 0, nullptr, nullptr, 0, 0, &aetScale, nullptr);
+			circleAet = createAetLayer(3, dtParams.layer, CREATEAET_20000, "button_maru", aetLoc, 0, nullptr, nullptr, 0, 0, aetScale, nullptr);
 			dtParams.textCurrentLoc.x += spriteSize;
 			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Select");
 		}

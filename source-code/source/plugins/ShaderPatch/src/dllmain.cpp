@@ -213,7 +213,7 @@ void hookedLoadFromFarcThunk(FArchivedFile** ppFile)
 
 	if (modifiedStr.length() > 0)
 	{
-		free(file.data);
+		//free(file.data);
 		file.data = _strdup(modifiedStr.c_str());
 		file.dataSize = modifiedStr.size();
 		printf("[ShaderPatch] Patched %s\n", file.fileName.GetCharBuf());

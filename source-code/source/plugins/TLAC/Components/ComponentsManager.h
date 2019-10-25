@@ -27,6 +27,8 @@ namespace TLAC::Components
 		void Initialize();
 		void Update();
 		void UpdateInput();
+		void UpdatePostInput();
+		void UpdateDraw2D();
 		void OnFocusGain();
 		void OnFocusLost();
 		void Dispose();

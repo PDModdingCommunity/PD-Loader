@@ -102,5 +102,6 @@ namespace TLAC::Components
 
 		void UpdateInputBit(uint32_t bit, uint8_t keycode);
 		void UpdateSliderLR();
+		void SetMetaButtons();
 	};
 }

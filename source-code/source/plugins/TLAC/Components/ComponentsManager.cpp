@@ -12,6 +12,7 @@
 #include "DebugComponent.h"
 #include "ScaleComponent.h"
 #include "ScoreSaver.h"
+#include "Pause.h"
 #include "GameTargets/TargetInspector.h"
 
 using ConfigFile = TLAC::FileSystem::ConfigFile;
@@ -36,6 +37,7 @@ namespace TLAC::Components
 			new InputEmulator(),
 			new TouchSliderEmulator(),
 			new TouchPanelEmulator(),
+			new Pause(), // ensure pause is always immediately after input emulators so it can swallow inputs
 			new PlayerDataManager(),
 			new FrameRateManager(),
 			new FastLoader(),
@@ -131,6 +133,22 @@ namespace TLAC::Components
 
 		for (auto& component : components)
 			component->UpdateInput();
+	}
+
+	void ComponentsManager::UpdatePostInput()
+	{
+		for (auto& component : components)
+		{
+			component->UpdatePostInput();
+		}
+	}
+
+	void ComponentsManager::UpdateDraw2D()
+	{
+		for (auto& component : components)
+		{
+			component->UpdateDraw2D();
+		}
 	}
 
 	void ComponentsManager::OnFocusGain()

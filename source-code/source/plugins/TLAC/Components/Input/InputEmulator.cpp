@@ -13,6 +13,7 @@
 #include "../../Utilities/EnumBitwiseOperations.h"
 #include "../../FileSystem/ConfigFile.h"
 #include "../GameState.h"
+#include "../Pause.h"
 
 const std::string KEY_CONFIG_FILE_NAME = "keyconfig.ini";
 
@@ -138,6 +139,8 @@ namespace TLAC::Components
 			UpdateSliderLR();
 		}
 
+		SetMetaButtons();
+
 		UpdateHoldState();
 		heldButtons = GetButtonFromHold();
 
@@ -236,13 +239,13 @@ namespace TLAC::Components
 	{
 		JvsButtons buttons = JVS_NONE;
 
-		if (!(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN) &&
+		if ((Pause::pause || !(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN)) &&
 			buttonTestFunc(MenuLBinding))
 		{
 			buttons |= JVS_L;
 			return buttons;
 		}
-		if (!(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN) &&
+		if ((Pause::pause || !(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN)) &&
 			buttonTestFunc(MenuRBinding))
 		{
 			buttons |= JVS_R;
@@ -369,5 +372,27 @@ namespace TLAC::Components
 			inputState->Down.Buttons |= JVS_R;
 		else
 			inputState->Down.Buttons &= ~JVS_R;
+	}
+
+	void InputEmulator::SetMetaButtons()
+	{
+		// bit 0x6e is used to skip a bunch of screens
+		if ((inputState->Down.Buttons & (JVS_L | JVS_R)) == 0) // ask sega okay? idk why this is needed
+		{
+			if ((inputState->Tapped.Buttons & (JVS_START | JVS_TRIANGLE | JVS_SQUARE | JVS_CROSS | JVS_CIRCLE)) != 0)
+				inputState->SetBit(0x6e, true, InputBufferType_Tapped);
+			else
+				inputState->SetBit(0x6e, false, InputBufferType_Tapped);
+
+			if ((inputState->Down.Buttons & (JVS_START | JVS_TRIANGLE | JVS_SQUARE | JVS_CROSS | JVS_CIRCLE)) != 0)
+				inputState->SetBit(0x6e, true, InputBufferType_Down);
+			else
+				inputState->SetBit(0x6e, false, InputBufferType_Down);
+
+			if ((inputState->Released.Buttons & (JVS_START | JVS_TRIANGLE | JVS_SQUARE | JVS_CROSS | JVS_CIRCLE)) != 0)
+				inputState->SetBit(0x6e, true, InputBufferType_Released);
+			else
+				inputState->SetBit(0x6e, false, InputBufferType_Released);
+		}
 	}
 }

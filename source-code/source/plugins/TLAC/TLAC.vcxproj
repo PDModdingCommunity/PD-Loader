@@ -211,7 +211,7 @@
     <ClCompile Include="Input\Mouse\Mouse.cpp" />
     <ClCompile Include="Input\Xinput\Xinput.cpp" />
     <ClCompile Include="Input\Xinput\XinputState.cpp" />
-    <ClInclude Include="Utilities\Drawing.cpp" />
+    <ClCompile Include="Utilities\Drawing.cpp" />
     <ClCompile Include="Utilities\Math.cpp" />
     <ClCompile Include="Utilities\Operations.cpp" />
     <ClCompile Include="Utilities\Stopwatch.cpp" />

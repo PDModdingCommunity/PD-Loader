@@ -6,6 +6,7 @@
 #include "../Utilities/Drawing.h"
 #include "Input/InputState.h"
 #include "Input/TouchSliderState.h"
+#include "Input/TouchPanelState.h"
 #include <string>
 #include <vector>
 #include <chrono>
@@ -52,12 +53,16 @@ namespace TLAC::Components
 		static PlayerData* playerData;
 		static InputState* inputState;
 		static TouchSliderState* sliderState;
+		static TouchPanelState* panelState;
+		static ComponentsManager* componentsManager;
 
 		static const JvsButtons allButtons = (JvsButtons)(JVS_START | JVS_TRIANGLE | JVS_SQUARE | JVS_CROSS | JVS_CIRCLE | JVS_L | JVS_R); // deliberately only has control panel buttons
 		static JvsButtons filteredButtons;
+		static int lastTouchType;
 
 		static const int menuX = 640;
 		static const int menuY = 360;
+		static const int menuItemWidth = 150;
 		static const int menuItemHeight = 36;
 		static const int menuItemPadding = 12;
 		static const int menuItemTotalHeight = menuItemHeight + menuItemPadding;
@@ -125,6 +130,6 @@ namespace TLAC::Components
 
 		static float getMenuAnimPos();
 
-		static TLAC::Utilities::Drawing::Point getMenuItemCoord(menusets set, int pos);
+		static TLAC::Utilities::Drawing::Point getMenuItemCoords(menusets set, int pos);
 	};
 }

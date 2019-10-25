@@ -198,7 +198,7 @@
     <ClInclude Include="Components\Pause.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\Drawing.h">
+    <ClInclude Include="Utilities\Drawing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -336,6 +336,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\Pause.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Drawing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

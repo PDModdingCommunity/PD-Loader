@@ -1,7 +1,7 @@
 ﻿#include "Pause.h"
 #include "../Constants.h"
 #include "GameState.h"
-#include "Drawing.h"
+#include "../Utilities/Drawing.h"
 #include "GL/glut.h"
 #include "detours.h"
 #include <windows.h>
@@ -10,6 +10,7 @@
 
 namespace TLAC::Components
 {
+	using TLAC::Utilities::Drawing;
 	bool Pause::pause = false;
 	bool Pause::isPaused = false;
 	bool Pause::giveUp = false;
@@ -150,15 +151,15 @@ namespace TLAC::Components
 					{
 						// clear these from the screen too
 						/*
-						destroyAetLayer(selResultAet1);
-						destroyAetLayer(selResultAet2);
-						destroyAetLayer(selResultAet3);
-						destroyAetLayer(selResultAet4);
+						Drawing::destroyAetLayer(selResultAet1);
+						Drawing::destroyAetLayer(selResultAet2);
+						Drawing::destroyAetLayer(selResultAet3);
+						Drawing::destroyAetLayer(selResultAet4);
 						*/
-						destroyAetLayer(triangleAet);
-						destroyAetLayer(squareAet);
-						destroyAetLayer(crossAet);
-						destroyAetLayer(circleAet);
+						Drawing::destroyAetLayer(triangleAet);
+						Drawing::destroyAetLayer(squareAet);
+						Drawing::destroyAetLayer(crossAet);
+						Drawing::destroyAetLayer(circleAet);
 					}
 				}
 
@@ -224,15 +225,15 @@ namespace TLAC::Components
 				}
 
 				/*
-				destroyAetLayer(selResultAet1);
-				destroyAetLayer(selResultAet2);
-				destroyAetLayer(selResultAet3);
-				destroyAetLayer(selResultAet4);
+				Drawing::destroyAetLayer(selResultAet1);
+				Drawing::destroyAetLayer(selResultAet2);
+				Drawing::destroyAetLayer(selResultAet3);
+				Drawing::destroyAetLayer(selResultAet4);
 				*/
-				destroyAetLayer(triangleAet);
-				destroyAetLayer(squareAet);
-				destroyAetLayer(crossAet);
-				destroyAetLayer(circleAet);
+				Drawing::destroyAetLayer(triangleAet);
+				Drawing::destroyAetLayer(squareAet);
+				Drawing::destroyAetLayer(crossAet);
+				Drawing::destroyAetLayer(circleAet);
 
 				isPaused = false;
 			}
@@ -258,16 +259,35 @@ namespace TLAC::Components
 		inputState->IntervalTapped.Buttons = (JvsButtons)(inputState->IntervalTapped.Buttons & ~filteredButtons);
 	}
 
+	// returns the midpoint of a menu button
+	Drawing::Point Pause::getMenuItemCoord(menusets set, int pos)
+	{
+		const float slant = 35.0f / 199.0f;
+
+		int menuOriginY = menuY - (menuItemTotalHeight * menu[set].items.size() - menuItemPadding) / 2 + menuItemHeight / 2;
+		if (set != MENUSET_MAIN)
+		{
+			menuOriginY += menuItemTotalHeight * 1.2 / 2;
+		}
+		int menuOriginX = menuX + (menuY - menuOriginY) * slant;
+
+		Drawing::Point out;
+		out.x = menuOriginX - (menuItemTotalHeight * pos * slant);
+		out.y = menuOriginY + menuItemTotalHeight * pos;
+
+		return out;
+	}
+
 	void Pause::UpdateDraw2D()
 	{
 		if (isPaused && showUI)
 		{
 			// setup draw objects
-			FontInfo fontInfo(0x11);
-			DrawParams dtParams(&fontInfo);
+			Drawing::FontInfo fontInfo(0x11);
+			Drawing::DrawParams dtParams(&fontInfo);
 			dtParams.layer = bgLayer;
-			Point aetScale = { 0.65, 0.65 };
-			Point aetLoc = { (1280 - aetScale.x * 1280) / 2, (720 - aetScale.y * 720) / 2 };
+			Drawing::Point aetScale = { 0.65, 0.65 };
+			Drawing::Point aetLoc = { (1280 - aetScale.x * 1280) / 2, (720 - aetScale.y * 720) / 2 };
 
 			// get aspect ratio
 			float aspect = *(float*)UI_ASPECT_RATIO;
@@ -276,11 +296,11 @@ namespace TLAC::Components
 			// bg rect
 			float bgWidth = aspect * 720 + 2; // add a couple of pixels to protect against rounding errors
 			float bgLeft = -(bgWidth - 1280) / 2; // 0,0 is in the corner of a 720p view.. half of the extra over 1280 wide is the horizontal offset to centre the bg
-			RectangleBounds rect;
+			Drawing::RectangleBounds rect;
 			rect = { bgLeft, 0, bgWidth, 720 };
 			dtParams.colour = 0xc0000000;
 			dtParams.fillColour = dtParams.colour;
-			fillRectangle(&dtParams, rect);
+			Drawing::fillRectangle(&dtParams, rect);
 
 
 			// pause icon
@@ -299,9 +319,9 @@ namespace TLAC::Components
 			dtParams.colour = 0x80ffffff;
 			dtParams.fillColour = 0x80ffffff;
 			rect = { pauseX1, pauseY1, pausePartWidth, pauseHeight };
-			fillRectangle(&dtParams, &rect);
+			Drawing::fillRectangle(&dtParams, &rect);
 			rect = { pauseX2, pauseY1, pausePartWidth, pauseHeight };
-			fillRectangle(&dtParams, &rect);
+			Drawing::fillRectangle(&dtParams, &rect);
 			*/
 
 
@@ -312,30 +332,30 @@ namespace TLAC::Components
 			static int selResultFile = 0;
 			if (selResultFile == 0)
 			{
-				//keyWinFile = findAetFileId("AET_KEY_WIN_MAIN");
-				selResultFile = findAetFileId("AET_SEL_RESULT_MAIN");
+				//keyWinFile = Drawing::findAetFileId("AET_KEY_WIN_MAIN");
+				selResultFile = Drawing::findAetFileId("AET_SEL_RESULT_MAIN");
 				//printf("keyWinFile: %d\n", keyWinFile);
 			}
 
-			destroyAetLayer(selResultAet1);
-			destroyAetLayer(selResultAet2);
-			destroyAetLayer(selResultAet3);
-			destroyAetLayer(selResultAet4);
+			Drawing::destroyAetLayer(selResultAet1);
+			Drawing::destroyAetLayer(selResultAet2);
+			Drawing::destroyAetLayer(selResultAet3);
+			Drawing::destroyAetLayer(selResultAet4);
 			if (selResultFile != -1)
 			{
-				//keyWinAet = createAetLayer(keyWinFile, dtParams.layer, CREATEAET_20000, "win_in", aetLoc, 0, nullptr, nullptr, 3.7, 3.7, aetScale, 0);
+				//keyWinAet = Drawing::createAetLayer(keyWinFile, dtParams.layer, CREATEAET_20000, "win_in", aetLoc, 0, nullptr, nullptr, 3.7, 3.7, aetScale, 0);
 				aetScale = { 0.47f, 0.47f };
 				aetLoc = { (1280 - aetScale.x * 1280) / 2, (720 - aetScale.y * 720) / 2 + 72 * aetScale.y };
 				float animPos = 7.2;
-				selResultAet1 = createAetLayer(selResultFile, dtParams.layer, CREATEAET_20000, "window_in", aetLoc, 0, nullptr, nullptr, animPos, animPos, aetScale, 0);
-				selResultAet2 = createAetLayer(selResultFile, dtParams.layer, CREATEAET_20000, "window_in", aetLoc, 0, nullptr, nullptr, animPos, animPos, aetScale, 0);
-				selResultAet3 = createAetLayer(selResultFile, dtParams.layer, CREATEAET_20000, "window_in", aetLoc, 0, nullptr, nullptr, animPos, animPos, aetScale, 0);
-				selResultAet4 = createAetLayer(selResultFile, dtParams.layer, CREATEAET_20000, "window_in", aetLoc, 0, nullptr, nullptr, animPos, animPos, aetScale, 0);
+				selResultAet1 = Drawing::createAetLayer(selResultFile, dtParams.layer, CREATEAET_20000, "window_in", aetLoc, 0, nullptr, nullptr, animPos, animPos, aetScale, 0);
+				selResultAet2 = Drawing::createAetLayer(selResultFile, dtParams.layer, CREATEAET_20000, "window_in", aetLoc, 0, nullptr, nullptr, animPos, animPos, aetScale, 0);
+				selResultAet3 = Drawing::createAetLayer(selResultFile, dtParams.layer, CREATEAET_20000, "window_in", aetLoc, 0, nullptr, nullptr, animPos, animPos, aetScale, 0);
+				selResultAet4 = Drawing::createAetLayer(selResultFile, dtParams.layer, CREATEAET_20000, "window_in", aetLoc, 0, nullptr, nullptr, animPos, animPos, aetScale, 0);
 			}
 			*/
 			
 			dtParams.colour = 0xffffff00;
-			drawPolyline(&dtParams, {
+			Drawing::drawPolyline(&dtParams, {
 				{ 537, 255 },
 				{ 794, 255 },
 				{ 759, 454 },
@@ -344,7 +364,7 @@ namespace TLAC::Components
 				{ 522, 267 },
 				{ 537, 255 },
 			});
-			drawPolyline(&dtParams, {
+			Drawing::drawPolyline(&dtParams, {
 				{ 537 - .7f, 255 - 2 },
 				{ 794 + 2.38f, 255 - 2 },
 				{ 759 + 2.1f, 454 + 1.15f },
@@ -353,7 +373,7 @@ namespace TLAC::Components
 				{ 522 - 2.1f, 267 - 1.15f },
 				{ 537 - .7f, 255 - 2 },
 			});
-			drawPolyline(&dtParams, {
+			Drawing::drawPolyline(&dtParams, {
 				{ 548, 258 },
 				{ 768, 258 },
 				{ 774, 265 },
@@ -374,26 +394,22 @@ namespace TLAC::Components
 			});
 
 
-			const float slant = 35.0f / 199.0f;
+			Drawing::Point menuCoords = getMenuItemCoord(curMenuSet, curMenuPos);
 			// selection cursor
-			int menuOriginY = menuY - menuItemTotalHeight * (menu[curMenuSet].items.size() / 2.0) + menuItemTotalHeight / 2 - menuTextSize / 2;
-			if (curMenuSet != MENUSET_MAIN)
-			{
-				menuOriginY += menuItemTotalHeight * 1.2 / 2;
-			}
-			int menuOriginX = menuX + (menuY - menuOriginY + menuTextSize / 2) * slant;
 			const float selectBoxWidth = 150;
 			const float selectBoxHeight = menuItemHeight;
 			const float selectBoxThickness = 2;
 
-			float selectBoxX = menuOriginX - (menuItemTotalHeight * curMenuPos * slant) - selectBoxWidth / 2;
-			float selectBoxY = menuOriginY - (menuItemHeight - menuTextSize) / 2 + menuItemTotalHeight * curMenuPos;
+			float selectBoxX = menuCoords.x - selectBoxWidth / 2;
+			float selectBoxY = menuCoords.y - menuItemHeight / 2;
 
-			//rect = { selectBoxX, selectBoxY, selectBoxWidth, selectBoxHeight };
 			dtParams.colour = 0xc0ffff00;
 			dtParams.fillColour = 0xc0ffff00;
-			//drawRectangle(&dtParams, rect, selectBoxThickness);
-			drawPolyline(&dtParams, {
+			//rect = { selectBoxX, selectBoxY, selectBoxWidth, selectBoxHeight };
+			//Drawing::drawRectangle(&dtParams, rect, selectBoxThickness);
+
+			const float slant = 35.0f / 199.0f;
+			Drawing::drawPolyline(&dtParams, {
 				{ selectBoxX + (selectBoxHeight - 8) * slant + 8 * 15 / 12, selectBoxY },
 				{ selectBoxX + selectBoxWidth, selectBoxY },
 				{ selectBoxX + selectBoxWidth - (selectBoxHeight - 8) * slant, selectBoxY + selectBoxHeight - 8 },
@@ -402,7 +418,7 @@ namespace TLAC::Components
 				{ selectBoxX + (selectBoxHeight - 8) * slant, selectBoxY + 8 },
 				{ selectBoxX + (selectBoxHeight - 8) * slant + 8 * 15 / 12, selectBoxY },
 			});
-			drawPolyline(&dtParams, {
+			Drawing::drawPolyline(&dtParams, {
 				{ selectBoxX + (selectBoxHeight - 8) * slant + 8 * 15 / 12 - .7f, selectBoxY - 2 },
 				{ selectBoxX + selectBoxWidth + 2.38f, selectBoxY - 2 },
 				{ selectBoxX + selectBoxWidth - (selectBoxHeight - 8) * slant + 2.1f, selectBoxY + selectBoxHeight - 8 + 1.15f },
@@ -421,14 +437,14 @@ namespace TLAC::Components
 				dtParams.textCurrentLoc = { menuX + 90 * slant, menuY - 90 };
 				dtParams.lineOriginLoc.y = dtParams.textCurrentLoc.y;
 				dtParams.colour = 0xffffffff;
-				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE | DRAWTEXT_STROKE), menu[curMenuSet].name);
+				Drawing::drawText(&dtParams, (Drawing::drawTextFlags)(Drawing::DRAWTEXT_ALIGN_CENTRE | Drawing::DRAWTEXT_STROKE), menu[curMenuSet].name);
 			}
-			
-			dtParams.textCurrentLoc = { (float)menuOriginX, (float)menuOriginY };
-			dtParams.lineOriginLoc = dtParams.textCurrentLoc;
 			
 			for (int i = 0; i < menu[curMenuSet].items.size(); i++)
 			{
+				menuCoords = getMenuItemCoord(curMenuSet, i);
+				dtParams.textCurrentLoc = { menuCoords.x, menuCoords.y - menuTextSize / 2 };
+				dtParams.lineOriginLoc = dtParams.textCurrentLoc;
 				if (i == curMenuPos)
 				{
 					uint8_t alpha = (cosf(getMenuAnimPos() * 6.283185f) * 0.15 + 0.85) * 255;
@@ -439,18 +455,15 @@ namespace TLAC::Components
 					dtParams.colour = 0xffffffff;
 				}
 
-				drawText(&dtParams, (drawTextFlags)(DRAWTEXT_ALIGN_CENTRE), menu[curMenuSet].items[i].name);
-				dtParams.textCurrentLoc.x -= (menuItemTotalHeight * slant);
-				dtParams.textCurrentLoc.y += menuItemTotalHeight;
-				dtParams.lineOriginLoc = dtParams.textCurrentLoc;
+				Drawing::drawText(&dtParams, (Drawing::drawTextFlags)(Drawing::DRAWTEXT_ALIGN_CENTRE), menu[curMenuSet].items[i].name);
 			}
 						
 
 			// key legend
-			destroyAetLayer(triangleAet);
-			destroyAetLayer(squareAet);
-			destroyAetLayer(crossAet);
-			destroyAetLayer(circleAet);
+			Drawing::destroyAetLayer(triangleAet);
+			Drawing::destroyAetLayer(squareAet);
+			Drawing::destroyAetLayer(crossAet);
+			Drawing::destroyAetLayer(circleAet);
 
 			float textLeft;
 			if (aspect > 16.0f / 9.0f)
@@ -467,25 +480,25 @@ namespace TLAC::Components
 			aetScale = { spriteSize / 64, spriteSize / 64 }; // just approximated
 
 			dtParams.colour = 0xffffffff;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L"L/R:Move　");
+			Drawing::drawTextW(&dtParams, (Drawing::drawTextFlags)(Drawing::DRAWTEXT_ENABLE_XADVANCE), L"L/R:Move　");
 			
 			aetLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
-			squareAet = createAetLayer(3, dtParams.layer, CREATEAET_20000, "button_shikaku", aetLoc, 0, nullptr, nullptr, 0, 0, aetScale, nullptr);
+			squareAet = Drawing::createAetLayer(3, dtParams.layer, Drawing::CREATEAET_20000, "button_shikaku", aetLoc, 0, nullptr, nullptr, 0, 0, aetScale, nullptr);
 			dtParams.textCurrentLoc.x += spriteSize;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Hide Menu　");
+			Drawing::drawTextW(&dtParams, (Drawing::drawTextFlags)(Drawing::DRAWTEXT_ENABLE_XADVANCE), L":Hide Menu　");
 
 			aetLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
-			crossAet = createAetLayer(3, dtParams.layer, CREATEAET_20000, "button_batsu", aetLoc, 0, nullptr, nullptr, 0, 0, aetScale, nullptr);
+			crossAet = Drawing::createAetLayer(3, dtParams.layer, Drawing::CREATEAET_20000, "button_batsu", aetLoc, 0, nullptr, nullptr, 0, 0, aetScale, nullptr);
 			dtParams.textCurrentLoc.x += spriteSize;
 			if (curMenuSet == MENUSET_MAIN)
-				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Close　");
+				Drawing::drawTextW(&dtParams, (Drawing::drawTextFlags)(Drawing::DRAWTEXT_ENABLE_XADVANCE), L":Close　");
 			else
-				drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Back　");
+				Drawing::drawTextW(&dtParams, (Drawing::drawTextFlags)(Drawing::DRAWTEXT_ENABLE_XADVANCE), L":Back　");
 			
 			aetLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
-			circleAet = createAetLayer(3, dtParams.layer, CREATEAET_20000, "button_maru", aetLoc, 0, nullptr, nullptr, 0, 0, aetScale, nullptr);
+			circleAet = Drawing::createAetLayer(3, dtParams.layer, Drawing::CREATEAET_20000, "button_maru", aetLoc, 0, nullptr, nullptr, 0, 0, aetScale, nullptr);
 			dtParams.textCurrentLoc.x += spriteSize;
-			drawTextW(&dtParams, (drawTextFlags)(DRAWTEXT_ENABLE_XADVANCE), L":Select");
+			Drawing::drawTextW(&dtParams, (Drawing::drawTextFlags)(Drawing::DRAWTEXT_ENABLE_XADVANCE), L":Select");
 		}
 	}
 

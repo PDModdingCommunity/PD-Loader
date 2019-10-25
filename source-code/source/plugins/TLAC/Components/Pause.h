@@ -3,6 +3,7 @@
 #include "EmulatorComponent.h"
 #include "PlayerData.h"
 #include "GameState.h"
+#include "../Utilities/Drawing.h"
 #include "Input/InputState.h"
 #include "Input/TouchSliderState.h"
 #include <string>
@@ -123,5 +124,7 @@ namespace TLAC::Components
 		static void setMenuPos(menusets set, int pos);
 
 		static float getMenuAnimPos();
+
+		static TLAC::Utilities::Drawing::Point getMenuItemCoord(menusets set, int pos);
 	};
 }

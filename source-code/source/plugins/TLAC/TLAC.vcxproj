@@ -111,7 +111,6 @@
     <ClInclude Include="Components\ComponentsManager.h" />
     <ClInclude Include="Components\CustomPlayerData.h" />
     <ClInclude Include="Components\DebugComponent.h" />
-    <ClInclude Include="Components\Drawing.h" />
     <ClInclude Include="Components\EmulatorComponent.h" />
     <ClInclude Include="Components\FastLoader.h" />
     <ClInclude Include="Components\FrameRateManager.h" />
@@ -163,6 +162,7 @@
     <ClInclude Include="Input\Xinput\Xinput.h" />
     <ClInclude Include="Input\Xinput\XinputState.h" />
     <ClInclude Include="pluginconfig.h" />
+    <ClInclude Include="Utilities\Drawing.h" />
     <ClInclude Include="Utilities\EnumBitwiseOperations.h" />
     <ClInclude Include="Utilities\Math.h" />
     <ClInclude Include="Utilities\Operations.h" />
@@ -211,6 +211,7 @@
     <ClCompile Include="Input\Mouse\Mouse.cpp" />
     <ClCompile Include="Input\Xinput\Xinput.cpp" />
     <ClCompile Include="Input\Xinput\XinputState.cpp" />
+    <ClInclude Include="Utilities\Drawing.cpp" />
     <ClCompile Include="Utilities\Math.cpp" />
     <ClCompile Include="Utilities\Operations.cpp" />
     <ClCompile Include="Utilities\Stopwatch.cpp" />

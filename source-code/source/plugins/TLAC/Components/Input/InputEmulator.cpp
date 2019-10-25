@@ -139,6 +139,8 @@ namespace TLAC::Components
 			UpdateSliderLR();
 		}
 
+		SetMetaButtons();
+
 		UpdateHoldState();
 		heldButtons = GetButtonFromHold();
 
@@ -370,5 +372,27 @@ namespace TLAC::Components
 			inputState->Down.Buttons |= JVS_R;
 		else
 			inputState->Down.Buttons &= ~JVS_R;
+	}
+
+	void InputEmulator::SetMetaButtons()
+	{
+		// bit 0x6e is used to skip a bunch of screens
+		if ((inputState->Down.Buttons & (JVS_L | JVS_R)) == 0) // ask sega okay? idk why this is needed
+		{
+			if ((inputState->Tapped.Buttons & (JVS_START | JVS_TRIANGLE | JVS_SQUARE | JVS_CROSS | JVS_CIRCLE)) != 0)
+				inputState->SetBit(0x6e, true, InputBufferType_Tapped);
+			else
+				inputState->SetBit(0x6e, false, InputBufferType_Tapped);
+
+			if ((inputState->Down.Buttons & (JVS_START | JVS_TRIANGLE | JVS_SQUARE | JVS_CROSS | JVS_CIRCLE)) != 0)
+				inputState->SetBit(0x6e, true, InputBufferType_Down);
+			else
+				inputState->SetBit(0x6e, false, InputBufferType_Down);
+
+			if ((inputState->Released.Buttons & (JVS_START | JVS_TRIANGLE | JVS_SQUARE | JVS_CROSS | JVS_CIRCLE)) != 0)
+				inputState->SetBit(0x6e, true, InputBufferType_Released);
+			else
+				inputState->SetBit(0x6e, false, InputBufferType_Released);
+		}
 	}
 }

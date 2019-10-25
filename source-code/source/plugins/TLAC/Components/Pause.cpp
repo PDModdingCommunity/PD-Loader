@@ -1,6 +1,7 @@
 ﻿#include "Pause.h"
 #include "../Constants.h"
 #include "GameState.h"
+#include "ComponentsManager.h"
 #include "../Utilities/Drawing.h"
 #include "GL/glut.h"
 #include "detours.h"
@@ -36,7 +37,10 @@ namespace TLAC::Components
 	PlayerData* Pause::playerData;
 	InputState* Pause::inputState;
 	TouchSliderState* Pause::sliderState;
+	TouchPanelState* Pause::panelState;
+	ComponentsManager* Pause::componentsManager;
 	JvsButtons Pause::filteredButtons;
+	int Pause::lastTouchType = 0;
 	std::vector<Pause::menuSet> Pause::menu = {
 		{
 			"PAUSED",
@@ -79,11 +83,13 @@ namespace TLAC::Components
 		memcpy(origFramespeedOp.data(), framespeedPatchAddress, 4);
 	}
 
-	void Pause::Initialize(ComponentsManager*)
+	void Pause::Initialize(ComponentsManager* manager)
 	{
 		inputState = (InputState*)(*(uint64_t*)INPUT_STATE_PTR_ADDRESS);
 		playerData = (PlayerData*)PLAYER_DATA_ADDRESS;
 		sliderState = (TouchSliderState*)SLIDER_CTRL_TASK_ADDRESS;
+		panelState = (TouchPanelState*)TASK_TOUCH_ADDRESS;
+		componentsManager = manager;
 
 		saveOldPatchOps();
 
@@ -187,6 +193,31 @@ namespace TLAC::Components
 					if (inputState->Tapped.Buttons & JVS_CIRCLE)
 						menu[curMenuSet].items[curMenuPos].callback();
 
+					if (!componentsManager->IsDwGuiActive()) // not sure if this check is necessary, but it doesn't hurt
+					{
+						if (panelState->ContactType == 2 && lastTouchType != 2) // down and was not down before
+						{
+							for (int i = 0; i < menu[curMenuSet].items.size(); i++)
+							{
+								Drawing::Point itemCoords = getMenuItemCoords(curMenuSet, i);
+
+								Drawing::Point touchCoords = { panelState->XPosition, panelState->YPosition };
+								touchCoords.x *= 1280.0f / *(int*)RESOLUTION_WIDTH_ADDRESS; // convert to 720p coords
+								touchCoords.y *= 720.0f / *(int*)RESOLUTION_HEIGHT_ADDRESS;
+
+								if (touchCoords.x >= itemCoords.x - menuItemWidth / 2 &&
+									touchCoords.x <= itemCoords.x + menuItemWidth / 2 &&
+									touchCoords.y >= itemCoords.y - menuItemHeight / 2 &&
+									touchCoords.y <= itemCoords.y + menuItemHeight / 2)
+								{
+									setMenuPos(curMenuSet, i);
+									menu[curMenuSet].items[i].callback();
+									break;
+								}
+							}
+						}
+					}
+
 					if (curMenuSet == MENUSET_SEVOL)
 					{
 						const char volformat[] = "%d";
@@ -257,10 +288,12 @@ namespace TLAC::Components
 		inputState->Down.Buttons = (JvsButtons)(inputState->Down.Buttons & ~filteredButtons);
 		inputState->Released.Buttons = (JvsButtons)(inputState->Released.Buttons & ~filteredButtons);
 		inputState->IntervalTapped.Buttons = (JvsButtons)(inputState->IntervalTapped.Buttons & ~filteredButtons);
+
+		lastTouchType = panelState->ContactType;
 	}
 
 	// returns the midpoint of a menu button
-	Drawing::Point Pause::getMenuItemCoord(menusets set, int pos)
+	Drawing::Point Pause::getMenuItemCoords(menusets set, int pos)
 	{
 		const float slant = 35.0f / 199.0f;
 
@@ -394,9 +427,9 @@ namespace TLAC::Components
 			});
 
 
-			Drawing::Point menuCoords = getMenuItemCoord(curMenuSet, curMenuPos);
+			Drawing::Point menuCoords = getMenuItemCoords(curMenuSet, curMenuPos);
 			// selection cursor
-			const float selectBoxWidth = 150;
+			const float selectBoxWidth = menuItemWidth;
 			const float selectBoxHeight = menuItemHeight;
 			const float selectBoxThickness = 2;
 
@@ -442,7 +475,7 @@ namespace TLAC::Components
 			
 			for (int i = 0; i < menu[curMenuSet].items.size(); i++)
 			{
-				menuCoords = getMenuItemCoord(curMenuSet, i);
+				menuCoords = getMenuItemCoords(curMenuSet, i);
 				dtParams.textCurrentLoc = { menuCoords.x, menuCoords.y - menuTextSize / 2 };
 				dtParams.lineOriginLoc = dtParams.textCurrentLoc;
 				if (i == curMenuPos)

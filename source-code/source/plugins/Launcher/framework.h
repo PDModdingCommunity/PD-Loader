@@ -247,6 +247,8 @@ ConfigOptionBase* componentsArray[] = {
 	new BooleanOption(L"target_inspector", COMPONENTS_SECTION, COMPONENTS_FILE, L"Target Inspector", L"Enables hold transfers.", false, true),
 
 	new BooleanOption(L"score_saver", COMPONENTS_SECTION, COMPONENTS_FILE, L"Score Saver", L"Saves high scores to plugins/scores.ini.", false, true),
+
+	new BooleanOption(L"pause", COMPONENTS_SECTION, COMPONENTS_FILE, L"Pause", L"Adds a pause menu.", false, true),
 };
 
 bool IsLineInFile(LPCSTR searchLine, LPCWSTR fileName)

@@ -16,6 +16,8 @@ namespace TLAC::Components
 		virtual void Update() = 0;
 
 		virtual void UpdateInput() {};
+		virtual void UpdatePostInput() {};
+		virtual void UpdateDraw2D() {};
 		virtual void OnFocusGain() {};
 		virtual void OnFocusLost() {};
 		

@@ -513,7 +513,7 @@ namespace TLAC::Components
 			aetScale = { spriteSize / 64, spriteSize / 64 }; // just approximated
 
 			dtParams.colour = 0xffffffff;
-			Drawing::drawTextW(&dtParams, (Drawing::drawTextFlags)(Drawing::DRAWTEXT_ENABLE_XADVANCE), L"L/R:Move　");
+			Drawing::drawTextW(&dtParams, (Drawing::drawTextFlags)(Drawing::DRAWTEXT_ENABLE_XADVANCE), L"↑↓/ＬＲ:Move　");
 			
 			aetLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
 			squareAet = Drawing::createAetLayer(3, dtParams.layer, Drawing::CREATEAET_20000, "button_shikaku", aetLoc, 0, nullptr, nullptr, 0, 0, aetScale, nullptr);

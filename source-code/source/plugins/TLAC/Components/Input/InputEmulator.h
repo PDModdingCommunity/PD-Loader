@@ -34,7 +34,7 @@ namespace TLAC::Components
 
 		Input::Binding* MenuLBinding;
 		Input::Binding* MenuRBinding;
-		Input::Binding* MenuCircleStackBinding;
+		Input::Binding* MenuCircleBinding;
 
 		InputEmulator();
 		~InputEmulator();

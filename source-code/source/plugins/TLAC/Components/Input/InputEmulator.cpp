@@ -42,6 +42,10 @@ namespace TLAC::Components
 
 		delete LeftBinding;
 		delete RightBinding;
+
+		delete MenuLBinding;
+		delete MenuRBinding;
+		delete MenuCircleBinding;
 	}
 
 	const char* InputEmulator::GetDisplayName()
@@ -72,6 +76,8 @@ namespace TLAC::Components
 		MenuLBinding = new Binding();
 		MenuRBinding = new Binding();
 
+		MenuCircleBinding = new Binding();
+
 		FileSystem::ConfigFile configFile(framework::GetModuleDirectory(), KEY_CONFIG_FILE_NAME);
 		configFile.OpenRead();
 
@@ -86,6 +92,7 @@ namespace TLAC::Components
 		Config::BindConfigKeys(configFile.ConfigMap, "JVS_RIGHT", *RightBinding, { "E", "O" });
 		Config::BindConfigKeys(configFile.ConfigMap, "MENU_L", *MenuLBinding, { "Left", "Up" });
 		Config::BindConfigKeys(configFile.ConfigMap, "MENU_R", *MenuRBinding, { "Down", "Right" });
+		Config::BindConfigKeys(configFile.ConfigMap, "MENU_CIRCLE", *MenuCircleBinding, { "D", "L", "Spacebar" });
 
 		mouseScrollPvSelection = configFile.GetBooleanValue("mouse_scroll_pv_selection");
 	}

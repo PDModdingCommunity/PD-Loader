@@ -10,6 +10,7 @@
 #include "../../Utilities/Math.h"
 #include <algorithm>
 #include <stdio.h>
+#include "../GameState.h"
 
 using namespace TLAC::Input;
 using namespace TLAC::Input::KeyConfig;
@@ -73,7 +74,7 @@ namespace TLAC::Components
 
 	void TouchSliderEmulator::UpdateInput()
 	{
-		if (!componentsManager->GetUpdateGameInput() || componentsManager->IsDwGuiActive())
+		if (!componentsManager->GetUpdateGameInput() || componentsManager->IsDwGuiActive() || !(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN))
 			return;
 
 		sliderIncrement = GetElapsedTime() / sliderSpeed;

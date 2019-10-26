@@ -76,6 +76,8 @@ namespace TLAC::Input::KeyConfig
 		{ "Tab",	VK_TAB },
 		{ "Back",      VK_BACK },
 		{ "Backspace", VK_BACK },
+		{ "Space", VK_SPACE },
+		{ "Spacebar", VK_SPACE },
 		{ "Insert", VK_INSERT },
 		{ "Ins",    VK_INSERT },
 		{ "Delete", VK_DELETE },

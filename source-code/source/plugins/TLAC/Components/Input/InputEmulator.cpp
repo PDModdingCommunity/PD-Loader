@@ -45,7 +45,7 @@ namespace TLAC::Components
 
 		delete MenuLBinding;
 		delete MenuRBinding;
-		delete MenuCircleBinding;
+		delete MenuCircleStackBinding;
 	}
 
 	const char* InputEmulator::GetDisplayName()
@@ -76,7 +76,7 @@ namespace TLAC::Components
 		MenuLBinding = new Binding();
 		MenuRBinding = new Binding();
 
-		MenuCircleBinding = new Binding();
+		MenuCircleStackBinding = new Binding();
 
 		FileSystem::ConfigFile configFile(framework::GetModuleDirectory(), KEY_CONFIG_FILE_NAME);
 		configFile.OpenRead();
@@ -92,7 +92,7 @@ namespace TLAC::Components
 		Config::BindConfigKeys(configFile.ConfigMap, "JVS_RIGHT", *RightBinding, { "E", "O" });
 		Config::BindConfigKeys(configFile.ConfigMap, "MENU_L", *MenuLBinding, { "Left", "Up" });
 		Config::BindConfigKeys(configFile.ConfigMap, "MENU_R", *MenuRBinding, { "Down", "Right" });
-		Config::BindConfigKeys(configFile.ConfigMap, "MENU_CIRCLE", *MenuCircleBinding, { "D", "L", "Spacebar" });
+		Config::BindConfigKeys(configFile.ConfigMap, "MENU_CIRCLE_STACK", *MenuCircleStackBinding, { "D", "L", "Spacebar" });
 
 		mouseScrollPvSelection = configFile.GetBooleanValue("mouse_scroll_pv_selection");
 	}
@@ -273,7 +273,7 @@ namespace TLAC::Components
 			buttons |= JVS_SQUARE;
 		if (buttonTestFunc(BatsuBinding))
 			buttons |= JVS_CROSS;
-		if (buttonTestFunc(MaruBinding))
+		if (buttonTestFunc(MaruBinding) || (buttonTestFunc(MenuCircleStackBinding) && (!(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN) || Pause::pause)))
 			buttons |= JVS_CIRCLE;
 
 		if (buttonTestFunc(LeftBinding))

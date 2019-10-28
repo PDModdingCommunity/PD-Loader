@@ -142,6 +142,8 @@ void ApplyPatches() {
 	auto nEStageManagerEncore = GetPrivateProfileIntW(L"patches", L"enhanced_stage_manager_encore", TRUE, CONFIG_FILE);
 	auto nUnlockPseudo = GetPrivateProfileIntW(L"patches", L"unlock_pseudo", FALSE, CONFIG_FILE);
 	auto nHardwareSlider = GetPrivateProfileIntW(L"patches", L"hardware_slider", FALSE, CONFIG_FILE);
+	auto nOGLPatchA = GetPrivateProfileIntW(L"patches", L"opengl_patch_a", FALSE, CONFIG_FILE);
+	auto nOGLPatchB = GetPrivateProfileIntW(L"patches", L"opengl_patch_b", FALSE, CONFIG_FILE);
 
 	// Replace the hardcoded videos with MP4s, if they exist
 	if (nMP4Movies)
@@ -325,6 +327,17 @@ void ApplyPatches() {
 		ESM[2] = nEStageManagerEncore;
 
 		printf("[Patches] Enhanced Stage Manager enabled\n");
+	}
+	// OpenGL Patches
+	if (nOGLPatchA)
+	{
+		// (call cs:glGetError) -> (xor eax, eax); (nop); (nop); (nop); (nop);
+		InjectCode((void*)0x000000014069D21D, { 0x31, 0xC0, 0x90, 0x90, 0x90, 0x90 });
+	}
+	if (nOGLPatchB)
+	{
+		// (js loc_14069BC32) -> (nop)...
+		InjectCode((void*)0x000000014069BAF4, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
 	}
 	// Unlock PSEUDO modules (which will all default to Miku, unless we also patch them to match the first performer)
 	if (nUnlockPseudo)

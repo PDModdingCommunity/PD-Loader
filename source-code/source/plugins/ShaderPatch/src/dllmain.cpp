@@ -139,6 +139,7 @@ void LoadData()
 		{
 			// force cfg key to lower because ini shouldn't be case sensitive
 			std::transform(equalSplit[0].begin(), equalSplit[0].end(), equalSplit[0].begin(), ::tolower);
+			equalSplit[0] = TrimString(equalSplit[0], " \t");
 			equalSplit[1] = TrimString(equalSplit[1], " \t");
 
 			dataCfgMap[equalSplit[0]] = strpair(equalSplit[1], lastComment);
@@ -204,6 +205,7 @@ void LoadUserCfg()
 		{
 			// force cfg key to lower because ini shouldn't be case sensitive
 			std::transform(equalSplit[0].begin(), equalSplit[0].end(), equalSplit[0].begin(), ::tolower);
+			equalSplit[0] = TrimString(equalSplit[0], " \t");
 			equalSplit[1] = TrimString(equalSplit[1], " \t");
 
 			userCfgMap[equalSplit[0]] = equalSplit[1];

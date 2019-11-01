@@ -33,9 +33,9 @@ void NopBytes(void* address, unsigned int num)
 
 
 
-void LoadConfig()
+void LoadData()
 {
-	std::ifstream fileStream(CONFIG_FILE_STRING);
+	std::ifstream fileStream(DATA_FILE_STRING);
 
 	if (!fileStream.is_open())
 		return;
@@ -141,8 +141,72 @@ void LoadConfig()
 			std::transform(equalSplit[0].begin(), equalSplit[0].end(), equalSplit[0].begin(), ::tolower);
 			equalSplit[1] = TrimString(equalSplit[1], " \t");
 
-			configMap.insert(std::pair<std::string, strpair>(equalSplit[0], strpair(equalSplit[1], lastComment)));
+			dataCfgMap[equalSplit[0]] = strpair(equalSplit[1], lastComment);
 			lastComment = ""; // consume the last comment
+		}
+	}
+
+	fileStream.close();
+}
+
+// always call this after LoadData
+void LoadUserCfg()
+{
+	// copy default config into userconfig to avoid having to read from multiple maps while patching
+	for (std::map<std::string, strpair>::iterator iter = dataCfgMap.begin(); iter != dataCfgMap.end(); ++iter)
+	{
+		userCfgMap[iter->first] = iter->second.first;
+	}
+
+	std::ifstream fileStream(CONFIG_FILE_STRING);
+
+	if (!fileStream.is_open())
+		return;
+
+	std::string line;
+	std::string section = "config";
+
+	// check for BOM
+	std::getline(fileStream, line);
+	if (line.size() >= 3 && line.rfind("\xEF\xBB\xBF", 0) == 0)
+		fileStream.seekg(3);
+	else
+		fileStream.seekg(0);
+
+	while (std::getline(fileStream, line))
+	{
+		if (line.size() <= 0) // skip empty lines
+		{
+			continue;
+		}
+
+		// skip comments
+		if ((line.size() >= 1 && line[0] == '#') || (line.size() >= 2 && line.rfind("//", 0) == 0))
+		{
+			continue;
+		}
+
+		if (line[0] == '[') // section name
+		{
+			size_t endIdx = line.find(']');
+			section = line.substr(1, endIdx - 1);
+			std::transform(section.begin(), section.end(), section.begin(), ::tolower);
+			continue;
+		}
+
+		std::vector<std::string> equalSplit = SplitString(line, "=");
+		if (equalSplit.size() < 2)
+		{
+			continue;
+		}
+
+		if (section == "config")
+		{
+			// force cfg key to lower because ini shouldn't be case sensitive
+			std::transform(equalSplit[0].begin(), equalSplit[0].end(), equalSplit[0].begin(), ::tolower);
+			equalSplit[1] = TrimString(equalSplit[1], " \t");
+
+			userCfgMap[equalSplit[0]] = equalSplit[1];
 		}
 	}
 
@@ -185,7 +249,7 @@ void hookedLoadFromFarcThunk(FArchivedFile** ppFile)
 
 		bool cfgMatches = false;
 		if (patch.cfg.length() == 0 || // patch has no config setting
-			(configMap.find(patch.cfg) != configMap.end() && configMap[patch.cfg].first != "0")) // patch has a toggle and is not set to 0
+			(userCfgMap.find(patch.cfg) != userCfgMap.end() && userCfgMap[patch.cfg] != "0")) // patch has a toggle and is not set to 0
 		{
 			cfgMatches = true;
 		}
@@ -203,9 +267,9 @@ void hookedLoadFromFarcThunk(FArchivedFile** ppFile)
 				int valNum = 0;
 				std::string valKey;
 				while (valNum++, valKey = patch.cfg + "_val" + std::to_string(valNum),
-					configMap.find(valKey) != configMap.end()) // loop until there's no more config values set
+					userCfgMap.find(valKey) != userCfgMap.end()) // loop until there's no more config values set
 				{
-					modifiedStr = StringReplace(modifiedStr, "<val" + std::to_string(valNum) + ">", configMap[valKey].first);
+					modifiedStr = StringReplace(modifiedStr, "<val" + std::to_string(valNum) + ">", userCfgMap[valKey]);
 				}
 			}
 		}
@@ -245,7 +309,8 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		printf("[ShaderPatch] Detected GPU: %s\n", gpuName.c_str());
 		//Sleep(2000);
 
-		LoadConfig();
+		LoadData();
+		LoadUserCfg();
 	}
 	return TRUE;
 }
@@ -266,13 +331,16 @@ extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
 std::vector<PluginConfigOption> configVec;
 extern "C" __declspec(dllexport) PluginConfigArray GetPluginOptions(void)
 {
-	LoadConfig();
+	LoadData();
+	LoadUserCfg();
 
-	for (std::map<std::string, strpair>::iterator iter = configMap.begin(); iter != configMap.end(); ++iter)
+	for (std::map<std::string, strpair>::iterator iter = dataCfgMap.begin(); iter != dataCfgMap.end(); ++iter)
 	{
 		std::string k = iter->first;
 		std::string v = iter->second.first;
 		std::string c = iter->second.second;
+
+
 
 		if (k.size() < 6 || k.substr(k.size() - 5, 4) != "_val")
 		{
@@ -285,7 +353,7 @@ extern "C" __declspec(dllexport) PluginConfigArray GetPluginOptions(void)
 			int valCount = 0;
 			std::string valKey;
 			while (valNum++, valKey = k + "_val" + std::to_string(valNum),
-				configMap.find(valKey) != configMap.end()) // loop until there's no more config values set
+				dataCfgMap.find(valKey) != dataCfgMap.end()) // loop until there's no more config values set
 			{
 				valCount++;
 			}
@@ -296,20 +364,20 @@ extern "C" __declspec(dllexport) PluginConfigArray GetPluginOptions(void)
 			LPCWSTR ttDup = _wcsdup(utf16comment);
 
 			configVec.push_back({ CONFIG_GROUP_START, new PluginConfigGroupData{ _wcsdup(utf16key), 45 + valCount * 25 } });
-			configVec.push_back({ CONFIG_BOOLEAN, new PluginConfigBooleanData{ _wcsdup(utf16key), L"config", CONFIG_FILE, L"Enable", ttDup, false, false } });
+			configVec.push_back({ CONFIG_BOOLEAN, new PluginConfigBooleanData{ _wcsdup(utf16key), L"config", CONFIG_FILE, L"Enable", ttDup, v == "0" ? false : true, false } }); // could use userCfgMap here, but launcher handles that anyway
 
 
 			valNum = 0;
 			while (valNum++, valKey = k + "_val" + std::to_string(valNum),
-				configMap.find(valKey) != configMap.end()) // loop until there's no more config values set
+				dataCfgMap.find(valKey) != dataCfgMap.end()) // loop until there's no more config values set
 			{
 				MultiByteToWideChar(CP_UTF8, 0, valKey.c_str(), -1, utf16key, 128);
-				MultiByteToWideChar(CP_UTF8, 0, configMap[valKey].first.c_str(), -1, utf16val, 128);
+				MultiByteToWideChar(CP_UTF8, 0, dataCfgMap[valKey].first.c_str(), -1, utf16val, 128); // could use userCfgMap here, but launcher handles that anyway
 
 				std::wstring name;
-				if (configMap[valKey].second.size() > 0)
+				if (dataCfgMap[valKey].second.size() > 0)
 				{
-					MultiByteToWideChar(CP_UTF8, 0, configMap[valKey].second.c_str(), -1, utf16comment, 512);
+					MultiByteToWideChar(CP_UTF8, 0, dataCfgMap[valKey].second.c_str(), -1, utf16comment, 512);
 					name = utf16comment;
 					name += L":";
 ;				}

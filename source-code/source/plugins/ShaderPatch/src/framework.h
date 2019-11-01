@@ -20,7 +20,8 @@ struct ShaderPatchInfo {
 std::vector<ShaderPatchInfo> patchesVec;
 
 typedef std::pair<std::string, std::string> strpair;
-std::map<std::string, strpair> configMap;
+std::map<std::string, strpair> dataCfgMap; // default config file entries
+std::map<std::string, std::string> userCfgMap; // user config file entries
 
 #pragma pack(push, 1)
 struct MsString {
@@ -120,6 +121,9 @@ std::wstring DirPath() {
 	return exepath.substr(0, pos);
 }
 
-std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\ShaderPatch.ini";
+std::wstring DATA_FILE_STRING = DirPath() + L"\\plugins\\ShaderPatch.ini";
+LPCWSTR DATA_FILE = DATA_FILE_STRING.c_str();
+
+std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\ShaderPatchConfig.ini";
 LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
 

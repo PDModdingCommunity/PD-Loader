@@ -5,9 +5,11 @@
 #include "../Input/Keyboard/Keyboard.h"
 #include "../FileSystem/ConfigFile.h"
 #include "../Utilities/Operations.h"
+#include <windows.h>
+#include "GameState.h"
 
 const std::string PLAYER_DATA_FILE_NAME = "playerdata.ini";
-
+static WCHAR configPath[256];
 namespace TLAC::Components
 {
 	PlayerDataManager::PlayerDataManager()
@@ -232,6 +234,12 @@ namespace TLAC::Components
 		config.TryGetValue("player_name", &customPlayerData->PlayerName);
 		config.TryGetValue("level_name", &customPlayerData->LevelName);
 
+		// ScoreSaver copies (can be improved?)
+		std::string utf8path = TLAC::framework::GetModuleDirectory() + "/playerdata.ini";
+		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, configPath, 256);
+
+		customPlayerData->LevelNum = config.GetIntegerValue("level");
+		customPlayerData->VocaloidPoints = config.GetIntegerValue("vocaloid_point");
 		customPlayerData->LevelPlateId = config.GetIntegerValue("level_plate_id");
 		customPlayerData->LevelPlateEffect = config.GetIntegerValue("level_plate_effect");
 		customPlayerData->SkinEquip = config.GetIntegerValue("skin_equip");
@@ -239,6 +247,18 @@ namespace TLAC::Components
 		customPlayerData->SlideSeEquip = config.GetIntegerValue("slide_se_equip");
 		customPlayerData->ChainslideSeEquip = config.GetIntegerValue("chainslide_se_equip");
 		customPlayerData->SlidertouchSeEquip = config.GetIntegerValue("slidertouch_se_equip");
+		//customPlayerData->ModuleEquip0 = config.GetIntegerValue("module_equip0"); See below for explanation
+		//customPlayerData->ModuleEquip1 = config.GetIntegerValue("module_equip1");
+		//customPlayerData->ModuleEquip2 = config.GetIntegerValue("module_equip2");
+		//customPlayerData->ModuleEquip3 = config.GetIntegerValue("module_equip3");
+		//customPlayerData->ModuleEquip4 = config.GetIntegerValue("module_equip4");
+		//customPlayerData->ModuleEquip5 = config.GetIntegerValue("module_equip5");
+		customPlayerData->ModuleEquipCmn0 = config.GetIntegerValue("module_equip_cmn0");
+		customPlayerData->ModuleEquipCmn1 = config.GetIntegerValue("module_equip_cmn1");
+		customPlayerData->ModuleEquipCmn2 = config.GetIntegerValue("module_equip_cmn2");
+		customPlayerData->ModuleEquipCmn3 = config.GetIntegerValue("module_equip_cmn3");
+		customPlayerData->ModuleEquipCmn4 = config.GetIntegerValue("module_equip_cmn4");
+		customPlayerData->ModuleEquipCmn5 = config.GetIntegerValue("module_equip_cmn5");
 		customPlayerData->ShowExcellentClearBorder = config.GetBooleanValue("border_excellent");
 		customPlayerData->ShowGreatClearBorder = config.GetBooleanValue("border_great");
 		customPlayerData->ShowRivalClearBorder = config.GetBooleanValue("border_rival");
@@ -246,6 +266,23 @@ namespace TLAC::Components
 		customPlayerData->GameModifierOptions = config.GetBooleanValue("gamemode_options");
 		customPlayerData->ActionSE = config.GetBooleanValue("act_toggle");
 		moduleCardWorkaround = config.GetBooleanValue("module_card_workaround");
+
+		// don't want to overwrite the default values
+		auto setIfNotEqual = [](int* target, int value, int comparison)
+		{
+			if (value != comparison)
+				* target = value;
+		};
+
+		// only need to run this line once on startup, otherwise cannot increase/decrease in-game
+		setIfNotEqual(&playerData->vocaloid_point, customPlayerData->VocaloidPoints, 0);
+		// run once to check if module setting is invalid
+		setIfNotEqual(&playerData->module_equip_cmn0, customPlayerData->ModuleEquipCmn0, 0);
+		setIfNotEqual(&playerData->module_equip_cmn1, customPlayerData->ModuleEquipCmn1, 0);
+		setIfNotEqual(&playerData->module_equip_cmn2, customPlayerData->ModuleEquipCmn2, 0);
+		setIfNotEqual(&playerData->module_equip_cmn3, customPlayerData->ModuleEquipCmn3, 0);
+		setIfNotEqual(&playerData->module_equip_cmn4, customPlayerData->ModuleEquipCmn4, 0);
+		setIfNotEqual(&playerData->module_equip_cmn5, customPlayerData->ModuleEquipCmn5, 0);
 
 		std::string* mylistString;
 		std::vector<std::string> mylistStringVec;
@@ -337,6 +374,7 @@ namespace TLAC::Components
 		}
 	}
 
+
 	void PlayerDataManager::ApplyCustomData()
 	{
 		// don't want to overwrite the default values
@@ -345,7 +383,59 @@ namespace TLAC::Components
 			if (value != comparison)
 				*target = value;
 		};
+		// check if the playerData in-game value is different from the customPlayerData value and update and save the ini
+		if (customPlayerData->VocaloidPoints != playerData->vocaloid_point)
+		{
+			customPlayerData->VocaloidPoints = playerData->vocaloid_point;
+			WCHAR val[32];
+			swprintf(val, 32, L"%d", playerData->vocaloid_point);
+			WritePrivateProfileStringW(L"playerdata", L"vocaloid_point", val, configPath);
+		}
+		// save module choices to module_equip_cmn[0-5]
+		if (customPlayerData->ModuleEquipCmn0 != playerData->module_equip_cmn0)
+		{
+			customPlayerData->ModuleEquipCmn0 = playerData->module_equip_cmn0;
+			WCHAR val[32];
+			swprintf(val, 32, L"%d", playerData->module_equip_cmn0);
+			WritePrivateProfileStringW(L"playerdata", L"module_equip_cmn0", val, configPath);
+		}
+		if (customPlayerData->ModuleEquipCmn1 != playerData->module_equip_cmn1)
+		{
+			customPlayerData->ModuleEquipCmn1 = playerData->module_equip_cmn1;
+			WCHAR val[32];
+			swprintf(val, 32, L"%d", playerData->module_equip_cmn1);
+			WritePrivateProfileStringW(L"playerdata", L"module_equip_cmn1", val, configPath);
+		}
+		if (customPlayerData->ModuleEquipCmn2 != playerData->module_equip_cmn2)
+		{
+			customPlayerData->ModuleEquipCmn2 = playerData->module_equip_cmn2;
+			WCHAR val[32];
+			swprintf(val, 32, L"%d", playerData->module_equip_cmn2);
+			WritePrivateProfileStringW(L"playerdata", L"module_equip_cmn2", val, configPath);
+		}
+		if (customPlayerData->ModuleEquipCmn3 != playerData->module_equip_cmn3)
+		{
+			customPlayerData->ModuleEquipCmn3 = playerData->module_equip_cmn3;
+			WCHAR val[32];
+			swprintf(val, 32, L"%d", playerData->module_equip_cmn3);
+			WritePrivateProfileStringW(L"playerdata", L"module_equip_cmn3", val, configPath);
+		}
+		if (customPlayerData->ModuleEquipCmn4 != playerData->module_equip_cmn4)
+		{
+			customPlayerData->ModuleEquipCmn4 = playerData->module_equip_cmn4;
+			WCHAR val[32];
+			swprintf(val, 32, L"%d", playerData->module_equip_cmn4);
+			WritePrivateProfileStringW(L"playerdata", L"module_equip_cmn4", val, configPath);
+		}
+		if (customPlayerData->ModuleEquipCmn5 != playerData->module_equip_cmn5)
+		{
+			customPlayerData->ModuleEquipCmn5 = playerData->module_equip_cmn5;
+			WCHAR val[32];
+			swprintf(val, 32, L"%d", playerData->module_equip_cmn5);
+			WritePrivateProfileStringW(L"playerdata", L"module_equip_cmn5", val, configPath);
+		}
 
+		setIfNotEqual(&playerData->level, customPlayerData->LevelNum, 1);
 		setIfNotEqual(&playerData->level_plate_id, customPlayerData->LevelPlateId, 0);
 		setIfNotEqual(&playerData->level_plate_effect, customPlayerData->LevelPlateEffect, 0);
 		setIfNotEqual(&playerData->skin_equip, customPlayerData->SkinEquip, 0);
@@ -354,6 +444,12 @@ namespace TLAC::Components
 		setIfNotEqual(&playerData->chainslide_se_equip, customPlayerData->ChainslideSeEquip, -1);
 		setIfNotEqual(&playerData->slidertouch_se_equip, customPlayerData->SlidertouchSeEquip, -1);
 		setIfNotEqual(&playerData->act_toggle, customPlayerData->ActionSE, 1);
+		//setIfNotEqual(&playerData->module_equip0, customPlayerData->ModuleEquip0, 0); Do NOT recommend using this
+		//setIfNotEqual(&playerData->module_equip1, customPlayerData->ModuleEquip1, 0);
+		//setIfNotEqual(&playerData->module_equip2, customPlayerData->ModuleEquip2, 0);
+		//setIfNotEqual(&playerData->module_equip3, customPlayerData->ModuleEquip3, 0);
+		//setIfNotEqual(&playerData->module_equip4, customPlayerData->ModuleEquip4, 0);
+		//setIfNotEqual(&playerData->module_equip5, customPlayerData->ModuleEquip5, 0);
 
 		// Display clear borders on the progress bar
 		playerData->clear_border = (customPlayerData->ShowRivalClearBorder << 2) | (customPlayerData->ShowExcellentClearBorder << 1) | (customPlayerData->ShowGreatClearBorder);

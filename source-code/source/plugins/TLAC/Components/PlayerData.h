@@ -76,7 +76,7 @@ struct PlayerData
 	int32_t field_114;
 	int32_t field_118;
 	int32_t field_11C;
-	int32_t field_120;
+	int32_t level;
 	int32_t level_plate_id;
 	int32_t level_plate_effect;
 	int32_t vocaloid_point;
@@ -96,39 +96,39 @@ struct PlayerData
 	int32_t field_164;
 	int32_t field_168;
 	int32_t field_16C;
-	int32_t field_170;
+	int32_t field_170; //170
 	int32_t field_174;
 	int32_t field_178;
 	int32_t field_17C;
 	int32_t field_180;
-	int32_t field_184;
+	int32_t field_184; //184
 	int32_t field_188;
 	int32_t field_18C;
 	int32_t field_190;
 	int32_t field_194;
-	int32_t field_198;
+	int32_t field_198; //198
 	int32_t field_19C;
 	int32_t field_1A0;
 	int32_t field_1A4;
 	int32_t field_1A8;
-	int32_t field_1AC;
+	int32_t field_1AC; //1AC
 	int32_t field_1B0;
 	int32_t field_1B4;
 	int32_t field_1B8;
 	int32_t field_1BC;
-	int32_t field_1C0;
-	int32_t field_1C4;
-	int32_t field_1C8;
-	int32_t field_1CC;
-	int32_t field_1D0;
-	int32_t field_1D4;
-	int32_t field_1D8;
-	int32_t field_1DC;
-	int32_t field_1E0;
-	int32_t field_1E4;
-	int32_t field_1E8;
-	int32_t field_1EC;
-	int32_t field_1F0;
+	int32_t module_equip0; //1C0
+	int32_t module_equip1; //1C4
+	int32_t module_equip2; //1C8
+	int32_t module_equip3; //1CC
+	int32_t module_equip4; //1D0
+	int32_t module_equip5; //1D4
+	int32_t module_equip_cmn0; //1D8
+	int32_t module_equip_cmn1;//1DC
+	int32_t module_equip_cmn2;//1E0
+	int32_t module_equip_cmn3;//1E4
+	int32_t module_equip_cmn4;//1E8
+	int32_t module_equip_cmn5;//1EC
+	int32_t field_1F0;//1F0
 	int32_t field_1F4;
 	int32_t field_1F8;
 	int32_t field_1FC;
@@ -148,7 +148,7 @@ struct PlayerData
 	int32_t field_234;
 	int32_t field_238;
 	int32_t field_23C;
-	int32_t field_240;
+	int32_t module_hist; //240
 	int32_t field_244;
 	int32_t field_248;
 	int32_t field_24C;

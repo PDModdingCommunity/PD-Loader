@@ -431,7 +431,7 @@ namespace TLAC::Components
 		{
 			customPlayerData->ModuleEquipCmn5 = playerData->module_equip_cmn5;
 			WCHAR val[32];
-			swprintf(val, 32, L"%d", playerData->module_equip_cmn0);
+			swprintf(val, 32, L"%d", playerData->module_equip_cmn5);
 			WritePrivateProfileStringW(L"playerdata", L"module_equip_cmn5", val, configPath);
 		}
 

@@ -13,12 +13,15 @@ namespace TLAC::Components
 {
 	WCHAR ScoreSaver::configPath[256];
 	WCHAR ScoreSaver::rival_configPath[256];
+	WCHAR ScoreSaver::modules_configPath[256];
 	ScoreSaver::ScoreSaver()
 	{
 		std::string utf8path = TLAC::framework::GetModuleDirectory() + "/scores.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, configPath, 256);
 		utf8path = TLAC::framework::GetModuleDirectory() + "/rivalscores.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, rival_configPath, 256);
+		utf8path = TLAC::framework::GetModuleDirectory() + "/modules.ini";
+		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, modules_configPath, 256);
 	}
 
 	ScoreSaver::~ScoreSaver()
@@ -354,12 +357,16 @@ namespace TLAC::Components
 						// update score begin and end vars from game
 						FixScoreCacheAddresses(diff);
 					}
-
+					else
+					{
+						UpdateSingleScoreCacheModulesEntry;
+					}
 					currentPv = pvNum;
 					currentDifficulty = diff;
 					currentDifficultyIsEx = diffIsEx;
 					currentInsurance = insurance;
 				}
+				ModuleCheck(pvNum, diff, diffIsEx);
 			}
 		}
 	}
@@ -541,6 +548,73 @@ namespace TLAC::Components
 		}
 	}
 
+	void ScoreSaver::UpdateSingleScoreCacheModulesEntry(int pvNum, int diff, int exDiff)
+	{
+		if (pvNum < 0 || diff < 0 || exDiff < 0 || pvNum > 999 || diff > 3 || exDiff > 1)
+			return;
+
+
+		WCHAR keyBase[32]; // needs to be big enough to store pv.999
+		WCHAR key[32]; // needs to be big enough to store pv.999.module5
+
+		const WCHAR section[] = L"modules";
+		swprintf(keyBase, 32, L"pv.%03d", pvNum);
+
+		for (int i = 0; i < 6; ++i)
+		{
+			swprintf(key, 32, L"%ls.module%d", keyBase, i);
+			int INImodule = GetPrivateProfileIntW(section, key, 0, modules_configPath);
+
+			if (INImodule > 0)
+			{
+				DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+				if (cachedScore == nullptr)
+				{
+					ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
+					cachedScore = GetCachedScore(pvNum, diff, exDiff);
+				}
+				if (cachedScore != nullptr)
+				{
+					cachedScore->per_module_equip[i] = INImodule;
+					WCHAR val[32];
+					swprintf(val, 32, L"%d", INImodule);
+					WritePrivateProfileStringW(L"modules", key, val, modules_configPath);
+				}
+			}
+		}
+
+
+	}
+
+	void ScoreSaver::ModuleCheck(int pvNum, int diff, int exDiff)
+	{
+		if (pvNum < 0 || diff < 0 || exDiff < 0 || pvNum > 999 || diff > 3 || exDiff > 1)
+			return;
+
+		WCHAR keyBase[32]; // needs to be big enough to store pv.999
+		WCHAR key[32]; // needs to be big enough to store pv.999.module5
+		const WCHAR section[] = L"modules";
+		swprintf(keyBase, 32, L"pv.%03d", pvNum);
+		DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+		for (int i = 0; i < 6; ++i)
+		{
+			swprintf(key, 32, L"%ls.module%d", keyBase, i);
+			int INImodule = GetPrivateProfileIntW(section, key, 0, modules_configPath);
+			if (INImodule != cachedScore->per_module_equip[0] || INImodule != cachedScore->per_module_equip[1] || INImodule != cachedScore->per_module_equip[2] || INImodule != cachedScore->per_module_equip[3] || INImodule != cachedScore->per_module_equip[4] || INImodule != cachedScore->per_module_equip[5])
+			{
+				INImodule = *cachedScore->per_module_equip;
+				WCHAR val[32];
+				swprintf(val, 32, L"%d", cachedScore->per_module_equip[i]);
+				WritePrivateProfileStringW(L"modules", key, val, modules_configPath);
+			}
+			else
+			{
+				return;
+			}
+		}
+		
+	}
+
 	void ScoreSaver::FixScoreCacheAddresses(int diff)
 	{
 		// update score begin and end vars from game
@@ -558,6 +632,7 @@ namespace TLAC::Components
 				{
 					UpdateSingleScoreCacheEntry(pvNum, diff, exDiff, false);
 					UpdateSingleScoreCacheRivalEntry(pvNum, diff, exDiff);
+					UpdateSingleScoreCacheModulesEntry(pvNum, diff, exDiff);
 				}
 			}
 		}

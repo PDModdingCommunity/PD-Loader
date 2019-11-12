@@ -29,6 +29,9 @@ namespace TLAC::Components
 		int ModuleEquipCmn3;
 		int ModuleEquipCmn4;
 		int ModuleEquipCmn5;
+		int ActionVol;
+		int ActionSlideVol;
+		int UsePVEquip;
 		bool ShowGreatClearBorder;
 		bool ShowExcellentClearBorder;
 		bool ShowRivalClearBorder;

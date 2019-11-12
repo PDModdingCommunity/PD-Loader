@@ -23,7 +23,13 @@ namespace TLAC::Components
 		{
 			int pvNum;
 			int exDifficulty;
-			byte padding08[0xa4]; // ??? -- seems to be 6*6 ints (0x90 bytes) for modules + 5 ints (0x14 bytes) for skin and button se
+			int per_module_equip[6];
+			int other_module_shit[30]; // ??? -- seems to be 6*6 ints (0x90 bytes) for modules + 5 ints (0x14 bytes) for skin and button se
+			int per_skin_equip;
+			int per_btn_se_equip;
+			int per_slide_se_equip;
+			int per_chainslide_se_equip;
+			int per_slidertouch_se_equip;
 			int clearRank;        // +0xac: clear rank
 			int score;            // +0xb0: score
 			int percent;          // +0xb4: best percent
@@ -104,9 +110,11 @@ namespace TLAC::Components
 		static void UpdateScoreCache();
 		static void UpdateSingleScoreCacheEntry(int pvNum, int diff, int exDiff, bool doDefaultsReset);
 		static void UpdateSingleScoreCacheRivalEntry(int pvNum, int diff, int exDiff);
+		static void UpdateSingleScoreCacheModulesEntry(int pvNum, int diff, int exDiff);
 		static void FixScoreCacheAddresses(int diff); // only call this from the main thread
 		static DivaScore* GetCachedScore(int pvNum, int diff, int exDiff);
 		static void UpdateClearCounts();
+		static void ModuleCheck(int pvNum, int diff, int exDiff);
 
 	private:
 		static bool(__stdcall* divaInitResults)(void* cls);
@@ -118,6 +126,7 @@ namespace TLAC::Components
 
 		static WCHAR configPath[256];
 		static WCHAR rival_configPath[256];
+		static WCHAR modules_configPath[256];
 		static std::thread initThread;
 
 		int currentPv;

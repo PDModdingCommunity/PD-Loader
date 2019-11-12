@@ -14,14 +14,21 @@ namespace TLAC::Components
 	WCHAR ScoreSaver::configPath[256];
 	WCHAR ScoreSaver::rival_configPath[256];
 	WCHAR ScoreSaver::modules_configPath[256];
+	WCHAR ScoreSaver::skins_configPath[256];
+	WCHAR ScoreSaver::sfx_configPath[256];
 	ScoreSaver::ScoreSaver()
 	{
 		std::string utf8path = TLAC::framework::GetModuleDirectory() + "/scores.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, configPath, 256);
 		utf8path = TLAC::framework::GetModuleDirectory() + "/rivalscores.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, rival_configPath, 256);
-		utf8path = TLAC::framework::GetModuleDirectory() + "/modules.ini";
+		utf8path = TLAC::framework::GetModuleDirectory() + "/pv_equip/modules.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, modules_configPath, 256);
+		utf8path = TLAC::framework::GetModuleDirectory() + "/pv_equip/skins.ini";
+		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, skins_configPath, 256);
+		utf8path = TLAC::framework::GetModuleDirectory() + "/pv_equip/sfx.ini";
+		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, sfx_configPath, 256);
+
 	}
 
 	ScoreSaver::~ScoreSaver()
@@ -559,6 +566,21 @@ namespace TLAC::Components
 
 		const WCHAR section[] = L"modules";
 		swprintf(keyBase, 32, L"pv.%03d", pvNum);
+		swprintf(key, 32, L"%ls.skin", keyBase);
+		int INISkin = GetPrivateProfileIntW(section, key, 0, skins_configPath);
+		if (INISkin > 0)
+		{
+			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			if (cachedScore == nullptr)
+			{
+				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
+				cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			}
+			if (cachedScore != nullptr)
+			{
+				cachedScore->per_skin_equip = INISkin;
+			}
+		}
 
 		for (int i = 0; i < 6; ++i)
 		{
@@ -576,9 +598,6 @@ namespace TLAC::Components
 				if (cachedScore != nullptr)
 				{
 					cachedScore->per_module_equip[i] = INImodule;
-					WCHAR val[32];
-					swprintf(val, 32, L"%d", INImodule);
-					WritePrivateProfileStringW(L"modules", key, val, modules_configPath);
 				}
 			}
 		}
@@ -615,6 +634,110 @@ namespace TLAC::Components
 		
 	}
 
+	void ScoreSaver::UpdateSingleScoreCacheSkinsEntry(int pvNum, int diff, int exDiff)
+	{
+		if (pvNum < 0 || diff < 0 || exDiff < 0 || pvNum > 999 || diff > 3 || exDiff > 1)
+			return;
+
+
+		WCHAR keyBase[32]; // needs to be big enough to store pv.999
+		WCHAR key[32]; // needs to be big enough to store pv.999.module5
+
+		const WCHAR section[] = L"skins";
+		swprintf(keyBase, 32, L"pv.%03d", pvNum);
+		swprintf(key, 32, L"%ls.skin", keyBase);
+		int INISkin = GetPrivateProfileIntW(section, key, 0, skins_configPath);
+		if (INISkin > 0)
+		{
+			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			if (cachedScore == nullptr)
+			{
+				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
+				cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			}
+			if (cachedScore != nullptr)
+			{
+				cachedScore->per_skin_equip = INISkin;
+			}
+		}
+	}
+
+	void ScoreSaver::UpdateSingleScoreCacheSFXEntry(int pvNum, int diff, int exDiff)
+	{
+		if (pvNum < 0 || diff < 0 || exDiff < 0 || pvNum > 999 || diff > 3 || exDiff > 1)
+			return;
+
+
+		WCHAR keyBase[32]; // needs to be big enough to store pv.999
+		WCHAR key[32]; // needs to be big enough to store pv.999.module5
+
+		const WCHAR section[] = L"SFX";
+		swprintf(keyBase, 32, L"pv.%03d", pvNum);
+		swprintf(key, 32, L"%ls.btn", keyBase);
+		int INIBtn = GetPrivateProfileIntW(section, key, 0, sfx_configPath);
+		if (INIBtn > 0)
+		{
+			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			if (cachedScore == nullptr)
+			{
+				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
+				cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			}
+			if (cachedScore != nullptr)
+			{
+				cachedScore->per_btn_se_equip = INIBtn;
+			}
+		}
+		swprintf(keyBase, 32, L"pv.%03d", pvNum);
+		swprintf(key, 32, L"%ls.chain", keyBase);
+		int INIChain = GetPrivateProfileIntW(section, key, 0, sfx_configPath);
+		if (INIChain > 0)
+		{
+			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			if (cachedScore == nullptr)
+			{
+				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
+				cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			}
+			if (cachedScore != nullptr)
+			{
+				cachedScore->per_chainslide_se_equip = INIChain;
+			}
+		}
+		swprintf(keyBase, 32, L"pv.%03d", pvNum);
+		swprintf(key, 32, L"%ls.slide", keyBase);
+		int INISlide = GetPrivateProfileIntW(section, key, 0, sfx_configPath);
+		if (INISlide > 0)
+		{
+			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			if (cachedScore == nullptr)
+			{
+				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
+				cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			}
+			if (cachedScore != nullptr)
+			{
+				cachedScore->per_slide_se_equip = INISlide;
+			}
+		}
+		swprintf(keyBase, 32, L"pv.%03d", pvNum);
+		swprintf(key, 32, L"%ls.touch", keyBase);
+		int INITouch = GetPrivateProfileIntW(section, key, 0, sfx_configPath);
+		if (INITouch > 0)
+		{
+			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			if (cachedScore == nullptr)
+			{
+				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
+				cachedScore = GetCachedScore(pvNum, diff, exDiff);
+			}
+			if (cachedScore != nullptr)
+			{
+				cachedScore->per_slidertouch_se_equip = INITouch;
+			}
+		}
+	}
+
 	void ScoreSaver::FixScoreCacheAddresses(int diff)
 	{
 		// update score begin and end vars from game
@@ -633,6 +756,8 @@ namespace TLAC::Components
 					UpdateSingleScoreCacheEntry(pvNum, diff, exDiff, false);
 					UpdateSingleScoreCacheRivalEntry(pvNum, diff, exDiff);
 					UpdateSingleScoreCacheModulesEntry(pvNum, diff, exDiff);
+					UpdateSingleScoreCacheSkinsEntry(pvNum, diff, exDiff);
+					UpdateSingleScoreCacheSFXEntry(pvNum, diff, exDiff);
 				}
 			}
 		}

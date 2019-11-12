@@ -224,6 +224,9 @@ ConfigOptionBase* playerdataArray[] = {
 
 	new BooleanOption(L"use_card", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Use Card", L"Enables IC card. This allows module selection.", false, true),
 	new BooleanOption(L"module_card_workaround", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Module Selection Workaround", L"Allows module selection without card and tries to improve menu performance.\n(BETA)", true, true),
+	new BooleanOption(L"use_pv_module_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Song Specific Modules", L"Allows song-specific module selection.", false, true),
+	new BooleanOption(L"use_pv_skin_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Song Specific Skins", L"Allows song-specific skin settings.\nValues stored in skins.ini", false, true),
+	new BooleanOption(L"use_pv_sfx_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Song Specific Sound Effects", L"Allows song-specific sound effect settings.\nValues stored in sfx.ini", false, true),
 
 	new BooleanOption(L"gamemode_options", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Game Modifiers", L"Allows use of game mode modifiers (hi-speed, hidden, and sudden).", true, true),
 };

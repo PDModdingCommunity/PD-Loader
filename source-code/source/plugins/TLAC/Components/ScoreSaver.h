@@ -111,6 +111,8 @@ namespace TLAC::Components
 		static void UpdateSingleScoreCacheEntry(int pvNum, int diff, int exDiff, bool doDefaultsReset);
 		static void UpdateSingleScoreCacheRivalEntry(int pvNum, int diff, int exDiff);
 		static void UpdateSingleScoreCacheModulesEntry(int pvNum, int diff, int exDiff);
+		static void UpdateSingleScoreCacheSkinsEntry(int pvNum, int diff, int exDiff);
+		static void UpdateSingleScoreCacheSFXEntry(int pvNum, int diff, int exDiff);
 		static void FixScoreCacheAddresses(int diff); // only call this from the main thread
 		static DivaScore* GetCachedScore(int pvNum, int diff, int exDiff);
 		static void UpdateClearCounts();
@@ -127,6 +129,8 @@ namespace TLAC::Components
 		static WCHAR configPath[256];
 		static WCHAR rival_configPath[256];
 		static WCHAR modules_configPath[256];
+		static WCHAR skins_configPath[256];
+		static WCHAR sfx_configPath[256];
 		static std::thread initThread;
 
 		int currentPv;

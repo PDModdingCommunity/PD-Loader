@@ -32,6 +32,8 @@ namespace TLAC::Components
 		int ActionVol;
 		int ActionSlideVol;
 		int UsePVEquip;
+		int UsePVSFXEquip;
+		int UsePVSkinEquip;
 		bool ShowGreatClearBorder;
 		bool ShowExcellentClearBorder;
 		bool ShowRivalClearBorder;

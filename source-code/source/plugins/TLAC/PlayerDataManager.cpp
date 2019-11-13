@@ -287,9 +287,9 @@ namespace TLAC::Components
 		setIfNotEqual(&playerData->act_vol, customPlayerData->ActionVol, 100);
 		setIfNotEqual(&playerData->act_slide_vol, customPlayerData->ActionSlideVol, 100);
 		setIfNotEqual(&playerData->btn_se_equip_cmn, customPlayerData->BtnSeEquip, -1);
-		setIfNotEqual(&playerData->slide_se_equip, customPlayerData->SlideSeEquip, -1);
-		setIfNotEqual(&playerData->chainslide_se_equip, customPlayerData->ChainslideSeEquip, -1);
-		setIfNotEqual(&playerData->slidertouch_se_equip, customPlayerData->SlidertouchSeEquip, -1);
+		setIfNotEqual(&playerData->slide_se_equip_cmn, customPlayerData->SlideSeEquip, -1);
+		setIfNotEqual(&playerData->chainslide_se_equip_cmn, customPlayerData->ChainslideSeEquip, -1);
+		setIfNotEqual(&playerData->slidertouch_se_equip_cmn, customPlayerData->SlidertouchSeEquip, -1);
 		setIfNotEqual(&playerData->act_toggle, customPlayerData->ActionSE, 1);
 
 		std::string* mylistString;

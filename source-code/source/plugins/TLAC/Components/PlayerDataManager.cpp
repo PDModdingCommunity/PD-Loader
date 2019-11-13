@@ -10,6 +10,8 @@
 
 const std::string PLAYER_DATA_FILE_NAME = "playerdata.ini";
 static WCHAR configPath[256];
+int* headitemequip = (int*)0x0000000141804CDC;
+int customheaditemequip;
 namespace TLAC::Components
 {
 	PlayerDataManager::PlayerDataManager()
@@ -234,7 +236,7 @@ namespace TLAC::Components
 		config.TryGetValue("player_name", &customPlayerData->PlayerName);
 		config.TryGetValue("level_name", &customPlayerData->LevelName);
 
-		// ScoreSaver copies (can be improved?)
+		// ScoreSaver copies & declaring non-playerdata values
 		std::string utf8path = TLAC::framework::GetModuleDirectory() + "/playerdata.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, configPath, 256);
 
@@ -247,18 +249,17 @@ namespace TLAC::Components
 		customPlayerData->SlideSeEquip = config.GetIntegerValue("slide_se_equip");
 		customPlayerData->ChainslideSeEquip = config.GetIntegerValue("chainslide_se_equip");
 		customPlayerData->SlidertouchSeEquip = config.GetIntegerValue("slidertouch_se_equip");
-		//customPlayerData->ModuleEquip0 = config.GetIntegerValue("module_equip0"); See below for explanation
-		//customPlayerData->ModuleEquip1 = config.GetIntegerValue("module_equip1");
-		//customPlayerData->ModuleEquip2 = config.GetIntegerValue("module_equip2");
-		//customPlayerData->ModuleEquip3 = config.GetIntegerValue("module_equip3");
-		//customPlayerData->ModuleEquip4 = config.GetIntegerValue("module_equip4");
-		//customPlayerData->ModuleEquip5 = config.GetIntegerValue("module_equip5");
 		customPlayerData->ModuleEquipCmn0 = config.GetIntegerValue("module_equip_cmn0");
 		customPlayerData->ModuleEquipCmn1 = config.GetIntegerValue("module_equip_cmn1");
 		customPlayerData->ModuleEquipCmn2 = config.GetIntegerValue("module_equip_cmn2");
 		customPlayerData->ModuleEquipCmn3 = config.GetIntegerValue("module_equip_cmn3");
 		customPlayerData->ModuleEquipCmn4 = config.GetIntegerValue("module_equip_cmn4");
 		customPlayerData->ModuleEquipCmn5 = config.GetIntegerValue("module_equip_cmn5");
+		customPlayerData->ActionVol = config.GetIntegerValue("act_vol");
+		customPlayerData->ActionSlideVol = config.GetIntegerValue("act_slide_vol");
+		customPlayerData->UsePVSFXEquip = config.GetBooleanValue("use_pv_sfx_equip");
+		customPlayerData->UsePVSkinEquip = config.GetBooleanValue("use_pv_skin_equip");
+		customPlayerData->UsePVEquip = config.GetBooleanValue("use_pv_module_equip");
 		customPlayerData->ShowExcellentClearBorder = config.GetBooleanValue("border_excellent");
 		customPlayerData->ShowGreatClearBorder = config.GetBooleanValue("border_great");
 		customPlayerData->ShowRivalClearBorder = config.GetBooleanValue("border_rival");
@@ -274,15 +275,22 @@ namespace TLAC::Components
 				* target = value;
 		};
 
-		// only need to run this line once on startup, otherwise cannot increase/decrease in-game
+		// only need to run this line once on startup, otherwise cannot increase/decrease in-game (or use per-song settings!)
 		setIfNotEqual(&playerData->vocaloid_point, customPlayerData->VocaloidPoints, 0);
-		// run once to check if module setting is invalid
+		setIfNotEqual(&playerData->skin_equip_cmn, customPlayerData->SkinEquip, 0);
 		setIfNotEqual(&playerData->module_equip_cmn0, customPlayerData->ModuleEquipCmn0, 0);
 		setIfNotEqual(&playerData->module_equip_cmn1, customPlayerData->ModuleEquipCmn1, 0);
 		setIfNotEqual(&playerData->module_equip_cmn2, customPlayerData->ModuleEquipCmn2, 0);
 		setIfNotEqual(&playerData->module_equip_cmn3, customPlayerData->ModuleEquipCmn3, 0);
 		setIfNotEqual(&playerData->module_equip_cmn4, customPlayerData->ModuleEquipCmn4, 0);
 		setIfNotEqual(&playerData->module_equip_cmn5, customPlayerData->ModuleEquipCmn5, 0);
+		setIfNotEqual(&playerData->act_vol, customPlayerData->ActionVol, 100);
+		setIfNotEqual(&playerData->act_slide_vol, customPlayerData->ActionSlideVol, 100);
+		setIfNotEqual(&playerData->btn_se_equip, customPlayerData->BtnSeEquip, -1);
+		setIfNotEqual(&playerData->slide_se_equip, customPlayerData->SlideSeEquip, -1);
+		setIfNotEqual(&playerData->chainslide_se_equip, customPlayerData->ChainslideSeEquip, -1);
+		setIfNotEqual(&playerData->slidertouch_se_equip, customPlayerData->SlidertouchSeEquip, -1);
+		setIfNotEqual(&playerData->act_toggle, customPlayerData->ActionSE, 1);
 
 		std::string* mylistString;
 		std::vector<std::string> mylistStringVec;
@@ -434,22 +442,40 @@ namespace TLAC::Components
 			swprintf(val, 32, L"%d", playerData->module_equip_cmn5);
 			WritePrivateProfileStringW(L"playerdata", L"module_equip_cmn5", val, configPath);
 		}
+		if (customPlayerData->ActionVol != playerData->act_vol)
+		{
+			customPlayerData->ActionVol = playerData->act_vol;
+			WCHAR val[32];
+			swprintf(val, 32, L"%d", playerData->act_vol);
+			WritePrivateProfileStringW(L"playerdata", L"act_vol", val, configPath);
+		}
+		if (customPlayerData->ActionSlideVol != playerData->act_slide_vol)
+		{
+			customPlayerData->ActionSlideVol = playerData->act_slide_vol;
+			WCHAR val[32];
+			swprintf(val, 32, L"%d", playerData->act_slide_vol);
+			WritePrivateProfileStringW(L"playerdata", L"act_slide_vol", val, configPath);
+		}
+		if (customPlayerData->UsePVEquip != playerData->use_pv_module_equip)
+		{
+			playerData->use_pv_module_equip = 1;
+		}
+		if (customPlayerData->UsePVSFXEquip != playerData->use_pv_btn_se_equip)
+		{
+			playerData->use_pv_btn_se_equip = 1;
+			playerData->use_pv_chainslide_se_equip = 1;
+			playerData->use_pv_slidertouch_se_equip = 1;
+			playerData->use_pv_slide_se_equip = 1;
+		}
+		if (customPlayerData->UsePVSkinEquip != playerData->use_pv_skin_equip)
+		{
+			playerData->use_pv_skin_equip = 1;
+		}
+				
 
 		setIfNotEqual(&playerData->level, customPlayerData->LevelNum, 1);
 		setIfNotEqual(&playerData->level_plate_id, customPlayerData->LevelPlateId, 0);
 		setIfNotEqual(&playerData->level_plate_effect, customPlayerData->LevelPlateEffect, 0);
-		setIfNotEqual(&playerData->skin_equip, customPlayerData->SkinEquip, 0);
-		setIfNotEqual(&playerData->btn_se_equip, customPlayerData->BtnSeEquip, -1);
-		setIfNotEqual(&playerData->slide_se_equip, customPlayerData->SlideSeEquip, -1);
-		setIfNotEqual(&playerData->chainslide_se_equip, customPlayerData->ChainslideSeEquip, -1);
-		setIfNotEqual(&playerData->slidertouch_se_equip, customPlayerData->SlidertouchSeEquip, -1);
-		setIfNotEqual(&playerData->act_toggle, customPlayerData->ActionSE, 1);
-		//setIfNotEqual(&playerData->module_equip0, customPlayerData->ModuleEquip0, 0); Do NOT recommend using this
-		//setIfNotEqual(&playerData->module_equip1, customPlayerData->ModuleEquip1, 0);
-		//setIfNotEqual(&playerData->module_equip2, customPlayerData->ModuleEquip2, 0);
-		//setIfNotEqual(&playerData->module_equip3, customPlayerData->ModuleEquip3, 0);
-		//setIfNotEqual(&playerData->module_equip4, customPlayerData->ModuleEquip4, 0);
-		//setIfNotEqual(&playerData->module_equip5, customPlayerData->ModuleEquip5, 0);
 
 		// Display clear borders on the progress bar
 		playerData->clear_border = (customPlayerData->ShowRivalClearBorder << 2) | (customPlayerData->ShowExcellentClearBorder << 1) | (customPlayerData->ShowGreatClearBorder);

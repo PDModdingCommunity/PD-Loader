@@ -21,6 +21,8 @@ after_build:
     md %TMP%\update\
 
     md %TMP%\update\plugins\
+    
+    md %TMP%\update\plugins\pv_equip\
 
 
 
@@ -33,6 +35,12 @@ after_build:
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\ShaderPatch.ini %TMP%\update\plugins\
     
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\keyconfig.ini %TMP%\update\plugins\
+    
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\modules.ini %TMP%\update\plugins\pv_equip\
+        
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\skins.ini %TMP%\update\plugins\pv_equip\
+            
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\sfx.ini %TMP%\update\plugins\pv_equip\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dnsapi.dll %TMP%\full\
 

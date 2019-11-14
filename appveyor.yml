@@ -12,6 +12,8 @@ after_build:
     md %TMP%\full\
 
     md %TMP%\full\plugins\
+    
+    md %TMP%\full\plugins\pv_equip\
 
     md %TMP%\full\ram\
 
@@ -36,11 +38,11 @@ after_build:
     
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\keyconfig.ini %TMP%\update\plugins\
     
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\modules.ini %TMP%\update\plugins\pv_equip\
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\pv_equip\modules.ini %TMP%\update\plugins\pv_equip\
         
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\skins.ini %TMP%\update\plugins\pv_equip\
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\pv_equip\skins.ini %TMP%\update\plugins\pv_equip\
             
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\sfx.ini %TMP%\update\plugins\pv_equip\
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\pv_equip\sfx.ini %TMP%\update\plugins\pv_equip\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dnsapi.dll %TMP%\full\
 

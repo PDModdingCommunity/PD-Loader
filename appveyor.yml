@@ -53,6 +53,8 @@ after_build:
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\glut32.dll %TMP%\full\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\*.* %TMP%\full\plugins\
+    
+        copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\*.* %TMP%\full\plugins\pv_equip\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\ram\databank\*.dat %TMP%\full\ram\databank\
 

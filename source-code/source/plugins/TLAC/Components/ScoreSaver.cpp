@@ -566,22 +566,6 @@ namespace TLAC::Components
 
 		const WCHAR section[] = L"modules";
 		swprintf(keyBase, 32, L"pv.%03d", pvNum);
-		swprintf(key, 32, L"%ls.skin", keyBase);
-		int INISkin = GetPrivateProfileIntW(section, key, 0, skins_configPath);
-		if (INISkin > 0)
-		{
-			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
-			if (cachedScore == nullptr)
-			{
-				ScoreCache[diff].push_back(DivaScore(pvNum, exDiff));
-				cachedScore = GetCachedScore(pvNum, diff, exDiff);
-			}
-			if (cachedScore != nullptr)
-			{
-				cachedScore->per_skin_equip = INISkin;
-			}
-		}
-
 		for (int i = 0; i < 6; ++i)
 		{
 			swprintf(key, 32, L"%ls.module%d", keyBase, i);
@@ -619,16 +603,12 @@ namespace TLAC::Components
 		{
 			swprintf(key, 32, L"%ls.module%d", keyBase, i);
 			int INImodule = GetPrivateProfileIntW(section, key, 0, modules_configPath);
-			if (INImodule != cachedScore->per_module_equip[0] || INImodule != cachedScore->per_module_equip[1] || INImodule != cachedScore->per_module_equip[2] || INImodule != cachedScore->per_module_equip[3] || INImodule != cachedScore->per_module_equip[4] || INImodule != cachedScore->per_module_equip[5])
+			if (INImodule != cachedScore->per_module_equip[i])
 			{
 				INImodule = *cachedScore->per_module_equip;
 				WCHAR val[32];
 				swprintf(val, 32, L"%d", cachedScore->per_module_equip[i]);
 				WritePrivateProfileStringW(L"modules", key, val, modules_configPath);
-			}
-			else
-			{
-				return;
 			}
 		}
 		
@@ -647,7 +627,7 @@ namespace TLAC::Components
 		swprintf(keyBase, 32, L"pv.%03d", pvNum);
 		swprintf(key, 32, L"%ls.skin", keyBase);
 		int INISkin = GetPrivateProfileIntW(section, key, 0, skins_configPath);
-		if (INISkin > 0)
+		if (INISkin > -1)
 		{
 			DivaScore* cachedScore = GetCachedScore(pvNum, diff, exDiff);
 			if (cachedScore == nullptr)

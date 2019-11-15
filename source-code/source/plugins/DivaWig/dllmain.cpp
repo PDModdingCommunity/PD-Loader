@@ -33,8 +33,12 @@
 #define UNKNOWN_16 23
 #define HEAD 24
 
+using namespace std;
+
 void(__cdecl* originalWig)(void* cls, uint64_t unk, uint64_t unk2) = (void(__cdecl*)(void* cls, uint64_t unk, uint64_t unk2))0x14052AD90;
-const std::string Strings[25] = { "Head accessory", "Hair", "Unknown 1", "Unknown 2", "Face accessory", "Unknown 3", "Face textures", "Unknown 4", "Chest accessory", "Unknown 5", "Body", "Unknown 6", "Unknown 7", "Unknown 8", "Hands", "Unknown 9", "Back accessory", "Unknown 10", "Unknown 11", "Unknown 12", "Unknown 13", "Unknown 14", "Unknown 15", "Unknown 16", "Head" };
+void(__cdecl* pvTimerUpdate)(__int64 a1) = (void(__cdecl*)(__int64 a1))0x1405BDF90;
+
+const string Strings[25] = { "Head accessory", "Hair", "Unknown 1", "Unknown 2", "Face accessory", "Unknown 3", "Face textures", "Unknown 4", "Chest accessory", "Unknown 5", "Body", "Unknown 6", "Unknown 7", "Unknown 8", "Hands", "Unknown 9", "Back accessory", "Unknown 10", "Unknown 11", "Unknown 12", "Unknown 13", "Unknown 14", "Unknown 15", "Unknown 16", "Head" };
 bool only_hair = false, only_head_accessory = false, only_face_accessory = false, only_face_textures = false, head = false, nothing = false;
 
 void loadConfig()
@@ -44,10 +48,8 @@ void loadConfig()
 	return;
 }
 
-void inputLoop()
+void inputLoop(__int64 a1)
 {
-	while (true)
-	{
 		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('0') < 0)
 		{
 			only_hair = false;
@@ -57,8 +59,8 @@ void inputLoop()
 			head = false;
 			nothing = false;
 			Beep(330, 300);
-			std::cout << "[DivaWig] Update all module parts!" << std::endl;
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			cout << "[DivaWig] Update all module parts!" << endl;
+			//this_thread::sleep_for(chrono::seconds(1));
 		}
 		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('1') < 0)
 		{
@@ -69,8 +71,8 @@ void inputLoop()
 			head = false;
 			nothing = false;
 			Beep(440, 300);
-			std::cout << "[DivaWig] Only update the hair!" << std::endl;
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			cout << "[DivaWig] Only update the hair!" << endl;
+			//this_thread::sleep_for(chrono::seconds(1));
 		}
 		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('2') < 0)
 		{
@@ -81,8 +83,8 @@ void inputLoop()
 			head = false;
 			nothing = false;
 			Beep(550, 300);
-			std::cout << "[DivaWig] Only update the head accessory!" << std::endl;
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			cout << "[DivaWig] Only update the head accessory!" << endl;
+			//this_thread::sleep_for(chrono::seconds(1));
 		}
 		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('3') < 0)
 		{
@@ -93,8 +95,8 @@ void inputLoop()
 			head = false;
 			nothing = false;
 			Beep(660, 300);
-			std::cout << "[DivaWig] Only update the face accessory!" << std::endl;
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			cout << "[DivaWig] Only update the face accessory!" << endl;
+			//this_thread::sleep_for(chrono::seconds(1));
 		}
 		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('4') < 0)
 		{
@@ -105,8 +107,8 @@ void inputLoop()
 			head = false;
 			nothing = false;
 			Beep(770, 300);
-			std::cout << "[DivaWig] Only update the face textures!" << std::endl;
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			cout << "[DivaWig] Only update the face textures!" << endl;
+			//this_thread::sleep_for(chrono::seconds(1));
 		}
 		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('5') < 0)
 		{
@@ -117,8 +119,8 @@ void inputLoop()
 			head = true;
 			nothing = false;
 			Beep(880, 300);
-			std::cout << "[DivaWig] Only update the head!" << std::endl;
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			cout << "[DivaWig] Only update the head!" << endl;
+			//this_thread::sleep_for(chrono::seconds(1));
 		}
 		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('9') < 0)
 		{
@@ -129,22 +131,22 @@ void inputLoop()
 			head = false;
 			nothing = true;
 			Beep(220, 300);
-			std::cout << "[DivaWig] Update nothing!" << std::endl;
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			cout << "[DivaWig] Update nothing!" << endl;
+			//this_thread::sleep_for(chrono::seconds(1));
 		}
-	}
+
+		pvTimerUpdate(a1);
 }
 
 __int64 hookedWig(__int64 classp, int module_part, int part_id)
 {
-	std::cout << "[DivaWig] Performer: " << (classp-5387286232)/33040+1 << "; Module part: " << module_part << " (" << Strings[module_part] << ")" << "; Default part: " << part_id << "." << std::endl;
+	cout << "[DivaWig] Performer: " << (classp-5387286232)/33040+1 << "; Module part: " << module_part << " (" << Strings[module_part] << ")" << "; Default part: " << part_id << "." << endl;
 
 	if (!(only_hair || only_head_accessory || only_face_accessory || only_face_textures || head || nothing) || (only_hair && module_part == HAIR) || (only_head_accessory && module_part == HEAD_ACCESSORY) || (only_face_accessory && module_part == FACE_ACCESSORY) || (only_face_textures && module_part == FACE_TEXTURES) || (head && module_part == HEAD))
 		*(int*)(classp + 4i64 * module_part + 8) = part_id;
 
 	return module_part;
 }
-
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
 
@@ -154,12 +156,18 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		DisableThreadLibraryCalls(hModule);
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		std::cout << "[DivaWig] Hooking function..." << std::endl;
+		cout << "[DivaWig] Hooking function..." << endl;
 		DetourAttach(&(PVOID&)originalWig, (PVOID)hookedWig);
-		std::cout << "[DivaWig] Function hooked." << std::endl;
+		cout << "[DivaWig] Function hooked." << endl;
 		DetourTransactionCommit();
 
-		std::thread* inputThread = new std::thread(inputLoop);
+		DisableThreadLibraryCalls(hModule);
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourAttach(&(PVOID&)pvTimerUpdate, (PVOID)inputLoop);
+		DetourTransactionCommit();
+
+		//thread* inputThread = new thread(inputLoop);
 	}
 
 	return TRUE;

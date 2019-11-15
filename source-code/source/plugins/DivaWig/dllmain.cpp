@@ -55,7 +55,7 @@ void loadConfig()
 void setPartToUpdate(char part, string message, unsigned short beepfreq)
 {
 	part_to_update = part;
-	cout << message << endl;
+	cout << "[DivaWig] " << message << endl;
 	if (dobeep) Beep(beepfreq, 300);
 
 	//this_thread::sleep_for(chrono::seconds(1));
@@ -66,13 +66,16 @@ void inputLoop(__int64 a1)
 {
 	if (GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0)
 	{
-		if (GetKeyState('0') < 0) setPartToUpdate(ALL, "[DivaWig] Update all module parts!", 330);
-		if (GetKeyState('1') < 0) setPartToUpdate(HAIR, "[DivaWig] Only update the hair!", 440);
-		if (GetKeyState('2') < 0) setPartToUpdate(HEAD_ACCESSORY, "[DivaWig] Only update the head accessory!", 550);
-		if (GetKeyState('3') < 0) setPartToUpdate(FACE_ACCESSORY, "[DivaWig] Only update the face accessory!", 660);
-		if (GetKeyState('4') < 0) setPartToUpdate(FACE_TEXTURES, "[DivaWig] Only update the face textures!", 770);
-		if (GetKeyState('5') < 0) setPartToUpdate(HEAD, "[DivaWig] Only update the head!", 880);
-		if (GetKeyState('9') < 0) setPartToUpdate(NONE, "[DivaWig] Update nothing!", 220);
+		if (GetKeyState('0') < 0) setPartToUpdate(ALL, "Update all module parts!", 330);
+		if (GetKeyState('1') < 0) setPartToUpdate(HAIR, "Only update the hair!", 440);
+		if (GetKeyState('2') < 0) setPartToUpdate(HEAD_ACCESSORY, "Only update the head accessory!", 550);
+		if (GetKeyState('3') < 0) setPartToUpdate(FACE_ACCESSORY, "Only update the face accessory!", 660);
+		if (GetKeyState('4') < 0) setPartToUpdate(FACE_TEXTURES, "Only update the face textures!", 770);
+		if (GetKeyState('5') < 0) setPartToUpdate(HEAD, "Only update the head!", 880);
+		if (GetKeyState('6') < 0) setPartToUpdate(CHEST_ACCESSORY, "Only update the chest accessory!", 990);
+		if (GetKeyState('7') < 0) setPartToUpdate(BODY, "Only update the body!", 1100);
+		if (GetKeyState('8') < 0) setPartToUpdate(BACK_ACCESSORY, "Only update the back accessory!", 1210);
+		if (GetKeyState('9') < 0) setPartToUpdate(NONE, "Update nothing!", 220);
 	}
 
 		pvTimerUpdate(a1);

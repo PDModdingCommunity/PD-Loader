@@ -32,6 +32,8 @@
 #define UNKNOWN_15 22
 #define UNKNOWN_16 23
 #define HEAD 24
+#define ALL -1
+#define NONE -2
 
 using namespace std;
 
@@ -39,101 +41,39 @@ void(__cdecl* originalWig)(void* cls, uint64_t unk, uint64_t unk2) = (void(__cde
 void(__cdecl* pvTimerUpdate)(__int64 a1) = (void(__cdecl*)(__int64 a1))0x1405BDF90;
 
 const string Strings[25] = { "Head accessory", "Hair", "Unknown 1", "Unknown 2", "Face accessory", "Unknown 3", "Face textures", "Unknown 4", "Chest accessory", "Unknown 5", "Body", "Unknown 6", "Unknown 7", "Unknown 8", "Hands", "Unknown 9", "Back accessory", "Unknown 10", "Unknown 11", "Unknown 12", "Unknown 13", "Unknown 14", "Unknown 15", "Unknown 16", "Head" };
-bool only_hair = false, only_head_accessory = false, only_face_accessory = false, only_face_textures = false, head = false, nothing = false;
+char part_to_update = -1;
+
+bool dobeep = true;
 
 void loadConfig()
 {
-	// some_option = GetPrivateProfileIntW(L"general", L"some_option", 0, CONFIG_FILE) > 0 ? true : false;
+	dobeep = GetPrivateProfileIntW(L"general", L"beep", 1, CONFIG_FILE) > 0 ? true : false;
 
 	return;
 }
 
+void setPartToUpdate(char part, string message, unsigned short beepfreq)
+{
+	part_to_update = part;
+	cout << message << endl;
+	if (dobeep) Beep(beepfreq, 300);
+
+	//this_thread::sleep_for(chrono::seconds(1));
+	Sleep(100);
+}
+
 void inputLoop(__int64 a1)
 {
-		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('0') < 0)
-		{
-			only_hair = false;
-			only_head_accessory = false;
-			only_face_accessory = false;
-			only_face_textures = false;
-			head = false;
-			nothing = false;
-			Beep(330, 300);
-			cout << "[DivaWig] Update all module parts!" << endl;
-			//this_thread::sleep_for(chrono::seconds(1));
-		}
-		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('1') < 0)
-		{
-			only_hair = true;
-			only_head_accessory = false;
-			only_face_accessory = false;
-			only_face_textures = false;
-			head = false;
-			nothing = false;
-			Beep(440, 300);
-			cout << "[DivaWig] Only update the hair!" << endl;
-			//this_thread::sleep_for(chrono::seconds(1));
-		}
-		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('2') < 0)
-		{
-			only_hair = false;
-			only_head_accessory = true;
-			only_face_accessory = false;
-			only_face_textures = false;
-			head = false;
-			nothing = false;
-			Beep(550, 300);
-			cout << "[DivaWig] Only update the head accessory!" << endl;
-			//this_thread::sleep_for(chrono::seconds(1));
-		}
-		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('3') < 0)
-		{
-			only_hair = false;
-			only_head_accessory = false;
-			only_face_accessory = true;
-			only_face_textures = false;
-			head = false;
-			nothing = false;
-			Beep(660, 300);
-			cout << "[DivaWig] Only update the face accessory!" << endl;
-			//this_thread::sleep_for(chrono::seconds(1));
-		}
-		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('4') < 0)
-		{
-			only_hair = false;
-			only_head_accessory = false;
-			only_face_accessory = false;
-			only_face_textures = true;
-			head = false;
-			nothing = false;
-			Beep(770, 300);
-			cout << "[DivaWig] Only update the face textures!" << endl;
-			//this_thread::sleep_for(chrono::seconds(1));
-		}
-		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('5') < 0)
-		{
-			only_hair = false;
-			only_head_accessory = false;
-			only_face_accessory = false;
-			only_face_textures = false;
-			head = true;
-			nothing = false;
-			Beep(880, 300);
-			cout << "[DivaWig] Only update the head!" << endl;
-			//this_thread::sleep_for(chrono::seconds(1));
-		}
-		if ((GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) && GetKeyState('9') < 0)
-		{
-			only_hair = false;
-			only_head_accessory = false;
-			only_face_accessory = false;
-			only_face_textures = false;
-			head = false;
-			nothing = true;
-			Beep(220, 300);
-			cout << "[DivaWig] Update nothing!" << endl;
-			//this_thread::sleep_for(chrono::seconds(1));
-		}
+	if (GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0)
+	{
+		if (GetKeyState('0') < 0) setPartToUpdate(ALL, "[DivaWig] Update all module parts!", 330);
+		if (GetKeyState('1') < 0) setPartToUpdate(HAIR, "[DivaWig] Only update the hair!", 440);
+		if (GetKeyState('2') < 0) setPartToUpdate(HEAD_ACCESSORY, "[DivaWig] Only update the head accessory!", 550);
+		if (GetKeyState('3') < 0) setPartToUpdate(FACE_ACCESSORY, "[DivaWig] Only update the face accessory!", 660);
+		if (GetKeyState('4') < 0) setPartToUpdate(FACE_TEXTURES, "[DivaWig] Only update the face textures!", 770);
+		if (GetKeyState('5') < 0) setPartToUpdate(HEAD, "[DivaWig] Only update the head!", 880);
+		if (GetKeyState('9') < 0) setPartToUpdate(NONE, "[DivaWig] Update nothing!", 220);
+	}
 
 		pvTimerUpdate(a1);
 }
@@ -141,8 +81,8 @@ void inputLoop(__int64 a1)
 __int64 hookedWig(__int64 classp, int module_part, int part_id)
 {
 	cout << "[DivaWig] Performer: " << (classp-5387286232)/33040+1 << "; Module part: " << module_part << " (" << Strings[module_part] << ")" << "; Default part: " << part_id << "." << endl;
-
-	if (!(only_hair || only_head_accessory || only_face_accessory || only_face_textures || head || nothing) || (only_hair && module_part == HAIR) || (only_head_accessory && module_part == HEAD_ACCESSORY) || (only_face_accessory && module_part == FACE_ACCESSORY) || (only_face_textures && module_part == FACE_TEXTURES) || (head && module_part == HEAD))
+	
+	if (part_to_update == ALL || part_to_update == module_part)
 		*(int*)(classp + 4i64 * module_part + 8) = part_id;
 
 	return module_part;
@@ -173,9 +113,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 	return TRUE;
 }
 
-/*PluginConfig::PluginConfigOption config[] = {
-	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"some_option", L"general", CONFIG_FILE, L"TODO", L"Add options.", false } },
-};*/
+PluginConfig::PluginConfigOption config[] = {
+	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"beep", L"general", CONFIG_FILE, L"Beep", L"Beep when selecting the part that should be updated.", true } },
+};
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
 {
@@ -187,7 +127,7 @@ extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
 	return L"DivaWig Plugin by nas\n\nDivaWig lets you mix some module parts.";
 }
 
-/*extern "C" __declspec(dllexport) PluginConfig::PluginConfigArray GetPluginOptions(void)
+extern "C" __declspec(dllexport) PluginConfig::PluginConfigArray GetPluginOptions(void)
 {
 	return PluginConfig::PluginConfigArray{ _countof(config), config };
-}*/
+}

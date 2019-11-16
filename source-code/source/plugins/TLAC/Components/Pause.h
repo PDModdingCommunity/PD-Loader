@@ -131,5 +131,7 @@ namespace TLAC::Components
 		static float getMenuAnimPos();
 
 		static TLAC::Utilities::Drawing::Point getMenuItemCoords(menusets set, int pos);
+
+		bool autoPause;
 	};
 }

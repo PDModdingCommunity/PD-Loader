@@ -49,12 +49,13 @@ char part_to_update = -1;
 unsigned int last_unload_a2 = 0, last_reload_a2 = 0;
 __int64 last_unload_a3 = 0, last_reload_a3 = 0;*/
 
-bool dobeep = true, allowReloading = true;
+bool dobeep = true, allowReloading = true, debug = false;
 
 void loadConfig()
 {
 	dobeep = GetPrivateProfileIntW(L"general", L"beep", 1, CONFIG_FILE) > 0 ? true : false;
 	allowReloading = GetPrivateProfileIntW(L"general", L"reloading", 0, CONFIG_FILE) > 0 ? true : false;
+	debug = GetPrivateProfileIntW(L"general", L"debug", 0, CONFIG_FILE) > 0 ? true : false;
 
 	return;
 }
@@ -160,7 +161,7 @@ void inputLoop(__int64 a1)
 
 __int64 hookedWig(__int64 classp, int module_part, int part_id)
 {
-	cout << "[DivaWig] Performer: " << (classp-5387286232)/33040+1 << "; Module part: " << module_part << " (" << Strings[module_part] << ")" << "; Default part: " << part_id << "." << endl;
+	if (debug) cout << "[DivaWig] Performer: " << (classp-5387286232)/33040+1 << "; Module part: " << module_part << " (" << Strings[module_part] << ")" << "; Default part: " << part_id << "." << endl;
 	
 	if (part_to_update == ALL || part_to_update == module_part)
 		*(int*)(classp + 4i64 * module_part + 8) = part_id;
@@ -211,6 +212,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 PluginConfig::PluginConfigOption config[] = {
 	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"beep", L"general", CONFIG_FILE, L"Beep", L"Beep when selecting the part that should be updated.", true } },
 	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"reloading", L"general", CONFIG_FILE, L"Unloading and loading (experimental)", L"Allow unloading (CTRL+U or U+number) and loading (CTRL+L or L+number).", false } },
+	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"debug", L"general", CONFIG_FILE, L"Debug", L"Print extra information.", false } },
 };
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)

@@ -8,6 +8,8 @@
 #include <windows.h>
 #include <vector>
 #include <chrono>
+#include "../FileSystem/ConfigFile.h"
+#include "../framework.h"
 
 namespace TLAC::Components
 {
@@ -90,6 +92,10 @@ namespace TLAC::Components
 		sliderState = (TouchSliderState*)SLIDER_CTRL_TASK_ADDRESS;
 		panelState = (TouchPanelState*)TASK_TOUCH_ADDRESS;
 		componentsManager = manager;
+
+		TLAC::FileSystem::ConfigFile config(TLAC::framework::GetModuleDirectory(), "keyconfig.ini");
+		config.OpenRead();
+		autoPause = config.GetBooleanValue("autopause");
 
 		saveOldPatchOps();
 
@@ -537,7 +543,7 @@ namespace TLAC::Components
 
 	void Pause::OnFocusLost()
 	{
-		if (isInGame())
+		if (isInGame() && autoPause)
 			pause = true;
 	}
 

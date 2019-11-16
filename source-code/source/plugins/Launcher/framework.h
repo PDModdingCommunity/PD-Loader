@@ -191,6 +191,9 @@ ConfigOptionBase* optionsArray[] = {
 	new NumericOption(L"frm.motion.rate", GRAPHICS_SECTION, CONFIG_FILE, L"FRM Motion Rate:", L"Sets the motion rate (fps) for the Frame Rate Manager component.\nLarger values should be smoother, but more CPU intensive and possibly buggier.", 300, 1, INT_MAX),
 	new OptionMetaSpacer(8),
 
+	new BooleanOption(L"autopause", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"Pause automatically", L"Pause when focus is lost.", true, true),
+	new OptionMetaSpacer(8),
+
 	new BooleanOption(L"rumble", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Rumble", L"Enables rumble during chainslides.", true, true),
 	new NumericOption(L"xinput_preferred", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Controller Num:", L"Sets the preferred XInput controller.\nIf unavailable, the next connected controller is used.", 0, 0, 3),
 	new OptionMetaSpacer(8),

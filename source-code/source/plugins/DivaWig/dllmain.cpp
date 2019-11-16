@@ -39,15 +39,22 @@ using namespace std;
 
 void(__cdecl* originalWig)(void* cls, uint64_t unk, uint64_t unk2) = (void(__cdecl*)(void* cls, uint64_t unk, uint64_t unk2))0x14052AD90;
 void(__cdecl* pvTimerUpdate)(__int64 a1) = (void(__cdecl*)(__int64 a1))0x1405BDF90;
+void(__cdecl* unloadFunc)(uint64_t* classp, unsigned int unk, __int64 performer) = (void(__cdecl*)(uint64_t * classp, unsigned int unk, __int64 performer))0x14052F720;
+void(__cdecl* loadFunc)(uint64_t* classp, unsigned int unk, __int64 performer) = (void(__cdecl*)(uint64_t * classp, unsigned int unk, __int64 performer))0x14052FC00;
 
 const string Strings[25] = { "Head accessory", "Hair", "Unknown 1", "Unknown 2", "Face accessory", "Unknown 3", "Face textures", "Unknown 4", "Chest accessory", "Unknown 5", "Body", "Unknown 6", "Unknown 7", "Unknown 8", "Hands", "Unknown 9", "Back accessory", "Unknown 10", "Unknown 11", "Unknown 12", "Unknown 13", "Unknown 14", "Unknown 15", "Unknown 16", "Head" };
 char part_to_update = -1;
 
-bool dobeep = true;
+/*uint64_t *last_unload_a1 = 0, *last_reload_a1 = 0;
+unsigned int last_unload_a2 = 0, last_reload_a2 = 0;
+__int64 last_unload_a3 = 0, last_reload_a3 = 0;*/
+
+bool dobeep = true, allowReloading = true;
 
 void loadConfig()
 {
 	dobeep = GetPrivateProfileIntW(L"general", L"beep", 1, CONFIG_FILE) > 0 ? true : false;
+	allowReloading = GetPrivateProfileIntW(L"general", L"reloading", 0, CONFIG_FILE) > 0 ? true : false;
 
 	return;
 }
@@ -58,9 +65,62 @@ void setPartToUpdate(char part, string message, unsigned short beepfreq)
 	cout << "[DivaWig] " << message << endl;
 	if (dobeep) Beep(beepfreq, 300);
 
-	//this_thread::sleep_for(chrono::seconds(1));
-	Sleep(100);
+	this_thread::sleep_for(chrono::seconds(1));
 }
+
+void unloadAll()
+{
+	unloadFunc((uint64_t*)0x1411B7060, 0, 5387286240);
+	unloadFunc((uint64_t*)0x1411B7060, 0, 5387319280);
+	unloadFunc((uint64_t*)0x1411B7060, 0, 5387352320);
+	cout << "[DivaWig] All unloaded!" << endl;
+	if (dobeep) Beep(500, 100);
+	this_thread::sleep_for(chrono::seconds(1));;
+}
+
+void unload(__int64 performer_address)
+{
+	unloadFunc((uint64_t*)0x1411B7060, 0, performer_address);
+	cout << "[DivaWig] Performer " << performer_address/33040 + 1 << " unloaded!" << endl;
+	if (dobeep) Beep(500, 100);
+	this_thread::sleep_for(chrono::seconds(1));;
+}
+
+void loadAll()
+{
+	loadFunc((uint64_t*)0x1411B7060, 0, 5387286240);
+	loadFunc((uint64_t*)0x1411B7060, 0, 5387319280);
+	loadFunc((uint64_t*)0x1411B7060, 0, 5387352320);
+	cout << "[DivaWig] All loaded!" << endl;
+	if (dobeep) Beep(600, 100);
+	this_thread::sleep_for(chrono::seconds(1));;
+}
+
+void load(__int64 performer_address)
+{
+	loadFunc((uint64_t*)0x1411B7060, 0, performer_address);
+	cout << "[DivaWig] Performer " << performer_address / 33040 + 1 << " loaded!" << endl;
+	if (dobeep) Beep(600, 100);
+	this_thread::sleep_for(chrono::seconds(1));
+}
+
+/*void hookedUnload(uint64_t* a1, unsigned int a2, __int64 a3)
+{
+	cout << "[DivaWig] hookedUnload a1: " << a1 << "; a2: " << a2 << "; a3: " << a3 << endl;
+	last_unload_a1 = a1;
+	last_unload_a2 = a2;
+	last_unload_a3 = a3;
+	unloadFunc(a1, a2, a3);
+}
+
+void hookedLoad(uint64_t* a1, unsigned int a2, __int64 a3)
+{
+	cout << "[DivaWig] hookedReload a1: " << a1 << "; a2: " << a2 << "; a3: " << a3 << endl;
+	last_reload_a1 = a1;
+	last_reload_a2 = a2;
+	last_reload_a3 = a3;
+	loadFunc(a1, a2, a3);
+}*/
 
 void inputLoop(__int64 a1)
 {
@@ -76,6 +136,23 @@ void inputLoop(__int64 a1)
 		if (GetKeyState('7') < 0) setPartToUpdate(BODY, "Only update the body!", 1100);
 		if (GetKeyState('8') < 0) setPartToUpdate(BACK_ACCESSORY, "Only update the back accessory!", 1210);
 		if (GetKeyState('9') < 0) setPartToUpdate(NONE, "Update nothing!", 220);
+	}
+	if (allowReloading)
+	{
+		if (GetKeyState('U') < 0)
+		{
+			if (GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) unloadAll();
+			if (GetKeyState('1') < 0) unload(5387286240);
+			if (GetKeyState('2') < 0) unload(5387319280);
+			if (GetKeyState('3') < 0) unload(5387352320);
+		}
+		if (GetKeyState('L') < 0)
+		{
+			if (GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0) loadAll();
+			if (GetKeyState('1') < 0) load(5387286240);
+			if (GetKeyState('2') < 0) load(5387319280);
+			if (GetKeyState('3') < 0) load(5387352320);
+		}
 	}
 
 		pvTimerUpdate(a1);
@@ -110,6 +187,21 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		DetourAttach(&(PVOID&)pvTimerUpdate, (PVOID)inputLoop);
 		DetourTransactionCommit();
 
+		/*if (allowReloading)
+		{
+			DisableThreadLibraryCalls(hModule);
+			DetourTransactionBegin();
+			DetourUpdateThread(GetCurrentThread());
+			DetourAttach(&(PVOID&)unloadFunc, (PVOID)hookedUnload);
+			DetourTransactionCommit();
+
+			DisableThreadLibraryCalls(hModule);
+			DetourTransactionBegin();
+			DetourUpdateThread(GetCurrentThread());
+			DetourAttach(&(PVOID&)loadFunc, (PVOID)hookedLoad);
+			DetourTransactionCommit();
+		}*/
+
 		//thread* inputThread = new thread(inputLoop);
 	}
 
@@ -118,6 +210,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 
 PluginConfig::PluginConfigOption config[] = {
 	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"beep", L"general", CONFIG_FILE, L"Beep", L"Beep when selecting the part that should be updated.", true } },
+	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"reloading", L"general", CONFIG_FILE, L"Unloading and loading (experimental)", L"Allow unloading (CTRL+U or U+number) and loading (CTRL+L or L+number).", false } },
 };
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
@@ -127,7 +220,7 @@ extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
 {
-	return L"DivaWig Plugin by nas\n\nDivaWig lets you mix some module parts.";
+	return L"DivaWig Plugin by nas\n\nDivaWig lets you mix some module parts by pressing CTRL+0~9.";
 }
 
 extern "C" __declspec(dllexport) PluginConfig::PluginConfigArray GetPluginOptions(void)

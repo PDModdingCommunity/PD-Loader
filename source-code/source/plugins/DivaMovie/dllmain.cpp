@@ -11,7 +11,7 @@
 #include <mferror.h>
 #include <mftransform.h>
 
-bool forceSoftwareDecoding;
+bool forceSoftwareDecoding = false, debug = false;
 
 IDirect3DDeviceManager9* deviceManager;
 
@@ -177,6 +177,7 @@ HOOK(HRESULT, DXVA2CreateDirect3DDeviceManager, PROC_ADDRESS("dxva2.dll", "DXVA2
 
 void loadConfig() {
 	forceSoftwareDecoding = GetPrivateProfileIntW(L"general", L"force_software_decoding", 0, CONFIG_FILE) > 0 ? true : false;
+	debug = GetPrivateProfileIntW(L"general", L"debug", 0, CONFIG_FILE) > 0 ? true : false;
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
@@ -193,6 +194,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 
 PluginConfig::PluginConfigOption config[] = {
 	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"force_software_decoding", L"general", CONFIG_FILE, L"Force Software Decoding", L"Use software decoding even on systems that support DXVA hardware decoding.", false } },
+	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"debug", L"general", CONFIG_FILE, L"Debug", L"Enable PRINT (possibly at the cost of performance).", false } },
 };
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)

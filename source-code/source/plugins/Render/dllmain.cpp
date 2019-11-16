@@ -70,7 +70,7 @@ int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 		glutInitWindowPosition(wndX, wndY);
 		glutCreateWindow(title);
 
-		if (nDisplay == 1) // borderless mode
+		if (nDisplay == 1 || nDisplay == 3) // borderless mode
 		{
 			// support borderless mode even with original copy of glut
 			HDC hDev = wglGetCurrentDC(); // get handle to current opengl device context
@@ -78,8 +78,11 @@ int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 
 			LONG_PTR wndStyle = WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;  // set no border (visible to ensure something is shown immediately)
 
-			if (nPopupBorderless)
+			if (nDisplay == 1)
+			{
 				wndStyle |= WS_POPUP;
+				printf("[Render Manager] Popup enabled.\n");
+			}
 
 			SetWindowLongPtr(hWnd, GWL_STYLE, wndStyle);
 			SetWindowPos(hWnd, HWND_TOP, wndX, wndY, nWidth, nHeight, SWP_FRAMECHANGED); // adjust position to apply new style

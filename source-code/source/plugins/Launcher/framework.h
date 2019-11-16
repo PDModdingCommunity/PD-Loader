@@ -135,8 +135,8 @@ static std::vector<int> getScreenRatesVec(std::vector<DEVMODEW> &screenModes) {
 std::vector<DEVMODEW> screenModes = getScreenModes();
 
 
-DropdownOption* DisplayModeDropdown = new DropdownOption(L"display", RESOLUTION_SECTION, CONFIG_FILE, L"Display:", L"Sets the window/screen mode.", 0, std::vector<LPCWSTR>({ L"Windowed", L"Borderless", L"Fullscreen" }));
-ResolutionOption* DisplayResolutionOption = new ResolutionOption(L"width", L"height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the display resolution.", resolution(1280, 720), getScreenResolutionsVec(screenModes), true, RESOPT_INCLUDE_MATCH_SCREEN);
+DropdownOption* DisplayModeDropdown = new DropdownOption(L"display", RESOLUTION_SECTION, CONFIG_FILE, L"Display:", L"Sets the window/screen mode.", 1, std::vector<LPCWSTR>({ L"Windowed", L"Popup (recommended)", L"Exclusive", L"Failsafe" }));
+ResolutionOption* DisplayResolutionOption = new ResolutionOption(L"width", L"height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the display resolution.", resolution(-1, -1), getScreenResolutionsVec(screenModes), true, RESOPT_INCLUDE_MATCH_SCREEN);
 
 ConfigOptionBase* screenResolutionArray[] = {
 	DisplayModeDropdown,
@@ -186,7 +186,6 @@ ConfigOptionBase* optionsArray[] = {
 
 	new BooleanOption(L"TAA", GRAPHICS_SECTION, CONFIG_FILE, L"TAA", L"Temporal Anti-Aliasing", true, false),
 	new BooleanOption(L"MLAA", GRAPHICS_SECTION, CONFIG_FILE, L"MLAA", L"Morphological Anti-Aliasing", true, false),
-	new BooleanOption(L"borderless.popup", RESOLUTION_SECTION, CONFIG_FILE, L"Popup Borderless Mode", L"Makes borderless mode use a popup window.\nPerformance may increase and latency should decrease, but screenshots may not work as expected.", true, false),
 	new BooleanOption(L"FPS.Limit.LightMode", GRAPHICS_SECTION, CONFIG_FILE, L"Use Lightweight Limiter", L"Makes the FPS limiter use less CPU.\nMay have less consistent performance.", true, false),
 	new NumericOption(L"FPS.Limit", GRAPHICS_SECTION, CONFIG_FILE, L"FPS Limit:", L"Allows you to set a frame rate cap. Set to -1 to unlock the frame rate.", 60, -1, INT_MAX),
 	new NumericOption(L"frm.motion.rate", GRAPHICS_SECTION, CONFIG_FILE, L"FRM Motion Rate:", L"Sets the motion rate (fps) for the Frame Rate Manager component.\nLarger values should be smoother, but more CPU intensive and possibly buggier.", 300, 1, INT_MAX),

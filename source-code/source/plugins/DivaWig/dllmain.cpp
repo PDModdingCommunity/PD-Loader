@@ -38,6 +38,7 @@
 using namespace std;
 
 void(__cdecl* originalWig)(void* cls, uint64_t unk, uint64_t unk2) = (void(__cdecl*)(void* cls, uint64_t unk, uint64_t unk2))0x14052AD90;
+void(__cdecl* originalSec)(unsigned int* a1, unsigned int module_part) = (void(__cdecl*)(unsigned int* a1, unsigned int module_part))0x14052ADF0;
 void(__cdecl* pvTimerUpdate)(__int64 a1) = (void(__cdecl*)(__int64 a1))0x1405BDF90;
 void(__cdecl* unloadFunc)(uint64_t* classp, unsigned int unk, __int64 performer) = (void(__cdecl*)(uint64_t * classp, unsigned int unk, __int64 performer))0x14052F720;
 void(__cdecl* loadFunc)(uint64_t* classp, unsigned int unk, __int64 performer) = (void(__cdecl*)(uint64_t * classp, unsigned int unk, __int64 performer))0x14052FC00;
@@ -168,6 +169,13 @@ __int64 hookedWig(__int64 classp, int module_part, int part_id)
 
 	return module_part;
 }
+
+void hookedSec(unsigned int* a1, unsigned int module_part)
+{
+	if (part_to_update == ALL || part_to_update == module_part)
+		originalSec(a1, module_part);
+}
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
 
@@ -177,15 +185,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		DisableThreadLibraryCalls(hModule);
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		cout << "[DivaWig] Hooking function..." << endl;
+		cout << "[DivaWig] Hooking functions..." << endl;
 		DetourAttach(&(PVOID&)originalWig, (PVOID)hookedWig);
-		cout << "[DivaWig] Function hooked." << endl;
-		DetourTransactionCommit();
-
-		DisableThreadLibraryCalls(hModule);
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
+		DetourAttach(&(PVOID&)originalSec, (PVOID)hookedSec);
 		DetourAttach(&(PVOID&)pvTimerUpdate, (PVOID)inputLoop);
+		cout << "[DivaWig] Functions hooked." << endl;
 		DetourTransactionCommit();
 
 		/*if (allowReloading)

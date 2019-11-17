@@ -132,7 +132,7 @@ namespace TLAC
 		ComponentsManager.UpdateDraw2D();
 	}
 
-	void InitializeExtraSettings()
+	/*void InitializeExtraSettings()
 	{
 		const LPCTSTR RESOLUTION_CONFIG_FILE_NAME = _T(".\\config.ini");
 		auto nTAA = GetPrivateProfileIntW(L"graphics", L"taa", TRUE, RESOLUTION_CONFIG_FILE_NAME);
@@ -225,8 +225,8 @@ namespace TLAC
 			}
 
 			printf("[TLAC] MAG Filter set to %d\n", nMagFilter);
-		}*/
-	}
+		}*
+	}*/
 
 	void Dispose()
 	{
@@ -380,7 +380,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 		DetourAttach(&(PVOID&)divaEngineDraw2D, hookedEngineDraw2D);
 		DetourTransactionCommit();
 
-		TLAC::InitializeExtraSettings();
+		//TLAC::InitializeExtraSettings();
 
 		TLAC::framework::Module = hModule;
 		break;

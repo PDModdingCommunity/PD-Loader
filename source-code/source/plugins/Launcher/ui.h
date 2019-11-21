@@ -382,7 +382,6 @@ namespace Launcher {
 			// 
 			// tabControl
 			// 
-			this->tabControl->Appearance = System::Windows::Forms::TabAppearance::FlatButtons;
 			this->tabControl->Controls->Add(this->tabPage_Resolution);
 			this->tabControl->Controls->Add(this->tabPage_Patches);
 			this->tabControl->Controls->Add(this->tabPage_Playerdata);
@@ -402,10 +401,10 @@ namespace Launcher {
 			this->tabPage_Resolution->Controls->Add(this->labelGPU);
 			this->tabPage_Resolution->Controls->Add(this->groupBox_InternalRes);
 			this->tabPage_Resolution->Controls->Add(this->groupBox_ScreenRes);
-			this->tabPage_Resolution->Location = System::Drawing::Point(4, 25);
+			this->tabPage_Resolution->Location = System::Drawing::Point(4, 22);
 			this->tabPage_Resolution->Name = L"tabPage_Resolution";
-			this->tabPage_Resolution->Padding = System::Windows::Forms::Padding(3, 3, 3, 3);
-			this->tabPage_Resolution->Size = System::Drawing::Size(286, 281);
+			this->tabPage_Resolution->Padding = System::Windows::Forms::Padding(3);
+			this->tabPage_Resolution->Size = System::Drawing::Size(286, 284);
 			this->tabPage_Resolution->TabIndex = 0;
 			this->tabPage_Resolution->Text = L"Resolution";
 			// 
@@ -447,9 +446,9 @@ namespace Launcher {
 			this->tabPage_Patches->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->tabPage_Patches->Controls->Add(this->panel_Patches);
-			this->tabPage_Patches->Location = System::Drawing::Point(4, 25);
+			this->tabPage_Patches->Location = System::Drawing::Point(4, 22);
 			this->tabPage_Patches->Name = L"tabPage_Patches";
-			this->tabPage_Patches->Size = System::Drawing::Size(286, 281);
+			this->tabPage_Patches->Size = System::Drawing::Size(286, 284);
 			this->tabPage_Patches->TabIndex = 1;
 			this->tabPage_Patches->Text = L"Options";
 			// 
@@ -466,9 +465,9 @@ namespace Launcher {
 			this->tabPage_Playerdata->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->tabPage_Playerdata->Controls->Add(this->panel_Playerdata);
-			this->tabPage_Playerdata->Location = System::Drawing::Point(4, 25);
+			this->tabPage_Playerdata->Location = System::Drawing::Point(4, 22);
 			this->tabPage_Playerdata->Name = L"tabPage_Playerdata";
-			this->tabPage_Playerdata->Size = System::Drawing::Size(286, 281);
+			this->tabPage_Playerdata->Size = System::Drawing::Size(286, 284);
 			this->tabPage_Playerdata->TabIndex = 3;
 			this->tabPage_Playerdata->Text = L"Player";
 			// 
@@ -485,10 +484,10 @@ namespace Launcher {
 			this->tabPage_Components->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->tabPage_Components->Controls->Add(this->panel_Components);
-			this->tabPage_Components->Location = System::Drawing::Point(4, 25);
+			this->tabPage_Components->Location = System::Drawing::Point(4, 22);
 			this->tabPage_Components->Name = L"tabPage_Components";
-			this->tabPage_Components->Padding = System::Windows::Forms::Padding(3, 3, 3, 3);
-			this->tabPage_Components->Size = System::Drawing::Size(286, 281);
+			this->tabPage_Components->Padding = System::Windows::Forms::Padding(3);
+			this->tabPage_Components->Size = System::Drawing::Size(286, 284);
 			this->tabPage_Components->TabIndex = 2;
 			this->tabPage_Components->Text = L"Components";
 			// 
@@ -505,10 +504,10 @@ namespace Launcher {
 			this->tabPage_Plugins->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->tabPage_Plugins->Controls->Add(this->panel_Plugins);
-			this->tabPage_Plugins->Location = System::Drawing::Point(4, 25);
+			this->tabPage_Plugins->Location = System::Drawing::Point(4, 22);
 			this->tabPage_Plugins->Name = L"tabPage_Plugins";
-			this->tabPage_Plugins->Padding = System::Windows::Forms::Padding(3, 3, 3, 3);
-			this->tabPage_Plugins->Size = System::Drawing::Size(286, 281);
+			this->tabPage_Plugins->Padding = System::Windows::Forms::Padding(3);
+			this->tabPage_Plugins->Size = System::Drawing::Size(286, 284);
 			this->tabPage_Plugins->TabIndex = 3;
 			this->tabPage_Plugins->Text = L"Plugins";
 			// 

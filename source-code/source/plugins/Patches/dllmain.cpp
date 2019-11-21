@@ -22,14 +22,14 @@ void hookedTAA(DWORD *a1, int a2)
 	a1[3] = 0; //a1[3] = a2;
 	a1[348] = -1082130432;
 	a1[950] = 1;
-	std::cout << "[Patches] TAA disabled!" << std::endl;
+	std::cout << "[Patches] TAA disabled" << std::endl;
 }
 
 void hookedMLAA(__int64 a1, int a2)
 {
 	*(DWORD*)(a1 + 16) = 0; //*(DWORD*)(a1 + 16) = a2;
 	*(DWORD*)(a1 + 3800) = 1;
-	std::cout << "[Patches] MLAA disabled!" << std::endl;
+	std::cout << "[Patches] MLAA disabled" << std::endl;
 }
 
 const LPCWSTR CONFIG_FILE = L".\\config.ini";
@@ -170,6 +170,15 @@ void ApplyPatches() {
 	auto nOGLPatchB = GetPrivateProfileIntW(L"patches", L"opengl_patch_b", FALSE, CONFIG_FILE);
 	auto nTAA = GetPrivateProfileIntW(L"graphics", L"taa", TRUE, CONFIG_FILE);
 	auto nMLAA = GetPrivateProfileIntW(L"graphics", L"mlaa", TRUE, CONFIG_FILE);
+	auto nStereo = GetPrivateProfileIntW(L"patches", L"stereo", TRUE, CONFIG_FILE);
+
+	// The old stereo patch...
+	// Use 2 channels instead of 4
+	if (nStereo)
+	{
+		InjectCode((void*)0x0000000140A860C0, { 0x02 });
+		printf("[Patches] Stereo patch enabled\n");
+	}
 
 	// Disable AA
 	if (!(nTAA && nMLAA))
@@ -181,14 +190,14 @@ void ApplyPatches() {
 		{
 			std::cout << "[Patches] Hooking TAA..." << std::endl;
 			DetourAttach(&(PVOID&)originalTAA, (PVOID)hookedTAA);
-			std::cout << "[Patches] TAA hooked!" << std::endl;
+			std::cout << "[Patches] TAA hooked" << std::endl;
 			hookedTAA((DWORD*)0x1411AB670, 0);
 		}
 		if (!nMLAA)
 		{
 			std::cout << "[Patches] Hooking MLAA..." << std::endl;
 			DetourAttach(&(PVOID&)originalMLAA, (PVOID)hookedMLAA);
-			std::cout << "[Patches] MLAA hooked!" << std::endl;
+			std::cout << "[Patches] MLAA hooked" << std::endl;
 			hookedMLAA(5387236976, 0);
 
 			// make constructor/init not set MLAA

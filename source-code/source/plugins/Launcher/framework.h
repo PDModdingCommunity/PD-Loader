@@ -164,6 +164,7 @@ ConfigOptionBase* optionsArray[] = {
 	new OptionMetaSpacer(8),
 
 	new BooleanOption(L"cursor", PATCHES_SECTION, CONFIG_FILE, L"Cursor", L"Enable or disable the mouse cursor.", true, false),
+	new BooleanOption(L"stereo", PATCHES_SECTION, CONFIG_FILE, L"Stereo", L"Use 2 channels instead of 4 (when not using DivaSound).", true, false),
 	new BooleanOption(L"hide_volume", PATCHES_SECTION, CONFIG_FILE, L"Hide Volume Buttons", L"Hide the volume and SE control buttons.", false, false),
 	new BooleanOption(L"no_pv_ui", PATCHES_SECTION, CONFIG_FILE, L"Disable PV UI", L"Remove the photo controls during PV playback.", false, false),
 	new BooleanOption(L"hide_pv_watermark", PATCHES_SECTION, CONFIG_FILE, L"Hide PV Watermark", L"Hide the watermark that's usually shown in PV viewing mode.", false, false),

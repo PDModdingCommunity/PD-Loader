@@ -16,6 +16,7 @@
 #include <GL/freeglut.h>
 
 #include <detours.h>
+#include <fstream>
 #pragma comment(lib, "detours.lib")
 
 void(__cdecl* divaEngineUpdate)() = (void(__cdecl*)())0x14018CC40;
@@ -47,11 +48,7 @@ namespace TLAC
 		if ((MessageThread.Handle = CreateThread(0, 0, WindowMessageDispatcher, 0, 0, 0)) == NULL)
 			printf("[TLAC] InitializeTick(): CreateThread() Error: %d\n", GetLastError());
 
-		framework::DivaWindowHandle = FindWindow(0, framework::DivaWindowName);
-		if (framework::DivaWindowHandle == NULL)
-			framework::DivaWindowHandle = FindWindow(0, framework::GlutDefaultName);
-		if (framework::DivaWindowHandle == NULL)
-			framework::DivaWindowHandle = FindWindow(0, framework::freeGlutDefaultName);
+		framework::DivaWindowHandle = WindowFromDC(wglGetCurrentDC());
 
 		HRESULT diInitResult = Input::InitializeDirectInput(framework::Module);
 		if (FAILED(diInitResult))

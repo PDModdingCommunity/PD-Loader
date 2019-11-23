@@ -7,10 +7,6 @@ namespace TLAC
 
 	std::string *framework::moduleDirectory;
 
-	const wchar_t* framework::DivaWindowName = L"Hatsune Miku Project DIVA Arcade Future Tone";
-	const wchar_t* framework::GlutDefaultName = L"GLUT";
-	const wchar_t* framework::freeGlutDefaultName = L"FREEGLUT";
-
 	HWND framework::DivaWindowHandle;
 	HMODULE framework::Module;
 

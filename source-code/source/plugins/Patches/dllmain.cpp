@@ -537,7 +537,7 @@ void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING)
 				issb >> std::setbase(16) >> byte;
 				unsigned char byte_u = byte;
 				std::cout << "[Patches] Patching: " << std::hex << address << ":" << std::hex << byte;
-				if (comment_string != "")
+				if (comment_counter < comment_string.length())
 				{
 					std::cout << " #" << comment_string.at(comment_counter);
 					comment_counter++;

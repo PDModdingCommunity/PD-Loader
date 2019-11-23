@@ -10,6 +10,7 @@
 
 #include "ConfigOption.h"
 #include "PluginConfig.h"
+#include <iostream>
 
 int (__cdecl* divaMain)(int argc, const char** argv, const char** envp) = (int(__cdecl*)(int argc, const char** argv, const char** envp))0x140194D90;
 
@@ -203,7 +204,9 @@ ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"opengl_patch_b", LAUNCHER_SECTION, CONFIG_FILE, L"OpenGL Patch B", L"Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.", L"", false),
 	new OptionMetaSpacer(8),
 
+	new BooleanOption(L"custom_patches", PATCHES_SECTION, CONFIG_FILE, L"Enable custom patches", L"Enable all custom patches.", true, false),
 	new BooleanOption(L"no_gpu_dialog", LAUNCHER_SECTION, CONFIG_FILE, L"Disable GPU Warning", L"Disables the warning dialog for unsupported GPUs.", L"", false),
+	//new BooleanOption(L"ignore_exe_checksum", PATCHES_SECTION, CONFIG_FILE, L"Ignore exe checksum", L"Use at your own risk.", false, false),
 	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"Command Line:", L"Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.", L"", false),
 };
 

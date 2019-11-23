@@ -3,16 +3,19 @@
 #include <tchar.h>
 #include <GL/freeglut.h>
 #include <iostream>
+#include <fstream>
 #include <filesystem>
 #include <sstream>
 #include <iomanip>
 #include "PluginConfigApi.h"
 
 #include <detours.h>
+#include "framework.h"
 #pragma comment(lib, "detours.lib")
 
 void InjectCode(void* address, const std::vector<uint8_t> data);
 void ApplyPatches();
+void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING);
 
 void(__cdecl* originalTAA)(DWORD *a1, int a2) = (void(__cdecl*)(DWORD *a1, int a2))0x1404B23A0;
 void(__cdecl* originalMLAA)(__int64 a1, int a2) = (void(__cdecl*)(__int64 a1, int a2))0x1404B2210;
@@ -57,24 +60,29 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 void patchMovieExt(std::string moviefile, void* address)
 {
 	bool isinmdata = 0;
-	for (int i = 0; i < 1000; i++)
-	{
-		std::stringstream ss;
-		ss << std::setw(3) << std::setfill('0') << i;
-		if (std::filesystem::exists("../mdata/M" + ss.str() + "/rom/movie/" + moviefile + ".mp4"))
+	try {
+		for (std::filesystem::path p : std::filesystem::directory_iterator("../mdata"))
 		{
-			isinmdata = 1;
-			//std::cout << "Movie " << moviefile << ".mp4 found in M" << ss.str() << std::endl;
-			break;
+			if (std::filesystem::path(p).filename().string().at(0) != 'M' || std::filesystem::path(p).filename().string().length() > 4) continue;
+			if (std::filesystem::exists(p.string() + "/rom/movie/" + moviefile + ".mp4"))
+			{
+				isinmdata = 1;
+				//std::cout << "[Patches] Movie " << moviefile << ".mp4 found in M" << ss.str() << std::endl;
+				break;
+			}
 		}
 	}
+	catch (const std::filesystem::filesystem_error & e) {
+		std::cout << "[Patches] File system error " << e.what() << " " << e.path1() << " " << e.path2() << " " << e.code() << std::endl;
+	}
+
 	if (isinmdata || std::filesystem::exists("../rom/movie/" + moviefile + ".mp4"))
 	{
 		InjectCode(address, { 0x6D, 0x70, 0x34 });
-		std::cout << "Movie " << moviefile << " patched to mp4\n";
+		std::cout << "[Patches] Movie " << moviefile << " patched to mp4\n";
 		return;
 	}
-	//std::cout << "Movie " << moviefile << " NOT patched to mp4\n";
+	//std::cout << "[Patches] Movie " << moviefile << " NOT patched to mp4\n";
 	return;
 }
 
@@ -131,17 +139,17 @@ void ApplyPatches() {
 			{ (void*)0x00000001406A1FEF,{ 0xC7, 0x44, 0x24, 0x74, 0x00, 0x00, 0x00, 0x00 } },  // MOV  dword ptr [RSP + 0x74],0x0
 			{ (void*)0x00000001406A1FF7,{ 0xEB, 0x0E } },                                      // JMP  0x1406a2007 (to rest of function as usual)
 																							   // add new code
-			{ (void*)0x00000001406A1FF9,{ 0x66, 0x48, 0x0F, 0x6E, 0xC2 } },              // MOVQ  XMM0,RDX (load touch pos)
-			{ (void*)0x00000001406A1FFE,{ 0xEB, 0x5D } },                                // JMP  0x1406a205d
-			{ (void*)0x00000001406A205D,{ 0x0F, 0x2A, 0x0D, 0xB8, 0x6A, 0x31, 0x00 } },  // CVTPI2PS  XMM1,qword ptr [0x1409b8b1c] (load 1280x720)
-			{ (void*)0x00000001406A2064,{ 0x0F, 0x12, 0x51, 0x1C } },                    // MOVLPS  XMM2,qword ptr [RCX + 0x1c] (load actual res)
-			{ (void*)0x00000001406A2068,{ 0xE9, 0x14, 0xFF, 0xFF, 0xFF } },              // JMP  0x1406a1f81
-			{ (void*)0x00000001406A1F81,{ 0x0F, 0x59, 0xC1 } },                          // MULPS  XMM0,XMM1
-			{ (void*)0x00000001406A1F84,{ 0x0F, 0x5E, 0xC2 } },                          // DIVPS  XMM0,XMM2
-			{ (void*)0x00000001406A1F87,{ 0x66, 0x0F, 0xD6, 0x44, 0x24, 0x10 } },        // MOVQ  qword ptr [RSP+0x10],XMM0
-			{ (void*)0x00000001406A1F8D,{ 0xEB, 0x06 } },                                // JMP  0x1406a1f95 (back to original function)
-																						 // jmp to new code
-			{ (void*)0x00000001406A1F90,{ 0xEB, 0x67 } },  // JMP  0x1406a1ff9
+			{ (void*)0x00000001406A1FF9,{ 0x66, 0x48, 0x0F, 0x6E, 0xC2 } },                    // MOVQ  XMM0,RDX (load touch pos)
+			{ (void*)0x00000001406A1FFE,{ 0xEB, 0x5D } },                                      // JMP  0x1406a205d
+			{ (void*)0x00000001406A205D,{ 0x0F, 0x2A, 0x0D, 0xB8, 0x6A, 0x31, 0x00 } },        // CVTPI2PS  XMM1,qword ptr [0x1409b8b1c] (load 1280x720)
+			{ (void*)0x00000001406A2064,{ 0x0F, 0x12, 0x51, 0x1C } },                          // MOVLPS  XMM2,qword ptr [RCX + 0x1c] (load actual res)
+			{ (void*)0x00000001406A2068,{ 0xE9, 0x14, 0xFF, 0xFF, 0xFF } },                    // JMP  0x1406a1f81
+			{ (void*)0x00000001406A1F81,{ 0x0F, 0x59, 0xC1 } },                                // MULPS  XMM0,XMM1
+			{ (void*)0x00000001406A1F84,{ 0x0F, 0x5E, 0xC2 } },                                // DIVPS  XMM0,XMM2
+			{ (void*)0x00000001406A1F87,{ 0x66, 0x0F, 0xD6, 0x44, 0x24, 0x10 } },              // MOVQ  qword ptr [RSP+0x10],XMM0
+			{ (void*)0x00000001406A1F8D,{ 0xEB, 0x06 } },                                      // JMP  0x1406a1f95 (back to original function)
+			                                                                                   // jmp to new code
+			{ (void*)0x00000001406A1F90,{ 0xEB, 0x67 } },                                      // JMP  0x1406a1ff9
 	};
 	printf("[Patches] Patches loaded\n");
 
@@ -171,6 +179,7 @@ void ApplyPatches() {
 	auto nTAA = GetPrivateProfileIntW(L"graphics", L"taa", TRUE, CONFIG_FILE);
 	auto nMLAA = GetPrivateProfileIntW(L"graphics", L"mlaa", TRUE, CONFIG_FILE);
 	auto nStereo = GetPrivateProfileIntW(L"patches", L"stereo", TRUE, CONFIG_FILE);
+	auto nCustomPatches = GetPrivateProfileIntW(L"patches", L"custom_patches", TRUE, CONFIG_FILE);
 
 	// The old stereo patch...
 	// Use 2 channels instead of 4
@@ -420,6 +429,27 @@ void ApplyPatches() {
 		// Don't update the touch slider state so we can write our own
 		InjectCode((void*)0x000000014061579B, { 0x90, 0x90, 0x90, 0x8B, 0x42, 0xE0, 0x90, 0x90, 0x90 });
 	}
+
+	if (nCustomPatches)
+	{
+		std::cout << "[Patches] Reading custom patches...\n";
+		try {
+			for (std::filesystem::path p : std::filesystem::directory_iterator("../patches"))
+			{
+				std::string extension = std::filesystem::path(p).extension().string();
+				if (extension == ".p" || extension == ".P")
+				{
+					std::cout << "[Patches] Reading custom patch file: " << std::filesystem::path(p).filename().string() << std::endl;
+					ApplyCustomPatches(std::filesystem::path(p).wstring());
+				}
+			}
+		}
+		catch (const std::filesystem::filesystem_error &e) {
+			std::cout << "[Patches] File system error " << e.what() << " " << e.path1() << " " << e.path2() << " " << e.code() << std::endl;
+		}
+
+		std::cout << "[Patches] All custom patches applied\n";
+	}
 }
 
 void InjectCode(void* address, const std::vector<uint8_t> data)
@@ -430,6 +460,97 @@ void InjectCode(void* address, const std::vector<uint8_t> data)
 	VirtualProtect(address, byteCount, PAGE_EXECUTE_READWRITE, &oldProtect);
 	memcpy(address, data.data(), byteCount);
 	VirtualProtect(address, byteCount, oldProtect, nullptr);
+}
+
+void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING)
+{
+	LPCWSTR CPATCH_FILE = CPATCH_FILE_STRING.c_str();
+	std::ifstream fileStream(CPATCH_FILE_STRING);
+
+	if (!fileStream.is_open())
+		return;
+
+	std::string line;
+
+	// check for BOM
+	std::getline(fileStream, line);
+	if (line.size() >= 3 && line.rfind("\xEF\xBB\xBF", 0) == 0)
+		fileStream.seekg(3);
+	else
+		fileStream.seekg(0);
+
+	while (std::getline(fileStream, line))
+	{
+		if (line[0] == '#')
+		{
+			std::cout << "[Patches]" << line.substr(1, line.size()-1) << std::endl;
+			continue;
+		}
+		if (line.find(':') == std::string::npos || (line[0] == '/' && line[1] == '/')) continue;
+
+		std::vector<std::string> commentHSplit = SplitString(line, "#");
+		std::vector<std::string> commentDSSplit = SplitString(commentHSplit[0], "//");
+		std::vector<std::string> colonSplit = SplitString(commentDSSplit[0], ":");
+		if (colonSplit.size() != 2) continue;
+		long long int address;
+		std::istringstream iss(colonSplit[0]);
+		iss >> std::setbase(16) >> address;
+		if (address == 0) std::cout << "[Patches] Custom patch address wrong: " << std::hex << address << std::endl;
+
+		if (colonSplit[1].at(0) == '!')
+		{
+			std::vector<std::string> fullColonSplit = SplitString(line, ":");
+			for (int i = 1; i < fullColonSplit[1].size(); i++)
+			{
+				std::cout << "[Patches] Patching: " << std::hex << address << ":" << fullColonSplit[1].at(i) << std::endl;
+				unsigned char byte_u = fullColonSplit[1].at(i);
+				std::vector<uint8_t> patch = { byte_u };
+				InjectCode((void*)address, patch);
+				address++;
+			}
+		}
+		else
+		{
+			std::vector<std::string> bytes = SplitString(colonSplit[1], " ");
+			if (bytes.size() < 1) continue;
+
+			std::string comment_string = "";
+			int comment_counter = 0;
+			if (commentHSplit.size() > 1)
+			{
+				bool ignore = 1;
+				for (std::string comment : commentHSplit)
+				{
+					if (ignore)
+					{
+						ignore = 0;
+						continue;
+					}
+					comment_string = comment_string + comment;
+				}
+			}
+
+			for (std::string bytestring : bytes)
+			{
+				int byte;
+				std::istringstream issb(bytestring);
+				issb >> std::setbase(16) >> byte;
+				unsigned char byte_u = byte;
+				std::cout << "[Patches] Patching: " << std::hex << address << ":" << std::hex << byte;
+				if (comment_string != "")
+				{
+					std::cout << " #" << comment_string.at(comment_counter);
+					comment_counter++;
+				}
+				std::cout << std::endl;
+				std::vector<uint8_t> patch = { byte_u };
+				InjectCode((void*)address, patch);
+				address++;
+			}
+		}
+	}
+
+	fileStream.close();
 }
 
 

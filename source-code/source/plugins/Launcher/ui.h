@@ -666,6 +666,8 @@ private: System::Void Button_Help_Click(System::Object^ sender, System::EventArg
 	System::Diagnostics::Process::Start("https://notabug.org/nastys/PD-Loader/wiki");
 }
 private: System::Void Button_Launch_Click(System::Object^ sender, System::EventArgs^ e) {
+	
+	//SkinnedMessageBox::Show(this, "It looks like the executable has been tampered with, or the version of the game is not 7.10.\n\nPlease use the \"patches\" folder instead of modifying the executable directly (or disable verification).", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Error);
 
 	SaveSettings();
 

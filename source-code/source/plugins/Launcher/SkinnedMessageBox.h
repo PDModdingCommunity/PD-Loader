@@ -253,8 +253,7 @@ private: ref class SkinnedMessageBoxForm : Form
 				// https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.messageboxicon?view=netframework-4.7.2
 				if (icon == MessageBoxIcon::Error) // also Hand and Stop
 				{
-					Drawing::Icon^ erricon = gcnew Drawing::Icon(SystemIcons::Error, iconsize, iconsize);
-					iconPB->Image = erricon->ToBitmap();
+					iconPB->Image = (Image^)(ResMgr->GetObject("FeelsThinkMan"));
 					iconPB->AccessibleDescription = "Error";
 					//this.Icon = SystemIcons.Error;
 					System::Media::SystemSounds::Hand->Play();

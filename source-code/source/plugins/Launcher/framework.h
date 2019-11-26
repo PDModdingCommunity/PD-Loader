@@ -181,6 +181,7 @@ ConfigOptionBase* optionsArray[] = {
 	new OptionMetaSpacer(8),
 
 	new BooleanOption(L"unlock_pseudo", PATCHES_SECTION, CONFIG_FILE, L"Unlock PSEUDO modules (incomplete)", L"Lets you play any PV with any performer.\n(incomplete, recommended modules will default to Miku)", false, false),
+	new BooleanOption(L"card", PATCHES_SECTION, CONFIG_FILE, L"Unlock card menu (incomplete)", L"Enables the card menu.\n(incomplete, it doesn't bypass the card prompt)", true, false),
 	new OptionMetaSpacer(8),
 
 	new BooleanOption(L"hardware_slider", PATCHES_SECTION, CONFIG_FILE, L"Use Hardware Slider", L"Enable this if using a real arcade slider.\n(set the slider to port COM11)", false, false),

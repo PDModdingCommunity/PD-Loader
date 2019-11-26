@@ -488,12 +488,19 @@ void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING)
 			std::cout << "[Patches]" << line.substr(1, line.size()-1) << std::endl;
 			continue;
 		}
+		if (line == "IGNORE") break;
 		if (line.find(':') == std::string::npos || (line[0] == '/' && line[1] == '/')) continue;
 
 		std::vector<std::string> commentHSplit = SplitString(line, "#");
 		std::vector<std::string> commentDSSplit = SplitString(commentHSplit[0], "//");
 		std::vector<std::string> colonSplit = SplitString(commentDSSplit[0], ":");
 		if (colonSplit.size() != 2) continue;
+		bool echo = true;
+		if (colonSplit[0].at(0) == '@')
+		{
+			echo = false;
+			colonSplit[0].at(0) = ' ';
+		}
 		long long int address;
 		std::istringstream iss(colonSplit[0]);
 		iss >> std::setbase(16) >> address;
@@ -501,17 +508,17 @@ void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING)
 
 		if (colonSplit[1].at(0) == '!')
 		{
-			std::cout << "[Patches] Patching: " << std::hex << address << ":!";
+			if (echo) std::cout << "[Patches] Patching: " << std::hex << address << ":!";
 			std::vector<std::string> fullColonSplit = SplitString(line, ":");
 			for (int i = 1; i < fullColonSplit[1].size(); i++)
 			{
-				std::cout << fullColonSplit[1].at(i);
+				if (echo) std::cout << fullColonSplit[1].at(i);
 				unsigned char byte_u = fullColonSplit[1].at(i);
 				std::vector<uint8_t> patch = { byte_u };
 				InjectCode((void*)address, patch);
 				address++;
 			}
-			std::cout << std::endl;
+			if (echo) std::cout << std::endl;
 		}
 		else
 		{
@@ -534,24 +541,33 @@ void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING)
 				}
 			}
 
-			std::cout << "[Patches] Patching: " << std::hex << address << ":";
+			if (echo) std::cout << "[Patches] Patching: " << std::hex << address << ":";
 			for (std::string bytestring : bytes)
 			{
 				int byte;
 				std::istringstream issb(bytestring);
 				issb >> std::setbase(16) >> byte;
 				unsigned char byte_u = byte;
-				std::cout << std::hex << byte << " ";
-				if (comment_counter < comment_string.length())
+				if (echo)
 				{
-					std::cout << "(" << comment_string.at(comment_counter) << ") ";
-					comment_counter++;
+					std::cout << std::hex << byte << " ";
+					if (comment_counter < comment_string.length())
+					{
+						std::cout << "(" << comment_string.at(comment_counter) << ") ";
+						comment_counter++;
+					}
 				}
 				std::vector<uint8_t> patch = { byte_u };
 				InjectCode((void*)address, patch);
 				address++;
 			}
-			std::cout << std::endl;
+			if (echo) std::cout << std::endl;
+			else if (comment_string.length() > 0)
+			{
+				std::cout << "[Patches]";;
+				if (comment_string.at(0) != ' ') std::cout << ' ';
+				std::cout << comment_string << std::endl;
+			}
 		}
 	}
 

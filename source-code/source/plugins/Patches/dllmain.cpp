@@ -17,24 +17,6 @@ void InjectCode(void* address, const std::vector<uint8_t> data);
 void ApplyPatches();
 void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING);
 
-void(__cdecl* originalTAA)(DWORD *a1, int a2) = (void(__cdecl*)(DWORD *a1, int a2))0x1404B23A0;
-void(__cdecl* originalMLAA)(__int64 a1, int a2) = (void(__cdecl*)(__int64 a1, int a2))0x1404B2210;
-
-void hookedTAA(DWORD *a1, int a2)
-{
-	a1[3] = 0; //a1[3] = a2;
-	a1[348] = -1082130432;
-	a1[950] = 1;
-	std::cout << "[Patches] TAA disabled" << std::endl;
-}
-
-void hookedMLAA(__int64 a1, int a2)
-{
-	*(DWORD*)(a1 + 16) = 0; //*(DWORD*)(a1 + 16) = a2;
-	*(DWORD*)(a1 + 3800) = 1;
-	std::cout << "[Patches] MLAA disabled" << std::endl;
-}
-
 const LPCWSTR CONFIG_FILE = L".\\config.ini";
 
 HMODULE *hModulePtr;
@@ -173,6 +155,7 @@ void ApplyPatches() {
 	auto nEStageManager = GetPrivateProfileIntW(L"patches", L"enhanced_stage_manager", 0, CONFIG_FILE);
 	auto nEStageManagerEncore = GetPrivateProfileIntW(L"patches", L"enhanced_stage_manager_encore", TRUE, CONFIG_FILE);
 	auto nUnlockPseudo = GetPrivateProfileIntW(L"patches", L"unlock_pseudo", FALSE, CONFIG_FILE);
+	auto nCard = GetPrivateProfileIntW(L"patches", L"card", TRUE, CONFIG_FILE);
 	auto nHardwareSlider = GetPrivateProfileIntW(L"patches", L"hardware_slider", FALSE, CONFIG_FILE);
 	auto nOGLPatchA = GetPrivateProfileIntW(L"patches", L"opengl_patch_a", FALSE, CONFIG_FILE);
 	auto nOGLPatchB = GetPrivateProfileIntW(L"patches", L"opengl_patch_b", FALSE, CONFIG_FILE);
@@ -190,34 +173,48 @@ void ApplyPatches() {
 	}
 
 	// Disable AA
-	if (!(nTAA && nMLAA))
+	if (!nTAA)
 	{
-		DisableThreadLibraryCalls(*hModulePtr);
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		if (!nTAA)
-		{
-			std::cout << "[Patches] Hooking TAA..." << std::endl;
-			DetourAttach(&(PVOID&)originalTAA, (PVOID)hookedTAA);
-			std::cout << "[Patches] TAA hooked" << std::endl;
-			hookedTAA((DWORD*)0x1411AB670, 0);
-		}
-		if (!nMLAA)
-		{
-			std::cout << "[Patches] Hooking MLAA..." << std::endl;
-			DetourAttach(&(PVOID&)originalMLAA, (PVOID)hookedMLAA);
-			std::cout << "[Patches] MLAA hooked" << std::endl;
-			hookedMLAA(5387236976, 0);
+		// set TAA var (shouldn't be needed but whatever)
+		*(byte*)0x00000001411AB67C = 0;
 
-			// make constructor/init not set MLAA
-			DWORD oldProtect, bck;
-			VirtualProtect((BYTE*)0x00000001404AB11A, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
-			*((byte*)0x00000001404AB11A + 0) = 0x90;
-			*((byte*)0x00000001404AB11A + 1) = 0x90;
-			*((byte*)0x00000001404AB11A + 2) = 0x90;
-			VirtualProtect((BYTE*)0x00000001404AB11A, 3, oldProtect, &bck);
-		}
-		DetourTransactionCommit();
+		// make constructor/init not set TAA
+		{DWORD oldProtect, bck;
+		VirtualProtect((BYTE*)0x00000001404AB11D, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
+		*((byte*)0x00000001404AB11D + 0) = 0x90;
+		*((byte*)0x00000001404AB11D + 1) = 0x90;
+		*((byte*)0x00000001404AB11D + 2) = 0x90;
+		VirtualProtect((BYTE*)0x00000001404AB11D, 3, oldProtect, &bck);}
+
+		// not sure, but it's somewhere in TaskPvGame init
+		// just make it set TAA to 0 instead of 1 to avoid possible issues
+		{DWORD oldProtect, bck;
+		VirtualProtect((BYTE*)0x00000001401063CE, 1, PAGE_EXECUTE_READWRITE, &oldProtect);
+		*((byte*)0x00000001401063CE + 0) = 0x00;
+		VirtualProtect((BYTE*)0x00000001401063CE, 1, oldProtect, &bck);}
+
+		// prevent re-enabling after taking photos
+		{DWORD oldProtect, bck;
+		VirtualProtect((BYTE*)0x000000014048FBA9, 1, PAGE_EXECUTE_READWRITE, &oldProtect);
+		*((byte*)0x000000014048FBA9 + 0) = 0x00;
+		VirtualProtect((BYTE*)0x000000014048FBA9, 1, oldProtect, &bck);}
+
+		printf("[Patches] TAA disabled\n");
+	}
+	if (!nMLAA)
+	{
+		// set MLAA var (shouldn't be needed but whatever)
+		*(byte*)0x00000001411AB680 = 0;
+
+		// make constructor/init not set MLAA
+		{DWORD oldProtect, bck;
+		VirtualProtect((BYTE*)0x00000001404AB11A, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
+		*((byte*)0x00000001404AB11A + 0) = 0x90;
+		*((byte*)0x00000001404AB11A + 1) = 0x90;
+		*((byte*)0x00000001404AB11A + 2) = 0x90;
+		VirtualProtect((BYTE*)0x00000001404AB11A, 3, oldProtect, &bck);}
+
+		printf("[TLAC] MLAA disabled\n");
 	}
 
 	// Replace the hardcoded videos with MP4s, if they exist
@@ -423,6 +420,11 @@ void ApplyPatches() {
 		InjectCode((void*)0x0000000140A217A0, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
 		InjectCode((void*)0x0000000140A217B0, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
 	}
+	// Enable card button by somewhatlurker (pretty much just eye candy for now)
+	if (nCard)
+	{
+		InjectCode((void*)0x0000000140565E6B, { 0x90, 0x90 });
+	}
 	// The original slider update needs to run for hardware sliders to work -- only patch it when using emulation
 	if (!nHardwareSlider)
 	{
@@ -499,15 +501,17 @@ void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING)
 
 		if (colonSplit[1].at(0) == '!')
 		{
+			std::cout << "[Patches] Patching: " << std::hex << address << ":!";
 			std::vector<std::string> fullColonSplit = SplitString(line, ":");
 			for (int i = 1; i < fullColonSplit[1].size(); i++)
 			{
-				std::cout << "[Patches] Patching: " << std::hex << address << ":" << fullColonSplit[1].at(i) << std::endl;
+				std::cout << fullColonSplit[1].at(i);
 				unsigned char byte_u = fullColonSplit[1].at(i);
 				std::vector<uint8_t> patch = { byte_u };
 				InjectCode((void*)address, patch);
 				address++;
 			}
+			std::cout << std::endl;
 		}
 		else
 		{
@@ -530,23 +534,24 @@ void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING)
 				}
 			}
 
+			std::cout << "[Patches] Patching: " << std::hex << address << ":";
 			for (std::string bytestring : bytes)
 			{
 				int byte;
 				std::istringstream issb(bytestring);
 				issb >> std::setbase(16) >> byte;
 				unsigned char byte_u = byte;
-				std::cout << "[Patches] Patching: " << std::hex << address << ":" << std::hex << byte;
+				std::cout << std::hex << byte << " ";
 				if (comment_counter < comment_string.length())
 				{
-					std::cout << " #" << comment_string.at(comment_counter);
+					std::cout << "(" << comment_string.at(comment_counter) << ") ";
 					comment_counter++;
 				}
-				std::cout << std::endl;
 				std::vector<uint8_t> patch = { byte_u };
 				InjectCode((void*)address, patch);
 				address++;
 			}
+			std::cout << std::endl;
 		}
 	}
 

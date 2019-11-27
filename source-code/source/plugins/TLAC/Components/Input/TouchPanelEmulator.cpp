@@ -1,7 +1,10 @@
 #include "TouchPanelEmulator.h"
 #include <iostream>
+#include <tchar.h>
+#include <tpcshrd.h>
 #include "../ComponentsManager.h"
 #include "../../Constants.h"
+#include "../../framework.h"
 #include "../../Input/Mouse/Mouse.h"
 #include "../../Input/Keyboard/Keyboard.h"
 
@@ -26,6 +29,13 @@ namespace TLAC::Components
 	{
 		componentsManager = manager;
 		state = GetTouchStatePtr((void*)TASK_TOUCH_ADDRESS);
+		// Make touches on actual touchscreens more responsive
+		const DWORD_PTR dwHwndTabletProperty =
+			TABLET_DISABLE_PRESSANDHOLD | // disables press and hold (right-click) gesture
+			TABLET_DISABLE_PENTAPFEEDBACK | // disables UI feedback on pen up (waves)
+			TABLET_DISABLE_PENBARRELFEEDBACK | // disables UI feedback on pen button down (circle)
+			TABLET_DISABLE_FLICKS; // disables pen flicks (back, forward, drag down, drag up)
+		SetProp(TLAC::framework::DivaWindowHandle, MICROSOFT_TABLETPENSERVICE_PROPERTY, reinterpret_cast<HANDLE>(dwHwndTabletProperty));
 	}
 
 	void TouchPanelEmulator::Update()

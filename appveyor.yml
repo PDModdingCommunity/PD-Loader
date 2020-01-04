@@ -37,6 +37,14 @@ after_build:
     
     copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\update\
 
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_base_game.sfv %TMP%\update\
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_base_game.md5 %TMP%\update\
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_mount_data.sfv %TMP%\update\
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_mount_data.md5 %TMP%\update\
+
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\patches\custom_freeplay_text_example.p %TMP%\update\patches\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\ShaderPatch.ini %TMP%\update\plugins\
@@ -56,6 +64,14 @@ after_build:
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\full\plugins\
 
     copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\full\
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_base_game.sfv %TMP%\full\
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_base_game.md5 %TMP%\full\
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_mount_data.sfv %TMP%\full\
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_mount_data.md5 %TMP%\full\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\glut32.dll %TMP%\full\
 

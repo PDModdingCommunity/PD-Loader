@@ -1,6 +1,8 @@
 #include "FastLoader.h"
+#include "../FileSystem/ConfigFile.h"
 #include "../Constants.h"
 #include <stdio.h>
+#include "../framework.h"
 
 namespace TLAC::Components
 {
@@ -19,6 +21,14 @@ namespace TLAC::Components
 
 	void FastLoader::Initialize(ComponentsManager*)
 	{
+		TLAC::FileSystem::ConfigFile componentsConfig(TLAC::framework::GetModuleDirectory(), COMPONENTS_CONFIG_FILE_NAME);
+		bool success = componentsConfig.OpenRead();
+		if (success)
+		{
+			int speed = componentsConfig.GetIntegerValue("fast_loader_speed");
+			if (speed >= 2 && speed <= 1024) updatesPerFrame = speed;
+		}
+		printf("[Fast Loader] Speed: %d\n", updatesPerFrame);
 	}
 
 	void FastLoader::Update()

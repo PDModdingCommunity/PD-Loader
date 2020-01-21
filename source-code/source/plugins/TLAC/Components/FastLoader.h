@@ -1,6 +1,7 @@
 #pragma once
 #include "EmulatorComponent.h"
 #include "GameState.h"
+#include <string>
 
 namespace TLAC::Components
 {
@@ -17,7 +18,8 @@ namespace TLAC::Components
 		virtual void UpdateInput() override;
 
 	private:
-		const int updatesPerFrame = 39;
+		const std::string COMPONENTS_CONFIG_FILE_NAME = "components.ini";
+		int updatesPerFrame = 39;
 		
 		GameState currentGameState;
 		GameState previousGameState;

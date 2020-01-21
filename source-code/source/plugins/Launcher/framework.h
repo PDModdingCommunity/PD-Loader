@@ -252,6 +252,8 @@ ConfigOptionBase* componentsArray[] = {
 
 	new BooleanOption(L"fast_loader", COMPONENTS_SECTION, COMPONENTS_FILE, L"Fast Loader", L"Skip or speed up unnecessary loading steps.", false, true),
 
+	new NumericOption(L"fast_loader_speed", COMPONENTS_SECTION, COMPONENTS_FILE, L"Fast Loader Speed", L"Set this to 4 or less when playing online.\nDefault: 39", 39, 2, 1024),
+
 	new BooleanOption(L"camera_controller", COMPONENTS_SECTION, COMPONENTS_FILE, L"Camera Controller", L"Enables freecam (toggled using F3).\nWASD to move, SPACE/CTRL for up/down, Q/R to rotate, R/F for zoom.\nHolding SHIFT/ALT changes control speed.", false, true),
 
 	new BooleanOption(L"scale_component", COMPONENTS_SECTION, COMPONENTS_FILE, L"Scale Component", L"Scales the graphics output framebuffer to fill the screen/window.", false, true),

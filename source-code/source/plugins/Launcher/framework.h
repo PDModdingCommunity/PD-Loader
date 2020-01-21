@@ -157,7 +157,7 @@ ConfigOptionBase* internalResolutionArray[] = {
 ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"hide_freeplay", PATCHES_SECTION, CONFIG_FILE, L"Hide \"FREE PLAY\"/\"CREDIT(S)\"", L"Hide the \"FREE PLAY\"/\"CREDIT(S)\" text.", false, false),
 	new BooleanOption(L"freeplay", PATCHES_SECTION, CONFIG_FILE, L"FREE PLAY", L"Show \"FREE PLAY\" instead of \"CREDIT(S)\".", true, false),
-	new BooleanOption(L"pdloadertext", PATCHES_SECTION, CONFIG_FILE, L"PD Loader FREE PLAY", L"Show the version of PD Loader instead of \"FREE PLAY\".", true, false),
+	new BooleanOption(L"pdloader_text", PATCHES_SECTION, CONFIG_FILE, L"PD Loader FREE PLAY", L"Show the version of PD Loader instead of \"FREE PLAY\".", true, false),
 	new OptionMetaSpacer(8),
 
 	new BooleanOption(L"no_movies", PATCHES_SECTION, CONFIG_FILE, L"Disable Movies", L"Disable movies (enable this if the game hangs when loading certain PVs).", false, false),

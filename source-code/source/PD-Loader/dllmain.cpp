@@ -143,6 +143,34 @@ void LoadOriginalLibrary()
 	}
 }
 
+void LoadDVA(std::wstring &path, LPCWSTR dir, LPCWSTR fileName)
+{
+	if (GetModuleHandle(path.c_str()) == NULL)
+	{
+		auto h = LoadLibraryW(path);
+		SetCurrentDirectoryW(dir); //in case dva switched it
+
+		if (h == NULL)
+		{
+			auto e = GetLastError();
+			if (e != ERROR_DLL_INIT_FAILED) // in case dllmain returns false
+			{
+				std::wstring msg = L"Unable to load " + std::wstring(fileName) + L". Error: " + std::to_wstring(e);
+				MessageBoxW(0, msg.c_str(), L"PD Loader", MB_ICONERROR);
+			}
+		}
+		else
+		{
+			auto procedure = (void(*)())GetProcAddress(h, "InitializeDVA");
+
+			if (procedure != NULL)
+			{
+				procedure();
+			}
+		}
+	}
+}
+
 void FindFiles(WIN32_FIND_DATAW* fd)
 {
 	auto dir = GetCurrentDirectoryW();
@@ -163,30 +191,7 @@ void FindFiles(WIN32_FIND_DATAW* fd)
 				{
 					auto path = dir + L'\\' + fd->cFileName;
 
-					if (GetModuleHandle(path.c_str()) == NULL)
-					{
-						auto h = LoadLibraryW(path);
-						SetCurrentDirectoryW(dir.c_str()); //in case dva switched it
-
-						if (h == NULL)
-						{
-							auto e = GetLastError();
-							if (e != ERROR_DLL_INIT_FAILED) // in case dllmain returns false
-							{
-								std::wstring msg = L"Unable to load " + std::wstring(fd->cFileName) + L". Error: " + std::to_wstring(e);
-								MessageBoxW(0, msg.c_str(), L"PD Loader", MB_ICONERROR);
-							}
-						}
-						else
-						{
-							auto procedure = (void(*)())GetProcAddress(h, "InitializeDVA");
-
-							if (procedure != NULL)
-							{
-								procedure();
-							}
-						}
-					}
+					LoadDVA(path, dir.c_str(), fd->cFileName);
 				}
 			}
 		} while (FindNextFileW(dvaFile, fd));
@@ -205,12 +210,22 @@ void LoadPlugins()
 
 	if (nWantsToLoadPlugins)
 	{
-		WIN32_FIND_DATAW fd;
-
-		SetCurrentDirectoryW(szSelfPath.c_str());
-
-		if (SetCurrentDirectoryW(L"plugins\\"))
-			FindFiles(&fd);
+		if (SetCurrentDirectoryW(szSelfPath.c_str()))
+		{
+			WIN32_FIND_DATAW dh;
+			HANDLE divaHook = FindFirstFileW(L"divahook.dll", &dh);
+			if (divaHook != INVALID_HANDLE_VALUE && !(dh.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+			{
+				printf("[PD Loader] Loading divahook.dll\n");
+				auto path = szSelfPath + L'\\' + dh.cFileName;
+				LoadDVA(path, szSelfPath.c_str(), dh.cFileName);
+			}
+			if (SetCurrentDirectoryW(L"plugins\\"))
+			{
+				WIN32_FIND_DATAW fd;
+				FindFiles(&fd);
+			}
+		}
 	}
 
 	SetCurrentDirectoryW(oldDir.c_str()); // Reset the current directory

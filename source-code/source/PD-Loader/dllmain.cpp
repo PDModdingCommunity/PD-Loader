@@ -138,7 +138,10 @@ void LoadOriginalLibrary()
 	auto szSystemPath = SHGetKnownFolderPath(FOLDERID_System, 0, nullptr) + L'\\' + szSelfName;
 	auto szLocalPath = GetModuleFileNameW(hm); szLocalPath = szLocalPath.substr(0, szLocalPath.find_last_of(L"/\\") + 1);
 
-	if (iequals(szSelfName, L"dnsapi.dll")) {
+	if (iequals(szSelfName, L"dinput8.dll")) {
+		dinput8.LoadOriginalLibrary(LoadLibraryW(szSystemPath));
+	}
+	else if (iequals(szSelfName, L"dnsapi.dll")) {
 		dnsapi.LoadOriginalLibrary(LoadLibraryW(szSystemPath));
 	}
 }
@@ -577,6 +580,15 @@ bool HookKernel32IAT(HMODULE mod, bool exe)
 						{
 							PIMAGE_IMPORT_BY_NAME import = (PIMAGE_IMPORT_BY_NAME)(hInstance + thunk->u1.AddressOfData);
 							void** p = (void**)(hInstance + (pImports + i)->FirstThunk);
+
+							if (iequals(szSelfName, L"dinput8.dll"))
+							{
+								DWORD Protect;
+								VirtualProtect(&p[j], 4, PAGE_EXECUTE_READWRITE, &Protect);
+
+								if ((IMAGE_ORDINAL(thunk->u1.Ordinal)) == 1)
+									p[j] = _DirectInput8Create;
+							}
 						}
 						++thunk;
 					}

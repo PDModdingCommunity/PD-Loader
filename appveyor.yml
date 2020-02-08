@@ -86,22 +86,19 @@ after_build:
     cd %TMP%\full\
 
     7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AppVeyor.zip *
+    
+    ren dinput8.dll dnsapi.dll
+    
+    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AppVeyor-Vista.zip *
 
     cd %TMP%\update\
 
     7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-Update-AppVeyor.zip *
     
-    cd %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\
-    
     ren dinput8.dll dnsapi.dll
-
-    cd %TMP%\full\
-
-    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AppVeyor-Vista.zip *
-
-    cd %TMP%\update\
-
+    
     7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-Update-AppVeyor-Vista.zip *
+
 
 artifacts:
 - path: PD-Loader-*.zip

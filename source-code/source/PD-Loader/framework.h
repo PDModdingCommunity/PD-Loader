@@ -506,6 +506,18 @@ struct dnsapi_dll
 	}
 } dnsapi;
 
+struct dinput8_dll
+{
+	HMODULE dll;
+	FARPROC DirectInput8Create;
+
+	void LoadOriginalLibrary(HMODULE module)
+	{
+		dll = module;
+		shared.LoadOriginalLibrary(dll);
+		DirectInput8Create = GetProcAddress(dll, "DirectInput8Create");
+	}
+} dinput8;
 
 #pragma runtime_checks( "", off )
 
@@ -737,6 +749,8 @@ void _Socket_TcpListen() { dnsapi.Socket_TcpListen(); }
 void _Update_ReplaceAddressRecordsW() { dnsapi.Update_ReplaceAddressRecordsW(); }
 void _Util_IsIp6Running() { dnsapi.Util_IsIp6Running(); }
 
+typedef HRESULT(*fn_DirectInput8Create)(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID* ppvOut, LPUNKNOWN punkOuter);
+void _DirectInput8Create() { (fn_DirectInput8Create)dinput8.DirectInput8Create(); }
 
 void _DllRegisterServer() { shared.DllRegisterServer(); }
 void _DllUnregisterServer() { shared.DllUnregisterServer(); }

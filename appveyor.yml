@@ -31,7 +31,7 @@ after_build:
 
 
 
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dnsapi.dll %TMP%\update\
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dinput8.dll %TMP%\update\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\update\plugins\
     
@@ -57,7 +57,7 @@ after_build:
             
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\pv_equip\sfx.ini %TMP%\update\plugins\pv_equip\
 
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dnsapi.dll %TMP%\full\
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dinput8.dll %TMP%\full\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\patches\custom_freeplay_text_example.p %TMP%\full\patches\
 
@@ -77,7 +77,7 @@ after_build:
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\*.* %TMP%\full\plugins\
     
-        copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\*.* %TMP%\full\plugins\pv_equip\
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\*.* %TMP%\full\plugins\pv_equip\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\ram\databank\*.dat %TMP%\full\ram\databank\
 
@@ -90,5 +90,18 @@ after_build:
     cd %TMP%\update\
 
     7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-Update-AppVeyor.zip *
+    
+    cd %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\
+    
+    ren dinput8.dll dnsapi.dll
+
+    cd %TMP%\full\
+
+    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AppVeyor-Vista.zip *
+
+    cd %TMP%\update\
+
+    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-Update-AppVeyor-Vista.zip *
+
 artifacts:
 - path: PD-Loader-*.zip

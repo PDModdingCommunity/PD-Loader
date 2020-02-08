@@ -89,7 +89,7 @@ after_build:
     
     ren dinput8.dll dnsapi.dll
     
-    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AppVeyor-Vista.zip *
+    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AppVeyor-Vista7.zip *
 
     cd %TMP%\update\
 
@@ -97,7 +97,7 @@ after_build:
     
     ren dinput8.dll dnsapi.dll
     
-    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-Update-AppVeyor-Vista.zip *
+    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-Update-AppVeyor-Vista7.zip *
 
 
 artifacts:

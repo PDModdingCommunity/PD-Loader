@@ -15,6 +15,11 @@
 
 using namespace std::chrono;
 
+void exitGameClean(int)
+{
+	*(bool*)0x0000000140EDA6B0 = true;
+}
+
 int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 {
 	SetProcessDPIAware();
@@ -39,7 +44,7 @@ int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 			printf(GameModeString);
 			printf("\n");
 			*fullScreenFlag = 1;
-			glutCreateWindow(title);
+			__glutCreateWindowWithExit(title, exitGameClean);
 		}
 	}
 	else // windowed or borderless
@@ -68,7 +73,7 @@ int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 
 		glutInitWindowSize(nWidth, nHeight);
 		glutInitWindowPosition(wndX, wndY);
-		glutCreateWindow(title);
+		__glutCreateWindowWithExit(title, exitGameClean);
 
 		if (nDisplay == 1 || nDisplay == 3) // borderless mode
 		{

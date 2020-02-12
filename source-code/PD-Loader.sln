@@ -23,6 +23,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShaderPatch", "source\plugi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DivaWig", "source\plugins\DivaWig\DivaWig.vcxproj", "{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DSCRemote", "source\plugins\DSCRemote\DSCRemote.vcxproj", "{8544C599-F73B-4EF2-BA3E-2A0FC3034B1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -69,6 +71,10 @@ Global
 		{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x64.Build.0 = Debug|x64
 		{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.ActiveCfg = Release|x64
 		{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.Build.0 = Release|x64
+		{8544C599-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x64.ActiveCfg = Debug|x64
+		{8544C599-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x64.Build.0 = Debug|x64
+		{8544C599-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.ActiveCfg = Release|x64
+		{8544C599-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

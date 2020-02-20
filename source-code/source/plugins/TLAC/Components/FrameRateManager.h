@@ -14,6 +14,7 @@ namespace TLAC::Components
 
 		virtual void Initialize(ComponentsManager*) override;
 		virtual void Update() override;
+		virtual void UpdateDraw2D() override;
 
 	private:
 		float *pvFrameRate;

@@ -5,6 +5,7 @@
 #include <windows.h>
 #include "../framework.h"
 #include <vector>
+#include "detours.h"
 
 namespace TLAC::Components
 {
@@ -25,6 +26,36 @@ namespace TLAC::Components
 	const char* FrameRateManager::GetDisplayName()
 	{
 		return "frame_rate_manager";
+	}
+
+
+	float fspeed_error = 0; // compensation value for use in this frame
+	float fspeed_error_next = 0; // save a compensation value to be used in the next frame
+
+	float(*divaGetFrameSpeed)() = (float(*)())0x140192D50;
+
+	// a version of the original function that tries to round the output to more closely match chara motion timings
+	float hookedGetFrameSpeed()
+	{
+		float frameSpeed = divaGetFrameSpeed();
+
+		// below is somewhat based (in concept) on 140194ad0 (motion quantisation thingy func)
+
+		// add the error compensation from last frame
+		frameSpeed += fspeed_error;
+
+		// separate whole and fractional parts of speed
+		// float speed_rounded = floorf(frameSpeed);
+		// float speed_remainder = frameSpeed - speed_rounded;
+		float speed_rounded;
+		float speed_remainder = modff(frameSpeed, &speed_rounded);
+
+		// save the remainder as error compensation for next frame
+		if (fspeed_error_next == 0)
+			fspeed_error_next = speed_remainder;
+			
+
+		return speed_rounded;
 	}
 
 	void FrameRateManager::Initialize(ComponentsManager*)
@@ -70,70 +101,17 @@ namespace TLAC::Components
 		InjectCode((void*)0x14053caba, { 0xE9, 0x42, 0xFE, 0xFF, 0xFF });                   // JMP 0x14053c901
 		InjectCode((void*)0x14053c901, { 0xF3, 0x0F, 0x5E, 0x05, 0xC7, 0xDD, 0x99, 0x00 }); // DIVSS XMM0, dword ptr [0x140eda6d0] (framerate)
 		InjectCode((void*)0x14053c909, { 0xE9, 0x68, 0x01, 0x00, 0x00 });                   // JMP 0x14053ca76
-		
-		
-		// below are patches for the alternate method (breaks physics)
-
-		//// run motions at motionSpeedMultiplier x rate
-		//	// skip unncessary code to free code space
-		//  InjectCode((void*)0x140194b2b, { 0xEB, 0x24 }); // JMP 0x140194b51
-
-		//  InjectCode((void*)0x140194b2d, { 0xE8, 0x1E, 0xE2, 0xFF, 0xFF });  // CALL 0x140192d50
-		//  InjectCode((void*)0x140194b32, {                                   // MOV ECX, &motionSpeedMultiplier
-		//  	0x48,
-		//  	0xB9,
-		//  	(uint8_t)((uint64_t)&motionSpeedMultiplier & 0xFF),
-		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 8) & 0xFF),
-		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 16) & 0xFF),
-		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 24) & 0xFF),
-		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 32) & 0xFF),
-		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 40) & 0xFF),
-		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 48) & 0xFF),
-		//  	(uint8_t)(((uint64_t)&motionSpeedMultiplier >> 56) & 0xFF),
-		//  });
-		//  InjectCode((void*)0x140194b3c, { 0x66, 0x67, 0x0F, 0x6E, 0x09 }); // MOVD XMM1, dword ptr [ECX]
-		//  InjectCode((void*)0x140194b41, { 0xF3, 0x0F, 0x59, 0xC1 });       // MULSS XMM0, XMM1
-		//  InjectCode((void*)0x140194b45, { 0xEB, 0xA1 });                   // JMP 0x140194ae8
-
-		//	// jump to new code
-		//  InjectCode((void*)0x140194ae3, { 0xEB, 0x48 }); // JMP 0x140194b2d
 
 
-		////	// trying to fix physics (fail)
-		////    InjectCode((void*)0x14011d537, { 0xF3, 0x0F, 0x10, 0x05, 0xB1, 0xFF, 0x9E, 0x00, 0x90 }); // change source to dword ptr [0x140b0d4f0]
+		// replace divaGetFrameSpeed with a version that rounds the output to fix issues
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourAttach(&(PVOID&)divaGetFrameSpeed, hookedGetFrameSpeed);
+		DetourTransactionCommit();
 	}
 
 	void FrameRateManager::Update()
 	{
-		// this alterante way makes physics slowmo, but overall may be better if that's fixed
-
-		//// target framerate
-		//*(float*)AUTO_FRAMESPEED_TARGET_FRAMERATE_ADDRESS = 60.0f;
-
-		//// enable dynamic framerate
-		//*(bool*)USE_AUTO_FRAMESPEED_ADDRESS = true;
-
-		//*pvFrameRate = 60.0f;
-
-		//*aetFrameDuration = 1.0f / GetGameFrameRate();
-
-		//bool inGame = *(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME;
-		//if (inGame)
-		//{
-		//	// This PV struct creates a copy of the PvFrameRate & PvFrameSpeed during the loading screen
-		//	// so we'll make sure to keep updating it as well.
-		//	// Each new motion also creates its own copy of these values but keeping track of the active motions is annoying
-		//	// and they usually change multiple times per PV anyway so this should suffice for now
-		//	float* pvStructPvFrameRate = (float*)(0x0000000140CDD978 + 0x2BF98);
-		//	float* pvStructPvFrameSpeed = (float*)(0x0000000140CDD978 + 0x2BF9C);
-
-		//	*pvStructPvFrameRate = 60.0; // ?
-		//	*pvStructPvFrameSpeed = 1.0 / motionSpeedMultiplier;
-		//}
-
-
-
-		// this way breaks some anim speeds, but they're fixable
 		// *aetFrameDuration = 1.0f / GetGameFrameRate();
 
 		if (*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME)
@@ -166,6 +144,13 @@ namespace TLAC::Components
 			// target framerate
 			*(float*)AUTO_FRAMESPEED_TARGET_FRAMERATE_ADDRESS = 60.0f;
 		}
+	}
+
+	void FrameRateManager::UpdateDraw2D()
+	{
+		// cycle the framespeed timing error once per frame
+		fspeed_error = fspeed_error_next;
+		fspeed_error_next = 0;
 	}
 
 	void FrameRateManager::InjectCode(void* address, const std::vector<uint8_t> data)

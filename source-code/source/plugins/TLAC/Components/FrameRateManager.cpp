@@ -29,8 +29,10 @@ namespace TLAC::Components
 	}
 
 
-	float fspeed_error = 0; // compensation value for use in this frame
-	float fspeed_error_next = 0; // save a compensation value to be used in the next frame
+	float FrameRateManager::fspeed_error = 0; // compensation value for use in this frame
+	float FrameRateManager::fspeed_error_next = 0; // save a compensation value to be used in the next frame
+
+	float FrameRateManager::fspeedhook_lastresult = 0; // used by the ageage hair patch to be lazy and avoid setting up for a proper call
 
 	float(*divaGetFrameSpeed)() = (float(*)())0x140192D50;
 
@@ -42,7 +44,7 @@ namespace TLAC::Components
 		// below is somewhat based (in concept) on 140194ad0 (motion quantisation thingy func)
 
 		// add the error compensation from last frame
-		frameSpeed += fspeed_error;
+		frameSpeed += FrameRateManager::fspeed_error;
 
 		// separate whole and fractional parts of speed
 		// float speed_rounded = floorf(frameSpeed);
@@ -51,9 +53,12 @@ namespace TLAC::Components
 		float speed_remainder = modff(frameSpeed, &speed_rounded);
 
 		// save the remainder as error compensation for next frame
-		if (fspeed_error_next == 0)
-			fspeed_error_next = speed_remainder;
-			
+		// use == 0 to detect new frame and vars must be written
+		if (FrameRateManager::fspeed_error_next == 0)
+		{
+			FrameRateManager::fspeed_error_next = speed_remainder;
+			FrameRateManager::fspeedhook_lastresult = speed_rounded;
+		}
 
 		return speed_rounded;
 	}
@@ -91,9 +96,20 @@ namespace TLAC::Components
 		InjectCode((void*)0x140192d30, { 0xF3, 0x0F, 0x10, 0x05, 0x5C, 0x02, 0x00, 0x00 }); // MOVSS XMM0, dword ptr [0x140192f94]
 
 		// fix ageage hair effect
-		InjectCode((void*)0x14054352f, { 0xE8, 0x1C, 0xF8, 0xC4, 0xFF }); // CALL 0x140192d50 (getFrameSpeed)
-		InjectCode((void*)0x140543534, { 0xF3, 0x0F, 0x59, 0xD8 });       // MULSS XMM3, XMM0
-		InjectCode((void*)0x140543538, { 0xEB, 0xB6 });                   // JMP 0x1405434f0
+		InjectCode((void*)0x14054352f, {                                  // MOV R9, &fspeedhook_lastresult
+			0x49,
+			0xB9,
+			(uint8_t)((uint64_t)&fspeedhook_lastresult & 0xFF),
+			(uint8_t)(((uint64_t)&fspeedhook_lastresult >> 8) & 0xFF),
+			(uint8_t)(((uint64_t)&fspeedhook_lastresult >> 16) & 0xFF),
+			(uint8_t)(((uint64_t)&fspeedhook_lastresult >> 24) & 0xFF),
+			(uint8_t)(((uint64_t)&fspeedhook_lastresult >> 32) & 0xFF),
+			(uint8_t)(((uint64_t)&fspeedhook_lastresult >> 40) & 0xFF),
+			(uint8_t)(((uint64_t)&fspeedhook_lastresult >> 48) & 0xFF),
+			(uint8_t)(((uint64_t)&fspeedhook_lastresult >> 56) & 0xFF),
+		});
+		InjectCode((void*)0x140543539, { 0xF3, 0x41, 0x0F, 0x59, 0x19 }); // MULSS XMM3, dword ptr [R9]
+		InjectCode((void*)0x14054353e, { 0xEB, 0xB0 });                   // JMP 0x1405434f0
 
 		// fix wind effect
 		InjectCode((void*)0x14053ca71, { 0xEB, 0x3F });                                     // JMP 0x14053cab2

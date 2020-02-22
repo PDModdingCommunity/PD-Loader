@@ -16,6 +16,11 @@ namespace TLAC::Components
 		virtual void Update() override;
 		virtual void UpdateDraw2D() override;
 
+		static float fspeed_error; // compensation value for use in this frame
+		static float fspeed_error_next; // save a compensation value to be used in the next frame
+
+		static float fspeedhook_lastresult; // used by the ageage hair patch to be lazy and avoid setting up for a proper call
+
 	private:
 		float *pvFrameRate;
 		float *frameSpeed;

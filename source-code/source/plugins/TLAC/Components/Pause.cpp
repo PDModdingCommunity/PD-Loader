@@ -34,6 +34,8 @@ namespace TLAC::Components
 	uint8_t* Pause::aetMovPatchAddress = (uint8_t*)0x1401703b3;
 	std::vector<uint8_t> Pause::origFramespeedOp;
 	uint8_t* Pause::framespeedPatchAddress = (uint8_t*)0x140192D50;
+	std::vector<uint8_t> Pause::origAgeageHairOp;
+	uint8_t* Pause::ageageHairPatchAddress = (uint8_t*)0x14054352c;
 	std::vector<bool> Pause::streamPlayStates;
 	bool(*divaGiveUpFunc)(void*) = (bool(*)(void* cls))GIVEUP_FUNC_ADDRESS;
 	PlayerData* Pause::playerData;
@@ -83,6 +85,9 @@ namespace TLAC::Components
 
 		origFramespeedOp.resize(4);
 		memcpy(origFramespeedOp.data(), framespeedPatchAddress, 4);
+
+		origAgeageHairOp.resize(3);
+		memcpy(origAgeageHairOp.data(), ageageHairPatchAddress, 3);
 	}
 
 	void Pause::Initialize(ComponentsManager* manager)
@@ -122,6 +127,7 @@ namespace TLAC::Components
 				saveOldPatchOps();
 				InjectCode(aetMovPatchAddress, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
 				InjectCode(framespeedPatchAddress, { 0x0f, 0x57, 0xc0, 0xc3 }); // XORPS XMM0,XMM0; RET
+				InjectCode(ageageHairPatchAddress, { 0x0f, 0x57, 0xdb }); // XORPS XMM3,XMM3
 
 				uint64_t audioMixerAddr = *(uint64_t*)(AUDIO_MAIN_CLASS_ADDRESS + 0x70);
 				uint64_t audioStreamsAddress = *(uint64_t*)(audioMixerAddr + 0x18);
@@ -250,6 +256,7 @@ namespace TLAC::Components
 
 				InjectCode(aetMovPatchAddress, origAetMovOp);
 				InjectCode(framespeedPatchAddress, origFramespeedOp);
+				InjectCode(ageageHairPatchAddress, origAgeageHairOp);
 
 				uint64_t audioMixerAddr = *(uint64_t*)(AUDIO_MAIN_CLASS_ADDRESS + 0x70);
 				uint64_t audioStreamsAddress = *(uint64_t*)(audioMixerAddr + 0x18);

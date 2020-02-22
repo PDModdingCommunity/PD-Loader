@@ -46,6 +46,9 @@ namespace TLAC::Components
 		static std::vector<uint8_t> origFramespeedOp;
 		static uint8_t* framespeedPatchAddress;
 
+		static std::vector<uint8_t> origAgeageHairOp;
+		static uint8_t* ageageHairPatchAddress;
+
 		static bool hookedGiveUpFunc(void* cls);
 
 		static void setSEVolume(int amount);

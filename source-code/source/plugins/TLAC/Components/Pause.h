@@ -114,14 +114,30 @@ namespace TLAC::Components
 		};
 
 		static int curMenuPos;
-		static int mainMenuPos; // syncs to curMenuPos when curMenuSet == MENUSET_MAIN (used for restoring on back)
+		static std::vector<std::pair<menusets, int>> menuHistory; // used for implementing back button in menus
 		static menusets curMenuSet;
 
 		static std::chrono::time_point<std::chrono::high_resolution_clock> menuItemMoveTime; // used for animation
 
-		static void mainmenu() { setMenuPos(MENUSET_MAIN, mainMenuPos); };
+		// static void mainmenu() { setMenuPos(MENUSET_MAIN, 0); menuHistory.resize(0); };
+		static void menuback()
+		{
+			if (menuHistory.size() == 0)
+			{
+				// mainmenu();
+				unpause();
+			}
+			else
+			{
+				std::pair<menusets, int> menuPos = menuHistory.back();
+				menuHistory.pop_back();
+
+				setMenuPos(menuPos.first, menuPos.second, false);
+			}
+		}
 		static void unpause() { pause = false; };
-		static void restart() {
+		static void restart()
+		{
 			/*
 			140d0b510+2 = 0, 140d0b510+14 = 8 for restart
 
@@ -146,6 +162,11 @@ namespace TLAC::Components
 
 			percentage doesn't fully reset by the looks of it????
 			rip
+			(actually was hold and slide scores -- fixed by manually clearing them now)
+
+			TODO:
+			check holds count towards percentage after restart if 5% limit was reached
+			reset not clear flag in protected mode
 			*/
 
 			// inject flow overrides to switch cases in FUN_1400fddc0
@@ -162,6 +183,11 @@ namespace TLAC::Components
 				doLoading(0x140cdd8d0);
 			}
 
+			// for some reason the above doesn't reset all scoring stuff
+			*(int*)0x140D0A9BC = 0; // total holds
+			*(int*)0x140D0A9B8 = 0; // hold + multi
+			*(int*)0x140D0A9C0 = 0; // slide
+
 			// revert patches and unpause
 			InjectCode((void*)0x1401038cd, { 0x12 }); InjectCode((void*)0x140103b94, { 0x16 });
 			unpause();
@@ -175,7 +201,7 @@ namespace TLAC::Components
 		// contents are in Pause.cpp because they can't be inline here for a static (const) array/vec
 		static std::vector<menuSet> menu;
 
-		static void setMenuPos(menusets set, int pos);
+		static void setMenuPos(menusets set, int pos, bool updateHistory = true);
 
 		static float getMenuAnimPos();
 

@@ -28,7 +28,7 @@ namespace TLAC::Components
 	int Pause::crossAet = 0;
 	int Pause::circleAet = 0;
 	int Pause::curMenuPos = 0;
-	int Pause::mainMenuPos = 0;
+	std::vector<std::pair<Pause::menusets, int>> Pause::menuHistory;
 	Pause::menusets Pause::curMenuSet = MENUSET_MAIN;
 	std::chrono::time_point<std::chrono::high_resolution_clock> Pause::menuItemMoveTime;
 	std::vector<uint8_t> Pause::origAetMovOp;
@@ -60,7 +60,7 @@ namespace TLAC::Components
 			"SE VOLUME",
 			{
 				{ "+", sevolplus, true },
-				{ "XX", mainmenu, false },
+				{ "XX", menuback, false },
 				{ "-", sevolminus, true },
 			}
 		},
@@ -148,6 +148,7 @@ namespace TLAC::Components
 				filteredButtons = allButtons;
 
 				setMenuPos(MENUSET_MAIN, 0);
+				menuHistory.resize(0);
 				showUI = true;
 				isPaused = true;
 			}
@@ -210,7 +211,7 @@ namespace TLAC::Components
 						}
 						else
 						{
-							setMenuPos(MENUSET_MAIN, mainMenuPos);
+							menuback();
 						}
 					}
 
@@ -553,7 +554,7 @@ namespace TLAC::Components
 			aetLoc.x = dtParams.textCurrentLoc.x + halfSpriteSize;
 			crossAet = Drawing::createAetLayer(3, dtParams.layer, Drawing::CREATEAET_20000, "button_batsu", aetLoc, 0, nullptr, nullptr, 0, 0, aetScale, nullptr);
 			dtParams.textCurrentLoc.x += spriteSize;
-			if (curMenuSet == MENUSET_MAIN)
+			if (menuHistory.size() == 0)
 				Drawing::drawTextW(&dtParams, (Drawing::drawTextFlags)(Drawing::DRAWTEXT_ENABLE_XADVANCE), L":Close　");
 			else
 				Drawing::drawTextW(&dtParams, (Drawing::drawTextFlags)(Drawing::DRAWTEXT_ENABLE_XADVANCE), L":Back　");
@@ -608,12 +609,19 @@ namespace TLAC::Components
 		playerData->act_slide_vol = playerData->act_vol;
 	}
 
-	void Pause::setMenuPos(menusets set, int pos)
+	void Pause::setMenuPos(menusets set, int pos, bool updateHistory)
 	{
+		menusets newMenuSet;
+
 		if (set >= 0 && set < menu.size())
-			curMenuSet = set;
+			newMenuSet = set;
 		else
-			curMenuSet = MENUSET_MAIN;
+			newMenuSet = MENUSET_MAIN;
+
+		if (updateHistory && newMenuSet != curMenuSet)
+			menuHistory.push_back(std::pair<menusets, int>(curMenuSet, curMenuPos));
+
+		curMenuSet = newMenuSet;
 
 		if (pos < 0)
 			pos = menu[curMenuSet].items.size() - 1;
@@ -621,9 +629,6 @@ namespace TLAC::Components
 			pos = 0;
 
 		curMenuPos = pos;
-
-		if (curMenuSet == MENUSET_MAIN)
-			mainMenuPos = curMenuPos;
 
 		menuItemMoveTime = std::chrono::high_resolution_clock::now(); // restart animations
 	}

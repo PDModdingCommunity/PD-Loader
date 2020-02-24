@@ -51,7 +51,7 @@ namespace TLAC::Components
 			"PAUSED",
 			{
 				{ "RESUME", unpause, false },
-				//{ "RESTART", restart, false },
+				{ "RESTART", restart, false },
 				{ "SE VOLUME", sevolmenu, false },
 				{ "GIVE UP", giveup, false },
 			}

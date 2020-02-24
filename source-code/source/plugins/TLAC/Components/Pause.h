@@ -187,6 +187,7 @@ namespace TLAC::Components
 			*(int*)0x140D0A9BC = 0; // total holds
 			*(int*)0x140D0A9B8 = 0; // hold + multi
 			*(int*)0x140D0A9C0 = 0; // slide
+			*(uint8_t*)0x140D0A50C = 0; // not clear flag
 
 			// revert patches and unpause
 			InjectCode((void*)0x1401038cd, { 0x12 }); InjectCode((void*)0x140103b94, { 0x16 });

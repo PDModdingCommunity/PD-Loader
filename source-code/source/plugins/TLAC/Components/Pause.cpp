@@ -17,6 +17,7 @@ namespace TLAC::Components
 	bool Pause::pause = false;
 	bool Pause::isPaused = false;
 	bool Pause::giveUp = false;
+	bool Pause::autoPause = false;
 	bool Pause::showUI = true;
 	int Pause::selResultAet1 = 0;
 	int Pause::selResultAet2 = 0;
@@ -181,6 +182,17 @@ namespace TLAC::Components
 					}
 				}
 
+				/* for testing `-ss` stuff
+				if (inputState->Tapped.Buttons & JVS_TRIANGLE)
+				{
+					void** ScreenShotImplAddr = (void**)0x1412016d0;
+					Drawing::MsString path; // just a small struct from TLAC::Utilities::Drawing::MsString
+					path.SetCharBuf("blahblahblah");
+
+					((void(*)(void* impl, Drawing::MsString* path, int width, int height))0x140557210)(*ScreenShotImplAddr, &path, 1280, 720);
+				}
+				*/
+
 				// only process menu events when UI is visible
 				if (showUI)
 				{
@@ -292,6 +304,11 @@ namespace TLAC::Components
 				{
 					pause = true;
 				}
+			}
+			else
+			{
+				// ensure giveUp isn't retained after already quitting
+				giveUp = false;
 			}
 		}
 
@@ -550,7 +567,7 @@ namespace TLAC::Components
 
 	void Pause::OnFocusLost()
 	{
-		if (isInGame() && autoPause)
+		if (autoPause && isInGame())
 			pause = true;
 	}
 
@@ -561,7 +578,7 @@ namespace TLAC::Components
 
 	bool Pause::isInGame()
 	{
-		return *(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN;
+		return *(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN && *(uint8_t*)PV_STATE_ADDRESS == 1;
 	}
 
 	bool Pause::hookedGiveUpFunc(void* cls)

@@ -29,6 +29,8 @@ namespace TLAC::Components
 
 		static bool pause; // set pause to change pause state
 		static bool giveUp; // set give up to end current song
+
+		static bool autoPause; // pause when window loses focus
 	private:
 		// this is a mess of static so that menuItems can work
 		static bool isPauseKeyTapped();
@@ -37,7 +39,7 @@ namespace TLAC::Components
 		static void InjectCode(void* address, const std::vector<uint8_t> data);
 
 		static bool isPaused; // tracks internal state
-
+		
 		static void saveOldPatchOps();
 
 		static std::vector<uint8_t> origAetMovOp;
@@ -119,7 +121,51 @@ namespace TLAC::Components
 
 		static void mainmenu() { setMenuPos(MENUSET_MAIN, mainMenuPos); };
 		static void unpause() { pause = false; };
-		//static void restart() { *(uint8_t*)0x140d0b512 = 2; ((void(*)(uint64_t))0x140127a30)(0x140d0b510); ((void(*)(uint64_t))0x140674e20)(PV_GAME_BASE_ADDRESS); /* *(uint8_t*)0x140d0b512 = 1; *(uint8_t*)0x140d0b513 = 1; *(int32_t*)0x140d0b534 = 0; ((void(*)(uint64_t))0x140127a30)(0x140d0b510); */ unpause(); }
+		static void restart() {
+			/*
+			140d0b510+2 = 0, 140d0b510+14 = 8 for restart
+
+			also 140cdd8d0+8 (something less than 0x1a but idk what) -- controls a switch statement in FUN_1400fddc0
+
+			0x18: PV seems good, audio good, chart and score broken? -- timing resets, notes don't
+			0x14: PVs a little bugged (not major), chart and scoring fine, life still doesn't reset
+			0x10: life resets now, but old graphics don't clear
+
+			0x15: same as 0x14
+			0x16: doesn't actually reset????
+			0x17: crash
+			0x12: like 0x10 but life isn't cleared
+
+			case 0x11 seems to clear life
+			case 0x15 seems to clear score (maybe note data)
+			case 0x18 seems to fix timing
+
+			patch 0x15 at 1401038cd (was 0x12), 0x18 at 140103b94 (was 0x16)
+			then call with 0x11
+			hopefully it'll work
+
+			percentage doesn't fully reset by the looks of it????
+			rip
+			*/
+
+			// inject flow overrides to switch cases in FUN_1400fddc0
+			InjectCode((void*)0x1401038cd, { 0x15 }); InjectCode((void*)0x140103b94, { 0x18 });
+
+			// set parameters
+			*(uint8_t*)PV_STATE_ADDRESS = 0; *(uint8_t*)PV_LOADING_STATE_ADDRESS = 8; *(int*)PV_INNER_LOADING_STATE_ADDRESS = 0x11;
+
+			void(*doLoading)(uint64_t) = (void(*)(uint64_t))0x1400fddc0;
+
+			// do loading until definitely done
+			while (*(int*)PV_INNER_LOADING_STATE_ADDRESS < 0x18)
+			{
+				doLoading(0x140cdd8d0);
+			}
+
+			// revert patches and unpause
+			InjectCode((void*)0x1401038cd, { 0x12 }); InjectCode((void*)0x140103b94, { 0x16 });
+			unpause();
+		}
 		static void giveup() { giveUp = true; };
 
 		static void sevolmenu() { setMenuPos(MENUSET_SEVOL, 1); };
@@ -134,7 +180,5 @@ namespace TLAC::Components
 		static float getMenuAnimPos();
 
 		static TLAC::Utilities::Drawing::Point getMenuItemCoords(menusets set, int pos);
-
-		bool autoPause;
 	};
 }

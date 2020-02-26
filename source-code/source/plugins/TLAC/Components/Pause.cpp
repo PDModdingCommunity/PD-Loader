@@ -116,6 +116,12 @@ namespace TLAC::Components
 
 	}
 
+	// put these here because my local VS was being a bitch and compiling the place that uses them wrong when they were inline
+	// updating VS would probably fix it, but this was quicker
+	// -somewhatlurker
+	int* resWidth = (int*)RESOLUTION_WIDTH_ADDRESS;
+	int* resHeight = (int*)RESOLUTION_HEIGHT_ADDRESS;
+
 	void Pause::UpdatePostInput()
 	{
 		if (pause)
@@ -227,8 +233,8 @@ namespace TLAC::Components
 								Drawing::Point itemCoords = getMenuItemCoords(curMenuSet, i);
 
 								Drawing::Point touchCoords = { panelState->XPosition, panelState->YPosition };
-								touchCoords.x *= 1280.0f / *(int*)RESOLUTION_WIDTH_ADDRESS; // convert to 720p coords
-								touchCoords.y *= 720.0f / *(int*)RESOLUTION_HEIGHT_ADDRESS;
+								touchCoords.x *= 1280.0f / *resWidth; // convert to 720p coords
+								touchCoords.y *= 720.0f / *resHeight;
 
 								if (touchCoords.x >= itemCoords.x - menuItemWidth / 2 &&
 									touchCoords.x <= itemCoords.x + menuItemWidth / 2 &&

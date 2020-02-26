@@ -163,10 +163,6 @@ namespace TLAC::Components
 			percentage doesn't fully reset by the looks of it????
 			rip
 			(actually was hold and slide scores -- fixed by manually clearing them now)
-
-			TODO:
-			check holds count towards percentage after restart if 5% limit was reached
-			reset not clear flag in protected mode
 			*/
 
 			// inject flow overrides to switch cases in FUN_1400fddc0
@@ -188,6 +184,7 @@ namespace TLAC::Components
 			*(int*)0x140D0A9B8 = 0; // hold + multi
 			*(int*)0x140D0A9C0 = 0; // slide
 			*(uint8_t*)0x140D0A50C = 0; // not clear flag
+			*(char*)0x140D0AA0F = 0; // chance time
 
 			// revert patches and unpause
 			InjectCode((void*)0x1401038cd, { 0x12 }); InjectCode((void*)0x140103b94, { 0x16 });

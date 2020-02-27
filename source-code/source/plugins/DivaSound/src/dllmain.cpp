@@ -32,18 +32,36 @@ void NopBytes(void* address, unsigned int num)
 void resizeInternalBuffers(int frames)
 {
 	float* oldMixbuffer = divaAudioMixCls->mixbuffer;
-	float* oldState2buffer = divaAudioMixCls->state2->buffer;
 
 	divaBufSizeInFrames = frames;
 
 	divaAudioMixCls->mixbuffer = (float*)malloc(divaBufSizeInFrames * 4 * 4);
 	divaAudioMixCls->mixbuffer_size = divaBufSizeInFrames * 4 * 4;
-	divaAudioMixCls->state2->buffer = (float*)malloc(divaBufSizeInFrames * 4 * 4);
-	divaAudioMixCls->state2->buffer_size = divaBufSizeInFrames * 4 * 4;
+	free(oldMixbuffer);
+
+	for (int i = 0; i < divaAudioMixCls->streamingChannels_len; i++)
+	{
+		float* oldChannelBuffer = divaAudioMixCls->streamingChannels[i].buffer;
+		if (oldChannelBuffer != nullptr)
+		{
+			if (divaAudioMixCls->streamingChannels[i].playing == 0)
+			{
+				divaAudioMixCls->streamingChannels[i].buffer = (float*)malloc(divaBufSizeInFrames * 4 * 4);
+				divaAudioMixCls->streamingChannels[i].buffer_size = divaBufSizeInFrames * 4 * 4;
+				free(oldChannelBuffer);
+			}
+			else if (divaAudioMixCls->streamingChannels[i].mutex != nullptr && mtx_lock_0(&divaAudioMixCls->streamingChannels[i].mutex) == 0)
+			{
+				divaAudioMixCls->streamingChannels[i].buffer = (float*)malloc(divaBufSizeInFrames * 4 * 4);
+				divaAudioMixCls->streamingChannels[i].buffer_size = divaBufSizeInFrames * 4 * 4;
+				free(oldChannelBuffer);
+				mtx_unlock(&divaAudioMixCls->streamingChannels[i].mutex);
+				//printf("[DivaSound] %d\n", i);
+			}
+		}
+	}
 	divaAudCls->buffer_size = divaBufSizeInFrames;
 
-	free(oldMixbuffer);
-	free(oldState2buffer);
 	printf("[DivaSound] Resized internal buffers to %d frames\n", frames);
 }
 
@@ -52,12 +70,12 @@ void resizeTestLoop()
 	bool dir = true;
 	while (true)
 	{
-		Sleep(5000);
+		Sleep(3000);
 
 		if (dir)
-			resizeInternalBuffers(divaBufSizeInFrames + 3000);
+			resizeInternalBuffers(divaBufSizeInFrames + 10000);
 		else
-			resizeInternalBuffers(divaBufSizeInFrames - 3000);
+			resizeInternalBuffers(divaBufSizeInFrames - 10000);
 
 		dir = !dir;
 	}
@@ -442,13 +460,28 @@ void hookedAudioInit(initClass *cls, uint64_t unk, uint64_t unk2)
 	{
 		if (!maInit()) return;
 
-		maInternalBufferSizeInMilliseconds = device.playback.internalBufferSizeInFrames * 1000 / device.playback.internalSampleRate; // because miniaudio doesn't seem to have this
-		printf("[DivaSound] Output buffer size: %d (%dms at %dHz)\n", device.playback.internalBufferSizeInFrames, maInternalBufferSizeInMilliseconds, device.playback.internalSampleRate);
-		printf("[DivaSound] Buffer periods: %d\n", device.playback.internalPeriods);
+		if (device.playback.internalSampleRate)
+		{
+			maInternalBufferSizeInMilliseconds = device.playback.internalBufferSizeInFrames * 1000 / device.playback.internalSampleRate; // because miniaudio doesn't seem to have this
+			printf("[DivaSound] Output buffer size: %d (%dms at %dHz)\n", device.playback.internalBufferSizeInFrames, maInternalBufferSizeInMilliseconds, device.playback.internalSampleRate);
+			printf("[DivaSound] Buffer periods: %d\n", device.playback.internalPeriods);
 
-		divaBufSizeInFrames = device.playback.internalBufferSizeInFrames * device.sampleRate / device.playback.internalSampleRate; // +128; // 128 is just a bit extra in case resampling needs it or something. idk
-		divaBufSizeInMilliseconds = divaBufSizeInFrames * 1000 / device.sampleRate;
-		printf("[DivaSound] PDAFT buffer size: %d (%dms at %dHz)\n", divaBufSizeInFrames, divaBufSizeInMilliseconds, device.sampleRate);
+			divaBufSizeInFrames = device.playback.internalBufferSizeInFrames * device.sampleRate / device.playback.internalSampleRate; // +128; // 128 is just a bit extra in case resampling needs it or something. idk
+			divaBufSizeInMilliseconds = divaBufSizeInFrames * 1000 / device.sampleRate;
+			printf("[DivaSound] PDAFT buffer size: %d (%dms at %dHz)\n", divaBufSizeInFrames, divaBufSizeInMilliseconds, device.sampleRate);
+		}
+		else
+		{
+			printf("[DivaSound] Unable to determine output sample rate. Assuming 44100Hz.\n");
+
+			maInternalBufferSizeInMilliseconds = device.playback.internalBufferSizeInFrames * 1000 / 44100; // because miniaudio doesn't seem to have this
+			printf("[DivaSound] Output buffer size: %d (%dms at %dHz)\n", device.playback.internalBufferSizeInFrames, maInternalBufferSizeInMilliseconds, 44100);
+			printf("[DivaSound] Buffer periods: %d\n", device.playback.internalPeriods);
+
+			divaBufSizeInFrames = device.playback.internalBufferSizeInFrames * device.sampleRate / 44100;
+			divaBufSizeInMilliseconds = divaBufSizeInFrames * 1000 / device.sampleRate;
+			printf("[DivaSound] PDAFT buffer size: %d (%dms at %dHz)\n", divaBufSizeInFrames, divaBufSizeInMilliseconds, device.sampleRate);
+		}
 
 
 		divaAudioAllocMixer(divaAudioMixCls, unk, unk2, divaBufSizeInFrames);

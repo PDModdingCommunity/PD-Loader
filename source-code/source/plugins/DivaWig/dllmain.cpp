@@ -127,7 +127,7 @@ void hookedLoad(uint64_t* a1, unsigned int a2, __int64 a3)
 
 void inputLoop(__int64 a1)
 {
-	if (GetKeyState(VK_LCONTROL) < 0 || GetKeyState(VK_RCONTROL) < 0)
+	//if (GetKeyState(VK_CONTROL) < 0)
 	{
 		if (GetKeyState('0') < 0) setPartToUpdate(ALL, "Update all module parts!", 330);
 		if (GetKeyState('1') < 0) setPartToUpdate(HAIR, "Only update the hair!", 440);

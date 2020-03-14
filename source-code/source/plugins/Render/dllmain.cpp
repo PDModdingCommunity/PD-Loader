@@ -288,9 +288,9 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		switch (game_version)
 		{
 		case 600:
-			DetourAttach(&(PVOID&)divaParseParameters_600, hookedCreateWindow);
+			DetourAttach(&(PVOID&)divaParseParameters_600, hookedParseParameters);
 		default:
-			DetourAttach(&(PVOID&)divaParseParameters_710, hookedCreateWindow);
+			DetourAttach(&(PVOID&)divaParseParameters_710, hookedParseParameters);
 		}
 		DetourTransactionCommit();
 
@@ -310,9 +310,9 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		switch (game_version)
 		{
 		case 600:
-			DetourAttach(&(PVOID&)divaEngineUpdate_600, hookedCreateWindow);
+			DetourAttach(&(PVOID&)divaEngineUpdate_600, hookedEngineUpdate);
 		default:
-			DetourAttach(&(PVOID&)divaEngineUpdate_710, hookedCreateWindow);
+			DetourAttach(&(PVOID&)divaEngineUpdate_710, hookedEngineUpdate);
 		}
 		DetourTransactionCommit();
 

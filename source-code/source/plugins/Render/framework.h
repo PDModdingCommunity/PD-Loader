@@ -5,12 +5,20 @@
 #include <windows.h>
 #include <string>
 
-static int(__cdecl* divaCreateWindow)(const char* title, void(__cdecl* exitfunc)(int)) = (int(__cdecl*)(const char* title, void(__cdecl * exitfunc)(int)))0x140194D00;
-__int64 (__fastcall* divaParseParameters)(int a1, __int64* a2) = (__int64(__fastcall*)(int a1, __int64* a2))0x140193630;
-__int64(__fastcall* divaEngineUpdate)(__int64 a1) = (__int64(__fastcall*)(__int64 a1))0x140194CD0;
+static int(__cdecl* divaCreateWindow_710)(const char* title, void(__cdecl* exitfunc)(int)) = (int(__cdecl*)(const char* title, void(__cdecl * exitfunc)(int)))0x140194D00;
+__int64 (__fastcall* divaParseParameters_710)(int a1, __int64* a2) = (__int64(__fastcall*)(int a1, __int64* a2))0x140193630;
+__int64(__fastcall* divaEngineUpdate_710)(__int64 a1) = (__int64(__fastcall*)(__int64 a1))0x140194CD0;
 
-uint8_t* fullScreenFlag = (uint8_t*)0x140EDA5D1;
-DWORD* resolutionType = (DWORD*)0x140EDA5D4;
+uint8_t* fullScreenFlag_710 = (uint8_t*)0x140EDA5D1;
+DWORD* resolutionType_710 = (DWORD*)0x140EDA5D4;
+
+
+static int(__cdecl* divaCreateWindow_600)(const char* title, void(__cdecl* exitfunc)(int)) = (int(__cdecl*)(const char* title, void(__cdecl * exitfunc)(int)))0x14018CD00;
+__int64(__fastcall* divaParseParameters_600)(int a1, __int64* a2) = (__int64(__fastcall*)(int a1, __int64* a2))0x14018B660;
+__int64(__fastcall* divaEngineUpdate_600)(__int64 a1) = (__int64(__fastcall*)(__int64 a1))0x14018CCD0;
+
+uint8_t* fullScreenFlag_600 = (uint8_t*)0x140E8DE41;
+DWORD* resolutionType_600 = (DWORD*)0x140E8DE44;
 
 using namespace std;
 

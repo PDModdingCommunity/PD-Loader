@@ -278,6 +278,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		{
 		case 600:
 			DetourAttach(&(PVOID&)divaCreateWindow_600, hookedCreateWindow);
+			break;
 		default:
 			DetourAttach(&(PVOID&)divaCreateWindow_710, hookedCreateWindow);
 		}
@@ -289,6 +290,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		{
 		case 600:
 			DetourAttach(&(PVOID&)divaParseParameters_600, hookedParseParameters);
+			break;
 		default:
 			DetourAttach(&(PVOID&)divaParseParameters_710, hookedParseParameters);
 		}
@@ -311,6 +313,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		{
 		case 600:
 			DetourAttach(&(PVOID&)divaEngineUpdate_600, hookedEngineUpdate);
+			break;
 		default:
 			DetourAttach(&(PVOID&)divaEngineUpdate_710, hookedEngineUpdate);
 		}

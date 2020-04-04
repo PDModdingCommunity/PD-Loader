@@ -357,7 +357,7 @@ namespace Launcher {
 			this->button_Help->Name = L"button_Help";
 			this->button_Help->Size = System::Drawing::Size(69, 23);
 			this->button_Help->TabIndex = 21;
-			this->button_Help->Text = L"HELP ME";
+			this->button_Help->Text = L"User guide";
 			this->button_Help->Click += gcnew System::EventHandler(this, &ui::Button_Help_Click);
 			// 
 			// groupBox_ScreenRes

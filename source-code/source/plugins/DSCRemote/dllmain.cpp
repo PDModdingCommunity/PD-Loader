@@ -72,7 +72,7 @@ void serve()
 	saddrin.sin_addr.s_addr = 0;
 	saddrin.sin_port = htons(port);
 
-	result = bind(sock, (sockaddr*)&saddrin, sizeof(sockaddr_in));
+	result = ::bind(sock, (sockaddr*)&saddrin, sizeof(sockaddr_in));
 	if (result) // error
 	{
 		cout << "[DSCRemote] E: Couldn't bind port " << port << '.' << endl;

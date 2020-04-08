@@ -202,7 +202,7 @@ void ApplyPatches() {
 	auto nCursor = GetPrivateProfileIntW(L"patches", L"cursor", TRUE, CONFIG_FILE);
 	auto nHideFreeplay = GetPrivateProfileIntW(L"patches", L"hide_freeplay", FALSE, CONFIG_FILE);
 	auto nFreeplay = GetPrivateProfileIntW(L"patches", L"freeplay", TRUE, CONFIG_FILE);
-	auto nPDLoaderText = GetPrivateProfileIntW(L"patches", L"pdloader_text", TRUE, CONFIG_FILE);
+	auto nPDLoaderText = GetPrivateProfileIntW(L"patches", L"pdloadertext", TRUE, CONFIG_FILE);
 	auto nStatusIcons = GetPrivateProfileIntW(L"patches", L"status_icons", 0, CONFIG_FILE);
 	auto nHidePVWatermark = GetPrivateProfileIntW(L"patches", L"hide_pv_watermark", FALSE, CONFIG_FILE);
 	auto nNoPVUi = GetPrivateProfileIntW(L"patches", L"no_pv_ui", FALSE, CONFIG_FILE);
@@ -310,8 +310,8 @@ void ApplyPatches() {
 
 			if (nPDLoaderText && !nHideFreeplay)
 			{
-				InjectCode((void*)0x00000001409BC188, { 0x50, 0x44, 0x20, 0x4C, 0x6F, 0x61, 0x64, 0x65, 0x72, 0x20, 0x41, 0x4C, 0x50, 0x48, 0x41 });
-				printf("[Patches] Show PD Loader version\n");
+				InjectCode((void*)0x00000001409BC188, { 0x50, 0x44, 0x20, 0x4C, 0x6F, 0x61, 0x64, 0x65, 0x72, 0x20, 0x00 });
+				printf("[Patches] Show PD Loader text\n");
 			}
 		}
 		// Use GLUT_CURSOR_RIGHT_ARROW instead of GLUT_CURSOR_NONE
@@ -582,8 +582,8 @@ void ApplyPatches() {
 
 			if (nPDLoaderText && !nHideFreeplay)
 			{
-				InjectCode((void*)0x00000001409F61F0, { 0x50, 0x44, 0x20, 0x4C, 0x6F, 0x61, 0x64, 0x65, 0x72, 0x20, 0x41, 0x4C, 0x50, 0x48, 0x41 });
-				printf("[Patches] Show PD Loader version\n");
+				InjectCode((void*)0x00000001409F61F0, { 0x50, 0x44, 0x20, 0x4C, 0x6F, 0x61, 0x64, 0x65, 0x72, 0x20, 0x00 });
+				printf("[Patches] Show PD Loader text\n");
 			}
 		}
 		// Use GLUT_CURSOR_RIGHT_ARROW instead of GLUT_CURSOR_NONE

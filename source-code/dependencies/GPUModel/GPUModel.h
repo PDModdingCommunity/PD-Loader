@@ -31,11 +31,27 @@ namespace GPUModel
 
 	std::string getGpuName()
 	{
+		WCHAR buffer[MAX_PATH];
+		GetModuleFileNameW(NULL, buffer, MAX_PATH);
+		std::wstring exepath = buffer;
+		std::wstring::size_type pos = exepath.find_last_of(L"\\/");
+		int nGPUModel = GetPrivateProfileIntW(L"gpu", L"model", -1, (exepath.substr(0, pos) + L"\\plugins\\config.ini").c_str());
+		if (nGPUModel>-1)
+		{
+			// -1=auto; 0=Kepler; 1=Maxwell; 2=Turing
+			std::string result("GK");
+			if (nGPUModel == 1) result[1]='M';
+			else if (nGPUModel == 2) result = "TU";
+			printf("[GPUModel] GPU Model override: %s\n", result.c_str());
+			Sleep(1000);
+			return std::string(result);
+		}
 /*		if (getWineVer() != "")
 		{
 			return "Unknown";
 		}
 		else {*/
+			printf("[GPUModel] Checking GPU model\n");
 			HMODULE hdlNvapi = LoadLibraryW(L"nvapi64.dll");
 
 			if (hdlNvapi == NULL) return

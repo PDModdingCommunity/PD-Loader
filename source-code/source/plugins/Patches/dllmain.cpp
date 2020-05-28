@@ -784,7 +784,7 @@ void ApplyPatches() {
 			for (std::filesystem::path p : std::filesystem::directory_iterator("../patches"))
 			{
 				std::string extension = std::filesystem::path(p).extension().string();
-				if ((extension == ".p" + std::to_string(game_version) || extension == ".P" + std::to_string(game_version))||(game_version == 710&&(extension == ".p" || extension == ".P")))
+				if (extension == ".p" || extension == ".P" || extension == ".p2" || extension == ".P2")
 				{
 					std::cout << "[Patches] Reading custom patch file: " << std::filesystem::path(p).filename().string() << std::endl;
 					ApplyCustomPatches(std::filesystem::path(p).wstring());
@@ -857,8 +857,22 @@ void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING)
 			std::vector<std::string> fullColonSplit = SplitString(line, ":");
 			for (int i = 1; i < fullColonSplit[1].size(); i++)
 			{
-				if (echo) std::cout << fullColonSplit[1].at(i);
 				unsigned char byte_u = fullColonSplit[1].at(i);
+				if(byte_u=='\\' && i<fullColonSplit[1].size())
+				{
+					switch (fullColonSplit[1].at(i + 1))
+					{
+					case '0':
+						byte_u = '\0';
+						i++;
+						break;
+					case 'n':
+						byte_u = '\n';
+						i++;
+						break;
+					}
+				}
+				if (echo) std::cout << byte_u;
 				std::vector<uint8_t> patch = { byte_u };
 				InjectCode((void*)address, patch);
 				address++;

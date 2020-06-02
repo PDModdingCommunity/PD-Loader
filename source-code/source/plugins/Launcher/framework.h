@@ -33,6 +33,9 @@ wstring DirPath() {
 wstring DIVA_EXECUTABLE_STRING = ExePath();
 LPCWSTR DIVA_EXECUTABLE = DIVA_EXECUTABLE_STRING.c_str();
 
+wstring DIVA_DIRPATH_STRING = DirPath();
+LPCWSTR DIVA_DIRPATH = DIVA_DIRPATH_STRING.c_str();
+
 wstring DIVA_EXECUTABLE_LAUNCH_STRING = DIVA_EXECUTABLE_STRING + L" --launch";
 LPWSTR DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING.c_str());
 
@@ -205,10 +208,11 @@ ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"opengl_patch_b", LAUNCHER_SECTION, CONFIG_FILE, L"OpenGL Patch B", L"Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.", L"", false),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"custom_patches", PATCHES_SECTION, CONFIG_FILE, L"Enable custom patches", L"Enable all custom patches.", true, false),
+	new BooleanOption(L"custom_patches", PATCHES_SECTION, CONFIG_FILE, L"Enable custom patches", L"Enables all custom patches.", true, false),
 	new BooleanOption(L"no_gpu_dialog", LAUNCHER_SECTION, CONFIG_FILE, L"Disable GPU Warning", L"Disables the warning dialog for unsupported GPUs.", L"", false),
 	//new BooleanOption(L"ignore_exe_checksum", PATCHES_SECTION, CONFIG_FILE, L"Ignore exe checksum", L"Use at your own risk.", false, false),
 	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"Command Line:", L"Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.", L"", false),
+	new BooleanOption(L"use_divahook_bat", LAUNCHER_SECTION, CONFIG_FILE, L"Use divahook.bat", L"Launches divahook.bat intead of diva.exe.", L"", false),
 };
 
 ConfigOptionBase* playerdataArray[] = {

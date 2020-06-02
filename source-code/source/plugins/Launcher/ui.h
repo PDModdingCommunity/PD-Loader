@@ -663,7 +663,7 @@ private: System::Void SaveSettings() {
 private: System::Void Ui_Load(System::Object^ sender, System::EventArgs^ e){
 }
 private: System::Void Button_Help_Click(System::Object^ sender, System::EventArgs^ e) {
-	System::Diagnostics::Process::Start("https://notabug.org/nastys/PD-Loader/wiki");
+	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki");
 }
 private: System::Void Button_Launch_Click(System::Object^ sender, System::EventArgs^ e) {
 	
@@ -750,7 +750,7 @@ private: System::Void button_Discord_Click(System::Object^ sender, System::Event
 	System::Diagnostics::Process::Start("https://discord.gg/cvBVGDZ");
 }
 private: System::Void button_github_Click(System::Object^ sender, System::EventArgs^ e) {
-	System::Diagnostics::Process::Start("https://notabug.org/nastys/PD-Loader");
+	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader");
 }
 private: System::Void button_Apply_Click(System::Object^ sender, System::EventArgs^ e) {
 	SaveSettings();

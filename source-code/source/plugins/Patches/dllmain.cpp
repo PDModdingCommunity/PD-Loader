@@ -870,6 +870,34 @@ void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING)
 						byte_u = '\n';
 						i++;
 						break;
+					case 't':
+						byte_u = '\t';
+						i++;
+						break;
+					case 'r':
+						byte_u = '\r';
+						i++;
+						break;
+					case 'b':
+						byte_u = '\b';
+						i++;
+						break;
+					case 'a':
+						byte_u = '\a';
+						i++;
+						break;
+					case 'f':
+						byte_u = '\f';
+						i++;
+						break;
+					case 'v':
+						byte_u = '\v';
+						i++;
+						break;
+					case '\\':
+						byte_u = '\\';
+						i++;
+						break;
 					}
 				}
 				if (echo) std::cout << byte_u;

@@ -671,13 +671,23 @@ private: System::Void Button_Launch_Click(System::Object^ sender, System::EventA
 
 	SaveSettings();
 
-	// read the command line here so it'll be up to date even if the user changed it
-	WCHAR stringBuf[256];
-	GetPrivateProfileStringW(LAUNCHER_SECTION, L"command_line", L"", stringBuf, 256, CONFIG_FILE);
+	if(GetPrivateProfileIntW(LAUNCHER_SECTION, L"use_divahook_bat", FALSE, CONFIG_FILE))
+	{
+		DIVA_EXECUTABLE = NULL;
+		wstring DIVA_EXECUTABLE_LAUNCH_STRING = L"cmd.exe /C \"";
+		DIVA_EXECUTABLE_LAUNCH_STRING.append(DIVA_DIRPATH);
+		DIVA_EXECUTABLE_LAUNCH_STRING.append(L"\\divahook.bat\"");
+		DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING.c_str());
+	}
+	else
+	{
+		// read the command line here so it'll be up to date even if the user changed it
+		WCHAR stringBuf[256];
+		GetPrivateProfileStringW(LAUNCHER_SECTION, L"command_line", L"", stringBuf, 256, CONFIG_FILE);
 
-	DIVA_EXECUTABLE_LAUNCH_STRING += L" " + wstring(stringBuf);
-	DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING.c_str());
-
+		DIVA_EXECUTABLE_LAUNCH_STRING += L" " + wstring(stringBuf);
+		DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING.c_str());
+	}
 
 	STARTUPINFOW si;
 	PROCESS_INFORMATION pi;

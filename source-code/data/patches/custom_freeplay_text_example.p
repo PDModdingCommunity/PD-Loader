@@ -12,5 +12,5 @@ IGNORE
 // "@" omit patch console output
 // ":" address:bytes (hex)
 // " " byte byte
-// ":!" address:!string ('\0' terminates the string, '\n' new line; both require PD Loader 2.1+)
+// ":!" address:!string (escape characters require PD Loader 2.1+)
 // "IGNORE" skip patch file

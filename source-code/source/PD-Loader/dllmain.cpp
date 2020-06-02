@@ -159,6 +159,18 @@ void LoadDVA(std::wstring &path, LPCWSTR dir, LPCWSTR fileName)
 			if (e != ERROR_DLL_INIT_FAILED) // in case dllmain returns false
 			{
 				std::wstring msg = L"Unable to load " + std::wstring(fileName) + L". Error: " + std::to_wstring(e);
+				switch (e)
+				{
+				case 126:
+					msg.append(L"\n\nIs the Microsoft Visual C++ Redistributable for Visual Studio 2019 (x64) installed?");
+					break;
+				case 998:
+					msg.append(L"\n\nAre all dependencies installed?\nIf the problem persists, please disable this plugin.");
+					break;
+				default:
+					msg.append(L"\n\nAre all dependencies installed?");
+				}
+				msg.append(L"\nPlease refer to the quick start guide or the wiki.");
 				MessageBoxW(0, msg.c_str(), L"PD Loader", MB_ICONERROR);
 			}
 		}

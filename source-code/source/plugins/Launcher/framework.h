@@ -40,6 +40,7 @@ wstring DIVA_EXECUTABLE_LAUNCH_STRING = DIVA_EXECUTABLE_STRING + L" --launch";
 LPWSTR DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING.c_str());
 
 wstring PLUGINS_DIR = DirPath() + L"\\plugins";
+wstring PATCHES_DIR = DirPath() + L"\\patches";
 
 wstring CONFIG_FILE_STRING = PLUGINS_DIR + L"\\config.ini";
 LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
@@ -426,6 +427,59 @@ std::vector<PluginOption*> GetPluginOptions(std::vector<PluginInfo>* plugins)
 // don't load until actually needed to avoid loading disabled plugins
 std::vector<PluginOption*> AllPluginOpts; // = GetPluginOptions(&AllPlugins);
 
+std::vector<PluginInfo> LoadCustom()
+{
+	std::vector<PluginInfo> outvec;
+
+	HANDLE hFind;
+	WIN32_FIND_DATAW ffd;
+
+	hFind = FindFirstFileW((PATCHES_DIR + L"\\*.p?").c_str(), &ffd);
+	if (hFind != INVALID_HANDLE_VALUE) {
+		do {
+			if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+			{
+				auto pos = wcslen(ffd.cFileName);
+
+				if ((ffd.cFileName[pos - 2] == '.' && (ffd.cFileName[pos - 1] == 'p' || ffd.cFileName[pos - 1] == 'P')) ||
+					(ffd.cFileName[pos - 3] == '.' && (ffd.cFileName[pos - 2] == 'p' || ffd.cFileName[pos - 2] == 'P') && (ffd.cFileName[pos - 1] == '2')))
+				{
+					PluginInfo thisplugin;
+					thisplugin.filename = ffd.cFileName;
+
+					thisplugin.name = thisplugin.filename;
+					if (thisplugin.filename[pos - 1] == '2')
+						thisplugin.name.resize(thisplugin.name.size() - 3);
+					else
+						thisplugin.name.resize(thisplugin.name.size() - 2);
+					
+					thisplugin.description = L"Custom patch";
+
+					outvec.push_back(thisplugin);
+				}
+			}
+		} while (FindNextFileW(hFind, &ffd));
+		FindClose(hFind);
+	}
+
+	return outvec;
+}
+std::vector<PluginInfo> AllCustomPatches; // = LoadCustom();
+
+std::vector<PluginOption*> GetCustomOptions(std::vector<PluginInfo>* patches)
+{
+	std::vector<PluginOption*> outvec;
+
+	for (PluginInfo& pi : *patches)
+	{
+		PluginOption* opt = new PluginOption(pi.filename.c_str(), L"plugins", CONFIG_FILE, pi.name.c_str(), pi.description.c_str(), true, pi.configopts);
+		outvec.push_back(opt);
+	}
+
+	return outvec;
+}
+// don't load until actually needed to avoid loading disabled plugins
+std::vector<PluginOption*> AllCustomOpts; // = GetCustomOptions(&AllCustomPatches);
 
 // used to trick Optimus into switching to the NVIDIA GPU
 HMODULE nvcudaModule = LoadLibraryW(L"nvcuda.dll");

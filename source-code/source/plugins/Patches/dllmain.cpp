@@ -784,7 +784,8 @@ void ApplyPatches() {
 			for (std::filesystem::path p : std::filesystem::directory_iterator("../patches"))
 			{
 				std::string extension = std::filesystem::path(p).extension().string();
-				if (extension == ".p" || extension == ".P" || extension == ".p2" || extension == ".P2")
+				if ((extension == ".p" || extension == ".P" || extension == ".p2" || extension == ".P2") &&
+					GetPrivateProfileIntW(L"plugins", std::filesystem::path(p).filename().c_str(), TRUE, CONFIG_FILE))
 				{
 					std::cout << "[Patches] Reading custom patch file: " << std::filesystem::path(p).filename().string() << std::endl;
 					ApplyCustomPatches(std::filesystem::path(p).wstring());

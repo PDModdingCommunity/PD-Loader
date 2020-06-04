@@ -17,6 +17,7 @@ namespace TLAC::FileSystem
 		int GetIntegerValue(const std::string& key);
 		bool GetBooleanValue(const std::string& key);
 		float GetFloatValue(const std::string& key);
+		std::string GetStringValue(const std::string& key);
 
 	protected:
 		virtual void Parse(std::ifstream &fileStream) override;

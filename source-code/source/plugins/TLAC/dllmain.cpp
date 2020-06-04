@@ -11,6 +11,7 @@
 #include "Input/Keyboard/Keyboard.h"
 #include "Input/DirectInput/DirectInput.h"
 #include "Input/DirectInput/Ds4/DualShock4.h"
+#include "Input/DirectInput/GenericUsb/GenericUsbInput.h"
 #include "Components/ComponentsManager.h"
 #include <tchar.h>
 #include <GL/freeglut.h>
@@ -74,6 +75,12 @@ namespace TLAC
 				if (Input::DualShock4::TryInitializeInstance())
 					printf("[TLAC] UpdateTick(): DualShock4 connected and initialized\n");
 			}
+
+			if (!Input::GenericUsbInput::InstanceInitialized())
+			{
+				if (Input::GenericUsbInput::TryInitializeInstance())
+					printf("[TLAC] UpdateTick(): GenericUsbInput connected and initialized\n");
+			}
 		}
 
 		ComponentsManager.Update();
@@ -96,6 +103,15 @@ namespace TLAC
 				}
 			}
 
+			if (Input::GenericUsbInput::GetInstance() != nullptr)
+			{
+				if (!Input::GenericUsbInput::GetInstance()->PollInput())
+				{
+					Input::GenericUsbInput::DeleteInstance();
+					printf("[TLAC] UpdateTick(): GenericUsbInput connection lost\n");
+				}
+			}
+
 			ComponentsManager.UpdateInput();
 		}
 
@@ -113,6 +129,15 @@ namespace TLAC
 				{
 					Input::DualShock4::DeleteInstance();
 					printf("[TLAC] UpdateTick(): DualShock4 connection lost\n");
+				}
+			}
+
+			if (Input::GenericUsbInput::GetInstance() != nullptr)
+			{
+				if (!Input::GenericUsbInput::GetInstance()->PollInput())
+				{
+					Input::GenericUsbInput::DeleteInstance();
+					printf("[TLAC] UpdateTick(): GenericUsbInput connection lost\n");
 				}
 			}
 		}
@@ -232,6 +257,7 @@ namespace TLAC
 		delete Input::Keyboard::GetInstance();
 		delete Input::Mouse::GetInstance();
 		delete Input::DualShock4::GetInstance();
+		delete Input::GenericUsbInput::GetInstance();
 
 		Input::DisposeDirectInput();
 

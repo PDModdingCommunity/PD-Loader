@@ -201,6 +201,18 @@
     <ClInclude Include="Utilities\Drawing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Input\DirectInput\GenericUsb\GuButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\DirectInput\GenericUsb\GuState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\DirectInput\GenericUsb\GenericUsbInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\Bindings\GuBinding.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -339,6 +351,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utilities\Drawing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\DirectInput\GenericUsb\GuState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\DirectInput\GenericUsb\GenericUsbInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\Bindings\GuBinding.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -140,6 +140,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="Input\Bindings\Binding.h" />
     <ClInclude Include="Input\Bindings\Ds4Binding.h" />
+    <ClInclude Include="Input\Bindings\GuBinding.h" />
     <ClInclude Include="Input\Bindings\IInputBinding.h" />
     <ClInclude Include="Input\Bindings\KeyboardBinding.h" />
     <ClInclude Include="Input\Bindings\MouseBinding.h" />
@@ -151,6 +152,9 @@
     <ClInclude Include="Input\DirectInput\Ds4\Ds4Button.h" />
     <ClInclude Include="Input\DirectInput\Ds4\Ds4State.h" />
     <ClInclude Include="Input\DirectInput\Ds4\DualShock4.h" />
+    <ClInclude Include="Input\DirectInput\GenericUsb\GenericUsbInput.h" />
+    <ClInclude Include="Input\DirectInput\GenericUsb\GuButton.h" />
+    <ClInclude Include="Input\DirectInput\GenericUsb\GuState.h" />
     <ClInclude Include="Input\IInputDevice.h" />
     <ClInclude Include="Input\Keyboard\Keyboard.h" />
     <ClInclude Include="Input\Keyboard\KeyboardState.h" />
@@ -194,6 +198,7 @@
     <ClCompile Include="framework.cpp" />
     <ClCompile Include="Input\Bindings\Binding.cpp" />
     <ClCompile Include="Input\Bindings\Ds4Binding.cpp" />
+    <ClCompile Include="Input\Bindings\GuBinding.cpp" />
     <ClCompile Include="Input\Bindings\KeyboardBinding.cpp" />
     <ClCompile Include="Input\Bindings\MouseBinding.cpp" />
     <ClCompile Include="Input\Bindings\XinputBinding.cpp" />
@@ -203,6 +208,8 @@
     <ClCompile Include="Input\DirectInput\DirectInputMouse.cpp" />
     <ClCompile Include="Input\DirectInput\Ds4\Ds4State.cpp" />
     <ClCompile Include="Input\DirectInput\Ds4\DualShock4.cpp" />
+    <ClCompile Include="Input\DirectInput\GenericUsb\GenericUsbInput.cpp" />
+    <ClCompile Include="Input\DirectInput\GenericUsb\GuState.cpp" />
     <ClCompile Include="Input\Keyboard\Keyboard.cpp" />
     <ClCompile Include="Input\Keyboard\KeyboardState.cpp" />
     <ClCompile Include="Input\KeyConfig\Config.cpp" />

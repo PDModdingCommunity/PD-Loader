@@ -47,6 +47,14 @@ namespace TLAC::FileSystem
 		return found ? (float)atof(pair->second.c_str()) : 0.0f;
 	}
 
+	std::string ConfigFile::GetStringValue(const std::string& key)
+	{
+		auto pair = ConfigMap.find(key);
+		bool found = pair != ConfigMap.end();
+
+		return found ? pair->second : "";
+	}
+
 	void ConfigFile::Parse(std::ifstream &fileStream)
 	{
 		std::string line;

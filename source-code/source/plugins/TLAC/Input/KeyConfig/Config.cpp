@@ -2,6 +2,7 @@
 #include "windows.h"
 #include "../Bindings/KeyboardBinding.h"
 #include "../Bindings/Ds4Binding.h"
+#include "../Bindings/GuBinding.h"
 #include "../../Utilities/Operations.h"
 #include "../Bindings/XinputBinding.h"
 #include "../../Constants.h"
@@ -218,6 +219,43 @@ namespace TLAC::Input::KeyConfig
 		{ "Ds4_R_Stick_Left", DS4_R_STICK_LEFT },
 	};
 
+	GuButtonMap Config::GuMap =
+	{
+		// Face Buttons
+		{ "GU_BUTTON1", GU_BUTTON1 },
+		{ "GU_BUTTON2", GU_BUTTON2 },
+		{ "GU_BUTTON3", GU_BUTTON3 },
+		{ "GU_BUTTON4", GU_BUTTON4 },
+		{ "GU_BUTTON5", GU_BUTTON5 },
+		{ "GU_BUTTON6", GU_BUTTON6 },
+		{ "GU_BUTTON7", GU_BUTTON7 },
+		{ "GU_BUTTON8", GU_BUTTON8 },
+		{ "GU_BUTTON9", GU_BUTTON9 },
+		{ "GU_BUTTON10", GU_BUTTON10 },
+		{ "GU_BUTTON11", GU_BUTTON11 },
+		{ "GU_BUTTON12", GU_BUTTON12 },
+		{ "GU_BUTTON13", GU_BUTTON13 },
+
+		// D-Pad Directions
+		{ "GU_DPAD_UP", GU_DPAD_UP },
+		{ "GU_DPAD_RIGHT", GU_DPAD_RIGHT },
+		{ "GU_DPAD_DOWN", GU_DPAD_DOWN },
+		{ "GU_DPAD_LEFT", GU_DPAD_LEFT },
+
+		// Left Joystick
+		{ "GU_L_STICK_UP", GU_L_STICK_UP },
+		{ "GU_L_STICK_RIGHT", GU_L_STICK_RIGHT },
+		{ "GU_L_STICK_DOWN", GU_L_STICK_DOWN },
+		{ "GU_L_STICK_LEFT", GU_L_STICK_LEFT },
+		
+		// Right Joystick
+		{ "GU_R_STICK_UP", GU_R_STICK_UP },
+		{ "GU_R_STICK_RIGHT", GU_R_STICK_RIGHT },
+		{ "GU_R_STICK_DOWN", GU_R_STICK_DOWN },		
+		{ "GU_R_STICK_LEFT", GU_R_STICK_LEFT },
+
+	};
+
 	void Config::BindConfigKeys(std::unordered_map<std::string, std::string> &configMap, const char *configKeyName, Binding &bindObj, std::vector<std::string> defaultKeys)
 	{
 		std::vector<std::string> keys;
@@ -271,7 +309,16 @@ namespace TLAC::Input::KeyConfig
 						}
 						else
 						{
-							printf("[TLAC] Config::BindConfigKeys(): Unable to parse key: '%s'\n", key.c_str());
+							auto guButton = Config::GuMap.find(key.c_str());
+
+							if (guButton != Config::GuMap.end())
+							{
+								bindObj.AddBinding(new GuBinding(guButton->second));
+							}
+							else
+							{
+								printf("[TLAC] Config::BindConfigKeys(): Unable to parse key: '%s'\n", key.c_str());
+							}
 						}
 					}
 				}

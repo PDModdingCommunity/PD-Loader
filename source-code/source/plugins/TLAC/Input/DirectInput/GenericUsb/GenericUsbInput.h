@@ -1,7 +1,9 @@
 #pragma once
 #include "../Controller.h"
 #include "../../IInputDevice.h"
+#include "../../../Input/KeyConfig/Config.h"
 #include "GuState.h"
+#include <unordered_map>
 
 namespace TLAC::Input
 {
@@ -36,6 +38,36 @@ namespace TLAC::Input
 
 		GuState lastState;
 		GuState currentState;
+
+		std::unordered_map<std::string, std::string> customKeyMapping;
+		
+		std::vector<std::string> buttonNames = { "GU_BUTTON1",
+												 "GU_BUTTON2",
+												 "GU_BUTTON3",
+												 "GU_BUTTON4",
+												 "GU_BUTTON5",
+												 "GU_BUTTON6",
+												 "GU_BUTTON7",
+												 "GU_BUTTON8",
+												 "GU_BUTTON9",
+												 "GU_BUTTON10",
+												 "GU_BUTTON11",
+												 "GU_BUTTON12",
+												 "GU_BUTTON13",
+												 "GU_DPAD_UP",
+												 "GU_DPAD_RIGHT",
+												 "GU_DPAD_DOWN",
+												 "GU_DPAD_LEFT",
+												 "GU_L_STICK_UP",
+												 "GU_L_STICK_RIGHT",
+												 "GU_L_STICK_DOWN",
+												 "GU_L_STICK_LEFT",
+												 "GU_R_STICK_UP",
+												 "GU_R_STICK_RIGHT",
+												 "GU_R_STICK_DOWN",
+												 "GU_R_STICK_LEFT",
+												 "GU_BUTTON_MAX"
+		                                       };
 
 		const float triggerThreshold = 0.5f;
 		const float joystickThreshold = 0.5f;

@@ -1,5 +1,6 @@
 #include "GenericUsbInput.h"
 #include "../../../Utilities/Math.h"
+#include "../../../Utilities/Operations.h"
 #include "../../../framework.h"
 #include "../../../FileSystem/ConfigFile.h"
 #include <stdio.h>
@@ -45,6 +46,8 @@ namespace TLAC::Input
 		FileSystem::ConfigFile configFile(framework::GetModuleDirectory(), GU_CONFIG_FILE_NAME);
 		configFile.OpenRead();
 
+		customKeyMapping = configFile.ConfigMap;
+
 		std::string stt = "0x";
 		std::string vid = configFile.GetStringValue("VID");
 		std::string pid = configFile.GetStringValue("PID");
@@ -84,7 +87,28 @@ namespace TLAC::Input
 		UpdateInternalGuState(currentState);
 
 		for (int button = 0; button < GU_BUTTON_MAX; button++)
-			currentState.Buttons[button] = GetButtonState(currentState, (GuButton)button);
+		{
+			bool buttonState = GetButtonState(currentState, (GuButton)button);
+			currentState.Buttons[button] = buttonState;
+
+			// If custom button is pressed
+			if (buttonState)
+			{
+				// Check whether this button is a custom mapped button
+				auto customMapping = customKeyMapping.find(buttonNames[button]);
+				if (customMapping != customKeyMapping.end())
+				{
+					std::vector<std::string> keys = Utilities::Split(customMapping->second, "+");
+					for (std::string key : keys)
+					{
+						Utilities::Trim(key);
+
+						auto guButton = KeyConfig::Config::GuMap.find(key.c_str());
+						currentState.Buttons[guButton->second] = buttonState;
+					}
+				}
+			}
+		}
 
 		return true;
 	}

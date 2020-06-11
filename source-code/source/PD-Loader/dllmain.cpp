@@ -735,6 +735,20 @@ void Init()
 		VirtualProtect(&SetUnhandledExceptionFilter, sizeof(ret), protect[0], &protect[1]);
 	}
 
+
+	auto szSelfName = GetSelfName();
+	if (iequals(szSelfName, L"dinput8.dll"))
+	{
+		auto dir = GetCurrentDirectoryW();
+		WIN32_FIND_DATAW fd;
+		HANDLE dnsloader = FindFirstFileW(L"dnsapi.dll", &fd);
+		if (dnsloader != INVALID_HANDLE_VALUE)
+		{
+			MessageBoxW(0, L"PD Loader was loaded from dinput8.dll, but dnsapi.dll was found. Aborting.\nPlease refer to the quick start guide or the wiki.", L"PD Loader", MB_ICONERROR);
+			exit(1);
+		}
+	}
+
 	LoadEverything();
 
 }

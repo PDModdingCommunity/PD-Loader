@@ -2,7 +2,6 @@ version: '{build}'
 image: Visual Studio 2019
 configuration:
 - Release
-- Debug
 platform: x64
 build:
   project: source-code/PD-Loader.sln

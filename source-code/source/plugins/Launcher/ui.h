@@ -192,9 +192,15 @@ namespace Launcher {
 			if (!vendor->Contains("NVIDIA")) // check OpenGL renderer to get actual GPU being used for vendor check (ensure not running on iGPU)
 			{
 				this->labelGPU->Text += "Issues: NVIDIA GPU REQUIRED!";
-				GPUIssueText = "Your graphics card is not supported! Only NVIDIA GPUs can run the game.\nPlease use a GTX 600 series or later GPU.\n\nIf you have a laptop with an NVIDIA GPU, you may need to set diva.exe to use it in NVIDIA Control Panel.";
+				GPUIssueText = "Your graphics card is not supported. Only NVIDIA GPUs are compatible.\nPlease use a GTX 600 series or later GPU.\n\nIf you have a laptop with an NVIDIA GPU, you may need to set diva.exe to use it in NVIDIA Control Panel.\n\nOwners of non-NVIDIA GPUs may be able to run the game using external plugins or mods, but 3D graphics will probably not work.";
 				this->labelGPU->LinkColor = System::Drawing::Color::Red;
 				showGpuDialog = true;
+			}
+			else if (gpuModel->StartsWith("GA")) // unconfirmed??
+			{
+				this->labelGPU->Text += "Issues: Ampere GPU detected! Unknown issues.\n(Click for more information)";
+				GPUIssueText = "Ampere GPUs have not been tested yet. On the previous generation Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled and report any further issues to the developers.";
+				this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
 			}
 			else if (gpuModel->StartsWith("TU"))
 			{

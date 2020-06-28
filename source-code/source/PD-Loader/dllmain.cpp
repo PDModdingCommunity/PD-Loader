@@ -159,6 +159,16 @@ void LoadDVA(std::wstring &path, LPCWSTR dir, LPCWSTR fileName)
 			if (e != ERROR_DLL_INIT_FAILED) // in case dllmain returns false
 			{
 				std::wstring msg = L"Unable to load " + std::wstring(fileName) + L". Error: " + std::to_wstring(e);
+				
+				LPVOID err_msg;
+				if (FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+					NULL, e, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), (LPWSTR)&err_msg, 1, NULL)
+					!= 0)
+				{
+					msg += L"\n";
+					msg += (LPWSTR)err_msg;
+				}
+
 				switch (e)
 				{
 				case 126:

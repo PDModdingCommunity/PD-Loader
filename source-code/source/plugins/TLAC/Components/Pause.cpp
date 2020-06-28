@@ -166,7 +166,8 @@ namespace TLAC::Components
 			}
 			else
 			{
-				if (inputState->Tapped.Buttons & JVS_SQUARE)
+				// note: use exact button comparisons instead of only single bits to avoid macros
+				if (inputState->Tapped.Buttons == JVS_SQUARE)
 				{
 					showUI = !showUI;
 					if (showUI)
@@ -190,7 +191,7 @@ namespace TLAC::Components
 				}
 
 				/* for testing `-ss` stuff
-				if (inputState->Tapped.Buttons & JVS_TRIANGLE)
+				if (inputState->Tapped.Buttons == JVS_TRIANGLE)
 				{
 					void** ScreenShotImplAddr = (void**)0x1412016d0;
 					Drawing::MsString path; // just a small struct from TLAC::Utilities::Drawing::MsString
@@ -203,13 +204,13 @@ namespace TLAC::Components
 				// only process menu events when UI is visible
 				if (showUI)
 				{
-					if (inputState->Tapped.Buttons & JVS_L)
+					if (inputState->Tapped.Buttons == JVS_L)
 						setMenuPos(curMenuSet, curMenuPos - 1);
 
-					if (inputState->Tapped.Buttons & JVS_R)
+					if (inputState->Tapped.Buttons == JVS_R)
 						setMenuPos(curMenuSet, curMenuPos + 1);
 
-					if (inputState->Tapped.Buttons & JVS_CROSS)
+					if (inputState->Tapped.Buttons == JVS_CROSS)
 					{
 						if (curMenuSet == MENUSET_MAIN)
 						{
@@ -221,7 +222,7 @@ namespace TLAC::Components
 						}
 					}
 
-					if (inputState->Tapped.Buttons & JVS_CIRCLE)
+					if (inputState->Tapped.Buttons == JVS_CIRCLE)
 						menu[curMenuSet].items[curMenuPos].callback();
 
 					if (!componentsManager->IsDwGuiActive()) // not sure if this check is necessary, but it doesn't hurt

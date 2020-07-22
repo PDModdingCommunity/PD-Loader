@@ -25,6 +25,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DivaWig", "source\plugins\D
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DSCRemote", "source\plugins\DSCRemote\DSCRemote.vcxproj", "{8544C599-F73B-4EF2-BA3E-2A0FC3034B1A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Novidia", "source\plugins\Novidia\Novidia.vcxproj", "{47181A1D-C22C-4C9C-B4E0-CB6CE886A1D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -75,6 +77,10 @@ Global
 		{8544C599-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x64.Build.0 = Debug|x64
 		{8544C599-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.ActiveCfg = Release|x64
 		{8544C599-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.Build.0 = Release|x64
+		{47181A1D-C22C-4C9C-B4E0-CB6CE886A1D8}.Debug|x64.ActiveCfg = Debug|x64
+		{47181A1D-C22C-4C9C-B4E0-CB6CE886A1D8}.Debug|x64.Build.0 = Debug|x64
+		{47181A1D-C22C-4C9C-B4E0-CB6CE886A1D8}.Release|x64.ActiveCfg = Release|x64
+		{47181A1D-C22C-4C9C-B4E0-CB6CE886A1D8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

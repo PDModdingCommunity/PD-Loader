@@ -3,7 +3,6 @@
 #include <PluginConfigApi.h>
 
 
-
 // upload to the SSBO instead after processing
 void h_uploadModelTransformBuf(DWORD* a1, int a2)
 {
@@ -11,10 +10,8 @@ void h_uploadModelTransformBuf(DWORD* a1, int a2)
 	
 	glActiveTexture(GL_TEXTURE8);
 	glBindTexture(GL_TEXTURE_1D, buf_tex);
-	//glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F, 0x3000 / sizeof(float) / 4, 0, GL_RGBA, GL_FLOAT, *(float**)0x1411a3330);
 	glTexSubImage1D(GL_TEXTURE_1D, 0, 0, 0x3000 / sizeof(float) / 4, GL_RGBA, GL_FLOAT, *(float**)0x1411a3330);
 	glActiveTexture(GL_TEXTURE0);
-	//glFinish();
 }
 
 /*
@@ -107,9 +104,9 @@ void h_glutSetCursor(int cursor)
 
 		//glActiveTexture(GL_TEXTURE8);
 		glGenTextures(1, &buf_tex);
+		printf("[Novidia] Buffer texture id: %d\n", buf_tex);
 		glBindTexture(GL_TEXTURE_1D, buf_tex);
 		glTexStorage1D(GL_TEXTURE_1D, 1, GL_RGBA32F, 0x3000 / sizeof(float) / 4);
-		//glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F, 0x3000 / sizeof(float) / 4, 0, GL_RGBA, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -159,5 +156,5 @@ extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
 {
-	return L"Novidia by somewhatlurker\n\nPerforms some model skinning transformations in an alternate way to enable functionality on non-Nvidia hardware.\nAlso fixes crashing on non-Nvidia hardware.\n\nRequires patched shaders and GLIntercept installed to work.";
+	return L"Novidia by somewhatlurker\n\nPerforms some model skinning transformations in an alternate way to enable functionality on non-Nvidia hardware.\nAlso fixes crashing on non-Nvidia hardware.";
 }

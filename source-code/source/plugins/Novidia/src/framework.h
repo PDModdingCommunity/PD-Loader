@@ -5,7 +5,6 @@
 // use this as a hook to perform initialisation
 void(__cdecl* glutSetCursor)(int cursor) = *(void(__cdecl**)(int))0x140966068;
 void(__cdecl* uploadModelTransformBuf)(DWORD* a1, int a2) = (void(__cdecl*)(DWORD * a1, int a2))0x140444fa0;
-PROC(*wGlGetProcAddress_forhook)(LPCSTR) = (PROC(*)(LPCSTR))(GetProcAddress(GetModuleHandle(L"opengl32.dll"), "wglGetProcAddress"));;
 
 bool& performTransform = *(bool*)0x14cc57bb0;
 

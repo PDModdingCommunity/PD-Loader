@@ -4,43 +4,25 @@
 
 
 // upload to the SSBO instead after processing
-void h_uploadModelTransformBuf(DWORD* a1, int a2)
+// two versions because apparently TexSubImage can cause major stuttering
+void h_uploadModelTransformBuf_TexImage(DWORD* a1, int a2)
 {
 	uploadModelTransformBuf(a1, a2);
 	
 	glActiveTexture(GL_TEXTURE8);
 	glBindTexture(GL_TEXTURE_1D, buf_tex);
+	glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F, 0x3000 / sizeof(float) / 4, 0, GL_RGBA, GL_FLOAT, *(float**)0x1411a3330);
+	glActiveTexture(GL_TEXTURE0);
+}
+void h_uploadModelTransformBuf_TexSubImage(DWORD* a1, int a2)
+{
+	uploadModelTransformBuf(a1, a2);
+
+	glActiveTexture(GL_TEXTURE8);
+	glBindTexture(GL_TEXTURE_1D, buf_tex);
 	glTexSubImage1D(GL_TEXTURE_1D, 0, 0, 0x3000 / sizeof(float) / 4, GL_RGBA, GL_FLOAT, *(float**)0x1411a3330);
 	glActiveTexture(GL_TEXTURE0);
 }
-
-/*
-void h_glDrawElements(GLenum mode, GLsizei count, GLenum type, const void* indices)
-{
-	if (performTransform)
-	{
-		glActiveTexture(GL_TEXTURE8);
-		glBindTexture(GL_TEXTURE_1D, buf_tex);
-		//glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F, 0x3000 / sizeof(float) / 4, 0, GL_RGBA, GL_FLOAT, *(float**)0x1411a3330);
-		glTexSubImage1D(GL_TEXTURE_1D, 0, 0, 0x3000 / sizeof(float) / 4, GL_RGBA, GL_FLOAT, *(float**)0x1411a3330);
-		//glActiveTexture(GL_TEXTURE0);
-	}
-	glDrawElements(mode, count, type, indices);
-}
-
-void h_glDrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const void* indices)
-{
-	if (performTransform)
-	{
-		glActiveTexture(GL_TEXTURE8);
-		glBindTexture(GL_TEXTURE_1D, buf_tex);
-		//glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F, 0x3000 / sizeof(float) / 4, 0, GL_RGBA, GL_FLOAT, *(float**)0x1411a3330);
-		glTexSubImage1D(GL_TEXTURE_1D, 0, 0, 0x3000 / sizeof(float) / 4, GL_RGBA, GL_FLOAT, *(float**)0x1411a3330);
-		//glActiveTexture(GL_TEXTURE0);
-	}
-	glDrawRangeElements(mode,start, end, count, type, indices);
-}
-*/
 
 // just a crash fix
 void h_glBindBuffer(GLenum target, GLuint buffer)
@@ -106,7 +88,8 @@ void h_glutSetCursor(int cursor)
 		glGenTextures(1, &buf_tex);
 		printf("[Novidia] Buffer texture id: %d\n", buf_tex);
 		glBindTexture(GL_TEXTURE_1D, buf_tex);
-		glTexStorage1D(GL_TEXTURE_1D, 1, GL_RGBA32F, 0x3000 / sizeof(float) / 4);
+		if (use_TexSubImage)
+			glTexStorage1D(GL_TEXTURE_1D, 1, GL_RGBA32F, 0x3000 / sizeof(float) / 4);
 		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -127,7 +110,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 
 	if (ul_reason_for_call == DLL_PROCESS_ATTACH)
 	{
-		//loadConfig();
+		loadConfig();
 
 		DisableThreadLibraryCalls(hModule);
 
@@ -135,10 +118,15 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		DetourUpdateThread(GetCurrentThread());
 		printf("[Novidia] Hooking glutSetCursor\n");
 		DetourAttach(&(PVOID&)glutSetCursor, h_glutSetCursor);
-		printf("[Novidia] Hooking uploadModelTransformBuf\n");
-		DetourAttach(&(PVOID&)uploadModelTransformBuf, h_uploadModelTransformBuf);
 		printf("[Novidia] Hooking wglGetProcAddress\n");
 		DetourAttach(&(PVOID&)wGlGetProcAddress_forhook, h_wglGetProcAddress);
+
+		printf("[Novidia] Hooking uploadModelTransformBuf\n");
+		if (use_TexSubImage)
+			DetourAttach(&(PVOID&)uploadModelTransformBuf, h_uploadModelTransformBuf_TexSubImage);
+		else
+			DetourAttach(&(PVOID&)uploadModelTransformBuf, h_uploadModelTransformBuf_TexImage);
+
 		DetourTransactionCommit();
 	}
 
@@ -149,6 +137,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 
 using namespace PluginConfig;
 
+PluginConfigOption config[] = {
+	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"use_TexSubImage", L"general", CONFIG_FILE, L"Use glTexSubImage", L"glTexSubImage should offer higher performance, but stuttering has been reported when it is used.\nTry disabling this if you have issues.", true, false } },
+};
+
 extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
 {
 	return L"Novidia";
@@ -157,4 +149,9 @@ extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
 extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
 {
 	return L"Novidia by somewhatlurker\n\nPerforms some model skinning transformations in an alternate way to enable functionality on non-Nvidia hardware.\nAlso fixes crashing on non-Nvidia hardware.";
+}
+
+extern "C" __declspec(dllexport) PluginConfigArray GetPluginOptions(void)
+{
+	return PluginConfigArray{ _countof(config), config };
 }

@@ -54,6 +54,7 @@ typedef char GLchar;
 void(__cdecl* glGenTextures)(GLsizei n, GLuint* textures) = *(void(__cdecl**)(GLsizei, GLuint*))0x140965ad8;
 void(__cdecl* glBindTexture)(GLenum target, GLuint texture) = *(void(__cdecl**)(GLenum, GLuint))0x140965bf8;
 void(__cdecl* glTexParameteri)(GLenum target, GLenum pname, GLint param) = *(void(__cdecl**)(GLenum, GLenum, GLint))0x140965a18;
+void(__cdecl* glTexImage1D)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, const void* data) = *(void(__cdecl**)(GLenum, GLint, GLint, GLsizei, GLint, GLenum, GLenum, const void*))0x140965b58;
 void(__cdecl* glTexSubImage1D)(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const void* pixels) = (void(__cdecl*)(GLenum, GLint, GLint, GLsizei, GLenum, GLenum, const void*))GetProcAddress(ogl32, "glTexSubImage1D");
 
 // these are all imported using wglGetProcAddress and can't be initialised until after the OpenGL context is created
@@ -73,6 +74,7 @@ struct {
 	{&glGenTextures, "glGenTextures", false},
 	{&glBindTexture, "glBindTexture", false},
 	{&glTexParameteri, "glTexParameteri", false},
+	{&glTexImage1D, "glTexImage1D", false},
 	{&glTexSubImage1D, "glTexSubImage1D", false},
 	{&glActiveTexture, "glActiveTexture", true},
 	{&glTexStorage1D, "glTexStorage1D", true},

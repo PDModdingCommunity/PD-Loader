@@ -24,7 +24,8 @@ bool checkBufferTargetOk(GLenum target)
 int __stdcall stub() { return 1; }
 
 
-/*
+bool use_TexSubImage;
+
 std::wstring ExePath() {
 	WCHAR buffer[MAX_PATH];
 	GetModuleFileNameW(NULL, buffer, MAX_PATH);
@@ -43,6 +44,5 @@ LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
 
 void loadConfig()
 {
-	
+	use_TexSubImage = GetPrivateProfileIntW(L"general", L"use_TexSubImage", 1, CONFIG_FILE) > 0 ? true : false;
 }
-*/

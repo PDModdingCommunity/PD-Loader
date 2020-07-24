@@ -4,6 +4,10 @@
 #include <iostream>
 #include <detours.h>
 
+HMODULE ogl32 = GetModuleHandle(L"opengl32.dll");
+
+PROC(*wGlGetProcAddress_forhook)(LPCSTR) = (PROC(*)(LPCSTR))(GetProcAddress(ogl32, "wglGetProcAddress"));
+
 
 // should probably just use GL.h, but I'm avoiding it to let me call hooked stuff as normal
 typedef uint32_t GLenum, GLuint, GLsizei, GLbitfield;
@@ -16,12 +20,14 @@ typedef char GLchar;
 #define GL_FALSE 0
 #define GL_NO_ERROR 0
 #define GL_TEXTURE_1D 0x0de0
+#define GL_TEXTURE_2D 0x0de1
 #define GL_FLOAT 0x1406
 #define GL_RGBA 0x1908
 #define GL_NEAREST 0x2600
 #define GL_TEXTURE_MAG_FILTER 0x2800
 #define GL_TEXTURE_MIN_FILTER 0x2801
 #define GL_TEXTURE_WRAP_S 0x2802
+#define GL_TEXTURE_WRAP_T 0x2803
 #define GL_CLAMP_TO_BORDER 0x812d
 #define GL_CLAMP_TO_EDGE 0x812f
 #define GL_TEXTURE0 0x84c0
@@ -45,24 +51,18 @@ typedef char GLchar;
 
 
 //void(__cdecl** p_glActiveTexture)(GLenum texture) = (void(__cdecl**)(GLenum texture))0x1411a3db8;
-//void(__cdecl* glGenTextures)(GLsizei n, GLuint* textures) = *(void(__cdecl**)(GLsizei n, GLuint * textures))0x140965ad8;
-//void(__cdecl* glBindTexture)(GLenum target, GLuint texture) = *(void(__cdecl**)(GLenum target, GLuint texture))0x140965bf8;
-//void(__cdecl* glDrawElements)(GLenum mode, GLsizei count, GLenum type, const void* indices) = *(void(__cdecl**)(GLenum mode, GLsizei count, GLenum type, const void* indices))0x140965a48;
+void(__cdecl* glGenTextures)(GLsizei n, GLuint* textures) = *(void(__cdecl**)(GLsizei, GLuint*))0x140965ad8;
+void(__cdecl* glBindTexture)(GLenum target, GLuint texture) = *(void(__cdecl**)(GLenum, GLuint))0x140965bf8;
+void(__cdecl* glTexParameteri)(GLenum target, GLenum pname, GLint param) = *(void(__cdecl**)(GLenum, GLenum, GLint))0x140965a18;
+void(__cdecl* glTexSubImage1D)(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const void* pixels) = (void(__cdecl*)(GLenum, GLint, GLint, GLsizei, GLenum, GLenum, const void*))GetProcAddress(ogl32, "glTexSubImage1D");
 
-// these are all dynamic imports and can't be initialised until after the OpenGL context is created
+// these are all imported using wglGetProcAddress and can't be initialised until after the OpenGL context is created
 void(__cdecl* glActiveTexture)(GLenum texture);
-void(__cdecl* glGenTextures)(GLsizei n, GLuint* textures);
-void(__cdecl* glBindTexture)(GLenum target, GLuint texture);
 void(__cdecl* glTexStorage1D)(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width);
-//void(__cdecl* glTexImage1D)(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLint border, GLenum format, GLenum type, const void* pixels);
-void(__cdecl* glTexSubImage1D)(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const void* pixels);
-void(__cdecl* glTexParameteri)(GLenum target, GLenum pname, GLint param);
-//void(__cdecl* glDrawRangeElements)(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const void* indices);
 void(__cdecl* glBindBuffer)(GLenum target, GLuint buffer);
 void(__cdecl* glBindBufferARB)(GLenum target, GLuint buffer);
 void(__cdecl* glBufferData)(GLenum target, GLsizeiptr size, const void* data, GLenum usage);
 void(__cdecl* glBufferDataARB)(GLenum target, GLsizeiptr size, const void* data, GLenum usage);
-void(__cdecl* glFinish)();
 
 // just used for a nicer time getting addresses and hooking
 struct {
@@ -70,20 +70,16 @@ struct {
 	const char* name;
 	bool dynamic;
 } glFuncs[] = {
-	//{&glDrawElements, "glDrawElements", false},
+	{&glGenTextures, "glGenTextures", false},
+	{&glBindTexture, "glBindTexture", false},
+	{&glTexParameteri, "glTexParameteri", false},
+	{&glTexSubImage1D, "glTexSubImage1D", false},
 	{&glActiveTexture, "glActiveTexture", true},
-	{&glGenTextures, "glGenTextures", true},
-	{&glBindTexture, "glBindTexture", true},
 	{&glTexStorage1D, "glTexStorage1D", true},
-	//{&glTexImage1D, "glTexImage1D", true},
-	{&glTexSubImage1D, "glTexSubImage1D", true},
-	{&glTexParameteri, "glTexParameteri", true},
-	//{&glDrawRangeElements, "glDrawRangeElements", true},
 	{&glBindBuffer, "glBindBuffer", true},
 	{&glBindBufferARB, "glBindBufferARB", true},
 	{&glBufferData, "glBufferData", true},
 	{&glBufferDataARB, "glBufferDataARB", true},
-	{&glFinish, "glFinish", true},
 };
 
 bool loadGlAddresses()
@@ -93,11 +89,12 @@ bool loadGlAddresses()
 	{
 		if (fn.dynamic)
 		{
-			*(PROC*)(fn.ptr) = wglGetProcAddress(fn.name);
+			*(PROC*)(fn.ptr) = wGlGetProcAddress_forhook(fn.name);
 			if (*(PROC*)(fn.ptr) == nullptr)
 			{
 				printf("[Novidia] Failed to load address of %s\n", fn.name);
 				ret = false;
+				MessageBoxA(NULL, fn.name, NULL, NULL);
 			}
 		}
 	}

@@ -27,12 +27,20 @@ after_build:
     md %TMP%\update\plugins\
     
     md %TMP%\update\plugins\pv_equip\
+    
+    md %TMP%\amd-pack\
+    
+    md %TMP%\amd-pack\plugins\
+    
+    md %TMP%\amd-pack\tools\
 
 
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dinput8.dll %TMP%\update\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\update\plugins\
+    
+    del %TMP%\update\plugins\Novidia.dva
     
     copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\update\
 
@@ -44,23 +52,15 @@ after_build:
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_mount_data.md5 %TMP%\update\
 
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\ShaderPatch.ini %TMP%\update\plugins\
+
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\patches\custom_freeplay_text_example.p %TMP%\update\patches\
 
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\ShaderPatch.ini %TMP%\update\plugins\
-    
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\keyconfig.ini %TMP%\update\plugins\
-    
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\pv_equip\modules.ini %TMP%\update\plugins\pv_equip\
-        
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\pv_equip\skins.ini %TMP%\update\plugins\pv_equip\
-            
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\pv_equip\sfx.ini %TMP%\update\plugins\pv_equip\
-
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dinput8.dll %TMP%\full\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\patches\custom_freeplay_text_example.p %TMP%\full\patches\
-
+    
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\full\plugins\
+    
+    del %TMP%\update\plugins\Novidia.dva
 
     copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\full\
 
@@ -76,11 +76,17 @@ after_build:
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\*.* %TMP%\full\plugins\
     
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\*.* %TMP%\full\plugins\pv_equip\
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\pv_equip\*.* %TMP%\full\plugins\pv_equip\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\ram\databank\*.dat %TMP%\full\ram\databank\
 
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\patches\custom_freeplay_text_example.p %TMP%\full\patches\
+    
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\Novidia.dva %TMP%\amd-pack\plugins\
+    
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\*.*  %TMP%\amd-pack\tools\
 
+    
 
     cd %TMP%\full\
 
@@ -105,6 +111,20 @@ after_build:
     del "DELETE DNSAPI.DLL.bat"
     
     7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-Update-AppVeyor-Vista7.zip *
+    
+    cd %TMP%\amd-pack\tools\
+    
+    C:\Python38\python.exe -m pip install cx_freeze
+    
+    C:\Python38\Scripts\cxfreeze.exe "ARB Patcher Source\main.py" --target-dir "ARB Patcher"
+    
+    copy "ARB Patcher Source\gamesettings" "ARB Patcher\gamesettings"
+    
+    rm "ARB Patcher Source"
+    
+    cd ..
+    
+    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AMDPack-AppVeyor.zip *
 
 
 artifacts:

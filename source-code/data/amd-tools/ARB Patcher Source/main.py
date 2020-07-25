@@ -99,14 +99,21 @@ def patch_shader(fname, f_lines, game_settings_module=None, enable_print_warning
 
 if __name__ == '__main__':
     from os import listdir, makedirs
-    from os.path import join as joinpath, splitext, isfile, exists
+    from os.path import join as joinpath, splitext, isfile, exists, dirname
     from re import compile as recompile
     import sys
-    import importlib
+    import importlib, importlib.util
+    
+    if getattr(sys, 'frozen', False):
+        datadir = dirname(sys.executable)
+    else:
+        datadir = dirname(__file__)
+    
+    gamesettings_dir = joinpath(datadir, 'gamesettings')
     
     def get_args():
         # make a list of game settings modules
-        game_modules_list = [f[:-3] for f in listdir('gamesettings') if isfile(joinpath('gamesettings', f)) and splitext(f)[1] == '.py']
+        game_modules_list = [f[:-3] for f in listdir(gamesettings_dir) if isfile(joinpath(gamesettings_dir, f)) and splitext(f)[1] == '.py']
         
         import argparse
         parser = argparse.ArgumentParser(description='An attempt at converting Nvidia-only ARB shaders to work on AMD.')
@@ -121,10 +128,12 @@ if __name__ == '__main__':
 
     def print_game_modules():
         # make a list of game settings modules
-        game_modules_list = [f[:-3] for f in listdir('gamesettings') if isfile(joinpath('gamesettings', f)) and splitext(f)[1] == '.py']
+        game_modules_list = [f[:-3] for f in listdir(gamesettings_dir) if isfile(joinpath(gamesettings_dir, f)) and splitext(f)[1] == '.py']
         
         for game in game_modules_list:
-            game_settings_module = importlib.import_module('gamesettings.{}'.format(game))
+            game_settings_spec = importlib.util.spec_from_file_location(game, joinpath(gamesettings_dir, game + '.py'))
+            game_settings_module = importlib.util.module_from_spec(game_settings_spec)
+            game_settings_spec.loader.exec_module(game_settings_module)
             
             if game_settings_module.GAME_NAME:
                 full_name = game_settings_module.GAME_NAME
@@ -141,7 +150,9 @@ if __name__ == '__main__':
         sys.exit()
     
     if args.game_settings:
-        game_settings_module = importlib.import_module('gamesettings.{}'.format(args.game_settings))
+        game_settings_spec = importlib.util.spec_from_file_location(args.game_settings, joinpath(gamesettings_dir, args.game_settings + '.py'))
+        game_settings_module = importlib.util.module_from_spec(game_settings_spec)
+        game_settings_spec.loader.exec_module(game_settings_module)
     else:
         game_settings_module = None
     

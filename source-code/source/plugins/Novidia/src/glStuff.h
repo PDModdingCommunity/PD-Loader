@@ -22,14 +22,20 @@ typedef char GLchar;
 #define GL_TEXTURE_1D 0x0de0
 #define GL_TEXTURE_2D 0x0de1
 #define GL_FLOAT 0x1406
+#define GL_RED 0x1903
+#define GL_GREEN 0x1904
+#define GL_BLUE 0x1905
+#define GL_ALPHA	 0x1906
 #define GL_RGBA 0x1908
 #define GL_NEAREST 0x2600
 #define GL_TEXTURE_MAG_FILTER 0x2800
 #define GL_TEXTURE_MIN_FILTER 0x2801
 #define GL_TEXTURE_WRAP_S 0x2802
 #define GL_TEXTURE_WRAP_T 0x2803
+#define GL_BGRA 0x80e1
 #define GL_CLAMP_TO_BORDER 0x812d
 #define GL_CLAMP_TO_EDGE 0x812f
+#define GL_TEXTURE_IMAGE_FORMAT 0x828f
 #define GL_TEXTURE0 0x84c0
 #define GL_TEXTURE8 0x84c8
 #define GL_BUFFER_SIZE 0x8764
@@ -44,6 +50,11 @@ typedef char GLchar;
 #define GL_CURRENT_PROGRAM 0x8b8d
 #define GL_VERTEX_PROGRAM_PARAMETER_BUFFER_NV 0x8da2
 #define GL_FRAGMENT_PROGRAM_PARAMETER_BUFFER_NV 0x8da4
+#define GL_TEXTURE_SWIZZLE_R 0x8e42
+#define GL_TEXTURE_SWIZZLE_G 0x8e43
+#define GL_TEXTURE_SWIZZLE_B 0x8e44
+#define GL_TEXTURE_SWIZZLE_A 0x8e45
+#define GL_TEXTURE_SWIZZLE_RGBA 0x8e46
 #define GL_SHADER_STORAGE_BUFFER 0x90d2
 #define GL_COMPUTE_SHADER 0x91b9
 #define GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT 0x00000001
@@ -60,6 +71,7 @@ void(__cdecl* glTexSubImage1D)(GLenum target, GLint level, GLint xoffset, GLsize
 // these are all imported using wglGetProcAddress and can't be initialised until after the OpenGL context is created
 void(__cdecl* glActiveTexture)(GLenum texture);
 void(__cdecl* glTexStorage1D)(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width);
+void(__cdecl* glGetInternalformativ)(GLenum target, GLenum internalformat, GLenum pname, GLsizei bufSize, GLint* params);
 void(__cdecl* glBindBuffer)(GLenum target, GLuint buffer);
 void(__cdecl* glBindBufferARB)(GLenum target, GLuint buffer);
 void(__cdecl* glBufferData)(GLenum target, GLsizeiptr size, const void* data, GLenum usage);
@@ -78,6 +90,7 @@ struct {
 	{&glTexSubImage1D, "glTexSubImage1D", false},
 	{&glActiveTexture, "glActiveTexture", true},
 	{&glTexStorage1D, "glTexStorage1D", true},
+	{&glGetInternalformativ, "glGetInternalformativ", true},
 	{&glBindBuffer, "glBindBuffer", true},
 	{&glBindBufferARB, "glBindBufferARB", true},
 	{&glBufferData, "glBufferData", true},

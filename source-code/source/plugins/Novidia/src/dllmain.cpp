@@ -11,7 +11,7 @@ void h_uploadModelTransformBuf_TexImage(DWORD* a1, int a2)
 	
 	glActiveTexture(GL_TEXTURE8);
 	glBindTexture(GL_TEXTURE_1D, buf_tex);
-	glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F, 0x3000 / sizeof(float) / 4, 0, GL_RGBA, GL_FLOAT, *(float**)0x1411a3330);
+	glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F, 0x3000 / sizeof(float) / 4, 0, tex_upload_format, GL_FLOAT, *(float**)0x1411a3330);
 	glActiveTexture(GL_TEXTURE0);
 }
 void h_uploadModelTransformBuf_TexSubImage(DWORD* a1, int a2)
@@ -20,7 +20,7 @@ void h_uploadModelTransformBuf_TexSubImage(DWORD* a1, int a2)
 
 	glActiveTexture(GL_TEXTURE8);
 	glBindTexture(GL_TEXTURE_1D, buf_tex);
-	glTexSubImage1D(GL_TEXTURE_1D, 0, 0, 0x3000 / sizeof(float) / 4, GL_RGBA, GL_FLOAT, *(float**)0x1411a3330);
+	glTexSubImage1D(GL_TEXTURE_1D, 0, 0, 0x3000 / sizeof(float) / 4, tex_upload_format, GL_FLOAT, *(float**)0x1411a3330);
 	glActiveTexture(GL_TEXTURE0);
 }
 
@@ -93,6 +93,35 @@ void h_glutSetCursor(int cursor)
 		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+
+		// BGRA texture uploads seem to run a little faster
+		// ideally just asking the driver what to use would be fine,
+		// but my driver says GL_RGBA is better (contrary to my testing)
+		if (force_BGRA_upload)
+		{
+			tex_upload_format = GL_BGRA;
+		}
+		else
+		{
+			// ask the driver which image format to use for uploads
+			glGetInternalformativ(GL_TEXTURE_1D, GL_RGBA32F, GL_TEXTURE_IMAGE_FORMAT, 1, &tex_upload_format);
+			printf("[Novidia] Driver preferred texture upload format: %d\n", tex_upload_format);
+		}
+
+		if (tex_upload_format == GL_BGRA)
+		{
+			printf("[Novidia] Using BGRA texture uploads\n");
+			// set swizzling to make shader read as if it's RGBA still
+			glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_SWIZZLE_R, GL_BLUE);
+			glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_SWIZZLE_B, GL_RED);
+		}
+		else
+		{
+			tex_upload_format = GL_RGBA;
+			printf("[Novidia] Using RGBA texture uploads\n");
+		}
+
+
 	}
 
 	DetourTransactionBegin();
@@ -139,6 +168,7 @@ using namespace PluginConfig;
 
 PluginConfigOption config[] = {
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"use_TexSubImage", L"general", CONFIG_FILE, L"Use glTexSubImage", L"glTexSubImage should offer higher performance, but stuttering has been reported when it is used.\nTry disabling this if you have issues.", true, false } },
+	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"force_BGRA_upload", L"general", CONFIG_FILE, L"Force BGRA Texture Uploads", L"BGRA format uploads seem to run faster (on some hardware), but drivers may suggest RGBA instead.\nUsing this forces uploads to use the BGRA format.\n\nDisabling this may decrease or improve performance.", true, false } },
 };
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)

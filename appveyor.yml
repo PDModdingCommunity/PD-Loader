@@ -33,6 +33,10 @@ after_build:
     md %TMP%\amd-pack\plugins\
     
     md %TMP%\amd-pack\amd-tools\
+    
+    md "%TMP%\amd-pack\amd-tools\ARB Patcher Source"
+    
+    md "%TMP%\amd-pack\amd-tools\ARB Patcher Source\gamesettings"
 
 
 
@@ -85,6 +89,10 @@ after_build:
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\Novidia.dva %TMP%\amd-pack\plugins\
     
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\*.*  %TMP%\amd-pack\amd-tools\
+    
+    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\ARB Patcher Source\*.*"  "%TMP%\amd-pack\amd-tools\ARB Patcher Source\"
+    
+    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\ARB Patcher Source\gamesettings\*.*"  "%TMP%\amd-pack\amd-tools\ARB Patcher Source\gamesettings\"
 
     
 
@@ -118,7 +126,9 @@ after_build:
     
     C:\Python38\Scripts\cxfreeze.exe "ARB Patcher Source\main.py" --target-dir "ARB Patcher"
     
-    copy "ARB Patcher Source\gamesettings" "ARB Patcher\gamesettings"
+    mkdir "ARB Patcher\gamesettings"
+    
+    copy "ARB Patcher Source\gamesettings\*.*" "ARB Patcher\gamesettings\"
     
     del /Q "ARB Patcher Source"
     

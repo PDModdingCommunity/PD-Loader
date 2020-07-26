@@ -189,10 +189,33 @@ namespace Launcher {
 
 			int linkStart = this->labelGPU->Text->Length;
 			bool showGpuDialog = false;
-			if (!vendor->Contains("NVIDIA")) // check OpenGL renderer to get actual GPU being used for vendor check (ensure not running on iGPU)
+			if (vendor->Contains("AMD") || renderer->Contains("AMD")) // check OpenGL renderer to get actual GPU being used for vendor check (ensure not running on iGPU)
 			{
-				this->labelGPU->Text += "Issues: NVIDIA GPU REQUIRED!";
-				GPUIssueText = "Your graphics card is not supported. Only NVIDIA GPUs are compatible.\nPlease use a GTX 600 series or later GPU.\n\nIf you have a laptop with an NVIDIA GPU, you may need to set diva.exe to use it in NVIDIA Control Panel.\n\nOwners of non-NVIDIA GPUs may be able to run the game using external plugins or mods, but 3D graphics will probably not work.";
+				bool hasNovidia = false;
+				for (PluginInfo i : AllPlugins)
+				{
+					if (i.name == L"Novidia")
+						hasNovidia = true;
+				}
+
+				if (hasNovidia)
+				{
+					this->labelGPU->Text += "Issues: AMD GPU support is unofficial.";
+					GPUIssueText = "AMD GPUs are not supported without mods.\nThe PD Loader AMDPack seems to be installed, but please keep in mind that it may have issues.";
+					this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+				}
+				else
+				{
+					this->labelGPU->Text += "Issues: Mods needed for AMD compatibility!";
+					GPUIssueText = "AMD GPUs are not supported without mods.\nThe PD Loader AMDPack can be used to make 3D rendering work. Please download it and follow the included instructions.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.";
+					this->labelGPU->LinkColor = System::Drawing::Color::Red;
+					showGpuDialog = true;
+				}
+			}
+			else if (!vendor->Contains("NVIDIA"))
+			{
+				this->labelGPU->Text += "Issues: UNSUPPORTED GPU!";
+				GPUIssueText = "Your graphics card is not supported. Only NVIDIA GPUs are recommended. (though AMD ones can be used with mods)\nPlease use a GTX 600 series or later NVIDIA GPU.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.\n\nOwners of other GPUs may be able to run the game using plugins or mods, but 3D graphics will probably not work.";
 				this->labelGPU->LinkColor = System::Drawing::Color::Red;
 				showGpuDialog = true;
 			}

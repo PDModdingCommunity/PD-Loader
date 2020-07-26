@@ -142,6 +142,8 @@ after_build:
     
     cd ..
     
+    move amd-tools\README.txt AMD-README.txt
+    
     7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AMDPack-AppVeyor.zip *
 
 

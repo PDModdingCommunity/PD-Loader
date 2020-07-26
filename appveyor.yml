@@ -64,7 +64,7 @@ after_build:
     
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\full\plugins\
     
-    del %TMP%\update\plugins\Novidia.dva
+    del %TMP%\full\plugins\Novidia.dva
 
     copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\full\
 
@@ -130,7 +130,13 @@ after_build:
     
     copy "ARB Patcher Source\gamesettings\*.*" "ARB Patcher\gamesettings\"
     
+    del /Q "ARB Patcher Source\gamesettings"
+    
+    rmdir "ARB Patcher Source\gamesettings"
+    
     del /Q "ARB Patcher Source"
+    
+    rmdir "ARB Patcher Source"
     
     del "patch shaders py.bat"
     

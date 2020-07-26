@@ -32,7 +32,7 @@ after_build:
     
     md %TMP%\amd-pack\plugins\
     
-    md %TMP%\amd-pack\tools\
+    md %TMP%\amd-pack\amd-tools\
 
 
 
@@ -84,7 +84,7 @@ after_build:
     
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\Novidia.dva %TMP%\amd-pack\plugins\
     
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\*.*  %TMP%\amd-pack\tools\
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\*.*  %TMP%\amd-pack\amd-tools\
 
     
 
@@ -112,7 +112,7 @@ after_build:
     
     7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-Update-AppVeyor-Vista7.zip *
     
-    cd %TMP%\amd-pack\tools\
+    cd %TMP%\amd-pack\amd-tools\
     
     C:\Python38\python.exe -m pip install cx_freeze
     
@@ -120,7 +120,9 @@ after_build:
     
     copy "ARB Patcher Source\gamesettings" "ARB Patcher\gamesettings"
     
-    rm "ARB Patcher Source"
+    del /Q "ARB Patcher Source"
+    
+    del "patch shaders py.bat"
     
     cd ..
     

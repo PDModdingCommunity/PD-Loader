@@ -6,7 +6,7 @@ Use the files here to patch your shaders to work (with Novidia) on AMD GPUs.
 Instructions:
   1. Copy amd-tools and plugins folders to your game directory.
   2. Run "patch shaders" from amd-tools. This may take several minutes.
-     **WARNING** This will overwrite shader.farc from existing MAMD mdata!
+     **WARNING** This will overwrite shader_amd.farc from existing MAMD mdata!
 
 
 

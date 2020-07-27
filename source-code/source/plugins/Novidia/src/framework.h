@@ -1,6 +1,7 @@
 #pragma once
 
 #include "glStuff.h"
+#include <vector>
 
 // use this as a hook to perform initialisation
 void(__cdecl* glutSetCursor)(int cursor) = *(void(__cdecl**)(int))0x140966068;
@@ -27,6 +28,7 @@ int __stdcall stub() { return 1; }
 bool use_TexSubImage;
 bool force_BGRA_upload;
 GLint tex_upload_format;
+bool shader_amd_farc;
 
 std::wstring ExePath() {
 	WCHAR buffer[MAX_PATH];
@@ -48,4 +50,16 @@ void loadConfig()
 {
 	use_TexSubImage = GetPrivateProfileIntW(L"general", L"use_TexSubImage", 1, CONFIG_FILE) > 0 ? true : false;
 	force_BGRA_upload = GetPrivateProfileIntW(L"general", L"force_BGRA_upload", 1, CONFIG_FILE) > 0 ? true : false;
+	shader_amd_farc = GetPrivateProfileIntW(L"general", L"shader_amd_farc", 1, CONFIG_FILE) > 0 ? true : false;
+}
+
+
+void InjectCode(void* address, const std::vector<uint8_t> data)
+{
+	const size_t byteCount = data.size() * sizeof(uint8_t);
+
+	DWORD oldProtect;
+	VirtualProtect(address, byteCount, PAGE_EXECUTE_READWRITE, &oldProtect);
+	memcpy(address, data.data(), byteCount);
+	VirtualProtect(address, byteCount, oldProtect, nullptr);
 }

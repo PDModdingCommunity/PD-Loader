@@ -3,7 +3,7 @@ FarcPack ..\rom\shader.farc shader_unpacked
 mkdir ..\mdata\MAMD
 mkdir ..\mdata\MAMD\rom
 copy info.txt ..\mdata\MAMD\
-FarcPack -c shader_patched ..\mdata\MAMD\rom\shader.farc
+FarcPack -c shader_patched ..\mdata\MAMD\rom\shader_amd.farc
 del /Q shader_unpacked
 rmdir shader_unpacked
 del /Q shader_patched

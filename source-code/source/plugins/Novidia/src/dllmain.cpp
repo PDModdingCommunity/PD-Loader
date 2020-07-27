@@ -157,6 +157,12 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 			DetourAttach(&(PVOID&)uploadModelTransformBuf, h_uploadModelTransformBuf_TexImage);
 
 		DetourTransactionCommit();
+
+		if (shader_amd_farc)
+		{
+			const char* shaderpath = "./rom/shader_amd.farc";
+			InjectCode((void*)0x140a41018, std::vector<uint8_t>(shaderpath, shaderpath + strlen(shaderpath)));
+		}
 	}
 
 	return TRUE;
@@ -169,6 +175,7 @@ using namespace PluginConfig;
 PluginConfigOption config[] = {
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"use_TexSubImage", L"general", CONFIG_FILE, L"Use glTexSubImage", L"glTexSubImage should offer higher performance, but stuttering has been reported when it is used.\nTry disabling this if you have issues.", true, false } },
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"force_BGRA_upload", L"general", CONFIG_FILE, L"Force BGRA Texture Uploads", L"BGRA format uploads seem to run faster (on some hardware), but drivers may suggest RGBA instead.\nUsing this forces uploads to use the BGRA format.\n\nDisabling this may decrease or improve performance.", true, false } },
+	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"shader_amd_farc", L"general", CONFIG_FILE, L"Load shader_amd.farc", L"Novidia can manage loading of alternate shaders automatically.\nLeave this enabled for current and future versions of AMDPack.", true, false } },
 };
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)

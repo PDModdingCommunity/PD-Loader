@@ -40,6 +40,7 @@ typedef char GLchar;
 #define GL_TEXTURE8 0x84c8
 #define GL_BUFFER_SIZE 0x8764
 #define GL_RGBA32F 0x8814
+#define GL_RGBA16F 0x881a
 #define GL_ARRAY_BUFFER 0x8892
 #define GL_ARRAY_BUFFER_BINDING 0x8894
 #define GL_READ_ONLY 0x88b8

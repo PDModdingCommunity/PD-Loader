@@ -90,7 +90,7 @@ def patch_shader(fname, f_lines, game_settings_module=None, enable_print_warning
     bad_instr = BAD_INSTR_REGEX.search(f_full)
     if bad_instr:
         if enable_print_warnings:
-            print ('Warning -- unpatched known bad instruction in {}: {}'.format(fname, bad_instr.group(1)))
+            print ('\rWarning -- unpatched known bad instruction(s) in {} -- first: {}'.format(fname, bad_instr.group(1)))
         f_full = BAD_INSTR_REGEX.sub("#\\1 \n", f_full)
     
     f_full = f_full.replace('\r', '')
@@ -116,9 +116,9 @@ if __name__ == '__main__':
         game_modules_list = [f[:-3] for f in listdir(gamesettings_dir) if isfile(joinpath(gamesettings_dir, f)) and splitext(f)[1] == '.py']
         
         import argparse
-        parser = argparse.ArgumentParser(description='An attempt at converting Nvidia-only ARB shaders to work on AMD.')
-        parser.add_argument('-i', '--in_dir', default='shader in', help='input directory containing .vp and .fp files')
-        parser.add_argument('-o', '--out_dir', default='shader patched', help='output directory')
+        parser = argparse.ArgumentParser(description='AMD ARB Patcher: An attempt at converting Nvidia-only ARB shaders to work on AMD. Patching techniques from Nezarn; implementation by somewhatlurker.')
+        parser.add_argument('-i', '--in_dir', default='shader in', help='input directory containing .vp and .fp files (default: "shader in")')
+        parser.add_argument('-o', '--out_dir', default='shader patched', help='output directory (default: "shader patched")')
         parser.add_argument('-f', '--file_filter', default=None, help='only process files that match this filter (regex)')
         parser.add_argument('-g', '--game_settings', default=None, choices=game_modules_list, help='game-specific settings to load')
         
@@ -149,10 +149,21 @@ if __name__ == '__main__':
         print_game_modules()
         sys.exit()
     
+    print("AMD ARB Patcher")
+    print("===============")
+    print("Patching techniques from Nezarn; implementation by somewhatlurker")
+    print("=================================================================")
+    print("Input directory: '{}'".format(args.in_dir))
+    print("Output directory: '{}'".format(args.out_dir))
+    
     if args.game_settings:
         game_settings_spec = importlib.util.spec_from_file_location(args.game_settings, joinpath(gamesettings_dir, args.game_settings + '.py'))
         game_settings_module = importlib.util.module_from_spec(game_settings_spec)
         game_settings_spec.loader.exec_module(game_settings_module)
+        if game_settings_module.GAME_NAME:
+            print("Using game-specific settings for {}".format(game_settings_module.GAME_NAME))
+        else:
+            print("Using game-specific settings for {}".format(args.game_settings))
     else:
         game_settings_module = None
     
@@ -178,9 +189,22 @@ if __name__ == '__main__':
     else:
         file_filter = None
     
-    for fname in listdir(IN_DIR):
-        if file_filter and not file_filter.match(fname):
-            continue
+    indir_list = listdir(IN_DIR)
+    
+    if file_filter:
+        indir_list = [f for f in indir_list if file_filter.match(f)]
+    
+    proc_count = 0
+    
+    for fname in indir_list:
+        proc_count += 1
+        progress_val = proc_count / len(indir_list)
+        progress_cnt_X = int(progress_val * 20)
+        
+        status_str = '\r[{e:{s1}<{n1}}{e:{s2}<{n2}}]'.format(e = '', s1='X', s2='-', n1=progress_cnt_X, n2=20-progress_cnt_X)
+        status_str += ' {:.2%}'.format(progress_val)
+        status_str += '   ' + fname
+        print(status_str, end=' ')
         
         if game_settings_module and game_settings_module.filename_filter:
             openname = game_settings_module.filename_filter(fname)
@@ -191,8 +215,6 @@ if __name__ == '__main__':
             f_lines = f.readlines()
         
         f_full = patch_shader(fname, f_lines, game_settings_module, True)
-        
-        print ('Patched {}'.format(fname))
         
         with open(joinpath(OUT_DIR, fname), 'wb') as f:
             f.write(f_full.encode('utf-8'))

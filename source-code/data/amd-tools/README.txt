@@ -8,6 +8,9 @@ Instructions:
   2. Run "patch shaders" from amd-tools. This may take several minutes.
      **WARNING** This will overwrite shader_amd.farc from existing MAMD mdata!
 
+ARB Patcher was developed with a lot of help from Nezarn, without whom AMD
+support would not be possible.
+
 
 
 

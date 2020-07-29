@@ -196,15 +196,25 @@ if __name__ == '__main__':
     
     proc_count = 0
     
+    last_status_len = 0
+    
     for fname in indir_list:
         proc_count += 1
         progress_val = proc_count / len(indir_list)
         progress_cnt_X = int(progress_val * 20)
         
-        status_str = '\r[{e:{s1}<{n1}}{e:{s2}<{n2}}]'.format(e = '', s1='X', s2='-', n1=progress_cnt_X, n2=20-progress_cnt_X)
+        status_str = '\r[{e:{s1}<{n1}}{e:{s2}<{n2}}]'.format(e='', s1='X', s2='-', n1=progress_cnt_X, n2=20-progress_cnt_X)
         status_str += ' {:.2%}'.format(progress_val)
         status_str += '   ' + fname
-        print(status_str, end=' ')
+        
+        # fix characters left on screen from a previous longer line
+        # (without cursor staying off to the side)
+        this_status_len = len(status_str)
+        if this_status_len < last_status_len:
+            status_str = '{: <{l}}'.format(status_str, l=last_status_len)
+        last_status_len = this_status_len
+        
+        print (status_str, end='')
         
         if game_settings_module and game_settings_module.filename_filter:
             openname = game_settings_module.filename_filter(fname)

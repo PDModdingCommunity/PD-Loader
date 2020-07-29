@@ -92,7 +92,7 @@ def filename_filter(fname):
 # use to tweak reasults after patching
 def post_filter(fname, f_full):
     # ideally this could do with a generic version in the main script...
-    f_full = f_full.replace('MOV.F.CC1 ', 'MOV ')
+    f_full = f_full.replace('MOV.F.CC1 ', 'MOVC1 ')
     
     f_full = f_full.replace('\nBUFFER4', '\n#BUFFER4')
     

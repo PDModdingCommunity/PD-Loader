@@ -41,10 +41,15 @@ RET_IF_REGEX = recompile(r"(IF\s+?(.*?);[\s\S]*?)RET;\s*?ENDIF;")
 RET_IF_SUB = "\\1ENDIF;\nRET (\\2);"
 
 
-# RET behaves differently on AMD, so convert conditional reta into if/else
+# RET behaves differently on AMD, so convert conditional rets into if/else
 # (may not work properly with CAL)
 CONDITIONAL_RET_REGEX = recompile(r"RET\s+?\((.*?)\);([\s\S]*?)(END\s*?$|RET;)")
 CONDITIONAL_RET_SUB = "IF \\1; ELSE; \\2 ENDIF; \\3"
+
+
+# CAL behaves differently on AMD, so convert conditional cals into if
+CONDITIONAL_CAL_REGEX = recompile(r"CAL\s+?(.*?)\s+?\((.*?)\)\s*?;")
+CONDITIONAL_CAL_SUB = "IF \\2; CAL \\1; ENDIF;"
 
 
 MATCH_FP_FNAME = recompile(r".*fp")
@@ -59,4 +64,5 @@ fix_repls = [
     (MATCH_ALL_FNAME, SAMPLER_OFFSET_REGEX, SAMPLER_OFFSET_SUB, False),
     (MATCH_ALL_FNAME, RET_IF_REGEX, RET_IF_SUB, False),
     (MATCH_ALL_FNAME, CONDITIONAL_RET_REGEX, CONDITIONAL_RET_SUB, True),
+    (MATCH_ALL_FNAME, CONDITIONAL_CAL_REGEX, CONDITIONAL_CAL_SUB, False),
 ]

@@ -9,7 +9,7 @@ VP_SKINNING_SUB = "TEMP _adr;\n#\\1 \nTEMP mtx_tmp, mtx_tmp1, mtx_tmp2;\\2"
 
 # load the address temp with a texture coordinate instead
 # hardcoded to assume a 768*1 pixel texture
-VP_SKINNING_REGEX_2 = recompile(r"(BUFFER4[\s\S]*?)CVT.S32.F32\s*?(.*?),\s*?(.*?);")
+VP_SKINNING_REGEX_2 = recompile(r"(BUFFER4[\s\S]*?)CVT(?:.S32.F32)?\s*?(.*?),\s*?(.*?);")
 VP_SKINNING_SUB_2 = "\\1MUL \\2, \\3, 0.0013037809647979;" #1/767
 
 VP_SKINNING_REGEX_3 = recompile(r"(BUFFER4[\s\S]*?)(DP4 ([^;]*?), _mtxpal\[([^\]]*?\.x) \])")
@@ -27,7 +27,7 @@ VP_SKINNING_SUB_4 = "\\1mtx_tmp\\3"
 # make these run before VP_SKINNING_REGEX_4
 #TIGHTS_SKINNING_EFFECT_REGEX = recompile(r"(BUFFER4[\s\S]*?)SUBC .*?, vertex.attrib\[15\], .*?;\s*?SUBC1 tmp, vertex.attrib\[15\], .*?;[\s\S]*?XPD .*?, .*?, .*?;\s*?DP3_SAT (.*?), .*?, .*?;")
 #TIGHTS_SKINNING_EFFECT_SUB = "\\1MOV \\2, 0;"
-TIGHTS_SKINNING_EFFECT_REGEX = recompile(r"(BUFFER4[\s\S]*?)CVT.S32.F32\s*?(.*?),\s*?(.*?);")
+TIGHTS_SKINNING_EFFECT_REGEX = recompile(r"(BUFFER4[\s\S]*?)CVT(?:.S32.F32)?\s*?(.*?),\s*?(.*?);")
 TIGHTS_SKINNING_EFFECT_SUB = "\\1MUL \\2, \\3, 0.0013037809647979;"
 #TIGHTS_SKINNING_EFFECT_REGEX_2 = recompile(r"(BUFFER4[\s\S]*?)(IF GT1.y;[\s\S]*?|)(DP3 ([^;]*?), _mtxpal\[([^\]]*?\.x) \])(?![\s\S]*MUL  _adr)")
 #TIGHTS_SKINNING_EFFECT_REGEX_2b = recompile(r"(BUFFER4[\s\S]*?)(IF GT1.y;[\s\S]*?|)(DP3 ([^;]*?), _mtxpal\[([^\]]*?\.y) \])(?![\s\S]*MUL  _adr)")
@@ -91,9 +91,6 @@ def filename_filter(fname):
 
 # use to tweak reasults after patching
 def post_filter(fname, f_full):
-    # ideally this could do with a generic version in the main script...
-    f_full = f_full.replace('MOV.F.CC1 ', 'MOVC1 ')
-    
     f_full = f_full.replace('\nBUFFER4', '\n#BUFFER4')
     
     # fix tex sampler offsets

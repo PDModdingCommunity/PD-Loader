@@ -10,7 +10,7 @@ PARAM_REGEX = recompile(r"(?<!#)(?<!#\s)((SHORT\s*?|LONG\s*?)?PARAM\s*?([^\[\]\s
 UNUSED_PARAM_REGEX = recompile(r"(?<!#)(?<!#\s)((SHORT\s*?|LONG\s*?)?PARAM\s*?([^\[\]\s]*?)(\s*?\[.*?\])?\s*?=\s*?([^\s].*?);)\s*(?![\s\S]*[\s\-{]\3[\s,;\[])")
 
 # I think some of these instructions might still be left after other patches..  they will be commented out
-BAD_INSTR_REGEX = recompile(r"((?<!#)(?<!#\s)(CVT.S32.F32|BUFFER4|POW|NRM|REP)\s+?.*?;|ENDREP;|[^;\n]*\s*?(p_coef2d\[idx.x\]).*?;)\s*")
+BAD_INSTR_REGEX = recompile(r"((?<!#)(?<!#\s)(CVT|BUFFER4|POW|NRM|REP)\s+?.*?;|ENDREP;|[^;\n]*\s*?(p_coef2d\[idx.x\]).*?;)\s*")
 
 # find the header tag to replace with !!ARBxx1.0 and an NV OPTION
 NVFP_HEADER_REGEX = recompile(r"!!NVfp\d\.\d")
@@ -52,6 +52,15 @@ CONDITIONAL_CAL_REGEX = recompile(r"CAL\s+?(.*?)\s+?\((.*?)\)\s*?;")
 CONDITIONAL_CAL_SUB = "IF \\2; CAL \\1; ENDIF;"
 
 
+# seems like some suffixes (eg .F, .CC1) don't work
+# first regex: drop everything before the CC suffix, and convert CC suffix to appended C0/C1
+INSTR_SUFFIX_REGEX = recompile(r"(;\s*?)([A-Z\d]+)[A-Z\d\.]*?\.CC(\d)")
+INSTR_SUFFIX_SUB = "\\1\\2C\\3"
+# second regex: remove all remaining suffixes (or all suffixes for instructions without CC)
+INSTR_SUFFIX_REGEX_2 = recompile(r"(;\s*?)([A-Z\d]+)\.[A-Z\.\d]+")
+INSTR_SUFFIX_SUB_2 = "\\1\\2"
+
+
 MATCH_FP_FNAME = recompile(r".*fp")
 MATCH_VP_FNAME = recompile(r".*vp")
 MATCH_ALL_FNAME = recompile(r".*")
@@ -65,4 +74,6 @@ fix_repls = [
     (MATCH_ALL_FNAME, RET_IF_REGEX, RET_IF_SUB, False),
     (MATCH_ALL_FNAME, CONDITIONAL_RET_REGEX, CONDITIONAL_RET_SUB, True),
     (MATCH_ALL_FNAME, CONDITIONAL_CAL_REGEX, CONDITIONAL_CAL_SUB, False),
+    (MATCH_ALL_FNAME, INSTR_SUFFIX_REGEX, INSTR_SUFFIX_SUB, False),
+    (MATCH_ALL_FNAME, INSTR_SUFFIX_REGEX_2, INSTR_SUFFIX_SUB_2, False),
 ]

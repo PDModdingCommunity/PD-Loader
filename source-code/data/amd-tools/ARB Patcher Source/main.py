@@ -98,7 +98,7 @@ def patch_shader(fname, f_lines, game_settings_module=None, enable_print_warning
     return f_full
 
 if __name__ == '__main__':
-    from os import listdir, makedirs
+    from os import listdir, makedirs, get_terminal_size
     from os.path import join as joinpath, splitext, isfile, exists, dirname
     from re import compile as recompile
     import sys
@@ -206,6 +206,14 @@ if __name__ == '__main__':
         status_str = '\r[{e:{s1}<{n1}}{e:{s2}<{n2}}]'.format(e='', s1='X', s2='-', n1=progress_cnt_X, n2=20-progress_cnt_X)
         status_str += ' {:.2%}'.format(progress_val)
         status_str += '   ' + fname
+        
+        try:
+            terminal_width = get_terminal_size()[0]
+        except:
+            terminal_width = 120
+        
+        if len(status_str) > terminal_width:
+            status_str = status_str[:terminal_width-3] + '...'
         
         # fix characters left on screen from a previous longer line
         # (without cursor staying off to the side)

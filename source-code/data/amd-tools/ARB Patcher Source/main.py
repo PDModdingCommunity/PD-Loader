@@ -10,6 +10,7 @@ def patch_shader(fname, f_lines, game_settings_module=None, enable_print_warning
     params = {}
 
     for i in range(0, len(f_lines)):   
+        # this inlining stuff is only really needed for vp, but :shrug:
         no_repl = False
         
         m = ATTRIB_REGEX.match(f_lines[i])
@@ -26,6 +27,7 @@ def patch_shader(fname, f_lines, game_settings_module=None, enable_print_warning
             no_repl = True
             m = OUTPUT_REGEX.match(f_lines[i])
         
+        # and not needed at all for PARAMs in the end, but :shrug: again
         m = PARAM_REGEX.match(f_lines[i])
         while m:
             params[m.group(3)] = m.group(4)

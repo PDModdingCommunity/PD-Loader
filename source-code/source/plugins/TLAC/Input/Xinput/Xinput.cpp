@@ -211,6 +211,18 @@ namespace TLAC::Input
 					if (state.Gamepad.sThumbLX < -10000)
 						currentState.KeyStates[i] = true;
 					SetTapStates(i, elapsed);
+
+					i = XINPUT_LUP;
+					currentState.KeyStates[i] = false;
+					if (state.Gamepad.sThumbLY > 10000)
+						currentState.KeyStates[i] = true;
+					SetTapStates(i, elapsed);
+
+					i = XINPUT_LDOWN;
+					currentState.KeyStates[i] = false;
+					if (state.Gamepad.sThumbLY < -10000)
+						currentState.KeyStates[i] = true;
+					SetTapStates(i, elapsed);
 				}
 
 				{
@@ -224,6 +236,18 @@ namespace TLAC::Input
 					i = XINPUT_RLEFT;
 					currentState.KeyStates[i] = false;
 					if (state.Gamepad.sThumbRX < -10000)
+						currentState.KeyStates[i] = true;
+					SetTapStates(i, elapsed);
+
+					i = XINPUT_RUP;
+					currentState.KeyStates[i] = false;
+					if (state.Gamepad.sThumbRY > 10000)
+						currentState.KeyStates[i] = true;
+					SetTapStates(i, elapsed);
+
+					i = XINPUT_RDOWN;
+					currentState.KeyStates[i] = false;
+					if (state.Gamepad.sThumbRY < -10000)
 						currentState.KeyStates[i] = true;
 					SetTapStates(i, elapsed);
 				}

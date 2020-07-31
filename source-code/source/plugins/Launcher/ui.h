@@ -8,6 +8,7 @@
 #include "SkinnedMessageBox.h"
 #include "PluginConfig.h"
 #include "GPUModel.h"
+#include "WineVer.h"
 
 namespace Launcher {
 
@@ -174,7 +175,7 @@ namespace Launcher {
 
 			String^ gpuModel = gcnew String(GPUModel::getGpuName().c_str());
 
-			String^ wineVersion = gcnew String(GPUModel::getWineVer().c_str());
+			String^ wineVersion = gcnew String(WineVer::getWineVer().c_str());
 
 			glutDestroyWindow(window); // destroy the window so it doesn't remain on screen
 			if (glutMainLoopEventDynamic != NULL) glutMainLoopEventDynamic(); // freeglut needs this

@@ -190,7 +190,7 @@ namespace Launcher {
 
 			int linkStart = this->labelGPU->Text->Length;
 			bool showGpuDialog = false;
-			if (vendor->Contains("AMD") || renderer->Contains("AMD")) // check OpenGL renderer to get actual GPU being used for vendor check (ensure not running on iGPU)
+			if (vendor->Contains("AMD") || vendor->Contains("ATI")) // check OpenGL to get actual GPU being used for vendor check (to get accurate results for iGPU)
 			{
 				bool hasNovidia = false;
 				for (PluginInfo i : AllPlugins)

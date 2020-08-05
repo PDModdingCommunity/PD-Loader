@@ -226,6 +226,7 @@ void ApplyPatches() {
 	auto nCustomPatches = GetPrivateProfileIntW(L"patches", L"custom_patches", TRUE, CONFIG_FILE);
 	auto nQuickStart = GetPrivateProfileIntW(L"patches", L"quick_start", 1, CONFIG_FILE);
 	auto nNoScrollingSfx = GetPrivateProfileIntW(L"patches", L"no_scrolling_sfx", FALSE, CONFIG_FILE);
+	auto nNoHandScaling = GetPrivateProfileIntW(L"patches", L"no_hand_scaling", FALSE, CONFIG_FILE);
 
 	std::string version_string = std::to_string(game_version);
 	version_string.insert(version_string.begin()+1, '.');
@@ -792,6 +793,11 @@ void ApplyPatches() {
 		if (nNoScrollingSfx)
 		{
 			InjectCode((void*)0x00000001405C84B3, { 0x90, 0x90, 0x90, 0x90, 0x90 });
+		}
+		// Disable hand scaling
+		if (nNoHandScaling)
+		{
+			InjectCode((void*)0x0000000140120709, { 0xE9, 0x82, 0x0A, 0x00 });
 		}
 	}
 

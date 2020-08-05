@@ -137,8 +137,6 @@ void ApplyPatches() {
 	};
 	const struct { void* Address; std::vector<uint8_t> Data; } patches_710[] =
 	{
-		// Always return true for the SelCredit enter SelPv check
-		{ (void*)0x0000000140393610, { 0xB0, 0x01, 0xC3, 0x90, 0x90, 0x90 } },
 		// Just completely ignore all SYSTEM_STARTUP errors
 		{ (void*)0x00000001403F5080, { 0xC3 } },
 		// Always exit TASK_MODE_APP_ERROR on the first frame
@@ -176,6 +174,8 @@ void ApplyPatches() {
 		{ (void*)0x0000000140136CFA,{ 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 } },
 		// enable module selector without use_card
 		{ (void*)0x00000001405C513B,{ 0x01 } },
+		// fix back button
+		{ (void*)0x0000000140578FB8, { 0xE9, 0x73, 0xFF, 0xFF, 0xFF } },
 		// Force Hide IDs
 		{ (void*)0x00000001409A5918, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } },
 		{ (void*)0x00000001409A5928, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } },
@@ -224,6 +224,8 @@ void ApplyPatches() {
 	auto nMLAA = GetPrivateProfileIntW(L"graphics", L"mlaa", TRUE, CONFIG_FILE);
 	auto nStereo = GetPrivateProfileIntW(L"patches", L"stereo", TRUE, CONFIG_FILE);
 	auto nCustomPatches = GetPrivateProfileIntW(L"patches", L"custom_patches", TRUE, CONFIG_FILE);
+	auto nQuickStart = GetPrivateProfileIntW(L"patches", L"quick_start", 1, CONFIG_FILE);
+	auto nNoScrollingSfx = GetPrivateProfileIntW(L"patches", L"no_scrolling_sfx", FALSE, CONFIG_FILE);
 
 	std::string version_string = std::to_string(game_version);
 	version_string.insert(version_string.begin()+1, '.');
@@ -577,6 +579,9 @@ void ApplyPatches() {
 		// Enable "FREE PLAY" mode
 		if (nFreeplay || nHideFreeplay)
 		{
+			// Always return true for the SelCredit enter SelPv check
+			InjectCode((void*)0x0000000140393610, { 0xB0, 0x01, 0xC3, 0x90, 0x90, 0x90 });
+
 			InjectCode((void*)0x00000001403BABEA, { 0x75 });
 			printf("[Patches] Show FREE PLAY instead of CREDIT(S)\n");
 
@@ -770,6 +775,23 @@ void ApplyPatches() {
 		{
 			// Don't update the touch slider state so we can write our own
 			InjectCode((void*)0x000000014061579B, { 0x90, 0x90, 0x90, 0x8B, 0x42, 0xE0, 0x90, 0x90, 0x90 });
+		}
+		// Quick start
+		{
+			if (nQuickStart == 1) // skip the card/guest screen
+			{
+				InjectCode((void*)0x0000000140578EA9, { 0xE9, 0x8E, 0x00, 0x00, 0x00 });
+			}
+			else if (nQuickStart == 2) // skip everything; normal mode
+			{
+				InjectCode((void*)0x0000000140578EA9, { 0xE9, 0xF1, 0x00, 0x00, 0x00 });
+				InjectCode((void*)0x0000000140578E9D, { 0xC7, 0x47, 0x68, 0x28, 0x00, 0x00, 0x00 }); // skip back button error
+			}
+		}
+		// Disable scrolling sound effect
+		if (nNoScrollingSfx)
+		{
+			InjectCode((void*)0x00000001405C84B3, { 0x90, 0x90, 0x90, 0x90, 0x90 });
 		}
 	}
 

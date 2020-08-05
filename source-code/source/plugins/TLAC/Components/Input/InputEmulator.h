@@ -38,6 +38,8 @@ namespace TLAC::Components
 		Input::Binding* MenuRBinding;
 		Input::Binding* MenuCircleBinding;
 
+		Input::Binding* CoinBinding;
+
 		InputEmulator();
 		~InputEmulator();
 
@@ -106,5 +108,7 @@ namespace TLAC::Components
 		void UpdateInputBit(uint32_t bit, uint8_t keycode);
 		void UpdateSliderLR();
 		void SetMetaButtons();
+
+		void addCoin();
 	};
 }

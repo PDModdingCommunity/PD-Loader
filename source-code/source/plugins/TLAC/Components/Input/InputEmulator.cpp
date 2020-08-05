@@ -14,6 +14,7 @@
 #include "../../FileSystem/ConfigFile.h"
 #include "../GameState.h"
 #include "../Pause.h"
+#include "../../Utils.h"
 
 const std::string KEY_CONFIG_FILE_NAME = "keyconfig.ini";
 
@@ -344,6 +345,9 @@ namespace TLAC::Components
 		if (keyboard->IsIntervalTapped(VK_SPACE))
 			inputKey = 0x20;
 
+		if (keyboard->IsIntervalTapped(VK_F9))
+			toggleNpr1();
+
 		if (keyboard->IsDoubleTapped(VK_ESCAPE))
 			*(bool*)SHOULD_EXIT_BOOL_ADDRESS = true;
 
@@ -433,6 +437,32 @@ namespace TLAC::Components
 			(*credits)++;
 			(*(unsigned char*)0x14CD93A98)++;
 			if ((*(unsigned char*)0x14CD93A98) == 0) (*(unsigned char*)0x14CD93A98)++;
+		}
+	}
+
+	void InputEmulator::toggleNpr1()
+	{
+		switch(*(byte*)0x0000000140502FC6)
+		{
+		case 0xC3: // default -> force on
+			InjectCode((void*)0x0000000140502FC0, { 0xC7, 0x05, 0x6E });
+			InjectCode((void*)0x0000000140502FC6, { 0x01, 0x00, 0x00, 0x00, 0xC3 });
+			*(byte*)0x00000001411AD638 = 1;
+
+			printf("[TLAC] NPR1 forced\n");
+			break;
+		case 0x01: // default -> force off
+			InjectCode((void*)0x0000000140502FC0, { 0xC7, 0x05, 0x6E });
+			InjectCode((void*)0x0000000140502FC6, { 0x00, 0x00, 0x00, 0x00, 0xC3 });
+			*(byte*)0x00000001411AD638 = 0;
+
+			printf("[TLAC] NPR1 disabled\n");
+			break;
+		default: // force off -> default
+			InjectCode((void*)0x0000000140502FC0, { 0x89, 0x0D, 0x72 });
+			InjectCode((void*)0x0000000140502FC6, { 0xC3, 0xCC, 0xCC, 0xCC, 0xCC });
+
+			printf("[TLAC] NPR1 restored\n");
 		}
 	}
 }

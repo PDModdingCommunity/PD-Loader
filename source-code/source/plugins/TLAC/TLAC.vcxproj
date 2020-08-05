@@ -173,6 +173,7 @@
     <ClInclude Include="Utilities\Stopwatch.h" />
     <ClInclude Include="Utilities\Vec2.h" />
     <ClInclude Include="Utilities\Vec3.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Components\CameraController.cpp" />
@@ -224,6 +225,7 @@
     <ClCompile Include="Utilities\Stopwatch.cpp" />
     <ClCompile Include="Utilities\Vec2.cpp" />
     <ClCompile Include="Utilities\Vec3.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

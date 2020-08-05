@@ -227,6 +227,8 @@ void ApplyPatches() {
 	auto nQuickStart = GetPrivateProfileIntW(L"patches", L"quick_start", 1, CONFIG_FILE);
 	auto nNoScrollingSfx = GetPrivateProfileIntW(L"patches", L"no_scrolling_sfx", FALSE, CONFIG_FILE);
 	auto nNoHandScaling = GetPrivateProfileIntW(L"patches", L"no_hand_scaling", FALSE, CONFIG_FILE);
+	auto nForceMouth = GetPrivateProfileIntW(L"patches", L"force_mouth", 0, CONFIG_FILE);
+	auto nForceExpressions = GetPrivateProfileIntW(L"patches", L"force_expressions", 0, CONFIG_FILE);
 
 	std::string version_string = std::to_string(game_version);
 	version_string.insert(version_string.begin()+1, '.');
@@ -798,6 +800,64 @@ void ApplyPatches() {
 		if (nNoHandScaling)
 		{
 			InjectCode((void*)0x0000000140120709, { 0xE9, 0x82, 0x0A, 0x00 });
+		}
+		// Force mouth animations
+		{
+			if (nForceMouth == 1) // PDA
+			{
+				printf("[Patches] Forcing PDA mouth...\n");
+				int* mouth_table = (int*)(0x1409A1DC0);
+				DWORD oldProtect;
+				VirtualProtect(mouth_table, 44, PAGE_EXECUTE_READWRITE, &oldProtect);
+				for (int i = 0; i < 11; i++)
+				{
+					mouth_table[i]++;
+				}
+				VirtualProtect(mouth_table, 44, oldProtect, nullptr);
+				printf("[Patches] PDA mouth forced\n");
+			}
+			else if (nForceMouth == 2) // FT
+			{
+				printf("[Patches] Forcing FT mouth...\n");
+				int* mouth_table_oldid = (int*)(0x1409A1E1C);
+				DWORD oldProtect;
+				VirtualProtect(mouth_table_oldid, 44, PAGE_EXECUTE_READWRITE, &oldProtect);
+				for (int i = 0; i < 11; i++)
+				{
+					mouth_table_oldid[i]--;
+				}
+				VirtualProtect(mouth_table_oldid, 44, oldProtect, nullptr);
+				printf("[Patches] FT mouth forced\n");
+			}
+		}
+		// Force expressions
+		{
+			if (nForceExpressions == 1) // PDA
+			{
+				printf("[Patches] Forcing PDA expressions...\n");
+				int* exp_table = (int*)(0x140A21900);
+				DWORD oldProtect;
+				VirtualProtect(exp_table, 104, PAGE_EXECUTE_READWRITE, &oldProtect);
+				for (int i = 0; i < 26; i++)
+				{
+					exp_table[i] += 2;
+				}
+				VirtualProtect(exp_table, 104, oldProtect, nullptr);
+				printf("[Patches] PDA expressions forced\n");
+			}
+			else if (nForceExpressions == 2) // FT
+			{
+				printf("[Patches] Forcing FT expressions...\n");
+				int* exp_table_oldid = (int*)(0x140A219D0);
+				DWORD oldProtect;
+				VirtualProtect(exp_table_oldid, 104, PAGE_EXECUTE_READWRITE, &oldProtect);
+				for (int i = 0; i < 26; i++)
+				{
+					exp_table_oldid[i] -= 2;
+				}
+				VirtualProtect(exp_table_oldid, 104, oldProtect, nullptr);
+				printf("[Patches] FT expressions forced\n");
+			}
 		}
 	}
 

@@ -169,11 +169,13 @@ ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"no_scrolling_sfx", PATCHES_SECTION, CONFIG_FILE, L"Disable Scrolling SFX", L"Disable the scrolling sound effect.", false, false),
 	new OptionMetaSpacer(8),
 
-	new NumericOption(L"Enhanced_Stage_Manager", PATCHES_SECTION, CONFIG_FILE, L"Number of stages:", L"Set the number of stages (0 = default).", 0, 0, INT_MAX),
+	new NumericOption(L"Enhanced_Stage_Manager", PATCHES_SECTION, CONFIG_FILE, L"Number of Stages:", L"Set the number of stages (0 = default).", 0, 0, INT_MAX),
 	new BooleanOption(L"Enhanced_Stage_Manager_Encore", PATCHES_SECTION, CONFIG_FILE, L"Encore", L"Enable encore stages.", true, false),
 	new OptionMetaSpacer(8),
 
 	new BooleanOption(L"no_hand_scaling", PATCHES_SECTION, CONFIG_FILE, L"No Hand Scaling", L"Disable hand scaling.", false, false),
+	new DropdownOption(L"force_mouth", PATCHES_SECTION, CONFIG_FILE, L"Mouth Type:", L"Change the mouth animations.", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
+	new DropdownOption(L"force_expressions", PATCHES_SECTION, CONFIG_FILE, L"Expression Type:", L"Change the expressions.", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
 	new OptionMetaSpacer(8),
 
 	new BooleanOption(L"hide_volume", PATCHES_SECTION, CONFIG_FILE, L"Hide Volume Buttons", L"Hide the volume and SE control buttons.", false, false),

@@ -230,6 +230,7 @@ void ApplyPatches() {
 	auto nForceMouth = GetPrivateProfileIntW(L"patches", L"force_mouth", 0, CONFIG_FILE);
 	auto nForceExpressions = GetPrivateProfileIntW(L"patches", L"force_expressions", 0, CONFIG_FILE);
 	auto nForceLook = GetPrivateProfileIntW(L"patches", L"force_look", 0, CONFIG_FILE);
+	auto nNpr1 = GetPrivateProfileIntW(L"graphics", L"npr1", 0, CONFIG_FILE);
 
 	std::string version_string = std::to_string(game_version);
 	version_string.insert(version_string.begin()+1, '.');
@@ -291,7 +292,7 @@ void ApplyPatches() {
 			*((byte*)0x000000014049258A + 2) = 0x90;
 			VirtualProtect((BYTE*)0x000000014049258A, 3, oldProtect, &bck); }
 
-			printf("[TLAC] MLAA disabled\n");
+			printf("[Patches] MLAA disabled\n");
 		}
 
 		// Replace the hardcoded videos with MP4s, if they exist
@@ -560,7 +561,7 @@ void ApplyPatches() {
 			*((byte*)0x00000001404AB11A + 2) = 0x90;
 			VirtualProtect((BYTE*)0x00000001404AB11A, 3, oldProtect, &bck); }
 
-			printf("[TLAC] MLAA disabled\n");
+			printf("[Patches] MLAA disabled\n");
 		}
 
 		// Replace the hardcoded videos with MP4s, if they exist
@@ -889,7 +890,23 @@ void ApplyPatches() {
 				printf("[Patches] FT look forced\n");
 			}
 		}
+		// NPR1
+		{
+			if (nNpr1 == 1) // force on
+			{
+				InjectCode((void*)0x0000000140502FC0, { 0xC7, 0x05, 0x6E });
+				InjectCode((void*)0x0000000140502FC6, { 0x01, 0x00, 0x00, 0x00, 0xC3 });
 
+				printf("[Patches] NPR1 forced\n");
+			}
+			if (nNpr1 == 2) // force off
+			{
+				InjectCode((void*)0x0000000140502FC0, { 0xC7, 0x05, 0x6E });
+				InjectCode((void*)0x0000000140502FC6, { 0x00, 0x00, 0x00, 0x00, 0xC3 });
+
+				printf("[Patches] NPR1 disabled\n");
+			}
+		}
 	}
 
 

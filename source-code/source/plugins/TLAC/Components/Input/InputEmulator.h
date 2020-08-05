@@ -110,5 +110,6 @@ namespace TLAC::Components
 		void SetMetaButtons();
 
 		void addCoin();
+		void toggleNpr1();
 	};
 }

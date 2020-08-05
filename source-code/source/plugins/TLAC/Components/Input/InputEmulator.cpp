@@ -80,6 +80,8 @@ namespace TLAC::Components
 
 		MenuCircleBinding = new Binding();
 
+		CoinBinding = new Binding();
+
 		FileSystem::ConfigFile configFile(framework::GetModuleDirectory(), KEY_CONFIG_FILE_NAME);
 		configFile.OpenRead();
 
@@ -97,6 +99,7 @@ namespace TLAC::Components
 		Config::BindConfigKeys(configFile.ConfigMap, "MENU_L", *MenuLBinding, { "Left", "Up" });
 		Config::BindConfigKeys(configFile.ConfigMap, "MENU_R", *MenuRBinding, { "Down", "Right" });
 		Config::BindConfigKeys(configFile.ConfigMap, "MENU_CIRCLE", *MenuCircleBinding, { "D", "L", "Spacebar" });
+		Config::BindConfigKeys(configFile.ConfigMap, "COIN", *CoinBinding, { "F10" });
 
 		mouseScrollPvSelection = configFile.GetBooleanValue("mouse_scroll_pv_selection");
 	}
@@ -295,6 +298,9 @@ namespace TLAC::Components
 		if (buttonTestFunc(RightBinding))
 			buttons |= JVS_R;
 
+		if (buttonTestFunc(CoinBinding))
+			addCoin();
+
 		return buttons;
 	}
 
@@ -398,7 +404,7 @@ namespace TLAC::Components
 	void InputEmulator::SetMetaButtons()
 	{
 		// bit 0x6e is used to skip a bunch of screens
-		if ((inputState->Down.Buttons & (JVS_L | JVS_R)) == 0) // ask sega okay? idk why this is needed
+		if ((inputState->Down.Buttons & (JVS_L | JVS_R)) == 0) // ask sega, okay? idk why this is needed
 		{
 			if ((inputState->Tapped.Buttons & (JVS_START | JVS_TRIANGLE | JVS_SQUARE | JVS_CROSS | JVS_CIRCLE)) != 0)
 				inputState->SetBit(0x6e, true, InputBufferType_Tapped);
@@ -414,6 +420,19 @@ namespace TLAC::Components
 				inputState->SetBit(0x6e, true, InputBufferType_Released);
 			else
 				inputState->SetBit(0x6e, false, InputBufferType_Released);
+		}
+	}
+
+	void InputEmulator::addCoin()
+	{
+		printf("[TLAC] Adding coin\n");
+		unsigned char* credits = (unsigned char*)0x14CD93788;
+		if (*credits < 9)
+		{
+			*(unsigned char*)0x14CD93A9C = 1;
+			(*credits)++;
+			(*(unsigned char*)0x14CD93A98)++;
+			if ((*(unsigned char*)0x14CD93A98) == 0) (*(unsigned char*)0x14CD93A98)++;
 		}
 	}
 }

@@ -159,25 +159,27 @@ ConfigOptionBase* internalResolutionArray[] = {
 };
 
 ConfigOptionBase* optionsArray[] = {
-	new BooleanOption(L"hide_freeplay", PATCHES_SECTION, CONFIG_FILE, L"Hide \"FREE PLAY\"/\"CREDIT(S)\"", L"Hide the \"FREE PLAY\"/\"CREDIT(S)\" text.", false, false),
-	new BooleanOption(L"freeplay", PATCHES_SECTION, CONFIG_FILE, L"FREE PLAY", L"Show \"FREE PLAY\" instead of \"CREDIT(S)\".", true, false),
-	new BooleanOption(L"pdloadertext", PATCHES_SECTION, CONFIG_FILE, L"PD Loader FREE PLAY", L"Show \"PD Loader\" instead of \"FREE PLAY\".", true, false),
-	new OptionMetaSpacer(8),
-
 	new BooleanOption(L"no_movies", PATCHES_SECTION, CONFIG_FILE, L"Disable Movies", L"Disable movies (enable this if the game hangs when loading certain PVs).", false, false),
 	new BooleanOption(L"mp4_movies", PATCHES_SECTION, CONFIG_FILE, L"Custom MP4 Adv Movies", L"Enable MP4 (instead of WMV) advertise/attract movies.", false, false),
-	new OptionMetaSpacer(8),
-
 	new BooleanOption(L"cursor", PATCHES_SECTION, CONFIG_FILE, L"Cursor", L"Enable or disable the mouse cursor.", true, false),
 	new BooleanOption(L"stereo", PATCHES_SECTION, CONFIG_FILE, L"Stereo", L"Use 2 channels instead of 4 (when not using DivaSound).", true, false),
+	new OptionMetaSpacer(8),
+
+	new DropdownOption(L"quick_start", PATCHES_SECTION, CONFIG_FILE, L"Quick Start:", L"Skip one or more menus.", 1, std::vector<LPCWSTR>({ L"Disabled", L"Guest", L"Guest + Normal" })),
+	new BooleanOption(L"no_scrolling_sfx", PATCHES_SECTION, CONFIG_FILE, L"Disable Scrolling SFX", L"Disable the scrolling sound effect.", false, false),
+	new OptionMetaSpacer(8),
+
 	new BooleanOption(L"hide_volume", PATCHES_SECTION, CONFIG_FILE, L"Hide Volume Buttons", L"Hide the volume and SE control buttons.", false, false),
 	new BooleanOption(L"no_pv_ui", PATCHES_SECTION, CONFIG_FILE, L"Disable PV UI", L"Remove the photo controls during PV playback.", false, false),
 	new BooleanOption(L"hide_pv_watermark", PATCHES_SECTION, CONFIG_FILE, L"Hide PV Watermark", L"Hide the watermark that's usually shown in PV viewing mode.", false, false),
+	new DropdownOption(L"status_icons", PATCHES_SECTION, CONFIG_FILE, L"Status Icons:", L"Set the state of card reader and network status icons.", 3, std::vector<LPCWSTR>({ L"Default", L"Hidden", L"Error", L"OK", L"Partial OK" })),
 	new BooleanOption(L"no_lyrics", PATCHES_SECTION, CONFIG_FILE, L"Disable Lyrics", L"Disable showing lyrics.", false, false),
 	new BooleanOption(L"no_error", PATCHES_SECTION, CONFIG_FILE, L"Disable Error Banner", L"Disable the error banner on the attract screen.", true, false),
+	new BooleanOption(L"hide_freeplay", PATCHES_SECTION, CONFIG_FILE, L"Hide \"FREE PLAY\"/\"CREDIT(S)\"", L"Hide the \"FREE PLAY\"/\"CREDIT(S)\" text.", false, false),
+	new BooleanOption(L"freeplay", PATCHES_SECTION, CONFIG_FILE, L"FREE PLAY", L"Show \"FREE PLAY\" instead of \"CREDIT(S)\".", true, false),
+	new BooleanOption(L"pdloadertext", PATCHES_SECTION, CONFIG_FILE, L"PD Loader FREE PLAY", L"Show \"PD Loader\" instead of \"FREE PLAY\".", true, false),
 	new BooleanOption(L"no_timer", PATCHES_SECTION, CONFIG_FILE, L"Freeze Timer", L"Disable the timer.", true, false),
 	new BooleanOption(L"no_timer_sprite", PATCHES_SECTION, CONFIG_FILE, L"Disable Timer Sprite", L"Disable the timer sprite.", true, false),
-	new DropdownOption(L"status_icons", PATCHES_SECTION, CONFIG_FILE, L"Status Icons:", L"Set the state of card reader and network status icons.", 3, std::vector<LPCWSTR>({ L"Default", L"Hidden", L"Error", L"OK", L"Partial OK" })),
 	new OptionMetaSpacer(8),
 
 	new BooleanOption(L"Enhanced_Stage_Manager_Encore", PATCHES_SECTION, CONFIG_FILE, L"Encore Stages", L"Enable encore stages.", true, false),
@@ -198,7 +200,7 @@ ConfigOptionBase* optionsArray[] = {
 	new NumericOption(L"frm.motion.rate", GRAPHICS_SECTION, CONFIG_FILE, L"FRM Motion Rate:", L"Sets the motion rate (fps) for the Frame Rate Manager component.\nLarger values should be smoother, but more CPU intensive and possibly buggier.", 300, 1, INT_MAX),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"autopause", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"Pause automatically", L"Pause when focus is lost.", true, true),
+	new BooleanOption(L"autopause", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"Pause Automatically", L"Pause when focus is lost.", true, true),
 	new OptionMetaSpacer(8),
 
 	new BooleanOption(L"rumble", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Rumble", L"Enables rumble during chainslides.", true, true),

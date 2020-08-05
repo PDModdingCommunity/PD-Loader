@@ -229,6 +229,7 @@ void ApplyPatches() {
 	auto nNoHandScaling = GetPrivateProfileIntW(L"patches", L"no_hand_scaling", FALSE, CONFIG_FILE);
 	auto nForceMouth = GetPrivateProfileIntW(L"patches", L"force_mouth", 0, CONFIG_FILE);
 	auto nForceExpressions = GetPrivateProfileIntW(L"patches", L"force_expressions", 0, CONFIG_FILE);
+	auto nForceLook = GetPrivateProfileIntW(L"patches", L"force_look", 0, CONFIG_FILE);
 
 	std::string version_string = std::to_string(game_version);
 	version_string.insert(version_string.begin()+1, '.');
@@ -859,6 +860,36 @@ void ApplyPatches() {
 				printf("[Patches] FT expressions forced\n");
 			}
 		}
+		// Force look animations
+		{
+			if (nForceLook == 1) // PDA
+			{
+				printf("[Patches] Forcing PDA look...\n");
+				int* look_table = (int*)(0x1409A1D70);
+				DWORD oldProtect;
+				VirtualProtect(look_table, 36, PAGE_EXECUTE_READWRITE, &oldProtect);
+				for (int i = 0; i < 9; i++)
+				{
+					look_table[i]++;
+				}
+				VirtualProtect(look_table, 36, oldProtect, nullptr);
+				printf("[Patches] PDA look forced\n");
+			}
+			else if (nForceLook == 2) // FT
+			{
+				printf("[Patches] Forcing FT look...\n");
+				int* look_table_oldid = (int*)(0x1409A1D9C);
+				DWORD oldProtect;
+				VirtualProtect(look_table_oldid, 36, PAGE_EXECUTE_READWRITE, &oldProtect);
+				for (int i = 0; i < 11; i++)
+				{
+					look_table_oldid[i]--;
+				}
+				VirtualProtect(look_table_oldid, 36, oldProtect, nullptr);
+				printf("[Patches] FT look forced\n");
+			}
+		}
+
 	}
 
 

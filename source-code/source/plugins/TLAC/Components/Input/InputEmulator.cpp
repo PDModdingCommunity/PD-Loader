@@ -63,6 +63,8 @@ namespace TLAC::Components
 
 		TestBinding = new Binding();
 		ServiceBinding = new Binding();
+		Sw1Binding = new Binding();
+		Sw2Binding = new Binding();
 		StartBinding = new Binding();
 
 		SankakuBinding = new Binding();
@@ -83,6 +85,8 @@ namespace TLAC::Components
 
 		Config::BindConfigKeys(configFile.ConfigMap, "JVS_TEST", *TestBinding, { "F1" });
 		Config::BindConfigKeys(configFile.ConfigMap, "JVS_SERVICE", *ServiceBinding, { "F2" });
+		Config::BindConfigKeys(configFile.ConfigMap, "JVS_SW1", *Sw1Binding, { "F11" });
+		Config::BindConfigKeys(configFile.ConfigMap, "JVS_SW2", *Sw2Binding, { "F12" });
 		Config::BindConfigKeys(configFile.ConfigMap, "JVS_START", *StartBinding, { "Enter" });
 		Config::BindConfigKeys(configFile.ConfigMap, "JVS_TRIANGLE", *SankakuBinding, { "W", "I" });
 		Config::BindConfigKeys(configFile.ConfigMap, "JVS_SQUARE", *ShikakuBinding, { "A", "J" });
@@ -269,6 +273,10 @@ namespace TLAC::Components
 			buttons |= JVS_TEST;
 		if (buttonTestFunc(ServiceBinding))
 			buttons |= JVS_SERVICE;
+		if (buttonTestFunc(Sw1Binding))
+			buttons |= JVS_SW1;
+		if (buttonTestFunc(Sw2Binding))
+			buttons |= JVS_SW2;
 
 		if (buttonTestFunc(StartBinding))
 			buttons |= JVS_START;

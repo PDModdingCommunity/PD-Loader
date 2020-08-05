@@ -22,6 +22,8 @@ namespace TLAC::Components
 	public:
 		Input::Binding* TestBinding;
 		Input::Binding* ServiceBinding;
+		Input::Binding* Sw1Binding;
+		Input::Binding* Sw2Binding;
 
 		Input::Binding* StartBinding;
 		Input::Binding* SankakuBinding;

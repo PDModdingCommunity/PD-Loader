@@ -227,6 +227,7 @@ void ApplyPatches() {
 	auto nQuickStart = GetPrivateProfileIntW(L"patches", L"quick_start", 1, CONFIG_FILE);
 	auto nNoScrollingSfx = GetPrivateProfileIntW(L"patches", L"no_scrolling_sfx", FALSE, CONFIG_FILE);
 	auto nNoHandScaling = GetPrivateProfileIntW(L"patches", L"no_hand_scaling", FALSE, CONFIG_FILE);
+	auto nDefaultHandSize = GetPrivateProfileIntW(L"patches", L"default_hand_size", -1, CONFIG_FILE);
 	auto nForceMouth = GetPrivateProfileIntW(L"patches", L"force_mouth", 0, CONFIG_FILE);
 	auto nForceExpressions = GetPrivateProfileIntW(L"patches", L"force_expressions", 0, CONFIG_FILE);
 	auto nForceLook = GetPrivateProfileIntW(L"patches", L"force_look", 0, CONFIG_FILE);
@@ -802,6 +803,27 @@ void ApplyPatches() {
 		if (nNoHandScaling)
 		{
 			InjectCode((void*)0x0000000140120709, { 0xE9, 0x82, 0x0A, 0x00 });
+		}
+		// Default hand size
+		if (nDefaultHandSize != -1)
+		{
+			printf("[Patches] Changing default hand size...\n");
+			const float num = (float)nDefaultHandSize / 10000.0;
+			DWORD oldProtect;
+			float* addr1 = (float*)(0x140506B59);
+			float* addr2 = (float*)(0x140506B60);
+			/*float* addr3 = (float*)(0x140506B67);
+			float* addr4 = (float*)(0x140506B71);*/
+			VirtualProtect(addr1, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+			VirtualProtect(addr2, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+			/*VirtualProtect(addr3, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+			VirtualProtect(addr4, 4, PAGE_EXECUTE_READWRITE, &oldProtect);*/
+			*addr1 = *addr2 /*= *addr3 = *addr4*/ = num;
+			VirtualProtect(addr1, 4, oldProtect, nullptr);
+			VirtualProtect(addr2, 4, oldProtect, nullptr);
+			/*VirtualProtect(addr3, 4, oldProtect, nullptr);
+			VirtualProtect(addr4, 4, oldProtect, nullptr);*/
+			printf("[Patches] New default hand size: %f\n", num);
 		}
 		// Force mouth animations
 		{

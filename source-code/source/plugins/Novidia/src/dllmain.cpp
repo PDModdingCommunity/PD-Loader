@@ -7,20 +7,27 @@
 // two versions because apparently TexSubImage can cause major stuttering
 void h_uploadModelTransformBuf_TexImage(DWORD* a1, int a2)
 {
+	if (a2 > 0x100)
+		return;
+
 	uploadModelTransformBuf(a1, a2);
 	
 	glActiveTexture(GL_TEXTURE8);
 	glBindTexture(GL_TEXTURE_1D, buf_tex);
+	// can't change tex size without making shader sad :(
 	glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F, 0x3000 / sizeof(float) / 4, 0, tex_upload_format, GL_FLOAT, *(float**)0x1411a3330);
 	glActiveTexture(GL_TEXTURE0);
 }
 void h_uploadModelTransformBuf_TexSubImage(DWORD* a1, int a2)
 {
+	if (a2 > 0x100)
+		return;
+
 	uploadModelTransformBuf(a1, a2);
 
 	glActiveTexture(GL_TEXTURE8);
 	glBindTexture(GL_TEXTURE_1D, buf_tex);
-	glTexSubImage1D(GL_TEXTURE_1D, 0, 0, 0x3000 / sizeof(float) / 4, tex_upload_format, GL_FLOAT, *(float**)0x1411a3330);
+	glTexSubImage1D(GL_TEXTURE_1D, 0, 0, a2 * 3, tex_upload_format, GL_FLOAT, *(float**)0x1411a3330);
 	glActiveTexture(GL_TEXTURE0);
 }
 

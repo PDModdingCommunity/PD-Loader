@@ -225,16 +225,16 @@ ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"hardware_slider", PATCHES_SECTION, CONFIG_FILE, L"Use Hardware Slider", L"Enable this if using a real arcade slider.\n(set the slider to port COM11)", false, false),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"opengl_patch_a", LAUNCHER_SECTION, CONFIG_FILE, L"OpenGL Patch A", L"Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.", L"", false),
-	new BooleanOption(L"opengl_patch_b", LAUNCHER_SECTION, CONFIG_FILE, L"OpenGL Patch B", L"Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.", L"", false),
+	new BooleanOption(L"opengl_patch_a", LAUNCHER_SECTION, CONFIG_FILE, L"OpenGL Patch A", L"Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.", false, false),
+	new BooleanOption(L"opengl_patch_b", LAUNCHER_SECTION, CONFIG_FILE, L"OpenGL Patch B", L"Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.", false, false),
 	new OptionMetaSpacer(8),
 
 	new BooleanOption(L"custom_patches", PATCHES_SECTION, CONFIG_FILE, L"Enable Custom Patches", L"Enables all custom patches.", true, false),
-	new BooleanOption(L"no_gpu_dialog", LAUNCHER_SECTION, CONFIG_FILE, L"Disable GPU Warning", L"Disables the warning dialog for unsupported GPUs.", L"", false),
+	new BooleanOption(L"no_gpu_dialog", LAUNCHER_SECTION, CONFIG_FILE, L"Disable GPU Warning", L"Disables the warning dialog for unsupported GPUs.", false, false),
 	//new BooleanOption(L"ignore_exe_checksum", PATCHES_SECTION, CONFIG_FILE, L"Ignore exe checksum", L"Use at your own risk.", false, false),
-	new BooleanOption(L"prevent_data_deletion", PATCHES_SECTION, CONFIG_FILE, L"Prevent Data Deletion", L"Prevents the game from deleting files.", L"", false),
+	new BooleanOption(L"prevent_data_deletion", PATCHES_SECTION, CONFIG_FILE, L"Prevent Data Deletion", L"Prevents the game from deleting files.", false, false),
 	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"Command Line:", L"Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.", L"", false),
-	new BooleanOption(L"use_divahook_bat", LAUNCHER_SECTION, CONFIG_FILE, L"Use divahook.bat", L"Launches divahook.bat intead of diva.exe.", L"", false),
+	new BooleanOption(L"use_divahook_bat", LAUNCHER_SECTION, CONFIG_FILE, L"Use divahook.bat", L"Launches divahook.bat intead of diva.exe.", false, false),
 };
 
 ConfigOptionBase* playerdataArray[] = {

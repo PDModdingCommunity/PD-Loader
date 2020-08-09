@@ -843,7 +843,7 @@ void ApplyPatches() {
 				int* mouth_table = (int*)(0x1409A1DC0);
 				DWORD oldProtect;
 				VirtualProtect(mouth_table, 44, PAGE_EXECUTE_READWRITE, &oldProtect);
-				for (int i = 0; i < 10; i++)
+				for (int i = 0; i < 11; i++)
 				{
 					mouth_table[i]++;
 				}
@@ -856,7 +856,7 @@ void ApplyPatches() {
 				int* mouth_table_oldid = (int*)(0x1409A1E1C);
 				DWORD oldProtect;
 				VirtualProtect(mouth_table_oldid, 44, PAGE_EXECUTE_READWRITE, &oldProtect);
-				for (int i = 0; i < 10; i++)
+				for (int i = 0; i < 11; i++)
 				{
 					mouth_table_oldid[i]--;
 				}

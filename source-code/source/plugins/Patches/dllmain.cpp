@@ -914,7 +914,7 @@ void ApplyPatches() {
 				int* look_table_oldid = (int*)(0x1409A1D9C);
 				DWORD oldProtect;
 				VirtualProtect(look_table_oldid, 36, PAGE_EXECUTE_READWRITE, &oldProtect);
-				for (int i = 0; i < 11; i++)
+				for (int i = 0; i < 9; i++)
 				{
 					look_table_oldid[i]--;
 				}

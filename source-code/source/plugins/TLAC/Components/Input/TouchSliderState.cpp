@@ -7,8 +7,15 @@ namespace TLAC::Components
 		if (index < 0 || index >= SLIDER_SENSORS)
 			return;
 	
-		SensorPressureLevels[index] = value;
-		SensorTouched[index].IsTouched = value > 0;
+		uint32_t* ph = SerialState->sliderSerialResponse.sensors[index].pressureHistory;
+		ph[3] = ph[2];
+		ph[2] = ph[1];
+		ph[1] = ph[0];
+		ph[0] = value;
+
+		SerialState->sliderSerialResponse.scanMode = 1;
+		SerialState->sliderSerialResponse.scanCount = 1;
+		SerialState->sliderResponseCnt = 1;
 	}
 
 	void TouchSliderState::ResetSensors()

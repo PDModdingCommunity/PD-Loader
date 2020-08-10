@@ -6,6 +6,7 @@
 #include "../../Input/Keyboard/Keyboard.h"
 #include "../../Input/Bindings/KeyboardBinding.h"
 #include "../../Input/KeyConfig/Config.h"
+#include "../../Input/DirectInput/Ds4/DualShock4.h"
 #include "../../FileSystem/ConfigFile.h"
 #include "../../Utilities/Math.h"
 #include <algorithm>
@@ -55,16 +56,22 @@ namespace TLAC::Components
 		FileSystem::ConfigFile configFile(framework::GetModuleDirectory(), KEY_CONFIG_FILE_NAME);
 		configFile.OpenRead();
 
-		Config::BindConfigKeys(configFile.ConfigMap, "LEFT_SIDE_SLIDE_LEFT", *LeftSideSlideLeft, { "Q" });
-		Config::BindConfigKeys(configFile.ConfigMap, "LEFT_SIDE_SLIDE_RIGHT", *LeftSideSlideRight, { "E" });
+		usePs4OfficialSlider = configFile.GetBooleanValue("ps4_official_slider");
+		enableInMenus = configFile.GetBooleanValue("slider_in_menus");
 
-		Config::BindConfigKeys(configFile.ConfigMap, "RIGHT_SIDE_SLIDE_LEFT", *RightSideSlideLeft, { "U" });
-		Config::BindConfigKeys(configFile.ConfigMap, "RIGHT_SIDE_SLIDE_RIGHT", *RightSideSlideRight, { "O" });
+		if (!usePs4OfficialSlider)
+		{
+			Config::BindConfigKeys(configFile.ConfigMap, "LEFT_SIDE_SLIDE_LEFT", *LeftSideSlideLeft, { "Q" });
+			Config::BindConfigKeys(configFile.ConfigMap, "LEFT_SIDE_SLIDE_RIGHT", *LeftSideSlideRight, { "E" });
 
-		float touchSliderEmulationSpeed = configFile.GetFloatValue("touch_slider_emulation_speed");
-	
-		if (touchSliderEmulationSpeed != 0.0f)
-			sliderSpeed = touchSliderEmulationSpeed;
+			Config::BindConfigKeys(configFile.ConfigMap, "RIGHT_SIDE_SLIDE_LEFT", *RightSideSlideLeft, { "U" });
+			Config::BindConfigKeys(configFile.ConfigMap, "RIGHT_SIDE_SLIDE_RIGHT", *RightSideSlideRight, { "O" });
+
+			float touchSliderEmulationSpeed = configFile.GetFloatValue("touch_slider_emulation_speed");
+
+			if (touchSliderEmulationSpeed != 0.0f)
+				sliderSpeed = touchSliderEmulationSpeed;
+		}
 	}
 
 	void TouchSliderEmulator::Update()
@@ -74,20 +81,46 @@ namespace TLAC::Components
 
 	void TouchSliderEmulator::UpdateInput()
 	{
-		if (!componentsManager->GetUpdateGameInput() || componentsManager->IsDwGuiActive() || !(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN))
+		if (!componentsManager->GetUpdateGameInput() || componentsManager->IsDwGuiActive() || (!enableInMenus && !(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN)))
 			return;
 
-		sliderIncrement = GetElapsedTime() / sliderSpeed;
+		if (usePs4OfficialSlider)
+		{
+			DualShock4* ds4 = DualShock4::GetInstance();
+			if (ds4 == nullptr)
+				return;
 
-		constexpr float sensorStep = (1.0f / SLIDER_SENSORS);
+			Joystick ls = ds4->GetLeftStick();
+			Joystick rs = ds4->GetRightStick();
 
-		EmulateSliderInput(LeftSideSlideLeft, LeftSideSlideRight, ContactPoints[0], 0.0f, 0.5f);
-		EmulateSliderInput(RightSideSlideLeft, RightSideSlideRight, ContactPoints[1], 0.5f + sensorStep, 1.0f + sensorStep);
+			// test data
+			// normalised the same as ds4 sticks, except instead of ushort this uses bytes
+			// hopefully the scaling to 16 bits doesn't screw things up lol
+			//Joystick ls = Joystick((float)(0b10101010) / 255 * 2.0f - 1.0f, (float)(0b10000000) / 255 * 2.0f - 1.0f);
+			//Joystick rs = Joystick((float)(0b10000001) / 255 * 2.0f - 1.0f, (float)(0b11001100) / 255 * 2.0f - 1.0f);
 
-		sliderState->ResetSensors();
+			uint32_t state = 0;
+			state |= (uint8_t)((ls.XAxis + 1.0) * 127.5) ^ 0b10000000;
+			state |= ((uint8_t)((ls.YAxis + 1.0) * 127.5) ^ 0b10000000) << 8;
+			state |= ((uint8_t)((rs.XAxis + 1.0) * 127.5) ^ 0b10000000) << 16;
+			state |= ((uint8_t)((rs.YAxis + 1.0) * 127.5) ^ 0b10000000) << 24;
 
-		for (int i = 0; i < CONTACT_POINTS; i++)
-			ApplyContactPoint(ContactPoints[i], i);
+			ApplyBitfieldState(state);
+		}
+		else
+		{
+			sliderIncrement = GetElapsedTime() / sliderSpeed;
+
+			constexpr float sensorStep = (1.0f / SLIDER_SENSORS);
+
+			EmulateSliderInput(LeftSideSlideLeft, LeftSideSlideRight, ContactPoints[0], 0.0f, 0.5f);
+			EmulateSliderInput(RightSideSlideLeft, RightSideSlideRight, ContactPoints[1], 0.5f + sensorStep, 1.0f + sensorStep);
+
+			sliderState->ResetSensors();
+
+			for (int i = 0; i < CONTACT_POINTS; i++)
+				ApplyContactPoint(ContactPoints[i]);
+		}
 	}
 
 	void TouchSliderEmulator::OnFocusLost()
@@ -120,23 +153,25 @@ namespace TLAC::Components
 		contactPoint.InContact = leftDown || rightDown;
 	}
 
-	void TouchSliderEmulator::ApplyContactPoint(ContactPoint &contactPoint, int section)
+	void TouchSliderEmulator::ApplyContactPoint(ContactPoint& contactPoint)
 	{
-		sliderState->SectionTouched[section] = contactPoint.InContact;
-
-		int pressure = contactPoint.InContact ? FULL_PRESSURE : NO_PRESSURE;
-		float position = std::clamp(contactPoint.Position, 0.0f, 1.0f);
-
 		if (contactPoint.InContact)
 		{
+			float position = std::clamp(contactPoint.Position, 0.0f, 1.0f);
 			int sensor = (int)(position * (SLIDER_SENSORS - 1));
 
-			sliderState->SetSensor(sensor, pressure);
+			sliderState->SetSensor(sensor, FULL_PRESSURE);
 		}
+	}
 
-		constexpr float startRange = -1.0f;
-		constexpr float endRange   = +1.0f;
-
-		sliderState->SectionPositions[section] = contactPoint.InContact ? (ConvertRange(0.0f, 1.0f, startRange, endRange, position)) : 0.0f;
+	void TouchSliderEmulator::ApplyBitfieldState(uint32_t state)
+	{
+		for (int i = 0; i < 32; i++)
+		{
+			if (state & (1 << (31 - i)))
+				sliderState->SetSensor(i, FULL_PRESSURE);
+			else
+				sliderState->SetSensor(i, NO_PRESSURE);
+		}
 	}
 }

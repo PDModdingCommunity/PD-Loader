@@ -6,7 +6,10 @@ namespace TLAC::Components
 	{
 		if (index < 0 || index >= SLIDER_SENSORS)
 			return;
-	
+		
+		if (SerialState == nullptr)
+			return;
+
 		uint32_t* ph = SerialState->sliderSerialResponse.sensors[index].pressureHistory;
 		ph[3] = ph[2];
 		ph[2] = ph[1];

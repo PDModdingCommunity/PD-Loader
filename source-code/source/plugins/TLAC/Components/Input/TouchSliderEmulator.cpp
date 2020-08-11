@@ -100,10 +100,12 @@ namespace TLAC::Components
 			//Joystick rs = Joystick((float)(0b10000001) / 255 * 2.0f - 1.0f, (float)(0b11001100) / 255 * 2.0f - 1.0f);
 
 			uint32_t state = 0;
-			state |= (uint8_t)((ls.XAxis + 1.0) * 127.5) ^ 0b10000000;
-			state |= ((uint8_t)((ls.YAxis + 1.0) * 127.5) ^ 0b10000000) << 8;
-			state |= ((uint8_t)((rs.XAxis + 1.0) * 127.5) ^ 0b10000000) << 16;
-			state |= ((uint8_t)((rs.YAxis + 1.0) * 127.5) ^ 0b10000000) << 24;
+			state |= (uint8_t)((ls.XAxis + 1.0 + 0.001) * 127.5) ^ 0b10000000; // 0.001 to hopefully fix zero-point (and maybe some rounding errors)
+			if (state == 0xffffffff)
+				printf("Joy neutral pos: %6.4f", ls.XAxis);
+			state |= ((uint8_t)((ls.YAxis + 1.0 + 0.001) * 127.5) ^ 0b10000000) << 8;
+			state |= ((uint8_t)((rs.XAxis + 1.0 + 0.001) * 127.5) ^ 0b10000000) << 16;
+			state |= ((uint8_t)((rs.YAxis + 1.0 + 0.001) * 127.5) ^ 0b10000000) << 24;
 
 			ApplyBitfieldState(state);
 		}

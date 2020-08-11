@@ -178,6 +178,7 @@ ConfigOptionBase* optionsArray[] = {
 	new DropdownOption(L"force_look", PATCHES_SECTION, CONFIG_FILE, L"Look Type:", L"Change the look animations.", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
 	new BooleanOption(L"no_hand_scaling", PATCHES_SECTION, CONFIG_FILE, L"No Hand Scaling", L"Disable hand scaling.", false, false),
 	new NumericOption(L"default_hand_size", PATCHES_SECTION, CONFIG_FILE, L"Default Hand Size:", L"-1: default\n12200: PDA", -1, -1, INT_MAX),
+	new BooleanOption(L"sing_missed", PATCHES_SECTION, CONFIG_FILE, L"Sing Missed", L"Sing missed notes.", false, false),
 	new OptionMetaSpacer(8),
 
 	new BooleanOption(L"hide_volume", PATCHES_SECTION, CONFIG_FILE, L"Hide Volume Buttons", L"Hide the volume and SE control buttons.", false, false),

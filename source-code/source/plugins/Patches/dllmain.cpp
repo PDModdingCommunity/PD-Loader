@@ -230,6 +230,7 @@ void ApplyPatches() {
 	auto nNoScrollingSfx = GetPrivateProfileIntW(L"patches", L"no_scrolling_sfx", FALSE, CONFIG_FILE);
 	auto nNoHandScaling = GetPrivateProfileIntW(L"patches", L"no_hand_scaling", FALSE, CONFIG_FILE);
 	auto nDefaultHandSize = GetPrivateProfileIntW(L"patches", L"default_hand_size", -1, CONFIG_FILE);
+	auto nSingMissed = GetPrivateProfileIntW(L"patches", L"sing_missed", FALSE, CONFIG_FILE);
 	auto nForceMouth = GetPrivateProfileIntW(L"patches", L"force_mouth", 0, CONFIG_FILE);
 	auto nForceExpressions = GetPrivateProfileIntW(L"patches", L"force_expressions", 0, CONFIG_FILE);
 	auto nForceLook = GetPrivateProfileIntW(L"patches", L"force_look", 0, CONFIG_FILE);
@@ -834,6 +835,12 @@ void ApplyPatches() {
 			/*VirtualProtect(addr3, 4, oldProtect, nullptr);
 			VirtualProtect(addr4, 4, oldProtect, nullptr);*/
 			printf("[Patches] New default hand size: %f\n", num);
+		}
+		// Sing missed notes
+		if (nSingMissed)
+		{
+			InjectCode((void*)0x140109044, { 0xEB });
+			InjectCode((void*)0x140109096, { 0xEB });
 		}
 		// Force mouth animations
 		{

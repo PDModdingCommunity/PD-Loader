@@ -93,19 +93,33 @@ namespace TLAC::Components
 			Joystick ls = ds4->GetLeftStick();
 			Joystick rs = ds4->GetRightStick();
 
-			// test data
-			// normalised the same as ds4 sticks, except instead of ushort this uses bytes
-			// hopefully the scaling to 16 bits doesn't screw things up lol
-			//Joystick ls = Joystick((float)(0b10101010) / 255 * 2.0f - 1.0f, (float)(0b10000000) / 255 * 2.0f - 1.0f);
-			//Joystick rs = Joystick((float)(0b10000001) / 255 * 2.0f - 1.0f, (float)(0b11001100) / 255 * 2.0f - 1.0f);
-
+			// this looks bad because it is -- experimentally derived based on observed values
+			/*
+				0: -1
+				63: -0.507805
+				65: -0.492210
+				126: -0.015640
+				127: -0.007828
+				128: -0.000015
+				129: 0.000015
+				130: 0.007950
+				131: 0.015885
+				192: 0.500023
+				255: 1
+			*/
 			uint32_t state = 0;
-			state |= (uint8_t)((ls.XAxis + 1.0 + 0.001) * 127.5) ^ 0b10000000; // 0.001 to hopefully fix zero-point (and maybe some rounding errors)
-			if (state == 0xffffffff)
-				printf("Joy neutral pos: %6.4f", ls.XAxis);
-			state |= ((uint8_t)((ls.YAxis + 1.0 + 0.001) * 127.5) ^ 0b10000000) << 8;
-			state |= ((uint8_t)((rs.XAxis + 1.0 + 0.001) * 127.5) ^ 0b10000000) << 16;
-			state |= ((uint8_t)((rs.YAxis + 1.0 + 0.001) * 127.5) ^ 0b10000000) << 24;
+			uint8_t read;
+			//printf("left stick: %8.6f, %8.6f, ", ls.XAxis, ls.YAxis);
+			read = ls.XAxis < 0 ? ((ls.XAxis + 1.001) * 128) : 255 - (uint8_t)((-ls.XAxis + 1.001) * 126);
+			//printf("%d, ", (int)read);
+			state |= read ^ 0b10000000;
+			read = ls.YAxis < 0 ? ((ls.YAxis + 1.001) * 128) : 255 - (uint8_t)((-ls.YAxis + 1.001) * 126);
+			//printf("%d\n", (int)read);
+			state |= (read ^ 0b10000000) << 8;
+			read = rs.XAxis < 0 ? ((rs.XAxis + 1.001) * 128) : 255 - (uint8_t)((-rs.XAxis + 1.001) * 126);
+			state |= (read ^ 0b10000000) << 16;
+			read = rs.YAxis < 0 ? ((rs.YAxis + 1.001) * 128) : 255 - (uint8_t)((-rs.YAxis + 1.001) * 126);
+			state |= (read ^ 0b10000000) << 24;
 
 			ApplyBitfieldState(state);
 		}

@@ -787,12 +787,6 @@ void ApplyPatches() {
 		{
 			InjectCode((void*)0x0000000140565E6B, { 0x90, 0x90 });
 		}
-		// The original slider update needs to run for hardware sliders to work -- only patch it when using emulation
-		if (!nHardwareSlider)
-		{
-			// Don't update the touch slider state so we can write our own
-			InjectCode((void*)0x000000014061579B, { 0x90, 0x90, 0x90, 0x8B, 0x42, 0xE0, 0x90, 0x90, 0x90 });
-		}
 		// Quick start
 		{
 			if (nQuickStart == 1) // skip the card/guest screen

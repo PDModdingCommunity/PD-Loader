@@ -25,6 +25,10 @@ namespace TLAC::Components
 		Input::Binding* RightSideSlideLeft;
 		Input::Binding* RightSideSlideRight;
 
+		bool usePs4OfficialSlider;
+
+		bool enableInMenus;
+
 		TouchSliderEmulator();
 		~TouchSliderEmulator();
 
@@ -53,7 +57,8 @@ namespace TLAC::Components
 		ContactPoint ContactPoints[CONTACT_POINTS];
 
 		void EmulateSliderInput(Input::Binding *leftBinding, Input::Binding *rightBinding, ContactPoint &contactPoint, float start, float end);
-		void ApplyContactPoint(ContactPoint &contactPoint, int section);
+		void ApplyContactPoint(ContactPoint &contactPoint);
+		void ApplyBitfieldState(uint32_t state);
 	};
 }
 

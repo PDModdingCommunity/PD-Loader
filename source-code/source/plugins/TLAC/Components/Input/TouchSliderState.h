@@ -10,9 +10,37 @@
 
 namespace TLAC::Components
 {
+	struct TouchSliderSerialState
+	{
+		uint8_t padding[0x1960];
+
+		int sliderResponseCnt;
+		struct
+		{
+			int scanMode;
+			int scanCount;
+			struct
+			{
+				uint32_t pressureHistory[4]; // first: current, second: last sample, ...
+			} sensors[SLIDER_SENSORS];
+		} sliderSerialResponse;
+
+		struct
+		{
+			int scanMode;
+			int scanCount;
+			struct
+			{
+				uint32_t pressureHistory[4]; // first: current, second: last sample, ...
+			} sensors[SLIDER_SENSORS];
+		} sliderSerialResponseCopy; // the other one is copied here by the game, feel free to ignore it
+	};
+
 	struct TouchSliderState
 	{
-		uint8_t Padding0000[112];
+		uint8_t Padding0000[104];
+
+		TouchSliderSerialState* SerialState;
 
 		int32_t State;
 

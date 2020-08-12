@@ -59,8 +59,22 @@ namespace TLAC::Components
 		usePs4OfficialSlider = configFile.GetBooleanValue("ps4_official_slider");
 		enableInMenus = configFile.GetBooleanValue("slider_in_menus");
 
-		if (!usePs4OfficialSlider)
+		if (usePs4OfficialSlider)
 		{
+			DualShock4* ds4 = DualShock4::GetInstance();
+			if (ds4 == nullptr)
+				DualShock4::rawMode = true; // set raw mode for future instances if no current instance
+			else
+				ds4->SetRawMode(true); // if is a current instance, set raw mode on it (also sets for future instances)
+		}
+		else
+		{
+			DualShock4* ds4 = DualShock4::GetInstance();
+			if (ds4 == nullptr)
+				DualShock4::rawMode = false; // set raw mode for future instances if no current instance
+			else
+				ds4->SetRawMode(false); // if is a current instance, set raw mode on it (also sets for future instances)
+
 			Config::BindConfigKeys(configFile.ConfigMap, "LEFT_SIDE_SLIDE_LEFT", *LeftSideSlideLeft, { "Q" });
 			Config::BindConfigKeys(configFile.ConfigMap, "LEFT_SIDE_SLIDE_RIGHT", *LeftSideSlideRight, { "E" });
 
@@ -93,33 +107,16 @@ namespace TLAC::Components
 			Joystick ls = ds4->GetLeftStick();
 			Joystick rs = ds4->GetRightStick();
 
-			// this looks bad because it is -- experimentally derived based on observed values
-			/*
-				0: -1
-				63: -0.507805
-				65: -0.492210
-				126: -0.015640
-				127: -0.007828
-				128: -0.000015
-				129: 0.000015
-				130: 0.007950
-				131: 0.015885
-				192: 0.500023
-				255: 1
-			*/
 			uint32_t state = 0;
-			uint8_t read;
-			//printf("left stick: %8.6f, %8.6f, ", ls.XAxis, ls.YAxis);
-			read = ls.XAxis < 0 ? ((ls.XAxis + 1.001) * 128) : 255 - (uint8_t)((-ls.XAxis + 1.001) * 126);
-			//printf("%d, ", (int)read);
-			state |= read ^ 0b10000000;
-			read = ls.YAxis < 0 ? ((ls.YAxis + 1.001) * 128) : 255 - (uint8_t)((-ls.YAxis + 1.001) * 126);
-			//printf("%d\n", (int)read);
-			state |= (read ^ 0b10000000) << 8;
-			read = rs.XAxis < 0 ? ((rs.XAxis + 1.001) * 128) : 255 - (uint8_t)((-rs.XAxis + 1.001) * 126);
-			state |= (read ^ 0b10000000) << 16;
-			read = rs.YAxis < 0 ? ((rs.YAxis + 1.001) * 128) : 255 - (uint8_t)((-rs.YAxis + 1.001) * 126);
-			state |= (read ^ 0b10000000) << 24;
+
+			// DualShock4 normalises sticks to floats -- this undoes that
+			//printf("left stick: %9.6f, %9.6f, ", ls.XAxis, ls.YAxis);
+			state |= (uint8_t)((ls.XAxis + 1.0 + 0.001) * 127.5) ^ 0b10000000; // 0.001 to prevent rounding errors
+			//printf("%d, ", (int)(state ^ 0b10000000));
+			state |= ((uint8_t)((ls.YAxis + 1.0 + 0.001) * 127.5) ^ 0b10000000) << 8;
+			//printf("%d\n", (int)((state >> 8) ^ 0b10000000));
+			state |= ((uint8_t)((rs.XAxis + 1.0 + 0.001) * 127.5) ^ 0b10000000) << 16;
+			state |= ((uint8_t)((rs.YAxis + 1.0 + 0.001) * 127.5) ^ 0b10000000) << 24;
 
 			ApplyBitfieldState(state);
 		}

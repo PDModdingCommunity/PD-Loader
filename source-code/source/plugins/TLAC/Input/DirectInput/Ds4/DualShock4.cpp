@@ -6,6 +6,7 @@
 namespace TLAC::Input
 {
 	DualShock4* DualShock4::instance;
+	bool DualShock4::rawMode = false;
 
 	DualShock4::DualShock4()
 	{
@@ -53,7 +54,25 @@ namespace TLAC::Input
 		if (FAILED(result = DI_SetDataFormat(&c_dfDIJoystick2)))
 			return false;
 
+		if (FAILED(result = DI_SetRange(0, 255))) // use 8-bit data
+			return false;
+
+		// set raw mode from previous instance
+		if (rawMode && FAILED(result = DI_SetRawMode(true)))
+			return false;
+
 		result = DI_Acquire();
+
+		return true;
+	}
+
+	bool DualShock4::SetRawMode(bool raw)
+	{
+		HRESULT result = NULL;
+		if (FAILED(result = DI_SetRawMode(raw)))
+			return false;
+
+		rawMode = raw;
 
 		return true;
 	}

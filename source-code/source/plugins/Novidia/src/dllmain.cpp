@@ -31,6 +31,13 @@ void h_uploadModelTransformBuf_TexSubImage(DWORD* a1, int a2)
 	glActiveTexture(GL_TEXTURE0);
 }
 
+void h_uploadModelTransformBuf_NoUpload(DWORD* a1, int a2)
+{
+	glActiveTexture(GL_TEXTURE8);
+	glBindTexture(GL_TEXTURE_1D, buf_tex);
+	glActiveTexture(GL_TEXTURE0);
+}
+
 // just a crash fix
 void h_glBindBuffer(GLenum target, GLuint buffer)
 {
@@ -95,7 +102,7 @@ void h_glutSetCursor(int cursor)
 		glGenTextures(1, &buf_tex);
 		printf("[Novidia] Buffer texture id: %d\n", buf_tex);
 		glBindTexture(GL_TEXTURE_1D, buf_tex);
-		if (use_TexSubImage)
+		if (enable_chara_skinning && use_TexSubImage)
 			glTexStorage1D(GL_TEXTURE_1D, 1, GL_RGBA32F, 0x3000 / sizeof(float) / 4);
 		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -128,7 +135,45 @@ void h_glutSetCursor(int cursor)
 			printf("[Novidia] Using RGBA texture uploads\n");
 		}
 
+		if (!enable_chara_skinning)
+		{
+			struct vec4 {
+				float x;
+				float y;
+				float z;
+				float w;
+			};
 
+			struct mtx {
+				vec4 xMul;
+				vec4 yMul;
+				vec4 zMul;
+			};
+
+			/*
+			mtx no_anim_mtx = {
+				{1, 0, 0, 0},
+				{0, 1, 0, 0},
+				{0, 0, 1, 0},
+			};
+			*/
+
+			mtx no_anim_mtx = {
+				{0, 0, 0, 0},
+				{0, 0, 0, 0},
+				{0, 0, 0, 0},
+			};
+
+			float uploadBuf[0x3000 / sizeof(float)];
+
+			for (int i = 0; i < sizeof(uploadBuf) / sizeof(float); i += sizeof(no_anim_mtx) / sizeof(float))
+			{
+				// yes, I really could just memset it to all zeros lol
+				memcpy(&uploadBuf[i], &no_anim_mtx, sizeof(no_anim_mtx));
+			}
+			
+			glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F, 0x3000 / sizeof(float) / 4, 0, tex_upload_format, GL_FLOAT, uploadBuf);
+		}
 	}
 
 	DetourTransactionBegin();
@@ -158,10 +203,17 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		DetourAttach(&(PVOID&)wGlGetProcAddress_forhook, h_wglGetProcAddress);
 
 		printf("[Novidia] Hooking uploadModelTransformBuf\n");
-		if (use_TexSubImage)
-			DetourAttach(&(PVOID&)uploadModelTransformBuf, h_uploadModelTransformBuf_TexSubImage);
+		if (enable_chara_skinning)
+		{
+			if (use_TexSubImage)
+				DetourAttach(&(PVOID&)uploadModelTransformBuf, h_uploadModelTransformBuf_TexSubImage);
+			else
+				DetourAttach(&(PVOID&)uploadModelTransformBuf, h_uploadModelTransformBuf_TexImage);
+		}
 		else
-			DetourAttach(&(PVOID&)uploadModelTransformBuf, h_uploadModelTransformBuf_TexImage);
+		{
+			DetourAttach(&(PVOID&)uploadModelTransformBuf, h_uploadModelTransformBuf_NoUpload);
+		}
 
 		DetourTransactionCommit();
 
@@ -180,6 +232,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 using namespace PluginConfig;
 
 PluginConfigOption config[] = {
+	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"enable_chara_skinning", L"general", CONFIG_FILE, L"Enable Chara Skinning", L"If you really need to get extra performance, you can disable uploading skinning data. (character models will disappear)", true, false } },
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"use_TexSubImage", L"general", CONFIG_FILE, L"Use glTexSubImage", L"glTexSubImage should offer higher performance, but stuttering has been reported when it is used.\nTry disabling this if you have issues.", true, false } },
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"force_BGRA_upload", L"general", CONFIG_FILE, L"Force BGRA Texture Uploads", L"BGRA format uploads seem to run faster (on some hardware), but drivers may suggest RGBA instead.\nUsing this forces uploads to use the BGRA format.\n\nDisabling this may decrease or improve performance.", true, false } },
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"shader_amd_farc", L"general", CONFIG_FILE, L"Load shader_amd.farc", L"Novidia can manage loading of alternate shaders automatically.\nLeave this enabled for current and future versions of AMDPack.", true, false } },

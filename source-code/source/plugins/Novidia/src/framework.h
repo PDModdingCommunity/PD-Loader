@@ -24,7 +24,7 @@ bool checkBufferTargetOk(GLenum target)
 
 int __stdcall stub() { return 1; }
 
-
+bool enable_chara_skinning;
 bool use_TexSubImage;
 bool force_BGRA_upload;
 GLint tex_upload_format;
@@ -48,6 +48,7 @@ LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
 
 void loadConfig()
 {
+	enable_chara_skinning = GetPrivateProfileIntW(L"general", L"enable_chara_skinning", 1, CONFIG_FILE) > 0 ? true : false;
 	use_TexSubImage = GetPrivateProfileIntW(L"general", L"use_TexSubImage", 1, CONFIG_FILE) > 0 ? true : false;
 	force_BGRA_upload = GetPrivateProfileIntW(L"general", L"force_BGRA_upload", 1, CONFIG_FILE) > 0 ? true : false;
 	shader_amd_farc = GetPrivateProfileIntW(L"general", L"shader_amd_farc", 1, CONFIG_FILE) > 0 ? true : false;

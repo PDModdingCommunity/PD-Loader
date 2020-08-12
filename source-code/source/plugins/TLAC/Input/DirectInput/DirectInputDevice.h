@@ -16,6 +16,8 @@ namespace TLAC::Input
 		HRESULT DI_Release();
 		HRESULT DI_Poll();
 		HRESULT DI_GetDeviceState(DWORD size, LPVOID data);
+		HRESULT DI_SetRange(LONG min, LONG max);
+		HRESULT DI_SetRawMode(BOOL raw);
 
 		void DI_Dispose();
 	};

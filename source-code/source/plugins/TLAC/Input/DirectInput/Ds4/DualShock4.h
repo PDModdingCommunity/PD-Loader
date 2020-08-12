@@ -31,6 +31,7 @@ namespace TLAC::Input
 		static bool TryInitializeInstance();
 
 		bool Initialize();
+		bool SetRawMode(bool raw);
 		bool PollInput() override;
 
 		bool IsDown(Ds4Button button);
@@ -48,6 +49,8 @@ namespace TLAC::Input
 		static inline DualShock4* GetInstance() { return instance; };
 		static inline void DeleteInstance() { delete instance; instance = nullptr; };
 
+		static bool rawMode; // kinda dodgy, used to set raw mode for all instances without waiting for a single one
+
 	private:
 		static DualShock4* instance;
 
@@ -58,8 +61,8 @@ namespace TLAC::Input
 		const float joystickThreshold = 0.5f;
 		const float dpadThreshold = 0.5f;
 	
-		inline float NormalizeTrigger(long value) { return (float)value / USHRT_MAX; };
-		inline float NormalizeStick(long value) { return (float)value / USHRT_MAX * 2.0f - 1.0f; };
+		inline float NormalizeTrigger(long value) { return (float)value / UCHAR_MAX; };
+		inline float NormalizeStick(long value) { return (float)value / UCHAR_MAX * 2.0f - 1.0f; };
 		inline Joystick NormalizeStick(long x, long y) { return Joystick(NormalizeStick(x), NormalizeStick(y)); };
 
 		void UpdateInternalDs4State(Ds4State &state);

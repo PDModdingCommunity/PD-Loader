@@ -53,6 +53,45 @@ namespace TLAC::Input
 		return result;
 	}
 
+	HRESULT DirectInputDevice::DI_SetRange(LONG min, LONG max)
+	{
+		DIPROPRANGE propData;
+		propData.lMin = min;
+		propData.lMax = max;
+
+		propData.diph.dwSize = sizeof(DIPROPRANGE);
+		propData.diph.dwHeaderSize = sizeof(DIPROPHEADER);
+		propData.diph.dwHow = DIPH_DEVICE;
+		propData.diph.dwObj = 0;
+
+		HRESULT result = directInputdevice->SetProperty(DIPROP_RANGE, &propData.diph);
+		return result;
+	}
+
+	HRESULT DirectInputDevice::DI_SetRawMode(BOOL raw)
+	{
+		// extra unacquire/acquire logic so this can be called on an active device
+		BOOL wasAcquired = DI_Unacquire() == DI_OK;
+
+		DIPROPDWORD propData;
+		propData.dwData = raw ? DIPROPCALIBRATIONMODE_RAW : DIPROPCALIBRATIONMODE_COOKED;
+
+		propData.diph.dwSize = sizeof(DIPROPDWORD);
+		propData.diph.dwHeaderSize = sizeof(DIPROPHEADER);
+		propData.diph.dwHow = DIPH_DEVICE;
+		propData.diph.dwObj = 0;
+
+		HRESULT result = NULL;
+
+		if (FAILED(result = directInputdevice->SetProperty(DIPROP_CALIBRATIONMODE, &propData.diph)))
+			return result;
+
+		if (wasAcquired)
+			result = DI_Acquire();
+
+		return result;
+	}
+
 	void DirectInputDevice::DI_Dispose()
 	{
 		if (directInputdevice == nullptr)

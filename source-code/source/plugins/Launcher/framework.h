@@ -223,9 +223,6 @@ ConfigOptionBase* optionsArray[] = {
 	new NumericOption(L"xinput_preferred", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Controller Num:", L"Sets the preferred XInput controller.\nIf unavailable, the next connected controller is used.", 0, 0, 3),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"hardware_slider", PATCHES_SECTION, CONFIG_FILE, L"Use Hardware Slider", L"Enable this if using a real arcade slider.\n(set the slider to port COM11)", false, false),
-	new OptionMetaSpacer(8),
-
 	new BooleanOption(L"opengl_patch_a", LAUNCHER_SECTION, CONFIG_FILE, L"OpenGL Patch A", L"Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.", false, false),
 	new BooleanOption(L"opengl_patch_b", LAUNCHER_SECTION, CONFIG_FILE, L"OpenGL Patch B", L"Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.", false, false),
 	new OptionMetaSpacer(8),

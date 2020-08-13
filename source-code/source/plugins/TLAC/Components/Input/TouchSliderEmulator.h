@@ -57,7 +57,7 @@ namespace TLAC::Components
 		ContactPoint ContactPoints[CONTACT_POINTS];
 
 		void EmulateSliderInput(Input::Binding *leftBinding, Input::Binding *rightBinding, ContactPoint &contactPoint, float start, float end);
-		void ApplyContactPoint(ContactPoint &contactPoint);
+		void ApplyContactPoint(ContactPoint &contactPoint, int section);
 		void ApplyBitfieldState(uint32_t state);
 	};
 }

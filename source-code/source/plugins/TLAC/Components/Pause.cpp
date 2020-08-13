@@ -265,7 +265,8 @@ namespace TLAC::Components
 			// no slider while paused
 			// this is simpler than buttons because slider doesn't trigger on press, it triggers on movement
 			// (therefore per-button blocking isn't needed)
-			sliderState->ResetSensors();
+			// SENSOR_SET_MODE_SECTIONS matches old behaviour
+			sliderState->ResetSensors(TouchSliderState::SENSOR_SET_MODE_SECTIONS);
 		}
 		else
 		{

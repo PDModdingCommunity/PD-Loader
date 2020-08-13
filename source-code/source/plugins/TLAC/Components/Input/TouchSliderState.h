@@ -8,6 +8,7 @@
 #define NO_PRESSURE 0
 #define FULL_PRESSURE 180
 
+
 namespace TLAC::Components
 {
 	struct TouchSliderSerialState
@@ -64,8 +65,17 @@ namespace TLAC::Components
 			uint8_t Padding[45];
 		} SensorTouched[SLIDER_SENSORS];
 
-		void SetSensor(int index, int value);
-		void ResetSensors();
+
+		// two different places to be set depending on operation mode now
+		// stick/button based emulation directly controls sections and raw slider emulation controls fake serial inputs
+		enum SliderSensorSetMode
+		{
+			SENSOR_SET_MODE_SECTIONS,
+			SENSOR_SET_MODE_RAW
+		};
+
+		void SetSensor(int index, int value, SliderSensorSetMode mode);
+		void ResetSensors(SliderSensorSetMode mode);
 	};
 }
 

@@ -129,18 +129,22 @@ namespace TLAC::Components
 			EmulateSliderInput(LeftSideSlideLeft, LeftSideSlideRight, ContactPoints[0], 0.0f, 0.5f);
 			EmulateSliderInput(RightSideSlideLeft, RightSideSlideRight, ContactPoints[1], 0.5f + sensorStep, 1.0f + sensorStep);
 
-			sliderState->ResetSensors();
+			sliderState->ResetSensors(TouchSliderState::SENSOR_SET_MODE_SECTIONS);
 
 			for (int i = 0; i < CONTACT_POINTS; i++)
-				ApplyContactPoint(ContactPoints[i]);
+				ApplyContactPoint(ContactPoints[i], i);
 		}
 	}
 
 	void TouchSliderEmulator::OnFocusLost()
 	{
-		sliderState->ResetSensors();
+		if (usePs4OfficialSlider)
+			sliderState->ResetSensors(TouchSliderState::SENSOR_SET_MODE_RAW);
+		else
+			sliderState->ResetSensors(TouchSliderState::SENSOR_SET_MODE_SECTIONS);
 	}
 
+	// EmulateSliderInput and ApplyContactPoint are used for analog stick/button slider emulation
 	void TouchSliderEmulator::EmulateSliderInput(Binding *leftBinding, Binding *rightBinding, ContactPoint &contactPoint, float start, float end)
 	{
 		bool leftDown = leftBinding->AnyDown();
@@ -166,25 +170,35 @@ namespace TLAC::Components
 		contactPoint.InContact = leftDown || rightDown;
 	}
 
-	void TouchSliderEmulator::ApplyContactPoint(ContactPoint& contactPoint)
+	void TouchSliderEmulator::ApplyContactPoint(ContactPoint& contactPoint, int section)
 	{
+		sliderState->SectionTouched[section] = contactPoint.InContact;
+
+		int pressure = contactPoint.InContact ? FULL_PRESSURE : NO_PRESSURE;
+		float position = std::clamp(contactPoint.Position, 0.0f, 1.0f);
+
 		if (contactPoint.InContact)
 		{
-			float position = std::clamp(contactPoint.Position, 0.0f, 1.0f);
 			int sensor = (int)(position * (SLIDER_SENSORS - 1));
 
-			sliderState->SetSensor(sensor, FULL_PRESSURE);
+			sliderState->SetSensor(sensor, pressure, TouchSliderState::SENSOR_SET_MODE_SECTIONS);
 		}
+
+		constexpr float startRange = -1.0f;
+		constexpr float endRange = +1.0f;
+
+		sliderState->SectionPositions[section] = contactPoint.InContact ? (ConvertRange(0.0f, 1.0f, startRange, endRange, position)) : 0.0f;
 	}
 
+	// ApplyBitfieldState is used for setting raw slider data
 	void TouchSliderEmulator::ApplyBitfieldState(uint32_t state)
 	{
 		for (int i = 0; i < 32; i++)
 		{
 			if (state & (1 << (31 - i)))
-				sliderState->SetSensor(i, FULL_PRESSURE);
+				sliderState->SetSensor(i, FULL_PRESSURE, TouchSliderState::SENSOR_SET_MODE_RAW);
 			else
-				sliderState->SetSensor(i, NO_PRESSURE);
+				sliderState->SetSensor(i, NO_PRESSURE, TouchSliderState::SENSOR_SET_MODE_RAW);
 		}
 	}
 }

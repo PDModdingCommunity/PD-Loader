@@ -14,20 +14,10 @@ after_build:
 
     md %TMP%\full\plugins\
     
-    md %TMP%\full\plugins\pv_equip\
-
     md %TMP%\full\ram\
 
-    md %TMP%\full\ram\databank\
-
-    md %TMP%\update\
-
-    md %TMP%\update\patches\
-    
-    md %TMP%\update\plugins\
-    
-    md %TMP%\update\plugins\pv_equip\
-    
+    md %TMP%\full\ram\databank_template\
+   
     md %TMP%\amd-pack\
     
     md %TMP%\amd-pack\plugins\
@@ -40,27 +30,7 @@ after_build:
 
 
 
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dinput8.dll %TMP%\update\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\update\plugins\
-    
-    del %TMP%\update\plugins\Novidia.dva
-    
-    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\update\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_base_game.sfv %TMP%\update\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_base_game.md5 %TMP%\update\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_mount_data.sfv %TMP%\update\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_mount_data.md5 %TMP%\update\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\ShaderPatch.ini %TMP%\update\plugins\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\patches\custom_freeplay_text_example.p %TMP%\update\patches\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dinput8.dll %TMP%\full\
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dnsapi.dll %TMP%\full\
     
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\full\plugins\
     
@@ -80,9 +50,7 @@ after_build:
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\*.* %TMP%\full\plugins\
     
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\pv_equip\*.* %TMP%\full\plugins\pv_equip\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\ram\databank\*.dat %TMP%\full\ram\databank\
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\ram\databank_template\*.dat %TMP%\full\ram\databank_template\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\patches\custom_freeplay_text_example.p %TMP%\full\patches\
     
@@ -98,28 +66,8 @@ after_build:
 
     cd %TMP%\full\
 
-    echo del dnsapi.dll > "DELETE DNSAPI.DLL.bat"
-
     7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AppVeyor.zip *
-    
-    ren dinput8.dll dnsapi.dll
-    
-    del "DELETE DNSAPI.DLL.bat"
-    
-    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AppVeyor-Vista7.zip *
-
-    cd %TMP%\update\
-
-    echo del dnsapi.dll > "DELETE DNSAPI.DLL.bat"
-
-    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-Update-AppVeyor.zip *
-    
-    ren dinput8.dll dnsapi.dll
-    
-    del "DELETE DNSAPI.DLL.bat"
-    
-    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-Update-AppVeyor-Vista7.zip *
-    
+  
     cd %TMP%\amd-pack\amd-tools\
     
     C:\Python38\python.exe -m pip install cx_freeze

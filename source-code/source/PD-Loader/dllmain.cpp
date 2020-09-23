@@ -1,5 +1,14 @@
 #include "framework.h"
 #include "exception.hpp"
+#include <VersionHelpers.h>
+#include <Shlwapi.h>
+#pragma comment(lib, "Shlwapi.lib")
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#pragma comment(linker,"\"/manifestdependency:type='win32' \
+name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
+processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 HMODULE hm;
 std::vector<std::wstring> iniPaths;
@@ -180,7 +189,7 @@ void LoadDVA(std::wstring &path, LPCWSTR dir, LPCWSTR fileName)
 				default:
 					msg.append(L"\n\nAre all dependencies installed?");
 				}
-				msg.append(L"\nPlease refer to the quick start guide or the wiki.");
+				msg.append(L"\nPlease refer to the quick start guide or the wiki.\n\nAlso, please note that 3rd-party plugins may require additional libraries.");
 				MessageBoxW(0, msg.c_str(), L"PD Loader", MB_ICONERROR);
 			}
 		}
@@ -718,12 +727,90 @@ LONG WINAPI CustomUnhandledExceptionFilter(LPEXCEPTION_POINTERS ExceptionInfo)
 
 void Init()
 {
+	SetProcessDPIAware();
+
+	auto dir = GetModuleFileNameW(hm).substr(0, GetModuleFileNameW(hm).find_last_of(L"/\\") + 1);
+	SetCurrentDirectoryW(dir.c_str());
+
 	std::wstring modulePath = GetModuleFileNameW(hm);
 	std::wstring moduleName = modulePath.substr(modulePath.find_last_of(L"/\\") + 1);
 	moduleName.resize(moduleName.find_last_of(L'.'));
 	modulePath.resize(modulePath.find_last_of(L"/\\") + 1);
 	iniPaths.emplace_back(modulePath + moduleName + L".ini");
-	iniPaths.emplace_back(modulePath + L"plugins\\config.ini");
+	const auto CONFIG_FILE = L"plugins\\config.ini";
+	const auto CONFIG_FILE_TEMPLATE = L"plugins\\config_template.bin";
+	iniPaths.emplace_back(modulePath + CONFIG_FILE);
+
+
+	// initialize configuration files.
+	CopyFileW(CONFIG_FILE_TEMPLATE, CONFIG_FILE, true);
+	const auto COMPONENTS_TEMPLATE = L"plugins\\components_template.bin";
+	const auto COMPONENTS = L"plugins\\components.ini";
+	CopyFileW(COMPONENTS_TEMPLATE, COMPONENTS, true);
+	const auto KEYCONFIG_TEMPLATE = L"plugins\\keyconfig_template.bin";
+	const auto KEYCONFIG = L"plugins\\keyconfig.ini";
+	CopyFileW(KEYCONFIG_TEMPLATE, KEYCONFIG, true);
+	const auto PLAYERDATA_TEMPLATE = L"plugins\\playerdata_template.bin";
+	const auto PLAYERDATA = L"plugins\\playerdata.ini";
+	CopyFileW(PLAYERDATA_TEMPLATE, PLAYERDATA, true);
+	const auto DIVASOUND_TEMPLATE = L"plugins\\DivaSound_template.bin";
+	const auto DIVASOUND = L"plugins\\DivaSound.ini";
+	CopyFileW(DIVASOUND_TEMPLATE, DIVASOUND, true);
+	const auto SHADERPATCH_TEMPLATE = L"plugins\\ShaderPatch_template.bin";
+	const auto SHADERPATCH = L"plugins\\ShaderPatch.ini";
+	CopyFileW(SHADERPATCH_TEMPLATE, SHADERPATCH, true);
+	const auto SHADERPATCHCONFIG_TEMPLATE = L"plugins\\ShaderPatchConfig_template.bin";
+	const auto SHADERPATCHCONFIG = L"plugins\\ShaderPatchConfig.ini";
+	CopyFileW(SHADERPATCHCONFIG_TEMPLATE, SHADERPATCHCONFIG, true);
+
+	if ((PathFileExistsW(CONFIG_FILE_TEMPLATE) && !PathFileExistsW(CONFIG_FILE)) ||
+		(PathFileExistsW(COMPONENTS_TEMPLATE) && !PathFileExistsW(COMPONENTS)) ||
+		(PathFileExistsW(KEYCONFIG_TEMPLATE) && !PathFileExistsW(KEYCONFIG)) ||
+		(PathFileExistsW(PLAYERDATA_TEMPLATE) && !PathFileExistsW(PLAYERDATA)) ||
+		(PathFileExistsW(DIVASOUND_TEMPLATE) && !PathFileExistsW(DIVASOUND)) ||
+		(PathFileExistsW(SHADERPATCH_TEMPLATE) && !PathFileExistsW(SHADERPATCH)) ||
+		(PathFileExistsW(SHADERPATCHCONFIG_TEMPLATE) && !PathFileExistsW(SHADERPATCHCONFIG))
+		)
+		MessageBoxW(0, L"Could not install configuration files. Is the game in a read-only folder?", L"PD Loader", MB_ICONWARNING);
+
+	CreateDirectoryW(L"plugins\\pv_equip", NULL);
+	const auto eq_modules = L"plugins\\pv_equip\\modules.ini";
+	if (!PathFileExistsW(eq_modules))
+	{
+		std::ofstream stream(eq_modules);
+		stream << "[modules]\n# Manual editing is NOT recommended as the game will save here during gameplay";
+		stream.close();
+	}
+	const auto eq_sfx = L"plugins\\pv_equip\\sfx.ini";
+	if (!PathFileExistsW(eq_sfx))
+	{
+		std::ofstream stream(eq_sfx);
+		stream << "[SFX]\n# INI Format = ' pv.xxx.btn = sfx id (ex. 5) '\n# pv.001.btn=2 for example\n# pv.xxx.btn, pv.xxx.chain, pv.xxx.slide & pv.xxx.touch can all be assigned using the format";
+		stream.close();
+	}
+	const auto eq_skins = L"plugins\\pv_equip\\skins.ini";
+	if (!PathFileExistsW(eq_skins))
+	{
+		std::ofstream stream(eq_skins);
+		stream << "[skins]\n# INI Format = ' pv.xxx.skin = skin ID (ex. 123) '\n# pv.001.skin=100 for example";
+		stream.close();
+	}
+
+	const std::filesystem::path databank_template = L"ram\\databank_template";
+	const std::filesystem::path databank = L"ram\\databank";
+	if (!std::filesystem::exists(databank)&&std::filesystem::exists(databank_template))
+	{
+		try
+		{
+			std::filesystem::create_directories(databank);
+			std::filesystem::copy(databank_template, databank, std::filesystem::copy_options::recursive);
+		}
+		catch (std::exception& e)
+		{
+			std::cout << "[PD Loader] databank copy exception: " << e.what() << std::endl;
+			MessageBoxW(0, L"Could not install databank files. Is the game in a read-only folder?\n\n", L"PD Loader", MB_ICONWARNING);
+		}
+	}
 
 	std::wstring m = GetModuleFileNameW(NULL);
 	m = m.substr(0, m.find_last_of(L"/\\") + 1) + L"logs";
@@ -745,18 +832,58 @@ void Init()
 		VirtualProtect(&SetUnhandledExceptionFilter, sizeof(ret), protect[0], &protect[1]);
 	}
 
-
-	auto szSelfName = GetSelfName();
-	if (iequals(szSelfName, L"dinput8.dll"))
+	DeleteFileW(L"~dinput8.dll");
+	std::wstring szSelfName = GetSelfName();
+	if (iequals(szSelfName, L"DINPUT8.dll"))
 	{
-		auto dir = GetCurrentDirectoryW();
 		WIN32_FIND_DATAW fd;
 		HANDLE dnsloader = FindFirstFileW(L"dnsapi.dll", &fd);
 		if (dnsloader != INVALID_HANDLE_VALUE)
 		{
-			MessageBoxW(0, L"PD Loader was loaded from dinput8.dll, but dnsapi.dll was found. Aborting.\nPlease refer to the quick start guide or the wiki.", L"PD Loader", MB_ICONERROR);
+			MessageBoxW(0, L"PD Loader was loaded from \"dinput8.dll\", but \"dnsapi.dll\" was found. Aborting.\nPlease refer to the quick start guide or the wiki.", L"PD Loader", MB_ICONERROR);
 			exit(1);
 		}
+	}
+	else if (iequals(szSelfName, L"DNSAPI.dll"))
+	{
+		WIN32_FIND_DATAW fd;
+		HANDLE dnsloader = FindFirstFileW(L"dinput8.dll", &fd);
+		if (dnsloader != INVALID_HANDLE_VALUE)
+		{
+			auto dinput_handle = GetModuleHandleW(L"DINPUT8.dll");
+			if (dinput_handle&&!FreeLibrary(dinput_handle))
+			{
+				MessageBoxW(0, L"PD Loader was loaded from \"dnsapi.dll\", but \"dinput8.dll\" was found and PD Loader could not unload it. Please delete \"dinput8.dll\".", L"PD Loader", MB_ICONERROR);
+				exit(1);
+			}
+			else if (!MoveFileExW(L"dinput8.dll", L"~dinput8.dll", MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH))
+			{
+				MessageBoxW(0, L"PD Loader was loaded from \"dnsapi.dll\", but \"dinput8.dll\" was found and PD Loader could not delete it automatically\nIs it read-only?", L"PD Loader", MB_ICONERROR);
+				exit(1);
+			}
+		}
+		if(IsWindows8OrGreater())
+		{
+			if (MoveFileExW(L"dnsapi.dll", L"dinput8.dll", MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH))
+			{
+				WCHAR DIVA_EXECUTABLE[MAX_PATH];
+				GetModuleFileNameW(NULL, DIVA_EXECUTABLE, MAX_PATH);
+				LPWSTR DIVA_COMMAND_LINE = GetCommandLineW();
+				STARTUPINFOW si;
+				PROCESS_INFORMATION pi;
+				ZeroMemory(&si, sizeof(si));
+				si.cb = sizeof(si);
+				ZeroMemory(&pi, sizeof(pi));
+				CreateProcessW(DIVA_EXECUTABLE, DIVA_COMMAND_LINE, NULL, NULL, false, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+				exit(0);
+			}
+			else MessageBoxW(0, L"It is highly recommended to rename \"dnsapi.dll\" \"dinput8.dll\" on Windows 8/8.1/10 to avoid issues, but PD Loader could not rename the file automatically.\nIs it read-only?", L"PD Loader", MB_ICONWARNING);
+		}
+	}
+	else
+	{
+		MessageBoxW(0, L"Supported file names:\n\"dnsapi.dll\" (Windows Vista/7)\n\"dinput8.dll\"", L"PD Loader", MB_ICONERROR);
+		exit(1);
 	}
 
 	LoadEverything();

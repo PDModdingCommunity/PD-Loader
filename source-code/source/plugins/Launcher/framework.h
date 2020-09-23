@@ -273,9 +273,7 @@ ConfigOptionBase* componentsArray[] = {
 
 	new BooleanOption(L"player_data_manager", COMPONENTS_SECTION, COMPONENTS_FILE, L"Player Data Manager", L"Loads user-defined values into the PlayerData struct.\nRequired for modules and game mode modifiers.", false, true),
 
-	new BooleanOption(L"frame_rate_manager", COMPONENTS_SECTION, COMPONENTS_FILE, L"Frame Rate Manager", L"Adjusts animations to the correct speed at different frame rates.\nOnly needed when FPS isn't locket at 60.", false, true),
-
-	new BooleanOption(L"stage_manager", COMPONENTS_SECTION, COMPONENTS_FILE, L"Stage Manager", L"Allows for playing unlimited songs per session.", false, true),
+	new BooleanOption(L"frame_rate_manager", COMPONENTS_SECTION, COMPONENTS_FILE, L"Frame Rate Manager", L"Adjusts animations to the correct speed at different frame rates.\nOnly needed when FPS isn't locked at 60.", false, true),
 
 	new BooleanOption(L"fast_loader", COMPONENTS_SECTION, COMPONENTS_FILE, L"Fast Loader", L"Skip or speed up unnecessary loading steps.", false, true),
 

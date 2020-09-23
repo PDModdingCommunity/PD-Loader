@@ -33,17 +33,18 @@ namespace Launcher {
 			this->ClientSize = Drawing::Size(444, 323);
 			TabPadding^ tabpad = gcnew TabPadding(tabControl);
 
-
 			// if components.ini has no section name, add one
 			if (!IsLineInFile("[components]", COMPONENTS_FILE))
 			{
 				PrependFile("[components]\n", COMPONENTS_FILE);
+				*ComponentsConfigChanged = true;
 			}
 
 			// if playerdata.ini has no section name, add one
 			if (!IsLineInFile("[playerdata]", PLAYERDATA_FILE))
 			{
 				PrependFile("[playerdata]\n", PLAYERDATA_FILE);
+				*PlayerdataConfigChanged = true;
 			}
 
 			// if keyconfig.ini has no section name, add one

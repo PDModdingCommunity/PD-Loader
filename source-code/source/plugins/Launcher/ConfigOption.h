@@ -927,10 +927,15 @@ public:
 		int width = GetPrivateProfileIntW(_iniSectionName, _iniVarName, -39, _iniFilePath);
 		int height = GetPrivateProfileIntW(_iniSectionName, _iniVarName2, -39, _iniFilePath);
 		if (width == -39 || height == -39) {
-			tempSysStr = Convert::ToInt32(_defaultVal.width).ToString() + L"x" + Convert::ToInt32(_defaultVal.height).ToString();
-			combobox->Text = tempSysStr;
+			if (_defaultVal.width == -1 || _defaultVal.height == -1)
+				width = -1;
+			else
+			{
+				tempSysStr = Convert::ToInt32(_defaultVal.width).ToString() + L"x" + Convert::ToInt32(_defaultVal.height).ToString();
+				combobox->Text = tempSysStr;
+			}
 		}
-		else if (width == -1 || height == -1) { // -1 -> Match window/screen
+		if (width == -1 || height == -1) { // -1 -> Match window/screen
 			if (_opts & RESOPT_INCLUDE_MATCH_WINDOW)
 				combobox->Text = RESOPT_MATCH_WINDOW_TEXT;
 			else if (_opts & RESOPT_INCLUDE_MATCH_SCREEN)

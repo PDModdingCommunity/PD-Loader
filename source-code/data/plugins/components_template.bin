@@ -23,10 +23,6 @@ player_data_manager = true
 # adjusts 2D and 3D animations to retain their original speed at different frame rates.
 frame_rate_manager = false
 
-# sets an unlimited per session play count for the normal game mode.
-# this means the player won't be sent back to the title screen after 2 plays.
-stage_manager = false
-
 # skip unnecessary DATA_INITIALIZE loading time, speed up SYSTEM_STARTUP and skip the startup WARNING message.
 # further improvements can be achieved by shortening the duration of the pv_999 script file as it's test loaded during the SYSTEM_STARTUP.
 fast_loader = true

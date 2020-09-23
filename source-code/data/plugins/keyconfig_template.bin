@@ -18,6 +18,11 @@ touch_slider_emulation_speed = 750.0
 # Preferred Xinput controller (0-3)
 xinput_preferred =0
 
+# DirectInput Vendor ID and Product ID
+# Check them in Device Manager or dxdiag.exe
+VID = 046D
+PID = C216
+
 # Rumble (Xinput)
 rumble =true
 

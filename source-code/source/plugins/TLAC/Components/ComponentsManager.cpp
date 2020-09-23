@@ -7,7 +7,6 @@
 #include "PlayerDataManager.h"
 #include "FrameRateManager.h"
 #include "FastLoader.h"
-#include "StageManager.h"
 #include "CameraController.h"
 #include "DebugComponent.h"
 #include "ScaleComponent.h"
@@ -43,7 +42,6 @@ namespace TLAC::Components
 			new FastLoader(),
 			new ScaleComponent(),
 			new ScoreSaver(),
-			new StageManager(),
 			new CameraController(),
 			new DebugComponent(),
 		};

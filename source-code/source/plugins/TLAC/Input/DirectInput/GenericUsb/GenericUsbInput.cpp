@@ -5,7 +5,7 @@
 #include "../../../FileSystem/ConfigFile.h"
 #include <stdio.h>
 
-const std::string GU_CONFIG_FILE_NAME = "genericusbinput.ini";
+const std::string GU_CONFIG_FILE_NAME = "keyconfig.ini";
 
 namespace TLAC::Input
 {

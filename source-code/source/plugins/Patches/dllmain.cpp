@@ -840,7 +840,8 @@ void ApplyPatches() {
 		if (nSingMissed)
 		{
 			InjectCode((void*)0x140109044, { 0xEB });
-			InjectCode((void*)0x140109096, { 0xEB });
+			// Breaks border:
+			// InjectCode((void*)0x140109096, { 0xEB });
 		}
 		// Force mouth animations
 		{

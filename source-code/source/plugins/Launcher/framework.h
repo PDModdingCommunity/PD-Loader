@@ -158,6 +158,21 @@ ConfigOptionBase* internalResolutionArray[] = {
 	InternalResolutionOption
 };
 
+ConfigOptionBase* graphicsArray[] = {
+	new BooleanOption(L"TAA", GRAPHICS_SECTION, CONFIG_FILE, L"TAA", L"Temporal Anti-Aliasing", true, false),
+	new BooleanOption(L"MLAA", GRAPHICS_SECTION, CONFIG_FILE, L"MLAA", L"Morphological Anti-Aliasing", true, false),
+	new DropdownOption(L"MAG", GRAPHICS_SECTION, CONFIG_FILE, L"Filter:", L"Image filter.\n\nBilinear: default filter\nNearest-neighbour: sharpest, but blocky\nSharpen: sharp filter\nCone: smooth filter", 0, std::vector<LPCWSTR>({ L"Bilinear", L"Nearest-neighbour", L"Sharpen", L"Cone" })),
+	new BooleanOption(L"DOF", GRAPHICS_SECTION, CONFIG_FILE, L"Depth of Field", L"Blurs the background. Disable for better performance.", true, false),
+	new BooleanOption(L"reflections", GRAPHICS_SECTION, CONFIG_FILE, L"Reflections", L"Enable or disable reflections.", true, false),
+	new BooleanOption(L"shadows", GRAPHICS_SECTION, CONFIG_FILE, L"Shadows", L"Enable or disable shadows.", true, false),
+	new BooleanOption(L"punchthrough", GRAPHICS_SECTION, CONFIG_FILE, L"Transparent Meshes", L"Show transparent meshes.", true, false),
+	new BooleanOption(L"glare", GRAPHICS_SECTION, CONFIG_FILE, L"Glare", L"Enable or disable glare.", true, false),
+	new BooleanOption(L"shader", GRAPHICS_SECTION, CONFIG_FILE, L"Shader", L"Enable or disable high-quality shaders.", true, false),
+	new DropdownOption(L"NPR1", GRAPHICS_SECTION, CONFIG_FILE, L"Toon (F9):", L"NPR1 shader\n\nPress F9 to toggle.", 0, std::vector<LPCWSTR>({ L"Default", L"Force on", L"Force off" })),
+	new BooleanOption(L"2D", GRAPHICS_SECTION, CONFIG_FILE, L"Disable 3D rendering", L"Disable all 3D passes.\n\nWARNING: The extended data will be deleted unless Prevent Data Deletion is enabled.", false, false),
+
+};
+
 ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"no_movies", PATCHES_SECTION, CONFIG_FILE, L"Disable Movies", L"Disable movies (enable this if the game hangs when loading certain PVs).", false, false),
 	new BooleanOption(L"mp4_movies", PATCHES_SECTION, CONFIG_FILE, L"Custom MP4 Adv Movies", L"Enable MP4 (instead of WMV) advertise/attract movies.", false, false),
@@ -196,19 +211,6 @@ ConfigOptionBase* optionsArray[] = {
 
 	new BooleanOption(L"unlock_pseudo", PATCHES_SECTION, CONFIG_FILE, L"Unlock PSEUDO modules (incomplete)", L"Lets you play any PV with any performer.\n(incomplete, recommended modules will default to Miku)", false, false),
 	new BooleanOption(L"card", PATCHES_SECTION, CONFIG_FILE, L"Unlock card menu (incomplete)", L"Enables the card menu.\n(incomplete, it doesn't bypass the card prompt)", false, false),
-	new OptionMetaSpacer(8),
-
-	new BooleanOption(L"TAA", GRAPHICS_SECTION, CONFIG_FILE, L"TAA", L"Temporal Anti-Aliasing", true, false),
-	new BooleanOption(L"MLAA", GRAPHICS_SECTION, CONFIG_FILE, L"MLAA", L"Morphological Anti-Aliasing", true, false),
-	new DropdownOption(L"MAG", GRAPHICS_SECTION, CONFIG_FILE, L"Filter:", L"Image filter.\n\nBilinear: default filter\nNearest-neighbour: sharpest, but blocky\nSharpen: sharp filter\nCone: smooth filter", 0, std::vector<LPCWSTR>({ L"Bilinear (default)", L"Nearest-neighbour", L"Sharpen", L"Cone" })),
-	new BooleanOption(L"DOF", GRAPHICS_SECTION, CONFIG_FILE, L"Depth of Field", L"Blurs the background. Disable for better performance.", true, false),
-	new BooleanOption(L"reflections", GRAPHICS_SECTION, CONFIG_FILE, L"Reflections", L"Enable or disable reflections.", true, false),
-	new BooleanOption(L"shadows", GRAPHICS_SECTION, CONFIG_FILE, L"Shadows", L"Enable or disable shadows.", true, false),
-	new BooleanOption(L"punchthrough", GRAPHICS_SECTION, CONFIG_FILE, L"Transparent Meshes", L"Show transparent meshes.", true, false),
-	new BooleanOption(L"glare", GRAPHICS_SECTION, CONFIG_FILE, L"Glare", L"Enable or disable glare.", true, false),
-	new BooleanOption(L"shader", GRAPHICS_SECTION, CONFIG_FILE, L"Shader", L"Enable or disable high-quality shaders.", true, false),
-	new DropdownOption(L"NPR1", GRAPHICS_SECTION, CONFIG_FILE, L"Toon (F9):", L"NPR1 shader\n\nPress F9 to toggle.", 0, std::vector<LPCWSTR>({ L"Default", L"Force on", L"Force off" })),
-	new BooleanOption(L"2D", GRAPHICS_SECTION, CONFIG_FILE, L"Disable 3D rendering", L"Disable all 3D passes.\n\nWARNING: The extended data will be deleted unless Prevent Data Deletion is enabled.", false, false),
 	new OptionMetaSpacer(8),
 
 	new BooleanOption(L"FPS.Limit.LightMode", GRAPHICS_SECTION, CONFIG_FILE, L"Use Lightweight Limiter", L"Makes the FPS limiter use less CPU.\nMay have less consistent performance.", true, false),

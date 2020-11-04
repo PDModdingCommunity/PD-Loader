@@ -86,6 +86,20 @@ namespace Launcher {
 			this->panel_IntRes->PerformLayout();
 
 
+			this->panel_Details->SuspendLayout();
+
+			// populate details (patches) from array in framework
+			// (easier than manually setting everything up)
+			int detailsY = 3;
+			for (ConfigOptionBase* option : graphicsArray)
+			{
+				option->hasChanged = OptionsConfigChanged;
+				detailsY += option->AddToPanel(panel_Details, 12, detailsY, toolTip1);
+			}
+			this->panel_Details->ResumeLayout(false);
+			this->panel_Details->PerformLayout();
+
+
 			this->panel_Patches->SuspendLayout();
 
 			// populate options (patches) from array in framework
@@ -322,8 +336,15 @@ namespace Launcher {
 	private: System::Windows::Forms::Panel^  panel_IntRes;
 	private: System::Windows::Forms::LinkLabel^ labelGPU;
 	private: System::Windows::Forms::Button^ button_Apply;
-private: System::Windows::Forms::TabPage^ tabPage_Custom;
+
+
+private: System::Windows::Forms::TabPage^ tabPage_Credits;
+private: System::Windows::Forms::TextBox^ textBox1;
+private: System::Windows::Forms::GroupBox^ groupBox_Details;
+private: System::Windows::Forms::Panel^ panel_Details;
 private: System::Windows::Forms::Panel^ panel_Custom;
+
+
 
 
 
@@ -361,6 +382,8 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->panel_ScreenRes = (gcnew System::Windows::Forms::Panel());
 			this->tabControl = (gcnew System::Windows::Forms::TabControl());
 			this->tabPage_Resolution = (gcnew System::Windows::Forms::TabPage());
+			this->groupBox_Details = (gcnew System::Windows::Forms::GroupBox());
+			this->panel_Details = (gcnew System::Windows::Forms::Panel());
 			this->labelGPU = (gcnew System::Windows::Forms::LinkLabel());
 			this->groupBox_InternalRes = (gcnew System::Windows::Forms::GroupBox());
 			this->panel_IntRes = (gcnew System::Windows::Forms::Panel());
@@ -371,9 +394,10 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabPage_Components = (gcnew System::Windows::Forms::TabPage());
 			this->panel_Components = (gcnew System::Windows::Forms::Panel());
 			this->tabPage_Plugins = (gcnew System::Windows::Forms::TabPage());
-			this->panel_Plugins = (gcnew System::Windows::Forms::Panel());
-			this->tabPage_Custom = (gcnew System::Windows::Forms::TabPage());
 			this->panel_Custom = (gcnew System::Windows::Forms::Panel());
+			this->panel_Plugins = (gcnew System::Windows::Forms::Panel());
+			this->tabPage_Credits = (gcnew System::Windows::Forms::TabPage());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->button_Discord = (gcnew System::Windows::Forms::Button());
 			this->button_github = (gcnew System::Windows::Forms::Button());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
@@ -381,12 +405,13 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->groupBox_ScreenRes->SuspendLayout();
 			this->tabControl->SuspendLayout();
 			this->tabPage_Resolution->SuspendLayout();
+			this->groupBox_Details->SuspendLayout();
 			this->groupBox_InternalRes->SuspendLayout();
 			this->tabPage_Patches->SuspendLayout();
 			this->tabPage_Playerdata->SuspendLayout();
 			this->tabPage_Components->SuspendLayout();
 			this->tabPage_Plugins->SuspendLayout();
-			this->tabPage_Custom->SuspendLayout();
+			this->tabPage_Credits->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// button_Launch
@@ -423,7 +448,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->groupBox_ScreenRes->Margin = System::Windows::Forms::Padding(4);
 			this->groupBox_ScreenRes->Name = L"groupBox_ScreenRes";
 			this->groupBox_ScreenRes->Padding = System::Windows::Forms::Padding(4);
-			this->groupBox_ScreenRes->Size = System::Drawing::Size(417, 170);
+			this->groupBox_ScreenRes->Size = System::Drawing::Size(395, 170);
 			this->groupBox_ScreenRes->TabIndex = 10;
 			this->groupBox_ScreenRes->TabStop = false;
 			this->groupBox_ScreenRes->Text = L"Screen Resolution";
@@ -431,10 +456,10 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			// panel_ScreenRes
 			// 
 			this->panel_ScreenRes->AutoScroll = true;
-			this->panel_ScreenRes->Location = System::Drawing::Point(6, 28);
+			this->panel_ScreenRes->Location = System::Drawing::Point(8, 28);
 			this->panel_ScreenRes->Margin = System::Windows::Forms::Padding(4);
 			this->panel_ScreenRes->Name = L"panel_ScreenRes";
-			this->panel_ScreenRes->Size = System::Drawing::Size(404, 134);
+			this->panel_ScreenRes->Size = System::Drawing::Size(379, 134);
 			this->panel_ScreenRes->TabIndex = 0;
 			// 
 			// tabControl
@@ -444,19 +469,20 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabControl->Controls->Add(this->tabPage_Playerdata);
 			this->tabControl->Controls->Add(this->tabPage_Components);
 			this->tabControl->Controls->Add(this->tabPage_Plugins);
-			this->tabControl->Controls->Add(this->tabPage_Custom);
+			this->tabControl->Controls->Add(this->tabPage_Credits);
 			this->tabControl->Location = System::Drawing::Point(0, 0);
 			this->tabControl->Margin = System::Windows::Forms::Padding(4);
 			this->tabControl->Name = L"tabControl";
 			this->tabControl->SelectedIndex = 0;
-			this->tabControl->Size = System::Drawing::Size(441, 465);
+			this->tabControl->Size = System::Drawing::Size(777, 465);
 			this->tabControl->TabIndex = 10;
 			// 
 			// tabPage_Resolution
 			// 
-			this->tabPage_Resolution->BackColor = System::Drawing::Color::Transparent;
-			this->tabPage_Resolution->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"tabPage_Resolution.BackgroundImage")));
+			this->tabPage_Resolution->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
+				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->tabPage_Resolution->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+			this->tabPage_Resolution->Controls->Add(this->groupBox_Details);
 			this->tabPage_Resolution->Controls->Add(this->labelGPU);
 			this->tabPage_Resolution->Controls->Add(this->groupBox_InternalRes);
 			this->tabPage_Resolution->Controls->Add(this->groupBox_ScreenRes);
@@ -464,19 +490,43 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabPage_Resolution->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage_Resolution->Name = L"tabPage_Resolution";
 			this->tabPage_Resolution->Padding = System::Windows::Forms::Padding(4);
-			this->tabPage_Resolution->Size = System::Drawing::Size(433, 432);
+			this->tabPage_Resolution->Size = System::Drawing::Size(769, 432);
 			this->tabPage_Resolution->TabIndex = 0;
-			this->tabPage_Resolution->Text = L"Resolution";
+			this->tabPage_Resolution->Text = L"Graphics";
+			// 
+			// groupBox_Details
+			// 
+			this->groupBox_Details->Controls->Add(this->panel_Details);
+			this->groupBox_Details->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->groupBox_Details->ForeColor = System::Drawing::Color::White;
+			this->groupBox_Details->Location = System::Drawing::Point(411, 9);
+			this->groupBox_Details->Margin = System::Windows::Forms::Padding(4);
+			this->groupBox_Details->Name = L"groupBox_Details";
+			this->groupBox_Details->Padding = System::Windows::Forms::Padding(4);
+			this->groupBox_Details->Size = System::Drawing::Size(350, 415);
+			this->groupBox_Details->TabIndex = 11;
+			this->groupBox_Details->TabStop = false;
+			this->groupBox_Details->Text = L"Details";
+			this->groupBox_Details->Enter += gcnew System::EventHandler(this, &ui::groupBox1_Enter);
+			// 
+			// panel_Details
+			// 
+			this->panel_Details->AutoScroll = true;
+			this->panel_Details->Location = System::Drawing::Point(8, 28);
+			this->panel_Details->Margin = System::Windows::Forms::Padding(4);
+			this->panel_Details->Name = L"panel_Details";
+			this->panel_Details->Size = System::Drawing::Size(334, 379);
+			this->panel_Details->TabIndex = 0;
 			// 
 			// labelGPU
 			// 
 			this->labelGPU->AutoSize = true;
 			this->labelGPU->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(80)), static_cast<System::Int32>(static_cast<System::Byte>(24)),
 				static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(24)));
-			this->labelGPU->Location = System::Drawing::Point(12, 314);
-			this->labelGPU->MinimumSize = System::Drawing::Size(410, 20);
+			this->labelGPU->Location = System::Drawing::Point(8, 314);
+			this->labelGPU->MinimumSize = System::Drawing::Size(395, 20);
 			this->labelGPU->Name = L"labelGPU";
-			this->labelGPU->Size = System::Drawing::Size(410, 20);
+			this->labelGPU->Size = System::Drawing::Size(395, 20);
 			this->labelGPU->TabIndex = 21;
 			this->labelGPU->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 			// 
@@ -489,18 +539,18 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->groupBox_InternalRes->Margin = System::Windows::Forms::Padding(4);
 			this->groupBox_InternalRes->Name = L"groupBox_InternalRes";
 			this->groupBox_InternalRes->Padding = System::Windows::Forms::Padding(4);
-			this->groupBox_InternalRes->Size = System::Drawing::Size(417, 124);
+			this->groupBox_InternalRes->Size = System::Drawing::Size(395, 124);
 			this->groupBox_InternalRes->TabIndex = 20;
 			this->groupBox_InternalRes->TabStop = false;
-			this->groupBox_InternalRes->Text = L"Internal Resolution";
+			this->groupBox_InternalRes->Text = L"Internal Resolution (Quality)";
 			// 
 			// panel_IntRes
 			// 
 			this->panel_IntRes->AutoScroll = true;
-			this->panel_IntRes->Location = System::Drawing::Point(6, 28);
+			this->panel_IntRes->Location = System::Drawing::Point(8, 28);
 			this->panel_IntRes->Margin = System::Windows::Forms::Padding(4);
 			this->panel_IntRes->Name = L"panel_IntRes";
-			this->panel_IntRes->Size = System::Drawing::Size(404, 88);
+			this->panel_IntRes->Size = System::Drawing::Size(379, 88);
 			this->panel_IntRes->TabIndex = 1;
 			// 
 			// tabPage_Patches
@@ -511,7 +561,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabPage_Patches->Location = System::Drawing::Point(4, 29);
 			this->tabPage_Patches->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage_Patches->Name = L"tabPage_Patches";
-			this->tabPage_Patches->Size = System::Drawing::Size(433, 432);
+			this->tabPage_Patches->Size = System::Drawing::Size(769, 432);
 			this->tabPage_Patches->TabIndex = 1;
 			this->tabPage_Patches->Text = L"Options";
 			// 
@@ -521,7 +571,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->panel_Patches->Location = System::Drawing::Point(0, 0);
 			this->panel_Patches->Margin = System::Windows::Forms::Padding(4);
 			this->panel_Patches->Name = L"panel_Patches";
-			this->panel_Patches->Size = System::Drawing::Size(429, 424);
+			this->panel_Patches->Size = System::Drawing::Size(769, 424);
 			this->panel_Patches->TabIndex = 9;
 			// 
 			// tabPage_Playerdata
@@ -532,7 +582,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabPage_Playerdata->Location = System::Drawing::Point(4, 29);
 			this->tabPage_Playerdata->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage_Playerdata->Name = L"tabPage_Playerdata";
-			this->tabPage_Playerdata->Size = System::Drawing::Size(433, 432);
+			this->tabPage_Playerdata->Size = System::Drawing::Size(769, 432);
 			this->tabPage_Playerdata->TabIndex = 3;
 			this->tabPage_Playerdata->Text = L"Player";
 			// 
@@ -542,7 +592,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->panel_Playerdata->Location = System::Drawing::Point(0, 0);
 			this->panel_Playerdata->Margin = System::Windows::Forms::Padding(4);
 			this->panel_Playerdata->Name = L"panel_Playerdata";
-			this->panel_Playerdata->Size = System::Drawing::Size(429, 424);
+			this->panel_Playerdata->Size = System::Drawing::Size(769, 424);
 			this->panel_Playerdata->TabIndex = 1;
 			// 
 			// tabPage_Components
@@ -554,7 +604,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabPage_Components->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage_Components->Name = L"tabPage_Components";
 			this->tabPage_Components->Padding = System::Windows::Forms::Padding(4);
-			this->tabPage_Components->Size = System::Drawing::Size(433, 432);
+			this->tabPage_Components->Size = System::Drawing::Size(769, 432);
 			this->tabPage_Components->TabIndex = 2;
 			this->tabPage_Components->Text = L"Components";
 			// 
@@ -564,21 +614,31 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->panel_Components->Location = System::Drawing::Point(0, 0);
 			this->panel_Components->Margin = System::Windows::Forms::Padding(4);
 			this->panel_Components->Name = L"panel_Components";
-			this->panel_Components->Size = System::Drawing::Size(429, 424);
+			this->panel_Components->Size = System::Drawing::Size(769, 424);
 			this->panel_Components->TabIndex = 0;
 			// 
 			// tabPage_Plugins
 			// 
 			this->tabPage_Plugins->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
+			this->tabPage_Plugins->Controls->Add(this->panel_Custom);
 			this->tabPage_Plugins->Controls->Add(this->panel_Plugins);
 			this->tabPage_Plugins->Location = System::Drawing::Point(4, 29);
 			this->tabPage_Plugins->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage_Plugins->Name = L"tabPage_Plugins";
 			this->tabPage_Plugins->Padding = System::Windows::Forms::Padding(4);
-			this->tabPage_Plugins->Size = System::Drawing::Size(433, 432);
+			this->tabPage_Plugins->Size = System::Drawing::Size(769, 432);
 			this->tabPage_Plugins->TabIndex = 3;
-			this->tabPage_Plugins->Text = L"Plugins";
+			this->tabPage_Plugins->Text = L"Plugins and Patches";
+			// 
+			// panel_Custom
+			// 
+			this->panel_Custom->AutoScroll = true;
+			this->panel_Custom->Location = System::Drawing::Point(385, 0);
+			this->panel_Custom->Margin = System::Windows::Forms::Padding(4);
+			this->panel_Custom->Name = L"panel_Custom";
+			this->panel_Custom->Size = System::Drawing::Size(384, 424);
+			this->panel_Custom->TabIndex = 3;
 			// 
 			// panel_Plugins
 			// 
@@ -586,28 +646,31 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->panel_Plugins->Location = System::Drawing::Point(0, 0);
 			this->panel_Plugins->Margin = System::Windows::Forms::Padding(4);
 			this->panel_Plugins->Name = L"panel_Plugins";
-			this->panel_Plugins->Size = System::Drawing::Size(429, 424);
+			this->panel_Plugins->Size = System::Drawing::Size(384, 424);
 			this->panel_Plugins->TabIndex = 0;
 			// 
-			// tabPage_Custom
+			// tabPage_Credits
 			// 
-			this->tabPage_Custom->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
-				static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Custom->Controls->Add(this->panel_Custom);
-			this->tabPage_Custom->Location = System::Drawing::Point(4, 29);
-			this->tabPage_Custom->Name = L"tabPage_Custom";
-			this->tabPage_Custom->Size = System::Drawing::Size(433, 432);
-			this->tabPage_Custom->TabIndex = 4;
-			this->tabPage_Custom->Text = L"Patches";
+			this->tabPage_Credits->Controls->Add(this->textBox1);
+			this->tabPage_Credits->Location = System::Drawing::Point(4, 29);
+			this->tabPage_Credits->Name = L"tabPage_Credits";
+			this->tabPage_Credits->Padding = System::Windows::Forms::Padding(3);
+			this->tabPage_Credits->Size = System::Drawing::Size(769, 432);
+			this->tabPage_Credits->TabIndex = 5;
+			this->tabPage_Credits->Text = L"Credits";
+			this->tabPage_Credits->UseVisualStyleBackColor = true;
+			this->tabPage_Credits->Click += gcnew System::EventHandler(this, &ui::tabPage_Credits_Click);
 			// 
-			// panel_Custom
+			// textBox1
 			// 
-			this->panel_Custom->AutoScroll = true;
-			this->panel_Custom->Location = System::Drawing::Point(0, 0);
-			this->panel_Custom->Margin = System::Windows::Forms::Padding(4);
-			this->panel_Custom->Name = L"panel_Custom";
-			this->panel_Custom->Size = System::Drawing::Size(429, 424);
-			this->panel_Custom->TabIndex = 1;
+			this->textBox1->Location = System::Drawing::Point(0, 0);
+			this->textBox1->Multiline = true;
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->ScrollBars = System::Windows::Forms::ScrollBars::Both;
+			this->textBox1->Size = System::Drawing::Size(769, 432);
+			this->textBox1->TabIndex = 0;
+			this->textBox1->Text = resources->GetString(L"textBox1.Text");
+			this->textBox1->TextChanged += gcnew System::EventHandler(this, &ui::textBox1_TextChanged);
 			// 
 			// button_Discord
 			// 
@@ -617,7 +680,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->button_Discord->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 			this->button_Discord->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_Discord->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_Discord.Image")));
-			this->button_Discord->Location = System::Drawing::Point(338, 466);
+			this->button_Discord->Location = System::Drawing::Point(674, 465);
 			this->button_Discord->Margin = System::Windows::Forms::Padding(4);
 			this->button_Discord->Name = L"button_Discord";
 			this->button_Discord->Size = System::Drawing::Size(48, 48);
@@ -634,7 +697,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->button_github->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 			this->button_github->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_github->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_github.Image")));
-			this->button_github->Location = System::Drawing::Point(393, 466);
+			this->button_github->Location = System::Drawing::Point(729, 465);
 			this->button_github->Margin = System::Windows::Forms::Padding(4);
 			this->button_github->Name = L"button_github";
 			this->button_github->Size = System::Drawing::Size(48, 48);
@@ -664,7 +727,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			this->ClientSize = System::Drawing::Size(440, 514);
+			this->ClientSize = System::Drawing::Size(778, 514);
 			this->Controls->Add(this->button_Apply);
 			this->Controls->Add(this->tabControl);
 			this->Controls->Add(this->button_Help);
@@ -689,12 +752,14 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabControl->ResumeLayout(false);
 			this->tabPage_Resolution->ResumeLayout(false);
 			this->tabPage_Resolution->PerformLayout();
+			this->groupBox_Details->ResumeLayout(false);
 			this->groupBox_InternalRes->ResumeLayout(false);
 			this->tabPage_Patches->ResumeLayout(false);
 			this->tabPage_Playerdata->ResumeLayout(false);
 			this->tabPage_Components->ResumeLayout(false);
 			this->tabPage_Plugins->ResumeLayout(false);
-			this->tabPage_Custom->ResumeLayout(false);
+			this->tabPage_Credits->ResumeLayout(false);
+			this->tabPage_Credits->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
@@ -718,6 +783,11 @@ private: System::Void SaveSettings() {
 	if (*OptionsConfigChanged)
 	{
 		for (ConfigOptionBase* option : optionsArray)
+		{
+			option->SaveOption();
+		}
+
+		for (ConfigOptionBase* option : graphicsArray)
 		{
 			option->SaveOption();
 		}
@@ -894,6 +964,13 @@ private: bool AnyConfigChanged() {
 private: String^ GPUIssueText;
 private: System::Void LinkLabelLinkClickedGPUIssueHandler(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
 	SkinnedMessageBox::Show(this, GPUIssueText, "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+}
+private: System::Void tabPage_Credits_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+
+private: System::Void groupBox1_Enter(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

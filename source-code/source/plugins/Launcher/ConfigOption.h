@@ -19,8 +19,8 @@ using namespace System::Windows::Forms;
 float BaseScaleSize = 96;
 int Col1Width = 110;
 int Col2Left = 114;
-int Col2Width = 110;
-int ConfigBtnLeft = 160;
+int Col2Width = 90;
+int ConfigBtnLeft = 120;
 int ControlSpacing = 6;
 
 // Custom function. Works like GetPrivateProfileIntW but returns bool. Can detect a numeric value or string.

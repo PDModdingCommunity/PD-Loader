@@ -57,7 +57,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\detours\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\dependencies\xdelta3;..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\detours\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -74,7 +74,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\detours\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\dependencies\xdelta3;..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\detours\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -86,9 +86,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\crc\crc_32.c" />
     <ClCompile Include="src\dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\crc\crc.h" />
+    <ClInclude Include="src\crc\sniptype.h" />
     <ClInclude Include="src\framework.h" />
     <ClInclude Include="src\glStuff.h" />
   </ItemGroup>

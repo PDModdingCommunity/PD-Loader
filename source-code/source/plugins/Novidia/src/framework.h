@@ -30,6 +30,46 @@ bool force_BGRA_upload;
 GLint tex_upload_format;
 bool shader_amd_farc;
 
+struct MsString {
+	union {
+		char* string_ptr;
+		char string_buf[16];
+	};
+	uint64_t len;
+	uint64_t bufsize;
+
+	char* GetCharBuf()
+	{
+		if (bufsize > 0xf && string_ptr != nullptr)
+			return string_ptr;
+		else
+			return string_buf;
+	};
+
+	void SetCharBuf(char* newcontent)
+	{
+		len = strlen(newcontent);
+		bufsize = len;
+		if (len > 0xf)
+		{
+			string_ptr = _strdup(newcontent);
+		}
+		else
+		{
+			strcpy_s(string_buf, newcontent);
+		}
+	}
+};
+
+std::string shader_farc_path = "";
+void* shader_farc_data = NULL;
+int64_t shader_farc_data_size;
+FILE* shader_file_handle = NULL;
+
+int64_t(*divaGetFileSize)(MsString* path) = (int64_t(*)(MsString* path))0x1400abb20;
+FILE* (*divaFsopen)(char* path, char* mode, int* shflag) = (FILE* (*)(char* path, char* mode, int* shflag))0x14085a17c;
+int64_t(*divaFread)(void* dst, int64_t size, int64_t count, FILE* file) = (int64_t(*)(void* dst, int64_t size, int64_t count, FILE* file))0x14085a6c4;
+
 std::wstring ExePath() {
 	WCHAR buffer[MAX_PATH];
 	GetModuleFileNameW(NULL, buffer, MAX_PATH);

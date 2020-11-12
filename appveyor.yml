@@ -21,12 +21,16 @@ after_build:
     md %TMP%\amd-pack\
     
     md %TMP%\amd-pack\plugins\
+
+    md "%TMP%\amd-pack\plugins\Novidia Shaders"
     
     md %TMP%\amd-pack\amd-tools\
     
-    md "%TMP%\amd-pack\amd-tools\ARB Patcher Source"
+    md "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source"
     
-    md "%TMP%\amd-pack\amd-tools\ARB Patcher Source\gamesettings"
+    md "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\ARB Patcher"
+    
+    md "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\ARB Patcher\gamesettings"
 
 
 
@@ -55,12 +59,16 @@ after_build:
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\patches\custom_freeplay_text_example.p %TMP%\full\patches\
     
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\Novidia.dva %TMP%\amd-pack\plugins\
+
+    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\Novidia Shaders\*.*" "%TMP%\amd-pack\plugins\Novidia Shaders\"
     
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\*.*  %TMP%\amd-pack\amd-tools\
     
-    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\ARB Patcher Source\*.*"  "%TMP%\amd-pack\amd-tools\ARB Patcher Source\"
+    copy "%TMP%\amd-pack\amd-tools\AFT Shader Patcher\*.*" "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\"
     
-    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\ARB Patcher Source\gamesettings\*.*"  "%TMP%\amd-pack\amd-tools\ARB Patcher Source\gamesettings\"
+    copy "%TMP%\amd-pack\amd-tools\AFT Shader Patcher\ARB Patcher\*.*" "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\ARB Patcher\"
+    
+    copy "%TMP%\amd-pack\amd-tools\AFT Shader Patcher\ARB Patcher\gamesettings\*.*" "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\ARB Patcher\gamesettings\"
 
     
 
@@ -70,21 +78,31 @@ after_build:
   
     cd %TMP%\amd-pack\amd-tools\
     
-    C:\Python38\python.exe -m pip install cx_freeze
+    C:\Python38\python.exe -m pip install cx_freeze construct
     
-    C:\Python38\Scripts\cxfreeze.exe "ARB Patcher Source\main.py" --target-dir "ARB Patcher"
+    C:\Python38\Scripts\cxfreeze.exe "AFT Shader Patcher Source\aft_shader_patcher.py" --target-dir "AFT Shader Patcher"
     
-    mkdir "ARB Patcher\gamesettings"
+    mkdir "AFT Shader Patcher\ARB Patcher"
     
-    copy "ARB Patcher Source\gamesettings\*.*" "ARB Patcher\gamesettings\"
+    mkdir "AFT Shader Patcher\ARB Patcher\gamesettings"
     
-    del /Q "ARB Patcher Source\gamesettings"
+    copy "AFT Shader Patcher Source\xdelta.exe" "AFT Shader Patcher\"
     
-    rmdir "ARB Patcher Source\gamesettings"
+    copy "AFT Shader Patcher Source\ARB Patcher\*.*" "AFT Shader Patcher\ARB Patcher\"
     
-    del /Q "ARB Patcher Source"
+    copy "AFT Shader Patcher Source\ARB Patcher\gamesettings\*.*" "AFT Shader Patcher\ARB Patcher\gamesettings\"
     
-    rmdir "ARB Patcher Source"
+    del /Q "AFT Shader Patcher Source\ARB Patcher\gamesettings"
+    
+    rmdir "AFT Shader Patcher Source\ARB Patcher\gamesettings"
+    
+    del /Q "AFT Shader Patcher Source\ARB Patcher"
+    
+    rmdir "AFT Shader Patcher Source\ARB Patcher"
+    
+    del /Q "AFT Shader Patcher Source"
+    
+    rmdir "AFT Shader Patcher Source"
     
     del "patch shaders py.bat"
     

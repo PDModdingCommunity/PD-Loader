@@ -224,87 +224,93 @@ int64_t hookedGetFileSize(MsString* path) {
 	}
 
 
-	// if shader, open it and read data
+	// local vars declared early to allow use of goto
 	FILE* ogfile;
+	void* ogdata = NULL;
+	DWORD crc;
+	wchar_t crcstr[9];
+	std::wstring vcd_path;
+	DWORD dwAttrib;
+	FILE* vcdfile;
+	long vcdsize;
+	void* vcddata = NULL;
+	void* outbuf = NULL;
+	usize_t outbuf_size;
+	usize_t outbuf_data_size;
+	int xd3err;
+
+
+	// if shader, open it and read data
 	if (fopen_s(&ogfile, path->GetCharBuf(), "rb") != 0)
 	{
 		MessageBoxW(NULL, L"Error opening shader.farc.", L"Novidia", NULL);
-		return ogsize;
+		goto fail;
 	}
 
-	void* ogdata = malloc(ogsize);
+	ogdata = malloc(ogsize);
 	if (fread(ogdata, 1, ogsize, ogfile) != ogsize)
 	{
 		MessageBoxW(NULL, L"Error reading shader.farc.", L"Novidia", NULL);
-		free(ogdata);
-		return ogsize;
+		goto fail;
 	}
 
 	fclose(ogfile);
 
 
 	// crc32 the shader data to find a vcdiff patch file
-	DWORD crc  = crc32buf((char*)ogdata, ogsize);
-	wchar_t crcstr[9];
-	swprintf_s(crcstr, L"%x", crc);
+	crc = crc32buf((char*)ogdata, ogsize);
+	swprintf_s(crcstr, L"%08x", crc);
 	//MessageBoxW(NULL, crcstr, L"Novidia", NULL);
 
-	std::wstring patch_path = DirPath() + L"\\plugins\\Novidia Shaders\\" + crcstr + L".vcdiff";
+	vcd_path = DirPath() + L"\\plugins\\Novidia Shaders\\" + crcstr + L".vcdiff";
 	
-	DWORD dwAttrib = GetFileAttributesW(patch_path.c_str());
+	dwAttrib = GetFileAttributesW(vcd_path.c_str());
 	if (dwAttrib == INVALID_FILE_ATTRIBUTES || (dwAttrib & FILE_ATTRIBUTE_DIRECTORY))
 	{
 		MessageBoxW(NULL, L"Unable to find shader vcdiff file.", L"Novidia", NULL);
-		MessageBoxW(NULL, patch_path.c_str(), L"Novidia", NULL);
-		free(ogdata);
-		return ogsize; // no patch file exists so can't patch
+		MessageBoxW(NULL, vcd_path.c_str(), L"Novidia", NULL);
+		goto fail;
 	}
 
 
 	// try opening and reading said vcdiff patch
-	FILE* vcdfile;
-	if (_wfopen_s(&vcdfile, patch_path.c_str(), L"rb") != 0)
+	if (_wfopen_s(&vcdfile, vcd_path.c_str(), L"rb") != 0)
 	{
 		MessageBoxW(NULL, L"Error opening shader vcdiff file.", L"Novidia", NULL);
-		MessageBoxW(NULL, patch_path.c_str(), L"Novidia", NULL);
-		free(ogdata);
-		return ogsize;
+		MessageBoxW(NULL, vcd_path.c_str(), L"Novidia", NULL);
+		goto fail;
 	}
 
 	// get size of the file from having already opened it, skipping whatever the game does
 	fseek(vcdfile, 0, SEEK_END); // seek to end of file
-	long vcdsize = ftell(vcdfile); // get current file pointer
+	vcdsize = ftell(vcdfile); // get current file pointer
 	fseek(vcdfile, 0, SEEK_SET); // seek back to beginning of file
 
-	void* vcddata = malloc(vcdsize);
+	vcddata = malloc(vcdsize);
 	if (fread(vcddata, 1, vcdsize, vcdfile) != vcdsize)
 	{
 		MessageBoxW(NULL, L"Error reading shader vcdiff file.", L"Novidia", NULL);
-		MessageBoxW(NULL, patch_path.c_str(), L"Novidia", NULL);
-		free(ogdata);
-		free(vcddata);
-		return ogsize;
+		MessageBoxW(NULL, vcd_path.c_str(), L"Novidia", NULL);
+		goto fail;
 	}
 
 	fclose(vcdfile);
 
 
 	// allocate an output buffer and patch shader into it (needs to be done now to know correct size)
-	usize_t outbuf_size = 64 * 1024 * 1024; // 64M should be enough
-	void* outbuf = malloc(outbuf_size);
-	usize_t outbuf_data_size;
-	int xd3err = xd3_decode_memory((uint8_t*)vcddata, vcdsize, (uint8_t*)ogdata, ogsize, (uint8_t*)outbuf, &outbuf_data_size, outbuf_size, 0);
+	outbuf_size = 64 * 1024 * 1024; // 64M should be enough
+	outbuf = malloc(outbuf_size);
+	outbuf_data_size;
+	xd3err = xd3_decode_memory((uint8_t*)vcddata, vcdsize, (uint8_t*)ogdata, ogsize, (uint8_t*)outbuf, &outbuf_data_size, outbuf_size, 0);
 
 	if (xd3err != 0)
 	{
 		MessageBoxW(NULL, L"Error applying shader vcdiff file.", L"Novidia", NULL);
 		MessageBoxA(NULL, xd3_strerror(xd3err), "Novidia", NULL);
-		free(ogdata);
-		free(vcddata);
-		free(outbuf);
-		return ogsize;
+		goto fail;
 	}
 
+	wprintf(L"[Novidia] Patched shader.farc using %s.vcdiff\n", crcstr);
 
 	// done successfully! cleanup and save results
 	free(ogdata);
@@ -314,6 +320,12 @@ int64_t hookedGetFileSize(MsString* path) {
 	shader_farc_path = pathStr;
 
 	return outbuf_data_size;
+
+fail:
+	if (ogdata) free(ogdata);
+	if (vcddata) free(vcddata);
+	if (outbuf) free(outbuf);
+	return ogsize;
 }
 FILE* hookedFsopen(char* path, char* mode, int* shflag)
 {
@@ -332,7 +344,6 @@ int64_t hookedFread(void* dst, int64_t size, int64_t count, FILE* file)
 		return divaFread(dst, size, count, file);
 	}
 
-	shader_file_handle = NULL; // easy way to avoid chance for reuse
 	size_t size_bytes = size * count;
 
 	if (size_bytes > shader_farc_data_size)
@@ -341,6 +352,19 @@ int64_t hookedFread(void* dst, int64_t size, int64_t count, FILE* file)
 	}
 
 	memcpy(dst, shader_farc_data, size_bytes);
+
+	shader_file_handle = NULL; // easy way to avoid risk of unexpected reuse
+
+	// optionally, could free the stored farc data here, but it only uses 64MB so why bother?
+	/*
+	free(shader_farc_data); // no longer need to keep this around so free it and save the RAM
+	shader_farc_data = NULL; // clear associated data too, because there's no longer a processed shader
+	shader_farc_data_size = 0;
+	shader_farc_path = "";
+	*/
+
+	printf("[Novidia] Shader patch applied\n");
+
 	return size_bytes;
 }
 

@@ -102,6 +102,8 @@ for fname in farcdata['files']:
     
     farcdata['files'][fname]['data'] = f_full.encode('utf-8')
 
+print('')
+
 if args.compress:
     farcdata['farc_type'] = 'FArC'
 
@@ -111,7 +113,9 @@ with open(args.out_farc, 'wb') as f:
 if args.xdelta:
     import subprocess
     
-    # make paths absolute before running this
+    # make paths absolute before running this (actually not needed)
     #args.in_farc = abspath(args.in_farc)
     #args.out_farc = abspath(args.out_farc)
+    
     subprocess.run([joinpath(datadir, 'xdelta3.exe'), '-e', '-f', '-S', 'none', '-s', args.in_farc, args.out_farc, joinpath(dirname(args.out_farc), in_farc_crc_str + '.vcdiff')], )
+    print ("Generated '{}.vcdiff'".format(in_farc_crc_str))

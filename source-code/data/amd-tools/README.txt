@@ -2,7 +2,7 @@ PD Loader Tools for AMD Compatibility
 =====================================
 
 The Novidia plugin and its included shader patch data will allow Project DIVA
-Arcade: Future Tone to work on AMD GPUs.
+Arcade Future Tone to work on AMD GPUs.
 
 Usage Instructions:
   Simply copy the plugins folder to your game directory.

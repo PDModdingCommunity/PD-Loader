@@ -86,7 +86,7 @@ after_build:
     
     mkdir "AFT Shader Patcher\ARB Patcher\gamesettings"
     
-    copy "AFT Shader Patcher Source\xdelta.exe" "AFT Shader Patcher\"
+    copy "AFT Shader Patcher Source\xdelta3.exe" "AFT Shader Patcher\"
     
     copy "AFT Shader Patcher Source\ARB Patcher\*.*" "AFT Shader Patcher\ARB Patcher\"
     

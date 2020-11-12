@@ -106,6 +106,8 @@ after_build:
     
     del "patch shaders py.bat"
     
+    del ".gitignore"
+    
     cd ..
     
     move amd-tools\README.txt AMD-README.txt

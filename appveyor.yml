@@ -64,11 +64,11 @@ after_build:
     
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\*.*  %TMP%\amd-pack\amd-tools\
     
-    copy "%TMP%\amd-pack\amd-tools\AFT Shader Patcher\*.*" "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\"
+    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\AFT Shader Patcher\*.*" "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\"
     
-    copy "%TMP%\amd-pack\amd-tools\AFT Shader Patcher\ARB Patcher\*.*" "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\ARB Patcher\"
+    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\AFT Shader Patcher\ARB Patcher\*.*" "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\ARB Patcher\"
     
-    copy "%TMP%\amd-pack\amd-tools\AFT Shader Patcher\ARB Patcher\gamesettings\*.*" "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\ARB Patcher\gamesettings\"
+    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\AFT Shader Patcher\ARB Patcher\gamesettings\*.*" "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\ARB Patcher\gamesettings\"
 
     
 

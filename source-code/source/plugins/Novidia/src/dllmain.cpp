@@ -241,20 +241,24 @@ int64_t hookedGetFileSize(MsString* path) {
 
 
 	// if shader, open it and read data
-	if (fopen_s(&ogfile, path->GetCharBuf(), "rb") != 0)
+	//if (fopen_s(&ogfile, path->GetCharBuf(), "rb") != 0)
+	ogfile = divaFsopen(path->GetCharBuf(), "rb", _SH_DENYNO);
+	if (ogfile == nullptr)
 	{
 		MessageBoxW(NULL, L"Error opening shader.farc.", L"Novidia", NULL);
 		goto fail;
 	}
 
 	ogdata = malloc(ogsize);
-	if (fread(ogdata, 1, ogsize, ogfile) != ogsize)
+	//if (fread(ogdata, 1, ogsize, ogfile) != ogsize)
+	if (divaFread(ogdata, 1, ogsize, ogfile) != ogsize)
 	{
 		MessageBoxW(NULL, L"Error reading shader.farc.", L"Novidia", NULL);
 		goto fail;
 	}
 
-	fclose(ogfile);
+	//fclose(ogfile);
+	divaFclose(ogfile); // need to use diva's fclose if using diva's fsopen and fread
 
 
 	// crc32 the shader data to find a vcdiff patch file
@@ -327,7 +331,7 @@ fail:
 	if (outbuf) free(outbuf);
 	return ogsize;
 }
-FILE* hookedFsopen(char* path, char* mode, int* shflag)
+FILE* hookedFsopen(const char* path, const char* mode, int shflag)
 {
 	FILE* res = divaFsopen(path, mode, shflag);
 
@@ -398,21 +402,25 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 			DetourAttach(&(PVOID&)uploadModelTransformBuf, h_uploadModelTransformBuf_NoUpload);
 		}
 
-
-		printf("[Novidia] Hooking divaGetFileSize\n");
-		DetourAttach(&(PVOID&)divaGetFileSize, hookedGetFileSize);
-		printf("[Novidia] Hooking divaFsopen\n");
-		DetourAttach(&(PVOID&)divaFsopen, hookedFsopen);
-		printf("[Novidia] Hooking divaFread\n");
-		DetourAttach(&(PVOID&)divaFread, hookedFread);
+		if (enable_shader_deltas)
+		{
+			printf("[Novidia] Hooking divaGetFileSize\n");
+			DetourAttach(&(PVOID&)divaGetFileSize, hookedGetFileSize);
+			printf("[Novidia] Hooking divaFsopen\n");
+			DetourAttach(&(PVOID&)divaFsopen, hookedFsopen);
+			printf("[Novidia] Hooking divaFread\n");
+			DetourAttach(&(PVOID&)divaFread, hookedFread);
+		}
 
 		DetourTransactionCommit();
 
+		/*
 		if (shader_amd_farc)
 		{
 			const char* shaderpath = "./rom/shader_amd.farc";
 			InjectCode((void*)0x140a41018, std::vector<uint8_t>(shaderpath, shaderpath + strlen(shaderpath)));
 		}
+		*/
 	}
 
 	return TRUE;
@@ -426,7 +434,7 @@ PluginConfigOption config[] = {
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"enable_chara_skinning", L"general", CONFIG_FILE, L"Enable Chara Skinning", L"If you really need to get extra performance, you can disable uploading skinning data. (character models will disappear)", true, false } },
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"use_TexSubImage", L"general", CONFIG_FILE, L"Use glTexSubImage", L"glTexSubImage should offer higher performance, but stuttering has been reported when it is used.\nTry disabling this if you have issues.", true, false } },
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"force_BGRA_upload", L"general", CONFIG_FILE, L"Force BGRA Texture Uploads", L"BGRA format uploads seem to run faster (on some hardware), but drivers may suggest RGBA instead.\nUsing this forces uploads to use the BGRA format.\n\nDisabling this may decrease or improve performance.", true, false } },
-	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"shader_amd_farc", L"general", CONFIG_FILE, L"Load shader_amd.farc", L"Novidia can manage loading of alternate shaders automatically.\nLeave this enabled for current and future versions of AMDPack.", true, false } },
+	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"shader_delta_patches", L"general", CONFIG_FILE, L"Apply shader vcdiff patches", L"Novidia can automatically apply pre-generated delta patch files to shaders.\nLeave this enabled for current and future versions of AMDPack.", true, false } },
 };
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)

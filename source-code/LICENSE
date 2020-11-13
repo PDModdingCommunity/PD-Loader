@@ -76,3 +76,7 @@ Launcher, Patches, Render and TLAC plugins utilize files from FreeGLUT:
 
 DivaSound uses miniaudio (public domain or MIT-0) and BASSASIO (free for
 non-commercial use only)
+
+
+AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
+Pack's readme file.

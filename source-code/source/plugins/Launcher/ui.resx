@@ -118,36 +118,94 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="textBox1.Text" xml:space="preserve">
-    <value>Contributors: ***REMOVED***, Brolijah, crash5b, ona, korenkonder, Kyberal, lybxlpsv, nastys, Nezarn, samyuu, Skyth, somewhatlurker, Stewie1.0, SwigS-27, zsccat.
-Libraries: Microsoft, FreeGLUT Team, ThirteenAG.
+    <value>PD Loader is intended for educational purposes only; not for piracy.
+Users should possess a legally-obtained dump of the game to use this software.
+Please check your local laws/regulataions to verify the legality of tampering
+with and dumping data from protected arcade machine hardware.
 
-PD Loader is intended for educational purposes, and not for piracy. Based on your current jurisdiction, it may be illegal to tamper with an arcade cabinet or its hardware and so it would be the usage of this software. You must have your own legal dump of the game to use this software.
+Project Contributors:
+***REMOVED***, Brolijah, crash5b, ona, korenkonder, Kyberal, lybxlpsv, nastys,
+Nezarn, samyuu, Skyth, somewhatlurker, Stewie1.0, SwigS-27, zsccat
 
-MIT License
 
-Copyright (c) Project DIVA Modding 2nd Community
-Copyright (c) samyuu (nop)
-Copyright (c) ThirteenAG
-Copyright (c) Microsoft Corporation
-Copyright (c) FreeGLUT team
+PD Loader and the included plugins are distributed under MIT License:
+  
+  Copyright (c) Project DIVA Modding 2nd Community
+  Copyright (c) samyuu (nop) (original TLAC code)
+  Copyright (c) ThirteenAG (original Ultimate ASI Loader code)
+  
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Microsoft Detours, utilized by many plugins, is licensed under MIT License:
+  
+  # Copyright (c) Microsoft Corporation
+  
+  All rights reserved.
+  
+  # MIT License
+  
+  Permission is hereby granted, free of charge, to any person obtaining a copy of
+  this software and associated documentation files (the "Software"), to deal in
+  the Software without restriction, including without limitation the rights to
+  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+  of the Software, and to permit persons to whom the Software is furnished to do
+  so, subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.</value>
+
+Launcher, Patches, Render and TLAC plugins utilize files from FreeGLUT:
+  
+  Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
+  Permission is hereby granted, free of charge,  to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction,  including without limitation the rights
+  to use, copy,  modify, merge,  publish, distribute,  sublicense,  and/or sell
+  copies or substantial portions of the Software.
+  
+  The above  copyright notice  and this permission notice  shall be included in
+  all copies or substantial portions of the Software.
+  
+  THE SOFTWARE  IS PROVIDED "AS IS",  WITHOUT WARRANTY OF ANY KIND,  EXPRESS OR
+  IMPLIED,  INCLUDING  BUT  NOT LIMITED  TO THE WARRANTIES  OF MERCHANTABILITY,
+  FITNESS  FOR  A PARTICULAR PURPOSE  AND NONINFRINGEMENT.  IN  NO EVENT  SHALL
+  PAWEL W. OLSZTA BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER LIABILITY, WHETHER
+  IN  AN ACTION  OF CONTRACT,  TORT OR OTHERWISE,  ARISING FROM,  OUT OF  OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  
+  Except as contained in this notice,  the name of Pawel W. Olszta shall not be
+  used  in advertising  or otherwise to promote the sale, use or other dealings
+  in this Software without prior written authorization from Pawel W. Olszta.
+
+
+DivaSound uses miniaudio (public domain or MIT-0) and BASSASIO (free for
+non-commercial use only)</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="button_Discord.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -209,9 +267,9 @@ SOFTWARE.</value>
         ZSNnuf0xq38QLKYcn/7WyZSb81ROzr/0gUC6FNUQmwAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <data name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>17, 17</value>
-  </metadata>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAgIAAAAEAIAAoCAEAFgAAACgAAACAAAAAAAEAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA

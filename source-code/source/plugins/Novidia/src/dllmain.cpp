@@ -221,6 +221,7 @@ int64_t hookedGetFileSize(MsString* path) {
 		shader_farc_data = NULL;
 		shader_farc_data_size = 0;
 		shader_farc_path = "";
+		shader_file_handle = NULL;
 	}
 
 
@@ -300,7 +301,7 @@ int64_t hookedGetFileSize(MsString* path) {
 
 	fclose(vcdfile);
 
-
+	
 	// allocate an output buffer and patch shader into it (needs to be done now to know correct size)
 	outbuf_size = 64 * 1024 * 1024; // 64M should be enough
 	outbuf = malloc(outbuf_size);
@@ -350,9 +351,9 @@ int64_t hookedFread(void* dst, int64_t size, int64_t count, FILE* file)
 
 	size_t size_bytes = size * count;
 
-	if (size_bytes > shader_farc_data_size)
+	if ((size_bytes > shader_farc_data_size) || !shader_farc_data)
 	{
-		return divaFread(dst, size, count, file); // this is an error -- the game wants more data than we have for some reason
+		return divaFread(dst, size, count, file); // this is an error -- the game wants more data than we have for some reason, or size has a value but not our buffer
 	}
 
 	memcpy(dst, shader_farc_data, size_bytes);

@@ -12,6 +12,7 @@
 #include <msclr\marshal_cppstd.h>
 
 #include "PluginConfigApi.h"
+#include "IniReader.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -23,26 +24,7 @@ int Col2Width = 90;
 int ConfigBtnLeft = 120;
 int ControlSpacing = 6;
 
-// Custom function. Works like GetPrivateProfileIntW but returns bool. Can detect a numeric value or string.
-bool GetPrivateProfileBoolW(LPCWSTR lpAppName, LPCWSTR lpKeyName, bool default, LPCWSTR lpFileName)
-{
-	wchar_t buffer[8];
-	GetPrivateProfileStringW(lpAppName, lpKeyName, L"", buffer, 8, lpFileName);
-	//MessageBoxW(NULL, buffer, NULL, 0);
 
-	for (wchar_t& chr : buffer)
-		chr = towlower(chr);
-
-	bool out;
-	if ((lstrcmpW(buffer, L"true") == 0) || (lstrcmpW(buffer, L"1") == 0))
-		out = true;
-	else if ((lstrcmpW(buffer, L"false") == 0) || (lstrcmpW(buffer, L"0") == 0))
-		out = false;
-	else
-		out = default;
-
-	return out;
-}
 
 // declare this early (actual definitions below)
 class ConfigOptionBase;
@@ -342,7 +324,7 @@ public:
 		CheckBox^ cb = gcnew CheckBox();
 
 		cb->Text = gcnew String(_friendlyName);
-		cb->Checked = GetPrivateProfileBoolW(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath);
+		cb->Checked = GetIniBool(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath);
 		cb->Left = left + 2;
 		cb->Top = top;
 		cb->AutoSize = true;
@@ -378,12 +360,7 @@ public:
 
 	virtual void SaveOption()
 	{
-		bool boolEnabled = ((CheckBox^)CheckBox::FromHandle(mainControlHandle))->Checked;
-
-		if (_saveAsString)
-			WritePrivateProfileStringW(_iniSectionName, _iniVarName, boolEnabled ? L"true" : L"false", _iniFilePath);
-		else
-			WritePrivateProfileStringW(_iniSectionName, _iniVarName, boolEnabled ? L"1" : L"0", _iniFilePath);
+		SetIniBool(_iniSectionName, _iniVarName, ((CheckBox^)CheckBox::FromHandle(mainControlHandle))->Checked, _iniFilePath, _saveAsString);
 	}
 };
 
@@ -422,8 +399,8 @@ public:
 		numberbox->Minimum = _minVal;
 		numberbox->Maximum = _maxVal;
 
-		numberbox->Value = (int)GetPrivateProfileIntW(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath); // cast to int because this returns uint and breaks -1
-																												// it seems it does read negative values correctly though... but eventually a parser that properly supports negative numbers would be ideal
+		numberbox->Value = GetIniInt(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath);
+
 		numberbox->Left = left + Col2Left;
 		numberbox->Top = top;
 		numberbox->Width = Col2Width;
@@ -459,12 +436,7 @@ public:
 
 	virtual void SaveOption()
 	{
-		System::String^ tempSysStr;
-		std::wstring tempWStr;
-
-		tempSysStr = Convert::ToInt32(((NumericUpDown^)NumericUpDown::FromHandle(mainControlHandle))->Value).ToString();
-		tempWStr = msclr::interop::marshal_as<std::wstring>(tempSysStr);
-		WritePrivateProfileStringW(_iniSectionName, _iniVarName, tempWStr.c_str(), _iniFilePath);
+		SetIniInt(_iniSectionName, _iniVarName, Convert::ToInt32(((NumericUpDown^)NumericUpDown::FromHandle(mainControlHandle))->Value), _iniFilePath);
 	}
 };
 
@@ -491,8 +463,7 @@ public:
 		Label^ label = gcnew Label();
 		TextBox^ textbox = gcnew TextBox();
 
-		WCHAR stringBuf[256];
-		char utf8Buf[256];
+		const wchar_t* stringBuf;
 
 		label->Text = gcnew String(_friendlyName);
 		label->Left = left;
@@ -501,11 +472,7 @@ public:
 		label->AutoSize = true;
 		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
-		GetPrivateProfileStringW(_iniSectionName, _iniVarName, _defaultVal, stringBuf, 256, _iniFilePath);
-		if (_useUtf8 && wcscmp(_defaultVal, stringBuf) != 0) { // don't convert default value
-			WideCharToMultiByte(CP_ACP, 0, stringBuf, -1, utf8Buf, 256, NULL, NULL); // convert back to the original ANSI as read from file
-			MultiByteToWideChar(CP_UTF8, 0, utf8Buf, -1, stringBuf, 256); // now use those bytes to convert from UTF8
-		}
+		stringBuf = GetIniString(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath, _useUtf8);
 
 		textbox->Text = gcnew String(stringBuf);
 		textbox->Left = left + Col2Left;
@@ -554,20 +521,11 @@ public:
 
 		System::String^ tempSysStr;
 		std::wstring tempWStr;
-		WCHAR stringBuf[256];
-		char utf8Buf[256];
 
 		tempSysStr = ((TextBox^)TextBox::FromHandle(mainControlHandle))->Text;
 		tempWStr = msclr::interop::marshal_as<std::wstring>(tempSysStr);
-		tempWStr.copy(stringBuf, 256, 0);
-		stringBuf[tempWStr.length()] = 0;
 
-		if (_useUtf8) {
-			WideCharToMultiByte(CP_UTF8, 0, stringBuf, -1, utf8Buf, 256, NULL, NULL); // convert to UTF8
-			MultiByteToWideChar(CP_ACP, 0, utf8Buf, -1, stringBuf, 256); // now convert that to wide chars as if it's ANSI so it saves properly after conversion to ANSI by windows
-		}
-
-		WritePrivateProfileStringW(_iniSectionName, _iniVarName, stringBuf, _iniFilePath);
+		SetIniString(_iniSectionName, _iniVarName, tempWStr.c_str(), _iniFilePath, _useUtf8);
 	}
 };
 
@@ -604,7 +562,7 @@ public:
 		for (LPCWSTR& choice : _valueStrings) {
 			combobox->Items->Add(msclr::interop::marshal_as<System::String^>(choice));
 		}
-		combobox->SelectedIndex = GetPrivateProfileIntW(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath);
+		combobox->SelectedIndex = GetIniInt(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath);
 		combobox->Left = left + Col2Left;
 		combobox->Top = top;
 		combobox->Width = Col2Width;
@@ -642,12 +600,7 @@ public:
 
 	virtual void SaveOption()
 	{
-		System::String^ tempSysStr;
-		std::wstring tempWStr;
-
-		tempSysStr = Convert::ToInt32(((ComboBox^)ComboBox::FromHandle(mainControlHandle))->SelectedIndex).ToString();
-		tempWStr = msclr::interop::marshal_as<std::wstring>(tempSysStr);
-		WritePrivateProfileStringW(_iniSectionName, _iniVarName, tempWStr.c_str(), _iniFilePath);
+		SetIniInt(_iniSectionName, _iniVarName, Convert::ToInt32(((ComboBox^)ComboBox::FromHandle(mainControlHandle))->SelectedIndex), _iniFilePath);
 	}
 };
 
@@ -678,8 +631,7 @@ public:
 		Label^ label = gcnew Label();
 		ComboBox^ combobox = gcnew ComboBox();
 
-		WCHAR stringBuf[256];
-		char utf8Buf[256];
+		const wchar_t* stringBuf;
 
 		label->Text = gcnew String(_friendlyName);
 		label->Left = left;
@@ -692,11 +644,7 @@ public:
 			combobox->Items->Add(msclr::interop::marshal_as<System::String^>(choice));
 		}
 		
-		GetPrivateProfileStringW(_iniSectionName, _iniVarName, _defaultVal, stringBuf, 256, _iniFilePath);
-		if (_useUtf8 && wcscmp(_defaultVal, stringBuf) != 0) { // don't convert default value
-			WideCharToMultiByte(CP_ACP, 0, stringBuf, -1, utf8Buf, 256, NULL, NULL); // convert back to the original ANSI as read from file
-			MultiByteToWideChar(CP_UTF8, 0, utf8Buf, -1, stringBuf, 256); // now use those bytes to convert from UTF8
-		}
+		stringBuf = GetIniString(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath, _useUtf8);
 
 		combobox->Text = gcnew String(stringBuf);
 		combobox->Left = left + Col2Left;
@@ -755,20 +703,11 @@ public:
 
 		System::String^ tempSysStr;
 		std::wstring tempWStr;
-		WCHAR stringBuf[256];
-		char utf8Buf[256];
 
 		tempSysStr = ((ComboBox^)ComboBox::FromHandle(mainControlHandle))->Text;
 		tempWStr = msclr::interop::marshal_as<std::wstring>(tempSysStr);
-		tempWStr.copy(stringBuf, 256, 0);
-		stringBuf[tempWStr.length()] = 0;
 
-		if (_useUtf8) {
-			WideCharToMultiByte(CP_UTF8, 0, stringBuf, -1, utf8Buf, 256, NULL, NULL); // convert to UTF8
-			MultiByteToWideChar(CP_ACP, 0, utf8Buf, -1, stringBuf, 256); // now convert that to wide chars as if it's ANSI so it saves properly after conversion to ANSI by windows
-		}
-
-		WritePrivateProfileStringW(_iniSectionName, _iniVarName, stringBuf, _iniFilePath);
+		SetIniString(_iniSectionName, _iniVarName, tempWStr.c_str(), _iniFilePath, _useUtf8);
 	}
 };
 
@@ -810,7 +749,7 @@ public:
 			combobox->Items->Add(Convert::ToInt32(choice).ToString());
 		}
 
-		tempSysStr = Convert::ToInt32((int)GetPrivateProfileIntW(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath)).ToString();
+		tempSysStr = Convert::ToInt32(GetIniInt(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath)).ToString();
 
 		combobox->Text = gcnew String(tempSysStr);
 		combobox->Left = left + Col2Left;
@@ -866,7 +805,7 @@ public:
 		tempSysStr = ((ComboBox^)ComboBox::FromHandle(mainControlHandle))->Text;
 		tempWStr = msclr::interop::marshal_as<std::wstring>(tempSysStr);
 
-		WritePrivateProfileStringW(_iniSectionName, _iniVarName, tempWStr.c_str(), _iniFilePath);
+		SetIniString(_iniSectionName, _iniVarName, tempWStr.c_str(), _iniFilePath, false);
 	}
 };
 
@@ -924,8 +863,8 @@ public:
 			combobox->Items->Add(tempSysStr);
 		}
 
-		int width = GetPrivateProfileIntW(_iniSectionName, _iniVarName, -39, _iniFilePath);
-		int height = GetPrivateProfileIntW(_iniSectionName, _iniVarName2, -39, _iniFilePath);
+		int width = GetIniInt(_iniSectionName, _iniVarName, -39, _iniFilePath);
+		int height = GetIniInt(_iniSectionName, _iniVarName2, -39, _iniFilePath);
 		if (width == -39 || height == -39) {
 			if (_defaultVal.width == -1 || _defaultVal.height == -1)
 				width = -1;
@@ -1007,11 +946,11 @@ public:
 
 		tempSysStr = resolutionArray[0];
 		tempWStr = msclr::interop::marshal_as<std::wstring>(tempSysStr);
-		WritePrivateProfileStringW(_iniSectionName, _iniVarName, tempWStr.c_str(), _iniFilePath);
+		SetIniString(_iniSectionName, _iniVarName, tempWStr.c_str(), _iniFilePath, false);
 
 		tempSysStr = resolutionArray[1];
 		tempWStr = msclr::interop::marshal_as<std::wstring>(tempSysStr);
-		WritePrivateProfileStringW(_iniSectionName, _iniVarName2, tempWStr.c_str(), _iniFilePath);
+		SetIniString(_iniSectionName, _iniVarName2, tempWStr.c_str(), _iniFilePath, false);
 
 	}
 };
@@ -1086,7 +1025,7 @@ public:
 		Button^ button = gcnew Button();
 
 		cb->Text = gcnew String(_friendlyName);
-		cb->Checked = GetPrivateProfileBoolW(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath);
+		cb->Checked = GetIniBool(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath);
 		cb->Left = left + 2;
 		cb->Top = top + 3;
 		cb->AutoSize = true;
@@ -1142,9 +1081,7 @@ public:
 
 	virtual void SaveOption()
 	{
-		bool boolEnabled = ((CheckBox^)CheckBox::FromHandle(mainControlHandle))->Checked;
-
-		WritePrivateProfileStringW(_iniSectionName, _iniVarName, boolEnabled ? L"1" : L"0", _iniFilePath);
+		SetIniBool(_iniSectionName, _iniVarName, ((CheckBox^)CheckBox::FromHandle(mainControlHandle))->Checked, _iniFilePath, false);
 
 		for (ConfigOptionBase* opt : _configopts)
 		{

@@ -2,6 +2,15 @@
 #include "glStuff.h"
 #include <PluginConfigApi.h>
 
+extern "C" {
+// well, only good for 64 bit now, ont that is matters lol
+#define SIZEOF_SIZE_T 8
+#define SIZEOF_UNSIGNED_LONG_LONG 8
+#include <xdelta3.h>
+#include <xdelta3.c>
+#include "crc/crc.h"
+}
+
 
 // upload to the SSBO instead after processing
 // two versions because apparently TexSubImage can cause major stuttering
@@ -185,6 +194,185 @@ void h_glutSetCursor(int cursor)
 	glutSetCursor(cursor);
 }
 
+int64_t hookedGetFileSize(MsString* path) {
+	// store original size for use later or to return in case of error
+	int64_t ogsize = divaGetFileSize(path);
+
+	std::string pathStr = std::string(path->GetCharBuf());
+	static std::string shdfarc = "shader.farc";
+
+
+	// identify whether current file is shader or not
+	bool fileIsShader = false;
+	if (pathStr.length() >= shdfarc.length())
+	{
+		fileIsShader = (0 == pathStr.compare(pathStr.length() - shdfarc.length(), shdfarc.length(), shdfarc));
+	}
+
+	if (!fileIsShader)
+	{
+		return ogsize;
+	}
+
+
+	// reset some stuff when reprocessing shader farc (should never happen)
+	if (shader_farc_data) {
+		free(shader_farc_data);
+		shader_farc_data = NULL;
+		shader_farc_data_size = 0;
+		shader_farc_path = "";
+		shader_file_handle = NULL;
+	}
+
+
+	// local vars declared early to allow use of goto
+	FILE* ogfile;
+	void* ogdata = NULL;
+	DWORD crc;
+	wchar_t crcstr[9];
+	std::wstring vcd_path;
+	DWORD dwAttrib;
+	FILE* vcdfile;
+	long vcdsize;
+	void* vcddata = NULL;
+	void* outbuf = NULL;
+	usize_t outbuf_size;
+	usize_t outbuf_data_size;
+	int xd3err;
+
+
+	// if shader, open it and read data
+	//if (fopen_s(&ogfile, path->GetCharBuf(), "rb") != 0)
+	ogfile = divaFsopen(path->GetCharBuf(), "rb", _SH_DENYNO);
+	if (ogfile == nullptr)
+	{
+		MessageBoxW(NULL, L"Error opening shader.farc.", L"Novidia", NULL);
+		goto fail;
+	}
+
+	ogdata = malloc(ogsize);
+	//if (fread(ogdata, 1, ogsize, ogfile) != ogsize)
+	if (divaFread(ogdata, 1, ogsize, ogfile) != ogsize)
+	{
+		MessageBoxW(NULL, L"Error reading shader.farc.", L"Novidia", NULL);
+		goto fail;
+	}
+
+	//fclose(ogfile);
+	divaFclose(ogfile); // need to use diva's fclose if using diva's fsopen and fread
+
+
+	// crc32 the shader data to find a vcdiff patch file
+	crc = crc32buf((char*)ogdata, ogsize);
+	swprintf_s(crcstr, L"%08x", crc);
+	//MessageBoxW(NULL, crcstr, L"Novidia", NULL);
+
+	vcd_path = DirPath() + L"\\plugins\\Novidia Shaders\\" + crcstr + L".vcdiff";
+	
+	dwAttrib = GetFileAttributesW(vcd_path.c_str());
+	if (dwAttrib == INVALID_FILE_ATTRIBUTES || (dwAttrib & FILE_ATTRIBUTE_DIRECTORY))
+	{
+		MessageBoxW(NULL, L"Unable to find shader vcdiff file.", L"Novidia", NULL);
+		MessageBoxW(NULL, vcd_path.c_str(), L"Novidia", NULL);
+		goto fail;
+	}
+
+
+	// try opening and reading said vcdiff patch
+	if (_wfopen_s(&vcdfile, vcd_path.c_str(), L"rb") != 0)
+	{
+		MessageBoxW(NULL, L"Error opening shader vcdiff file.", L"Novidia", NULL);
+		MessageBoxW(NULL, vcd_path.c_str(), L"Novidia", NULL);
+		goto fail;
+	}
+
+	// get size of the file from having already opened it, skipping whatever the game does
+	fseek(vcdfile, 0, SEEK_END); // seek to end of file
+	vcdsize = ftell(vcdfile); // get current file pointer
+	fseek(vcdfile, 0, SEEK_SET); // seek back to beginning of file
+
+	vcddata = malloc(vcdsize);
+	if (fread(vcddata, 1, vcdsize, vcdfile) != vcdsize)
+	{
+		MessageBoxW(NULL, L"Error reading shader vcdiff file.", L"Novidia", NULL);
+		MessageBoxW(NULL, vcd_path.c_str(), L"Novidia", NULL);
+		goto fail;
+	}
+
+	fclose(vcdfile);
+
+	
+	// allocate an output buffer and patch shader into it (needs to be done now to know correct size)
+	outbuf_size = 64 * 1024 * 1024; // 64M should be enough
+	outbuf = malloc(outbuf_size);
+	outbuf_data_size;
+	xd3err = xd3_decode_memory((uint8_t*)vcddata, vcdsize, (uint8_t*)ogdata, ogsize, (uint8_t*)outbuf, &outbuf_data_size, outbuf_size, 0);
+
+	if (xd3err != 0)
+	{
+		MessageBoxW(NULL, L"Error applying shader vcdiff file.", L"Novidia", NULL);
+		MessageBoxA(NULL, xd3_strerror(xd3err), "Novidia", NULL);
+		goto fail;
+	}
+
+	wprintf(L"[Novidia] Patched shader.farc using %s.vcdiff\n", crcstr);
+
+	// done successfully! cleanup and save results
+	free(ogdata);
+	free(vcddata);
+	shader_farc_data = outbuf;
+	shader_farc_data_size = outbuf_data_size;
+	shader_farc_path = pathStr;
+
+	return outbuf_data_size;
+
+fail:
+	if (ogdata) free(ogdata);
+	if (vcddata) free(vcddata);
+	if (outbuf) free(outbuf);
+	return ogsize;
+}
+FILE* hookedFsopen(const char* path, const char* mode, int shflag)
+{
+	FILE* res = divaFsopen(path, mode, shflag);
+
+	if (strcmp(path, shader_farc_path.c_str()) == 0)
+	{
+		shader_file_handle = res;
+	}
+	return res;
+}
+int64_t hookedFread(void* dst, int64_t size, int64_t count, FILE* file)
+{
+	if (file != shader_file_handle)
+	{
+		return divaFread(dst, size, count, file);
+	}
+
+	size_t size_bytes = size * count;
+
+	if ((size_bytes > shader_farc_data_size) || !shader_farc_data)
+	{
+		return divaFread(dst, size, count, file); // this is an error -- the game wants more data than we have for some reason, or size has a value but not our buffer
+	}
+
+	memcpy(dst, shader_farc_data, size_bytes);
+
+	shader_file_handle = NULL; // easy way to avoid risk of unexpected reuse
+
+	// optionally, could free the stored farc data here, but it only uses 64MB so why bother?
+	/*
+	free(shader_farc_data); // no longer need to keep this around so free it and save the RAM
+	shader_farc_data = NULL; // clear associated data too, because there's no longer a processed shader
+	shader_farc_data_size = 0;
+	shader_farc_path = "";
+	*/
+
+	printf("[Novidia] Shader patch applied\n");
+
+	return size_bytes;
+}
+
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
@@ -215,13 +403,25 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 			DetourAttach(&(PVOID&)uploadModelTransformBuf, h_uploadModelTransformBuf_NoUpload);
 		}
 
+		if (enable_shader_deltas)
+		{
+			printf("[Novidia] Hooking divaGetFileSize\n");
+			DetourAttach(&(PVOID&)divaGetFileSize, hookedGetFileSize);
+			printf("[Novidia] Hooking divaFsopen\n");
+			DetourAttach(&(PVOID&)divaFsopen, hookedFsopen);
+			printf("[Novidia] Hooking divaFread\n");
+			DetourAttach(&(PVOID&)divaFread, hookedFread);
+		}
+
 		DetourTransactionCommit();
 
+		/*
 		if (shader_amd_farc)
 		{
 			const char* shaderpath = "./rom/shader_amd.farc";
 			InjectCode((void*)0x140a41018, std::vector<uint8_t>(shaderpath, shaderpath + strlen(shaderpath)));
 		}
+		*/
 	}
 
 	return TRUE;
@@ -235,7 +435,7 @@ PluginConfigOption config[] = {
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"enable_chara_skinning", L"general", CONFIG_FILE, L"Enable Chara Skinning", L"If you really need to get extra performance, you can disable uploading skinning data. (character models will disappear)", true, false } },
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"use_TexSubImage", L"general", CONFIG_FILE, L"Use glTexSubImage", L"glTexSubImage should offer higher performance, but stuttering has been reported when it is used.\nTry disabling this if you have issues.", true, false } },
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"force_BGRA_upload", L"general", CONFIG_FILE, L"Force BGRA Texture Uploads", L"BGRA format uploads seem to run faster (on some hardware), but drivers may suggest RGBA instead.\nUsing this forces uploads to use the BGRA format.\n\nDisabling this may decrease or improve performance.", true, false } },
-	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"shader_amd_farc", L"general", CONFIG_FILE, L"Load shader_amd.farc", L"Novidia can manage loading of alternate shaders automatically.\nLeave this enabled for current and future versions of AMDPack.", true, false } },
+	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"shader_delta_patches", L"general", CONFIG_FILE, L"Apply shader vcdiff patches", L"Novidia can automatically apply pre-generated delta patch files to shaders.\nLeave this enabled for current and future versions of AMDPack.", true, false } },
 };
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)

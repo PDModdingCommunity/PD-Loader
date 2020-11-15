@@ -4,10 +4,10 @@
 
 ## License and Legal
 
-The code included in this repository is intended for the solely usage of investigative reasons for the **PDAFT** videogame.
-Based on your current jurisdiction, it may be illegal to tamper with an arcade cabinet or its hardware and so it would be the usage of this software.
-**You must have your own legal dump of the game to use this software.**
-Additionally, a MIT License is provided.
+PD Loader is intended for educational purposes only; not for piracy. The code included is intended to be used sole for investigative purposes related to the **PDAFT** video game.
+**Users should possess a legally-obtained dump of the game to use this software.**
+Please check your local laws/regulataions to verify the legality of tampering with and dumping data from protected arcade machine hardware.
+Code is licensed under the MIT License.
 
 ## Installation
 

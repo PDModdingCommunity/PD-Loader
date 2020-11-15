@@ -28,7 +28,48 @@ bool enable_chara_skinning;
 bool use_TexSubImage;
 bool force_BGRA_upload;
 GLint tex_upload_format;
-bool shader_amd_farc;
+
+struct MsString {
+	union {
+		char* string_ptr;
+		char string_buf[16];
+	};
+	uint64_t len;
+	uint64_t bufsize;
+
+	char* GetCharBuf()
+	{
+		if (bufsize > 0xf && string_ptr != nullptr)
+			return string_ptr;
+		else
+			return string_buf;
+	};
+
+	void SetCharBuf(char* newcontent)
+	{
+		len = strlen(newcontent);
+		bufsize = len;
+		if (len > 0xf)
+		{
+			string_ptr = _strdup(newcontent);
+		}
+		else
+		{
+			strcpy_s(string_buf, newcontent);
+		}
+	}
+};
+
+std::string shader_farc_path = "";
+void* shader_farc_data = NULL;
+int64_t shader_farc_data_size;
+FILE* shader_file_handle = NULL;
+bool enable_shader_deltas;
+
+int64_t(*divaGetFileSize)(MsString* path) = (int64_t(*)(MsString* path))0x1400abb20;
+FILE* (*divaFsopen)(const char* path, const char* mode, int shflag) = (FILE* (*)(const char* path, const char* mode, int shflag))0x14085a17c;
+int64_t(*divaFread)(void* dst, int64_t size, int64_t count, FILE* file) = (int64_t(*)(void* dst, int64_t size, int64_t count, FILE* file))0x14085a6c4;
+int(*divaFclose)(FILE* file) = (int(*)(FILE* file))0x140846e9c; // not hooked, just so it can be called
 
 std::wstring ExePath() {
 	WCHAR buffer[MAX_PATH];
@@ -51,7 +92,13 @@ void loadConfig()
 	enable_chara_skinning = GetPrivateProfileIntW(L"general", L"enable_chara_skinning", 1, CONFIG_FILE) > 0 ? true : false;
 	use_TexSubImage = GetPrivateProfileIntW(L"general", L"use_TexSubImage", 1, CONFIG_FILE) > 0 ? true : false;
 	force_BGRA_upload = GetPrivateProfileIntW(L"general", L"force_BGRA_upload", 1, CONFIG_FILE) > 0 ? true : false;
-	shader_amd_farc = GetPrivateProfileIntW(L"general", L"shader_amd_farc", 1, CONFIG_FILE) > 0 ? true : false;
+	enable_shader_deltas = GetPrivateProfileIntW(L"general", L"shader_delta_patches", 1, CONFIG_FILE) > 0 ? true : false;
+	
+	if (GetPrivateProfileIntW(L"general", L"shader_amd_farc", 0, CONFIG_FILE) > 0)
+	{
+		MessageBoxA(NULL, "Attention: Use of shader_amd.farc has been discontinued and will no longer work. MAMD mdata is not required and can be deleted.\n\nIf you use modded shaders, amd-tools has been updated so it can generate new patches. Please check the readme for more information.", "Novidia", 0);
+		WritePrivateProfileStringW(L"general", L"shader_amd_farc", L"0", CONFIG_FILE);
+	}
 }
 
 

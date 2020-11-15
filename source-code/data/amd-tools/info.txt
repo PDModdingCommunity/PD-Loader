@@ -1,3 +1,0 @@
-#mdata_info
-depend.length=0
-version=20161030

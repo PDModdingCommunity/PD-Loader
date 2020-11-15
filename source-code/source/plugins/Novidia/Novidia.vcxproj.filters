@@ -18,12 +18,21 @@
     <ClCompile Include="src\dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\crc\crc_32.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\glStuff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\crc\sniptype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\crc\crc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

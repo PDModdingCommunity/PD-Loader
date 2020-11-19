@@ -13,6 +13,8 @@ after_build:
     md %TMP%\full\patches\
 
     md %TMP%\full\plugins\
+
+    md "%TMP%\full\plugins\Novidia Shaders"
     
     md %TMP%\full\ram\
 
@@ -38,8 +40,6 @@ after_build:
     
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\full\plugins\
     
-    del %TMP%\full\plugins\Novidia.dva
-
     copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\full\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_base_game.sfv %TMP%\full\
@@ -53,6 +53,8 @@ after_build:
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\glut32.dll %TMP%\full\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\*.* %TMP%\full\plugins\
+    
+    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\Novidia Shaders\*.*" "%TMP%\full\plugins\Novidia Shaders\"
     
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\ram\databank_template\*.dat %TMP%\full\ram\databank_template\
 
@@ -112,7 +114,7 @@ after_build:
     
     move amd-tools\README.txt AMD-README.txt
     
-    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AMDPack-AppVeyor.zip *
+    7z a %APPVEYOR_BUILD_FOLDER%\shader-dev-tool-%CONFIGURATION%-AppVeyor.zip *
 
 
 artifacts:

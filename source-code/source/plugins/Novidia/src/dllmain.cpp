@@ -382,13 +382,13 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 	{
 		loadConfig();
 
-		if (!disable_nvidia_check)
+		if (!disable_amd_check)
 		{
 			std::string gpuName = GPUModel::getGpuName();
-			if (gpuName != "Other" && gpuName != "Unknown")
+			if (gpuName != "AMD")
 			{
 				// detected Nvidia GPU
-				printf("[Novidia] Detected Nvidia GPU! Quitting!\n");
+				printf("[Novidia] Detected Non-AMD GPU! Quitting!\n");
 				return TRUE;
 			}
 		}
@@ -444,7 +444,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 using namespace PluginConfig;
 
 PluginConfigOption config[] = {
-	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"disable_nvidia_check", L"general", CONFIG_FILE, L"Disable Nvidia Check", L"On systems with both AMD and Nvidia graphics, the plugin may disable functionality due to detecting the Nvidia GPU. Set this to forcefully enable functionality.", false, false } },
+	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"disable_amd_check", L"general", CONFIG_FILE, L"Disable AMD Check", L"On systems with both AMD and Nvidia graphics, the plugin may disable functionality due to detecting a non-AMD GPU.\nSet this to forcefully enable functionality.", false, false } },
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"enable_chara_skinning", L"general", CONFIG_FILE, L"Enable Chara Skinning", L"If you really need to get extra performance, you can disable uploading skinning data. (character models will disappear)", true, false } },
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"use_TexSubImage", L"general", CONFIG_FILE, L"Use glTexSubImage", L"glTexSubImage should offer higher performance, but stuttering has been reported when it is used.\nTry disabling this if you have issues.", true, false } },
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"force_BGRA_upload", L"general", CONFIG_FILE, L"Force BGRA Texture Uploads", L"BGRA format uploads seem to run faster (on some hardware), but drivers may suggest RGBA instead.\nUsing this forces uploads to use the BGRA format.\n\nDisabling this may decrease or improve performance.", true, false } },

@@ -30,6 +30,8 @@ namespace GPUModel
 	int(*NvAPI_EnumPhysicalGPUs)(int64_t** handle, int* count) = NULL;
 	int(*NvAPI_GPU_GetShortName)(int64_t* handle, char* name) = NULL;
 
+	// returns the nvidia GPU die/chip name if one is installed, else "AMD" if an AMD driver is found, else "Unknown"
+	// note that the used GL context may differ
 	std::string getGpuName()
 	{
 		// detected model can be overridden -- 0: Kepler, 1: Maxwell, 2: Turing
@@ -54,15 +56,26 @@ namespace GPUModel
 			return arch;
 		}
 
+		std::string non_nv_name = "Unknown";
+
+		// detect installed AMD driver
+		//DWORD dwAttrib = GetFileAttributesW(L"amdgfxinfo64.dll");
+		//if (dwAttrib != INVALID_FILE_ATTRIBUTES && !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY))
+		struct stat buffer; // for some reason winapi version wasn't working
+		if (stat("amdgfxinfo64.dll", &buffer) == 0);
+		{
+			non_nv_name = "AMD";
+		}
+
 		printf("[GPUModel] Checking GPU model\n");
 		HMODULE hdlNvapi = LoadLibraryW(L"nvapi64.dll");
 
-		if (hdlNvapi == NULL) return
-			std::string("Other");
+		if (hdlNvapi == NULL)
+			return non_nv_name;
 
 		NvAPI_QueryInterface = (void* (*)(unsigned int offset))GetProcAddress(hdlNvapi, "nvapi_QueryInterface");
 		if (NvAPI_QueryInterface == nullptr)
-			return std::string("Other");
+			return non_nv_name;
 
 		NvAPI_Initialize = (int(*)())NvAPI_QueryInterface(0x0150E828);
 		NvAPI_Unload = (int(*)()) NvAPI_QueryInterface(0xD22BDD7E);
@@ -73,7 +86,7 @@ namespace GPUModel
 			NvAPI_Unload == nullptr ||
 			NvAPI_EnumPhysicalGPUs == nullptr ||
 			NvAPI_GPU_GetShortName == nullptr)
-			return std::string("Unknown");
+			return non_nv_name;
 
 		int64_t* hdlGpu[64] = { 0 };
 		int nGpu = 0;
@@ -85,7 +98,7 @@ namespace GPUModel
 		if (nGpu < 1)
 		{
 			NvAPI_Unload();
-			return std::string("Unknown");
+			return non_nv_name;
 		}
 
 		char nameBuf[64];

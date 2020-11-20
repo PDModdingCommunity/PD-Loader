@@ -57,7 +57,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\dependencies\xdelta3;..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\detours\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\dependencies\GPUModel;..\..\..\dependencies\xdelta3;..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\detours\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -74,7 +74,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\dependencies\xdelta3;..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\detours\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\dependencies\GPUModel;..\..\..\dependencies\xdelta3;..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\detours\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

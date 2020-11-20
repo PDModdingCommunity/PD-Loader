@@ -24,6 +24,7 @@ bool checkBufferTargetOk(GLenum target)
 
 int __stdcall stub() { return 1; }
 
+bool disable_nvidia_check;
 bool enable_chara_skinning;
 bool use_TexSubImage;
 bool force_BGRA_upload;
@@ -89,6 +90,7 @@ LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
 
 void loadConfig()
 {
+	disable_nvidia_check = GetPrivateProfileIntW(L"general", L"disable_nvidia_check", 0, CONFIG_FILE) > 0 ? true : false;
 	enable_chara_skinning = GetPrivateProfileIntW(L"general", L"enable_chara_skinning", 1, CONFIG_FILE) > 0 ? true : false;
 	use_TexSubImage = GetPrivateProfileIntW(L"general", L"use_TexSubImage", 1, CONFIG_FILE) > 0 ? true : false;
 	force_BGRA_upload = GetPrivateProfileIntW(L"general", L"force_BGRA_upload", 1, CONFIG_FILE) > 0 ? true : false;

@@ -1,15 +1,14 @@
 /*
 Simple header for detecting Nvidia GPU models
 */
-
+#pragma once
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#include <windows.h>
+#include <string>
+#include <stdio.h>
+#pragma comment(lib, "advapi32")
 namespace GPUModel
 {
-	#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
-	#include <windows.h>
-	#include <string>
-	#include <stdio.h>
-	#pragma comment(lib, "advapi32")
-
 	std::wstring ExePath() {
 		WCHAR buffer[MAX_PATH];
 		GetModuleFileNameW(NULL, buffer, MAX_PATH);

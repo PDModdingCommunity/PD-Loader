@@ -25,19 +25,22 @@ namespace TLAC::Utilities
 		struct RawFont
 		{
 			uint32_t sprId; // ?
-			uint8_t width1; // glyph?
-			uint8_t height1; // glyph?
-			uint8_t width2; // advance?
-			uint8_t height2; // advance?
-			uint8_t metric08; // or flag?
-			uint8_t metric09; // or flag?
-			uint8_t padding0a[0x06];
-			float metric08divby09;
-			uint64_t _0x10;
+			uint8_t width1; // advance
+			uint8_t height1; // advance
+			uint8_t width2; // tex glyph box
+			uint8_t height2; // tex glyph box
+			uint8_t layoutParam2Num; // layout param 2 is a fraction that seems to relate to margins
+			uint8_t layoutParam2Div;
+			uint8_t padding0a[0x02];
+			int32_t fontmapId;
+			float layoutParam2NumOverDiv;
+			uint8_t padding14[0x04];
+			uint64_t numChars;
 			int64_t dataBegin;
 			int64_t dataEnd;
 			int64_t dataCapacityEnd;
-			uint8_t padding38[0x8];
+			uint8_t layoutParam1;
+			uint8_t padding39[0x7];
 		};
 
 		struct RawFontHolderIdk // ...SeemsPrettyPointlessTbh

@@ -35,7 +35,7 @@ namespace TLAC::Utilities
 			int32_t fontmapId;
 			float layoutParam2NumOverDiv;
 			uint8_t padding14[0x04];
-			uint64_t numChars;
+			uint64_t texWidthChars;
 			int64_t dataBegin;
 			int64_t dataEnd;
 			int64_t dataCapacityEnd;

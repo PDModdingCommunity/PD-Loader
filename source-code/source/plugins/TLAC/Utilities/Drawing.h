@@ -50,7 +50,7 @@ namespace TLAC::Utilities
 			uint16_t height1;
 			uint16_t zero1; // ?
 			uint16_t zero2; // ?
-			uint8_t zero3; // some kind of flag, but seems unused
+			uint8_t proportional; // game always sets this to 0
 		};
 
 		struct FontInfo
@@ -58,7 +58,7 @@ namespace TLAC::Utilities
 			uint32_t fontId;
 			uint8_t padding04[0x4];
 			RawFont* rawfont;
-			uint16_t flag10; // (zero3 != 0 && padding38[0] != 0) ? 2 : (metric08 != metric09 ? 1 : 0)
+			uint16_t flag10; // (proportional != 0 && layoutParam1 != 0) ? 2 : (layoutParam2NumOverDiv != 1 ? 1 : 0)
 			uint8_t padding12[0x02];
 			float width1;
 			float height1;

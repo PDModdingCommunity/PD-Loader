@@ -68,8 +68,8 @@ namespace TLAC::Utilities
 			float userSizeHeight;
 			float userSizeWidthMultiplier; // userSizeWidth / width1
 			float userSizeHeightMultiplier; // userSizeHeight / width2
-			float zero1; // ?
-			float zero2; // ?
+			float spacingWidth; // ?
+			float spacingHeight; // ?
 
 			void setSize(float width, float height)
 			{

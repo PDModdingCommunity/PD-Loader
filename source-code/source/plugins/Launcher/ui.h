@@ -339,7 +339,7 @@ namespace Launcher {
 
 
 private: System::Windows::Forms::TabPage^ tabPage_Credits;
-private: System::Windows::Forms::TextBox^ textBox1;
+private: System::Windows::Forms::TextBox^ creditsTextBox;
 private: System::Windows::Forms::GroupBox^ groupBox_Details;
 private: System::Windows::Forms::Panel^ panel_Details;
 private: System::Windows::Forms::Panel^ panel_Custom;
@@ -397,7 +397,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->panel_Custom = (gcnew System::Windows::Forms::Panel());
 			this->panel_Plugins = (gcnew System::Windows::Forms::Panel());
 			this->tabPage_Credits = (gcnew System::Windows::Forms::TabPage());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->creditsTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->button_Discord = (gcnew System::Windows::Forms::Button());
 			this->button_github = (gcnew System::Windows::Forms::Button());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
@@ -507,7 +507,6 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->groupBox_Details->TabIndex = 11;
 			this->groupBox_Details->TabStop = false;
 			this->groupBox_Details->Text = L"Details";
-			this->groupBox_Details->Enter += gcnew System::EventHandler(this, &ui::groupBox1_Enter);
 			// 
 			// panel_Details
 			// 
@@ -651,7 +650,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			// 
 			// tabPage_Credits
 			// 
-			this->tabPage_Credits->Controls->Add(this->textBox1);
+			this->tabPage_Credits->Controls->Add(this->creditsTextBox);
 			this->tabPage_Credits->Location = System::Drawing::Point(4, 29);
 			this->tabPage_Credits->Name = L"tabPage_Credits";
 			this->tabPage_Credits->Padding = System::Windows::Forms::Padding(3);
@@ -659,22 +658,20 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabPage_Credits->TabIndex = 5;
 			this->tabPage_Credits->Text = L"Credits";
 			this->tabPage_Credits->UseVisualStyleBackColor = true;
-			this->tabPage_Credits->Click += gcnew System::EventHandler(this, &ui::tabPage_Credits_Click);
 			// 
-			// textBox1
+			// creditsTextBox
 			// 
-			this->textBox1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
+			this->creditsTextBox->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->textBox1->ForeColor = System::Drawing::Color::White;
-			this->textBox1->Location = System::Drawing::Point(0, 0);
-			this->textBox1->Multiline = true;
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->ReadOnly = true;
-			this->textBox1->ScrollBars = System::Windows::Forms::ScrollBars::Both;
-			this->textBox1->Size = System::Drawing::Size(769, 432);
-			this->textBox1->TabIndex = 0;
-			this->textBox1->Text = resources->GetString(L"textBox1.Text");
-			this->textBox1->TextChanged += gcnew System::EventHandler(this, &ui::textBox1_TextChanged);
+			this->creditsTextBox->ForeColor = System::Drawing::Color::White;
+			this->creditsTextBox->Location = System::Drawing::Point(0, 0);
+			this->creditsTextBox->Multiline = true;
+			this->creditsTextBox->Name = L"creditsTextBox";
+			this->creditsTextBox->ReadOnly = true;
+			this->creditsTextBox->ScrollBars = System::Windows::Forms::ScrollBars::Both;
+			this->creditsTextBox->Size = System::Drawing::Size(769, 432);
+			this->creditsTextBox->TabIndex = 0;
+			this->creditsTextBox->Text = resources->GetString(L"creditsTextBox.Text");
 			// 
 			// button_Discord
 			// 
@@ -968,13 +965,6 @@ private: bool AnyConfigChanged() {
 private: String^ GPUIssueText;
 private: System::Void LinkLabelLinkClickedGPUIssueHandler(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
 	SkinnedMessageBox::Show(this, GPUIssueText, "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
-}
-private: System::Void tabPage_Credits_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-}
-
-private: System::Void groupBox1_Enter(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

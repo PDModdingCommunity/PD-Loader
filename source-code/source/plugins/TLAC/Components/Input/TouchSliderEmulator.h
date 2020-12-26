@@ -60,5 +60,7 @@ namespace TLAC::Components
 		void ApplyContactPoint(ContactPoint &contactPoint, int section);
 		void ApplyBitfieldState(uint32_t state);
 	};
+
+	inline bool touchSliderEmulatorIsEnabled = false;
 }
 

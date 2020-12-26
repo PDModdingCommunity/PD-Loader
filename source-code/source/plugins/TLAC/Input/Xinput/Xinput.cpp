@@ -252,7 +252,7 @@ namespace TLAC::Input
 					SetTapStates(i, elapsed);
 				}
 
-				if (rumble && TLAC::Components::TouchSliderEmulator::LatestInstance->isSliderTouched() && TLAC::Components::TargetInspector::ShouldVibrate)
+				if (rumble && TLAC::Components::touchSliderEmulatorIsEnabled && TLAC::Components::TouchSliderEmulator::LatestInstance->isSliderTouched() && TLAC::Components::TargetInspector::ShouldVibrate)
 				{
 					XINPUT_VIBRATION vibration;
 					ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));

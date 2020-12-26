@@ -47,6 +47,8 @@ namespace TLAC::Components
 		componentsManager = manager;
 		sliderState = (TouchSliderState*)SLIDER_CTRL_TASK_ADDRESS;
 
+		touchSliderEmulatorIsEnabled = true;
+
 		LeftSideSlideLeft = new Binding();
 		LeftSideSlideRight = new Binding();
 

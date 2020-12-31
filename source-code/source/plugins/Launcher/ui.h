@@ -418,7 +418,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			// 
 			this->button_Launch->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Launch->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Launch->Location = System::Drawing::Point(4, 472);
+			this->button_Launch->Location = System::Drawing::Point(4, 496);
 			this->button_Launch->Margin = System::Windows::Forms::Padding(4);
 			this->button_Launch->Name = L"button_Launch";
 			this->button_Launch->Size = System::Drawing::Size(102, 34);
@@ -431,7 +431,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->button_Help->DialogResult = System::Windows::Forms::DialogResult::Cancel;
 			this->button_Help->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Help->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Help->Location = System::Drawing::Point(114, 472);
+			this->button_Help->Location = System::Drawing::Point(114, 496);
 			this->button_Help->Margin = System::Windows::Forms::Padding(4);
 			this->button_Help->Name = L"button_Help";
 			this->button_Help->Size = System::Drawing::Size(104, 34);
@@ -474,7 +474,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabControl->Margin = System::Windows::Forms::Padding(4);
 			this->tabControl->Name = L"tabControl";
 			this->tabControl->SelectedIndex = 0;
-			this->tabControl->Size = System::Drawing::Size(777, 465);
+			this->tabControl->Size = System::Drawing::Size(777, 489);
 			this->tabControl->TabIndex = 10;
 			// 
 			// tabPage_Resolution
@@ -490,7 +490,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabPage_Resolution->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage_Resolution->Name = L"tabPage_Resolution";
 			this->tabPage_Resolution->Padding = System::Windows::Forms::Padding(4);
-			this->tabPage_Resolution->Size = System::Drawing::Size(769, 432);
+			this->tabPage_Resolution->Size = System::Drawing::Size(769, 456);
 			this->tabPage_Resolution->TabIndex = 0;
 			this->tabPage_Resolution->Text = L"Graphics";
 			// 
@@ -503,7 +503,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->groupBox_Details->Margin = System::Windows::Forms::Padding(4);
 			this->groupBox_Details->Name = L"groupBox_Details";
 			this->groupBox_Details->Padding = System::Windows::Forms::Padding(4);
-			this->groupBox_Details->Size = System::Drawing::Size(350, 415);
+			this->groupBox_Details->Size = System::Drawing::Size(350, 439);
 			this->groupBox_Details->TabIndex = 11;
 			this->groupBox_Details->TabStop = false;
 			this->groupBox_Details->Text = L"Details";
@@ -514,7 +514,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->panel_Details->Location = System::Drawing::Point(8, 28);
 			this->panel_Details->Margin = System::Windows::Forms::Padding(4);
 			this->panel_Details->Name = L"panel_Details";
-			this->panel_Details->Size = System::Drawing::Size(334, 379);
+			this->panel_Details->Size = System::Drawing::Size(334, 403);
 			this->panel_Details->TabIndex = 0;
 			// 
 			// labelGPU
@@ -560,7 +560,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabPage_Patches->Location = System::Drawing::Point(4, 29);
 			this->tabPage_Patches->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage_Patches->Name = L"tabPage_Patches";
-			this->tabPage_Patches->Size = System::Drawing::Size(769, 432);
+			this->tabPage_Patches->Size = System::Drawing::Size(769, 456);
 			this->tabPage_Patches->TabIndex = 1;
 			this->tabPage_Patches->Text = L"Options";
 			// 
@@ -570,7 +570,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->panel_Patches->Location = System::Drawing::Point(0, 0);
 			this->panel_Patches->Margin = System::Windows::Forms::Padding(4);
 			this->panel_Patches->Name = L"panel_Patches";
-			this->panel_Patches->Size = System::Drawing::Size(769, 424);
+			this->panel_Patches->Size = System::Drawing::Size(769, 448);
 			this->panel_Patches->TabIndex = 9;
 			// 
 			// tabPage_Playerdata
@@ -581,7 +581,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabPage_Playerdata->Location = System::Drawing::Point(4, 29);
 			this->tabPage_Playerdata->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage_Playerdata->Name = L"tabPage_Playerdata";
-			this->tabPage_Playerdata->Size = System::Drawing::Size(769, 432);
+			this->tabPage_Playerdata->Size = System::Drawing::Size(769, 456);
 			this->tabPage_Playerdata->TabIndex = 3;
 			this->tabPage_Playerdata->Text = L"Player";
 			// 
@@ -591,7 +591,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->panel_Playerdata->Location = System::Drawing::Point(0, 0);
 			this->panel_Playerdata->Margin = System::Windows::Forms::Padding(4);
 			this->panel_Playerdata->Name = L"panel_Playerdata";
-			this->panel_Playerdata->Size = System::Drawing::Size(769, 424);
+			this->panel_Playerdata->Size = System::Drawing::Size(769, 448);
 			this->panel_Playerdata->TabIndex = 1;
 			// 
 			// tabPage_Components
@@ -603,7 +603,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabPage_Components->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage_Components->Name = L"tabPage_Components";
 			this->tabPage_Components->Padding = System::Windows::Forms::Padding(4);
-			this->tabPage_Components->Size = System::Drawing::Size(769, 432);
+			this->tabPage_Components->Size = System::Drawing::Size(769, 456);
 			this->tabPage_Components->TabIndex = 2;
 			this->tabPage_Components->Text = L"Components";
 			// 
@@ -613,7 +613,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->panel_Components->Location = System::Drawing::Point(0, 0);
 			this->panel_Components->Margin = System::Windows::Forms::Padding(4);
 			this->panel_Components->Name = L"panel_Components";
-			this->panel_Components->Size = System::Drawing::Size(769, 424);
+			this->panel_Components->Size = System::Drawing::Size(769, 448);
 			this->panel_Components->TabIndex = 0;
 			// 
 			// tabPage_Plugins
@@ -626,7 +626,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabPage_Plugins->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage_Plugins->Name = L"tabPage_Plugins";
 			this->tabPage_Plugins->Padding = System::Windows::Forms::Padding(4);
-			this->tabPage_Plugins->Size = System::Drawing::Size(769, 432);
+			this->tabPage_Plugins->Size = System::Drawing::Size(769, 456);
 			this->tabPage_Plugins->TabIndex = 3;
 			this->tabPage_Plugins->Text = L"Plugins and Patches";
 			// 
@@ -636,7 +636,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->panel_Custom->Location = System::Drawing::Point(385, 0);
 			this->panel_Custom->Margin = System::Windows::Forms::Padding(4);
 			this->panel_Custom->Name = L"panel_Custom";
-			this->panel_Custom->Size = System::Drawing::Size(384, 424);
+			this->panel_Custom->Size = System::Drawing::Size(384, 448);
 			this->panel_Custom->TabIndex = 3;
 			// 
 			// panel_Plugins
@@ -645,7 +645,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->panel_Plugins->Location = System::Drawing::Point(0, 0);
 			this->panel_Plugins->Margin = System::Windows::Forms::Padding(4);
 			this->panel_Plugins->Name = L"panel_Plugins";
-			this->panel_Plugins->Size = System::Drawing::Size(384, 424);
+			this->panel_Plugins->Size = System::Drawing::Size(384, 444);
 			this->panel_Plugins->TabIndex = 0;
 			// 
 			// tabPage_Credits
@@ -654,7 +654,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->tabPage_Credits->Location = System::Drawing::Point(4, 29);
 			this->tabPage_Credits->Name = L"tabPage_Credits";
 			this->tabPage_Credits->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage_Credits->Size = System::Drawing::Size(769, 432);
+			this->tabPage_Credits->Size = System::Drawing::Size(769, 456);
 			this->tabPage_Credits->TabIndex = 5;
 			this->tabPage_Credits->Text = L"Credits";
 			this->tabPage_Credits->UseVisualStyleBackColor = true;
@@ -669,7 +669,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->creditsTextBox->Name = L"creditsTextBox";
 			this->creditsTextBox->ReadOnly = true;
 			this->creditsTextBox->ScrollBars = System::Windows::Forms::ScrollBars::Both;
-			this->creditsTextBox->Size = System::Drawing::Size(769, 432);
+			this->creditsTextBox->Size = System::Drawing::Size(769, 456);
 			this->creditsTextBox->TabIndex = 0;
 			this->creditsTextBox->Text = resources->GetString(L"creditsTextBox.Text");
 			// 
@@ -681,7 +681,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->button_Discord->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 			this->button_Discord->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_Discord->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_Discord.Image")));
-			this->button_Discord->Location = System::Drawing::Point(674, 465);
+			this->button_Discord->Location = System::Drawing::Point(674, 489);
 			this->button_Discord->Margin = System::Windows::Forms::Padding(4);
 			this->button_Discord->Name = L"button_Discord";
 			this->button_Discord->Size = System::Drawing::Size(48, 48);
@@ -698,7 +698,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->button_github->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 			this->button_github->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_github->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_github.Image")));
-			this->button_github->Location = System::Drawing::Point(729, 465);
+			this->button_github->Location = System::Drawing::Point(729, 489);
 			this->button_github->Margin = System::Windows::Forms::Padding(4);
 			this->button_github->Name = L"button_github";
 			this->button_github->Size = System::Drawing::Size(48, 48);
@@ -710,7 +710,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			// 
 			this->button_Apply->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Apply->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Apply->Location = System::Drawing::Point(225, 472);
+			this->button_Apply->Location = System::Drawing::Point(225, 496);
 			this->button_Apply->Margin = System::Windows::Forms::Padding(4);
 			this->button_Apply->Name = L"button_Apply";
 			this->button_Apply->Size = System::Drawing::Size(104, 34);
@@ -728,7 +728,7 @@ private: System::Windows::Forms::Panel^ panel_Custom;
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			this->ClientSize = System::Drawing::Size(778, 514);
+			this->ClientSize = System::Drawing::Size(778, 538);
 			this->Controls->Add(this->button_Apply);
 			this->Controls->Add(this->tabControl);
 			this->Controls->Add(this->button_Help);

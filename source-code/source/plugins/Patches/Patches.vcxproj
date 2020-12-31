@@ -104,6 +104,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="PatchApplier.h" />
+    <ClInclude Include="PatchApplier600.h" />
+    <ClInclude Include="PatchApplier710.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

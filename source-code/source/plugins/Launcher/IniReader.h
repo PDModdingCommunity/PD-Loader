@@ -19,6 +19,15 @@ bool LoadIni(const wchar_t* filename, bool use_utf8=false)
 
 	if (ini_reader.LoadFile(filename) != 0)
 	{
+		// if the path doesn't exist, this isn't an error so we can still save filename and return true
+		// (writing config will create the file)
+		DWORD dwAttrib = GetFileAttributesW(filename);
+		if (dwAttrib == INVALID_FILE_ATTRIBUTES)
+		{
+			loaded_ini_file = filename;
+			return true;
+		}
+
 		loaded_ini_file = L"";
 		return false;
 	}

@@ -19,20 +19,6 @@ after_build:
     md %TMP%\full\ram\
 
     md %TMP%\full\ram\databank_template\
-   
-    md %TMP%\amd-pack\
-    
-    md %TMP%\amd-pack\plugins\
-
-    md "%TMP%\amd-pack\plugins\Novidia Shaders"
-    
-    md %TMP%\amd-pack\amd-tools\
-    
-    md "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source"
-    
-    md "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\ARB Patcher"
-    
-    md "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\ARB Patcher\gamesettings"
 
 
 
@@ -59,63 +45,12 @@ after_build:
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\ram\databank_template\*.dat %TMP%\full\ram\databank_template\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\patches\custom_freeplay_text_example.p %TMP%\full\patches\
-    
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\Novidia.dva %TMP%\amd-pack\plugins\
-
-    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\Novidia Shaders\*.*" "%TMP%\amd-pack\plugins\Novidia Shaders\"
-    
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\*.*  %TMP%\amd-pack\amd-tools\
-    
-    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\AFT Shader Patcher\*.*" "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\"
-    
-    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\AFT Shader Patcher\ARB Patcher\*.*" "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\ARB Patcher\"
-    
-    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\amd-tools\AFT Shader Patcher\ARB Patcher\gamesettings\*.*" "%TMP%\amd-pack\amd-tools\AFT Shader Patcher Source\ARB Patcher\gamesettings\"
 
     
 
     cd %TMP%\full\
 
     7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AppVeyor.zip *
-  
-    cd %TMP%\amd-pack\amd-tools\
-    
-    C:\Python38\python.exe -m pip install cx_freeze construct
-    
-    C:\Python38\Scripts\cxfreeze.exe "AFT Shader Patcher Source\aft_shader_patcher.py" --target-dir "AFT Shader Patcher"
-    
-    mkdir "AFT Shader Patcher\ARB Patcher"
-    
-    mkdir "AFT Shader Patcher\ARB Patcher\gamesettings"
-    
-    copy "AFT Shader Patcher Source\xdelta3.exe" "AFT Shader Patcher\"
-    
-    copy "AFT Shader Patcher Source\ARB Patcher\*.*" "AFT Shader Patcher\ARB Patcher\"
-    
-    copy "AFT Shader Patcher Source\ARB Patcher\gamesettings\*.*" "AFT Shader Patcher\ARB Patcher\gamesettings\"
-    
-    del /Q "AFT Shader Patcher Source\ARB Patcher\gamesettings"
-    
-    rmdir "AFT Shader Patcher Source\ARB Patcher\gamesettings"
-    
-    del /Q "AFT Shader Patcher Source\ARB Patcher"
-    
-    rmdir "AFT Shader Patcher Source\ARB Patcher"
-    
-    del /Q "AFT Shader Patcher Source"
-    
-    rmdir "AFT Shader Patcher Source"
-    
-    del "patch shaders py.bat"
-    
-    del ".gitignore"
-    
-    cd ..
-    
-    move amd-tools\README.txt AMD-README.txt
-    
-    7z a %APPVEYOR_BUILD_FOLDER%\shader-dev-tool-%CONFIGURATION%-AppVeyor.zip *
-
 
 artifacts:
 - path: PD-Loader-*.zip

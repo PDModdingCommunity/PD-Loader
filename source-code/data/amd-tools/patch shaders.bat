@@ -1,1 +1,0 @@
-"AFT Shader Patcher\aft_shader_patcher.exe" -i shader.farc -o shader_patched.farc --xdelta

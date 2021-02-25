@@ -7,7 +7,7 @@
 Enable=1
 
 [GPU]
-# Force GPU model -- -1=auto, 0=Kepler, 1=Maxwell, 2=Turing
+# Force GPU model -- -1=auto, 0=Kepler, 1=Maxwell, 2=Turing, 3=Ampere
 Model=-1
 
 [Launcher]
@@ -15,6 +15,10 @@ Model=-1
 Skip=0
 # Disables unsupported GPU warning dialogs.
 No_GPU_Dialog=0
+# Sets the dark colour scheme in the launcher.
+Dark_Launcher=0
+# Enables acrylic blur in the launcher on Windows 10 20H2 or later.
+Acrylic_Blur=0
 #Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing
 OpenGL_Patch_A=0
 #Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing
@@ -88,6 +92,8 @@ Custom_Patches=1
 Prevent_Data_Deletion=0
 
 [Graphics]
+# Lag Compensation
+Lag_Compensation = 0
 # Set to -1 to unlock the frame rate.
 FPS.Limit=60
 # Reduces FPS Limiter CPU usage
@@ -121,7 +127,7 @@ NPR1=0
 FRM.Motion.Rate=400
 
 [Resolution]
-# 0 = Windowed, 1 = Popup (recommended), 2 = Exclusive, 3 = Failsafe
+# 0 = Windowed, 1 = Fast, 2 = Exclusive, 3 = Safe
 # For same as screen res: -1x-1
 Display=1
 Width=-1

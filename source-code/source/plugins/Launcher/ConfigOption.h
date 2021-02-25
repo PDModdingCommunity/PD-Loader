@@ -19,7 +19,7 @@ using namespace System::Windows::Forms;
 
 float BaseScaleSize = 96;
 int Col1Width = 110;
-int Col2Left = 114;
+int Col2Left = 140;
 int Col2Width = 90;
 int ConfigBtnLeft = 120;
 int ControlSpacing = 6;
@@ -301,6 +301,41 @@ public:
 	}
 };
 
+class OptionMetaSeparator : public ConfigOptionBase
+{
+public:
+	OptionMetaSeparator()
+	{
+	}
+
+	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
+	{
+		Label^ lab = gcnew Label();
+		
+		lab->Text = "_____________________________________";
+		lab->Left = left + 2;
+		lab->Top = top;
+		lab->AutoSize = true;
+
+		Form^ RootForm = panel->FindForm();
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
+		lab->Scale(ScaleWidth, ScaleHeight);
+
+		panel->Controls->Add(lab);
+		mainControlHandle = lab->Handle;
+
+		int ControlHeight = lab->Font->Height / ScaleHeight;
+		return ControlHeight + ControlSpacing;
+	}
+};
+
 
 class BooleanOption : public ConfigOptionBase
 {
@@ -331,7 +366,7 @@ public:
 		cb->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		// hack to ensure high contrast
-		cb->BackColor = System::Drawing::Color::FromArgb(0, 0, 0, 0);
+		cb->BackColor = System::Drawing::Color::FromArgb(0, 127, 127, 127);
 		
 		Form^ RootForm = panel->FindForm();
 		float ScaleWidth = 1.0f;
@@ -534,9 +569,10 @@ class DropdownOption : public ConfigOptionBase
 {
 public:
 	int _defaultVal;
+	int _indexOffset;
 	std::vector<LPCWSTR> _valueStrings;
 
-	DropdownOption(LPCWSTR iniVarName, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, int defaultVal, std::vector<LPCWSTR> valueStrings)
+	DropdownOption(LPCWSTR iniVarName, LPCWSTR iniSectionName, LPCWSTR iniFilePath, LPCWSTR friendlyName, LPCWSTR description, int defaultVal, std::vector<LPCWSTR> valueStrings, int indexOffset=0)
 	{
 		_iniVarName = iniVarName;
 		_iniSectionName = iniSectionName;
@@ -545,6 +581,7 @@ public:
 		_description = description;
 		_defaultVal = defaultVal;
 		_valueStrings = valueStrings;
+		_indexOffset = indexOffset;
 	}
 
 	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
@@ -562,12 +599,12 @@ public:
 		for (LPCWSTR& choice : _valueStrings) {
 			combobox->Items->Add(msclr::interop::marshal_as<System::String^>(choice));
 		}
-		combobox->SelectedIndex = GetIniInt(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath);
+		combobox->SelectedIndex = GetIniInt(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath)-_indexOffset;
 		combobox->Left = left + Col2Left;
 		combobox->Top = top;
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
-		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		combobox->FlatStyle = System::Windows::Forms::FlatStyle::System;
 		combobox->DropDownStyle = ComboBoxStyle::DropDownList;
 
 		Form^ RootForm = panel->FindForm();
@@ -600,7 +637,7 @@ public:
 
 	virtual void SaveOption()
 	{
-		SetIniInt(_iniSectionName, _iniVarName, Convert::ToInt32(((ComboBox^)ComboBox::FromHandle(mainControlHandle))->SelectedIndex), _iniFilePath);
+		SetIniInt(_iniSectionName, _iniVarName, Convert::ToInt32(((ComboBox^)ComboBox::FromHandle(mainControlHandle))->SelectedIndex+_indexOffset), _iniFilePath);
 	}
 };
 
@@ -651,7 +688,7 @@ public:
 		combobox->Top = top;
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
-		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		combobox->FlatStyle = System::Windows::Forms::FlatStyle::System;
 
 		if (_editable)
 			combobox->DropDownStyle = ComboBoxStyle::DropDown;
@@ -756,7 +793,7 @@ public:
 		combobox->Top = top;
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
-		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		combobox->FlatStyle = System::Windows::Forms::FlatStyle::System;
 		
 		if (_editable)
 			combobox->DropDownStyle = ComboBoxStyle::DropDown;
@@ -889,7 +926,7 @@ public:
 		combobox->Top = top;
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
-		combobox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		combobox->FlatStyle = System::Windows::Forms::FlatStyle::System;
 
 		if (_editable)
 			combobox->DropDownStyle = ComboBoxStyle::DropDown;
@@ -1032,7 +1069,7 @@ public:
 		cb->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		// hack to ensure high contrast
-		cb->BackColor = System::Drawing::Color::FromArgb(0, 0, 0, 0);
+		cb->BackColor = System::Drawing::Color::FromArgb(0, 127, 127, 127);
 
 		button->Text = L"Config";
 		button->Left = left + ConfigBtnLeft;

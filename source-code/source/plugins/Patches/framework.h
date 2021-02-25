@@ -126,3 +126,4 @@ auto nReflectResWidth = GetPrivateProfileIntW(L"graphics", L"reflect_res_width",
 auto nReflectResHeight = GetPrivateProfileIntW(L"graphics", L"reflect_res_height", 256, CONFIG_FILE);
 auto nRefractResWidth = GetPrivateProfileIntW(L"graphics", L"refract_res_width", 512, CONFIG_FILE);
 auto nRefractResHeight = GetPrivateProfileIntW(L"graphics", L"refract_res_height", 256, CONFIG_FILE);
+auto nLagCompensation = GetPrivateProfileIntW(L"graphics", L"lag_compensation", 0, CONFIG_FILE);

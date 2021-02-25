@@ -109,6 +109,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="composition.h" />
     <ClInclude Include="ConfigOption.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="IniReader.h" />
@@ -127,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="FeelsThinkMan.gif" />
+    <Image Include="Help.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -275,11 +275,16 @@ private: ref class SkinnedMessageBoxForm : Form
 				}
 				else if (icon == MessageBoxIcon::Information) // also Asterisk
 				{
-					Drawing::Icon^ infoicon = gcnew Drawing::Icon(SystemIcons::Information, iconsize, iconsize);
+					/*Drawing::Icon^ infoicon = gcnew Drawing::Icon(SystemIcons::Information, iconsize, iconsize);
 					iconPB->Image = infoicon->ToBitmap();
 					iconPB->AccessibleDescription = "Information";
 					//this.Icon = SystemIcons.Question;
-					System::Media::SystemSounds::Asterisk->Play();
+					System::Media::SystemSounds::Asterisk->Play();*/
+
+					iconPB->Image = (Image^)(ResMgr->GetObject("Help"));
+					iconPB->AccessibleDescription = "Question";
+					//this.Icon = SystemIcons.Question;
+					System::Media::SystemSounds::Question->Play();
 				}
 				else
 				{

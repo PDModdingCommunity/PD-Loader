@@ -680,7 +680,7 @@ class PatchApplier710 : public PatchApplier {
 		}
 
 		// lag compensation
-		if (nLagCompensation>0 && nLagCompensation<50)
+		if (nLagCompensation>0 && nLagCompensation<=50)
 		{
 			InjectCode((void*)(0x14011e44e), { 0xf3, 0x0f, 0x10, 0x05, 0x8a, 0xcf, 0x9c, 0x00 });	// hijack xmm0
 			InjectCode((void*)(0x14011e46b), { 0xf3, 0x0f, 0x11, 0x44, 0x24, 0x20 });	// get value from xmm0 instead of xmm1

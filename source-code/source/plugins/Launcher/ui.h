@@ -360,8 +360,8 @@ namespace Launcher {
 			{
 				setDarkTheme(hWnd);
 				colourFg = Color::White;
-				colourBg = Color::FromArgb(64, 64, 64); // tabControl
-				colourBg2 = Color::Black;
+				colourBg = Color::Black; // tabControl
+				colourBg2 = Color::FromArgb(23, 23, 23);
 			}
 			else
 			{

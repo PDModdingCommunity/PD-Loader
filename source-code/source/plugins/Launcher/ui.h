@@ -360,8 +360,8 @@ namespace Launcher {
 			{
 				setDarkTheme(hWnd);
 				colourFg = Color::White;
-				colourBg = Color::Black; // tabControl
-				colourBg2 = Color::FromArgb(23, 23, 23);
+				colourBg = Color::FromArgb(32, 32, 32); // tabControl
+				colourBg2 = Color::FromArgb(25, 25, 25);
 			}
 			else
 			{
@@ -373,13 +373,16 @@ namespace Launcher {
 
 			if (useAcrylic)
 			{
-				colourBg2 = Color::FromArgb(255, 255, 255);
 				this->button_Discord->BackColor = colourBg2;
 				this->button_github->BackColor = colourBg2;
 				this->button_Wiki->BackColor = colourBg2;
+
+				colourBg2 = Color::FromArgb(255, 0, 255);
 			}
 			else
 			{
+				setBlur(hWnd, AccentState::ACCENT_DISABLED);
+
 				this->button_Discord->BackColor = Color::Transparent;
 				this->button_github->BackColor = Color::Transparent;
 				this->button_Wiki->BackColor = Color::Transparent;

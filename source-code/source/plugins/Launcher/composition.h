@@ -78,6 +78,8 @@ bool setBlur(HWND hWnd, AccentState accentState)
 
 		return result;
 	}
+
+	return 0;
 }
 
 void setDarkTheme(HWND hWnd, bool dark=true)

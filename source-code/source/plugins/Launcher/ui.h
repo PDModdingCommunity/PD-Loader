@@ -985,7 +985,7 @@ private: System::Void button_Discord_Click(System::Object^ sender, System::Event
 	switch (SkinnedMessageBox::Show(this, "Would you like to read the user guide for troubleshooting?", "PD Launcher", MessageBoxButtons::YesNoCancel, MessageBoxIcon::Information))
 	{
 	case System::Windows::Forms::DialogResult::Yes:
-		System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader");
+		System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki");
 		break;
 
 	case System::Windows::Forms::DialogResult::No:

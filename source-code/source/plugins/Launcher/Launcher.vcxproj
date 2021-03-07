@@ -65,7 +65,7 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\dependencies\simpleini;..\..\..\dependencies\WineVer;..\..\..\dependencies\GPUModel;..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\freeglut\include;..\..\..\dependencies\detours\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalOptions>-d2FH4- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-d2FH4- /utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>User32.lib</AdditionalDependencies>
@@ -86,7 +86,7 @@
       <AdditionalIncludeDirectories>..\..\..\dependencies\simpleini;..\..\..\dependencies\WineVer;..\..\..\dependencies\GPUModel;..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\freeglut\include;..\..\..\dependencies\detours\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalOptions>-d2FH4- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-d2FH4- /utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>User32.lib</AdditionalDependencies>

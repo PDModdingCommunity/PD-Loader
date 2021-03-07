@@ -58,6 +58,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\..\dependencies\GPUModel;..\..\..\dependencies\xdelta3;..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\detours\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>-d2FH4- /utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -75,6 +76,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\..\dependencies\GPUModel;..\..\..\dependencies\xdelta3;..\..\..\dependencies\PluginConfigApi;..\..\..\dependencies\detours\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>-d2FH4- /utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

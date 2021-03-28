@@ -344,7 +344,7 @@ namespace Launcher {
 
 		void updateLagCompMsec()
 		{
-			this->groupBox_Lag->Text = "Lag Compensation (" + this->trackBar_LagCompensation->Value * 10 + " msec)";
+			this->groupBox_Lag->Text = "Lag Compensation (" + this->trackBar_LagCompensation->Value + " msec)";
 		}
 
 		void updateStyle()
@@ -532,29 +532,45 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabPage_Plugins->SuspendLayout();
 			this->tabPage_Credits->SuspendLayout();
 			this->SuspendLayout();
+			// 
+			// button_Launch
+			// 
 			this->button_Launch->BackColor = System::Drawing::Color::White;
 			this->button_Launch->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Launch->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Launch->Location = System::Drawing::Point(172, 389);
+			this->button_Launch->Location = System::Drawing::Point(258, 584);
+			this->button_Launch->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->button_Launch->Name = L"button_Launch";
-			this->button_Launch->Size = System::Drawing::Size(217, 23);
+			this->button_Launch->Size = System::Drawing::Size(326, 34);
 			this->button_Launch->TabIndex = 20;
 			this->button_Launch->Text = L"Launch";
 			this->button_Launch->UseVisualStyleBackColor = false;
 			this->button_Launch->Click += gcnew System::EventHandler(this, &ui::Button_Launch_Click);
+			// 
+			// groupBox_ScreenRes
+			// 
 			this->groupBox_ScreenRes->Controls->Add(this->panel_ScreenRes);
 			this->groupBox_ScreenRes->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->groupBox_ScreenRes->Location = System::Drawing::Point(5, 6);
+			this->groupBox_ScreenRes->Location = System::Drawing::Point(8, 9);
+			this->groupBox_ScreenRes->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->groupBox_ScreenRes->Name = L"groupBox_ScreenRes";
-			this->groupBox_ScreenRes->Size = System::Drawing::Size(263, 113);
+			this->groupBox_ScreenRes->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->groupBox_ScreenRes->Size = System::Drawing::Size(394, 170);
 			this->groupBox_ScreenRes->TabIndex = 10;
 			this->groupBox_ScreenRes->TabStop = false;
 			this->groupBox_ScreenRes->Text = L"Screen Resolution";
+			// 
+			// panel_ScreenRes
+			// 
 			this->panel_ScreenRes->AutoScroll = true;
-			this->panel_ScreenRes->Location = System::Drawing::Point(5, 19);
+			this->panel_ScreenRes->Location = System::Drawing::Point(8, 28);
+			this->panel_ScreenRes->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->panel_ScreenRes->Name = L"panel_ScreenRes";
-			this->panel_ScreenRes->Size = System::Drawing::Size(253, 89);
+			this->panel_ScreenRes->Size = System::Drawing::Size(380, 134);
 			this->panel_ScreenRes->TabIndex = 0;
+			// 
+			// tabControl
+			// 
 			this->tabControl->Controls->Add(this->tabPage_Resolution);
 			this->tabControl->Controls->Add(this->tabPage_Patches);
 			this->tabControl->Controls->Add(this->tabPage_Playerdata);
@@ -562,10 +578,14 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabControl->Controls->Add(this->tabPage_Plugins);
 			this->tabControl->Controls->Add(this->tabPage_Credits);
 			this->tabControl->Location = System::Drawing::Point(0, 0);
+			this->tabControl->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->tabControl->Name = L"tabControl";
 			this->tabControl->SelectedIndex = 0;
-			this->tabControl->Size = System::Drawing::Size(560, 384);
+			this->tabControl->Size = System::Drawing::Size(840, 576);
 			this->tabControl->TabIndex = 10;
+			// 
+			// tabPage_Resolution
+			// 
 			this->tabPage_Resolution->BackColor = System::Drawing::Color::White;
 			this->tabPage_Resolution->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			this->tabPage_Resolution->Controls->Add(this->groupBox_Lag);
@@ -575,181 +595,268 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabPage_Resolution->Controls->Add(this->groupBox_ScreenRes);
 			this->tabPage_Resolution->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Resolution->Location = System::Drawing::Point(4, 22);
+			this->tabPage_Resolution->Location = System::Drawing::Point(4, 29);
+			this->tabPage_Resolution->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->tabPage_Resolution->Name = L"tabPage_Resolution";
-			this->tabPage_Resolution->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage_Resolution->Size = System::Drawing::Size(552, 358);
+			this->tabPage_Resolution->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->tabPage_Resolution->Size = System::Drawing::Size(832, 543);
 			this->tabPage_Resolution->TabIndex = 0;
 			this->tabPage_Resolution->Text = L"Graphics";
+			// 
+			// groupBox_Lag
+			// 
 			this->groupBox_Lag->Controls->Add(this->trackBar_LagCompensation);
 			this->groupBox_Lag->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->groupBox_Lag->Location = System::Drawing::Point(5, 282);
+			this->groupBox_Lag->Location = System::Drawing::Point(8, 449);
+			this->groupBox_Lag->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->groupBox_Lag->Name = L"groupBox_Lag";
-			this->groupBox_Lag->Size = System::Drawing::Size(263, 70);
+			this->groupBox_Lag->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->groupBox_Lag->Size = System::Drawing::Size(394, 79);
 			this->groupBox_Lag->TabIndex = 21;
 			this->groupBox_Lag->TabStop = false;
 			this->groupBox_Lag->Text = L"Lag Compensation";
-			this->trackBar_LagCompensation->Location = System::Drawing::Point(7, 20);
-			this->trackBar_LagCompensation->Maximum = 50;
+			// 
+			// trackBar_LagCompensation
+			// 
+			this->trackBar_LagCompensation->LargeChange = 1;
+			this->trackBar_LagCompensation->Location = System::Drawing::Point(10, 30);
+			this->trackBar_LagCompensation->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->trackBar_LagCompensation->Maximum = 500;
 			this->trackBar_LagCompensation->Name = L"trackBar_LagCompensation";
-			this->trackBar_LagCompensation->Size = System::Drawing::Size(250, 45);
+			this->trackBar_LagCompensation->Size = System::Drawing::Size(375, 69);
 			this->trackBar_LagCompensation->TabIndex = 0;
+			this->trackBar_LagCompensation->TickStyle = System::Windows::Forms::TickStyle::None;
 			this->trackBar_LagCompensation->ValueChanged += gcnew System::EventHandler(this, &ui::trackBar_LagCompensation_ValueChanged);
+			// 
+			// groupBox_Details
+			// 
 			this->groupBox_Details->Controls->Add(this->panel_Details);
 			this->groupBox_Details->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->groupBox_Details->Location = System::Drawing::Point(274, 6);
+			this->groupBox_Details->Location = System::Drawing::Point(411, 9);
+			this->groupBox_Details->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->groupBox_Details->Name = L"groupBox_Details";
-			this->groupBox_Details->Size = System::Drawing::Size(272, 346);
+			this->groupBox_Details->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->groupBox_Details->Size = System::Drawing::Size(408, 519);
 			this->groupBox_Details->TabIndex = 11;
 			this->groupBox_Details->TabStop = false;
 			this->groupBox_Details->Text = L"Details";
+			// 
+			// panel_Details
+			// 
 			this->panel_Details->AutoScroll = true;
-			this->panel_Details->Location = System::Drawing::Point(5, 19);
+			this->panel_Details->Location = System::Drawing::Point(8, 28);
+			this->panel_Details->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->panel_Details->Name = L"panel_Details";
-			this->panel_Details->Size = System::Drawing::Size(261, 321);
+			this->panel_Details->Size = System::Drawing::Size(392, 482);
 			this->panel_Details->TabIndex = 0;
+			// 
+			// labelGPU
+			// 
 			this->labelGPU->AutoSize = true;
 			this->labelGPU->BackColor = System::Drawing::Color::Transparent;
 			this->labelGPU->ForeColor = System::Drawing::Color::Black;
-			this->labelGPU->Location = System::Drawing::Point(5, 209);
-			this->labelGPU->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			this->labelGPU->MinimumSize = System::Drawing::Size(263, 13);
+			this->labelGPU->Location = System::Drawing::Point(8, 314);
+			this->labelGPU->MinimumSize = System::Drawing::Size(394, 20);
 			this->labelGPU->Name = L"labelGPU";
-			this->labelGPU->Size = System::Drawing::Size(263, 13);
+			this->labelGPU->Size = System::Drawing::Size(394, 20);
 			this->labelGPU->TabIndex = 21;
 			this->labelGPU->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+			// 
+			// groupBox_InternalRes
+			// 
 			this->groupBox_InternalRes->Controls->Add(this->panel_IntRes);
 			this->groupBox_InternalRes->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->groupBox_InternalRes->Location = System::Drawing::Point(5, 124);
+			this->groupBox_InternalRes->Location = System::Drawing::Point(8, 186);
+			this->groupBox_InternalRes->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->groupBox_InternalRes->Name = L"groupBox_InternalRes";
-			this->groupBox_InternalRes->Size = System::Drawing::Size(263, 83);
+			this->groupBox_InternalRes->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->groupBox_InternalRes->Size = System::Drawing::Size(394, 124);
 			this->groupBox_InternalRes->TabIndex = 20;
 			this->groupBox_InternalRes->TabStop = false;
 			this->groupBox_InternalRes->Text = L"Internal Resolution (Quality)";
+			// 
+			// panel_IntRes
+			// 
 			this->panel_IntRes->AutoScroll = true;
-			this->panel_IntRes->Location = System::Drawing::Point(5, 19);
+			this->panel_IntRes->Location = System::Drawing::Point(8, 28);
+			this->panel_IntRes->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->panel_IntRes->Name = L"panel_IntRes";
-			this->panel_IntRes->Size = System::Drawing::Size(253, 59);
+			this->panel_IntRes->Size = System::Drawing::Size(380, 88);
 			this->panel_IntRes->TabIndex = 1;
+			// 
+			// tabPage_Patches
+			// 
 			this->tabPage_Patches->BackColor = System::Drawing::Color::White;
 			this->tabPage_Patches->Controls->Add(this->panel_Patches);
 			this->tabPage_Patches->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Patches->Location = System::Drawing::Point(4, 22);
+			this->tabPage_Patches->Location = System::Drawing::Point(4, 29);
+			this->tabPage_Patches->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->tabPage_Patches->Name = L"tabPage_Patches";
-			this->tabPage_Patches->Size = System::Drawing::Size(552, 358);
+			this->tabPage_Patches->Size = System::Drawing::Size(832, 543);
 			this->tabPage_Patches->TabIndex = 1;
 			this->tabPage_Patches->Text = L"Options";
+			// 
+			// panel_Patches
+			// 
 			this->panel_Patches->AutoScroll = true;
 			this->panel_Patches->Location = System::Drawing::Point(0, 0);
+			this->panel_Patches->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->panel_Patches->Name = L"panel_Patches";
-			this->panel_Patches->Size = System::Drawing::Size(552, 358);
+			this->panel_Patches->Size = System::Drawing::Size(828, 537);
 			this->panel_Patches->TabIndex = 9;
+			// 
+			// tabPage_Playerdata
+			// 
 			this->tabPage_Playerdata->BackColor = System::Drawing::Color::White;
 			this->tabPage_Playerdata->Controls->Add(this->panel_Playerdata);
 			this->tabPage_Playerdata->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Playerdata->Location = System::Drawing::Point(4, 22);
+			this->tabPage_Playerdata->Location = System::Drawing::Point(4, 29);
+			this->tabPage_Playerdata->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->tabPage_Playerdata->Name = L"tabPage_Playerdata";
-			this->tabPage_Playerdata->Size = System::Drawing::Size(552, 358);
+			this->tabPage_Playerdata->Size = System::Drawing::Size(832, 543);
 			this->tabPage_Playerdata->TabIndex = 3;
 			this->tabPage_Playerdata->Text = L"Player";
+			// 
+			// panel_Playerdata
+			// 
 			this->panel_Playerdata->AutoScroll = true;
 			this->panel_Playerdata->Location = System::Drawing::Point(0, 0);
+			this->panel_Playerdata->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->panel_Playerdata->Name = L"panel_Playerdata";
-			this->panel_Playerdata->Size = System::Drawing::Size(552, 358);
+			this->panel_Playerdata->Size = System::Drawing::Size(828, 537);
 			this->panel_Playerdata->TabIndex = 1;
+			// 
+			// tabPage_Components
+			// 
 			this->tabPage_Components->BackColor = System::Drawing::Color::White;
 			this->tabPage_Components->Controls->Add(this->panel_Components);
 			this->tabPage_Components->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Components->Location = System::Drawing::Point(4, 22);
+			this->tabPage_Components->Location = System::Drawing::Point(4, 29);
+			this->tabPage_Components->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->tabPage_Components->Name = L"tabPage_Components";
-			this->tabPage_Components->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage_Components->Size = System::Drawing::Size(552, 358);
+			this->tabPage_Components->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->tabPage_Components->Size = System::Drawing::Size(832, 543);
 			this->tabPage_Components->TabIndex = 2;
 			this->tabPage_Components->Text = L"Components";
+			// 
+			// panel_Components
+			// 
 			this->panel_Components->AutoScroll = true;
 			this->panel_Components->Location = System::Drawing::Point(0, 0);
+			this->panel_Components->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->panel_Components->Name = L"panel_Components";
-			this->panel_Components->Size = System::Drawing::Size(552, 358);
+			this->panel_Components->Size = System::Drawing::Size(828, 537);
 			this->panel_Components->TabIndex = 0;
+			// 
+			// tabPage_Plugins
+			// 
 			this->tabPage_Plugins->BackColor = System::Drawing::Color::White;
 			this->tabPage_Plugins->Controls->Add(this->panel_Custom);
 			this->tabPage_Plugins->Controls->Add(this->panel_Plugins);
 			this->tabPage_Plugins->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Plugins->Location = System::Drawing::Point(4, 22);
+			this->tabPage_Plugins->Location = System::Drawing::Point(4, 29);
+			this->tabPage_Plugins->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->tabPage_Plugins->Name = L"tabPage_Plugins";
-			this->tabPage_Plugins->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage_Plugins->Size = System::Drawing::Size(552, 358);
+			this->tabPage_Plugins->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->tabPage_Plugins->Size = System::Drawing::Size(832, 543);
 			this->tabPage_Plugins->TabIndex = 3;
 			this->tabPage_Plugins->Text = L"Plugins and Patches";
+			// 
+			// panel_Custom
+			// 
 			this->panel_Custom->AutoScroll = true;
-			this->panel_Custom->Location = System::Drawing::Point(276, 0);
+			this->panel_Custom->Location = System::Drawing::Point(414, 0);
+			this->panel_Custom->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->panel_Custom->Name = L"panel_Custom";
-			this->panel_Custom->Size = System::Drawing::Size(276, 358);
+			this->panel_Custom->Size = System::Drawing::Size(414, 537);
 			this->panel_Custom->TabIndex = 3;
+			// 
+			// panel_Plugins
+			// 
 			this->panel_Plugins->AutoScroll = true;
 			this->panel_Plugins->Location = System::Drawing::Point(0, 0);
+			this->panel_Plugins->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->panel_Plugins->Name = L"panel_Plugins";
-			this->panel_Plugins->Size = System::Drawing::Size(276, 358);
+			this->panel_Plugins->Size = System::Drawing::Size(414, 537);
 			this->panel_Plugins->TabIndex = 0;
+			// 
+			// tabPage_Credits
+			// 
 			this->tabPage_Credits->Controls->Add(this->creditsTextBox);
-			this->tabPage_Credits->Location = System::Drawing::Point(4, 22);
-			this->tabPage_Credits->Margin = System::Windows::Forms::Padding(2);
+			this->tabPage_Credits->Location = System::Drawing::Point(4, 29);
 			this->tabPage_Credits->Name = L"tabPage_Credits";
-			this->tabPage_Credits->Padding = System::Windows::Forms::Padding(2);
-			this->tabPage_Credits->Size = System::Drawing::Size(552, 358);
+			this->tabPage_Credits->Padding = System::Windows::Forms::Padding(3, 3, 3, 3);
+			this->tabPage_Credits->Size = System::Drawing::Size(832, 543);
 			this->tabPage_Credits->TabIndex = 5;
 			this->tabPage_Credits->Text = L"Credits";
 			this->tabPage_Credits->UseVisualStyleBackColor = true;
+			// 
+			// creditsTextBox
+			// 
 			this->creditsTextBox->BackColor = System::Drawing::Color::White;
 			this->creditsTextBox->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->creditsTextBox->Location = System::Drawing::Point(0, 0);
-			this->creditsTextBox->Margin = System::Windows::Forms::Padding(2);
 			this->creditsTextBox->Multiline = true;
 			this->creditsTextBox->Name = L"creditsTextBox";
 			this->creditsTextBox->ReadOnly = true;
 			this->creditsTextBox->ScrollBars = System::Windows::Forms::ScrollBars::Both;
-			this->creditsTextBox->Size = System::Drawing::Size(552, 358);
+			this->creditsTextBox->Size = System::Drawing::Size(826, 535);
 			this->creditsTextBox->TabIndex = 0;
 			this->creditsTextBox->Text = resources->GetString(L"creditsTextBox.Text");
+			// 
+			// button_Discord
+			// 
 			this->button_Discord->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(242)), static_cast<System::Int32>(static_cast<System::Byte>(242)),
 				static_cast<System::Int32>(static_cast<System::Byte>(242)));
 			this->button_Discord->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->button_Discord->FlatAppearance->BorderSize = 0;
 			this->button_Discord->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_Discord->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_Discord.Image")));
-			this->button_Discord->Location = System::Drawing::Point(496, 384);
+			this->button_Discord->Location = System::Drawing::Point(744, 576);
+			this->button_Discord->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->button_Discord->Name = L"button_Discord";
-			this->button_Discord->Size = System::Drawing::Size(32, 32);
+			this->button_Discord->Size = System::Drawing::Size(48, 48);
 			this->button_Discord->TabIndex = 31;
 			this->button_Discord->UseVisualStyleBackColor = false;
 			this->button_Discord->Click += gcnew System::EventHandler(this, &ui::button_Discord_Click);
+			// 
+			// button_github
+			// 
 			this->button_github->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(242)), static_cast<System::Int32>(static_cast<System::Byte>(242)),
 				static_cast<System::Int32>(static_cast<System::Byte>(242)));
 			this->button_github->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->button_github->FlatAppearance->BorderSize = 0;
 			this->button_github->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_github->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_github.Image")));
-			this->button_github->Location = System::Drawing::Point(528, 384);
+			this->button_github->Location = System::Drawing::Point(792, 576);
+			this->button_github->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->button_github->Name = L"button_github";
-			this->button_github->Size = System::Drawing::Size(32, 32);
+			this->button_github->Size = System::Drawing::Size(48, 48);
 			this->button_github->TabIndex = 32;
 			this->button_github->UseVisualStyleBackColor = false;
 			this->button_github->Click += gcnew System::EventHandler(this, &ui::button_github_Click);
+			// 
+			// button_Apply
+			// 
 			this->button_Apply->BackColor = System::Drawing::Color::White;
 			this->button_Apply->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Apply->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Apply->Location = System::Drawing::Point(4, 389);
+			this->button_Apply->Location = System::Drawing::Point(6, 584);
+			this->button_Apply->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->button_Apply->Name = L"button_Apply";
-			this->button_Apply->Size = System::Drawing::Size(69, 23);
+			this->button_Apply->Size = System::Drawing::Size(104, 34);
 			this->button_Apply->TabIndex = 33;
 			this->button_Apply->Text = L"Apply";
 			this->button_Apply->UseVisualStyleBackColor = false;
 			this->button_Apply->Click += gcnew System::EventHandler(this, &ui::button_Apply_Click);
+			// 
+			// button_Wiki
+			// 
 			this->button_Wiki->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(242)), static_cast<System::Int32>(static_cast<System::Byte>(242)),
 				static_cast<System::Int32>(static_cast<System::Byte>(242)));
 			this->button_Wiki->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_Wiki.BackgroundImage")));
@@ -757,20 +864,24 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->button_Wiki->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->button_Wiki->FlatAppearance->BorderSize = 0;
 			this->button_Wiki->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Wiki->Location = System::Drawing::Point(464, 384);
+			this->button_Wiki->Location = System::Drawing::Point(696, 576);
+			this->button_Wiki->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->button_Wiki->Name = L"button_Wiki";
-			this->button_Wiki->Size = System::Drawing::Size(32, 32);
+			this->button_Wiki->Size = System::Drawing::Size(48, 48);
 			this->button_Wiki->TabIndex = 34;
 			this->button_Wiki->UseVisualStyleBackColor = false;
 			this->button_Wiki->Click += gcnew System::EventHandler(this, &ui::button_Wiki_Click);
+			// 
+			// ui
+			// 
 			this->AcceptButton = this->button_Launch;
-			this->AutoScaleDimensions = System::Drawing::SizeF(96, 96);
+			this->AutoScaleDimensions = System::Drawing::SizeF(144, 144);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Dpi;
 			this->AutoSize = true;
 			this->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 			this->BackColor = System::Drawing::Color::Magenta;
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			this->ClientSize = System::Drawing::Size(560, 417);
+			this->ClientSize = System::Drawing::Size(840, 626);
 			this->Controls->Add(this->button_Wiki);
 			this->Controls->Add(this->button_Apply);
 			this->Controls->Add(this->tabControl);
@@ -784,6 +895,7 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->HelpButton = true;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->KeyPreview = true;
+			this->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->MaximizeBox = false;
 			this->Name = L"ui";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;

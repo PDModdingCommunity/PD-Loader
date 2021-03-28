@@ -680,11 +680,11 @@ class PatchApplier710 : public PatchApplier {
 		}
 
 		// lag compensation
-		if (nLagCompensation>0 && nLagCompensation<=50)
+		if (nLagCompensation>0 && nLagCompensation<=500)
 		{
 			InjectCode((void*)(0x14011e44e), { 0xf3, 0x0f, 0x10, 0x05, 0x8a, 0xcf, 0x9c, 0x00 });	// hijack xmm0
 			InjectCode((void*)(0x14011e46b), { 0xf3, 0x0f, 0x11, 0x44, 0x24, 0x20 });	// get value from xmm0 instead of xmm1
-			float startPos = (float)nLagCompensation / 100.0;
+			float startPos = (float)nLagCompensation / 1000.0;
 			InjectCode((void*)(0x140aeB3e0), { *((uint8_t*)(&startPos)), *((uint8_t*)(&startPos)+1), *((uint8_t*)(&startPos) + 2), *((uint8_t*)(&startPos) + 3) });
 		
 			printf("[Patches] Lag Compensation: %f\n", startPos);

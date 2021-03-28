@@ -40,6 +40,8 @@ namespace TLAC::Components
 
 		Input::Binding* CoinBinding;
 
+		Input::Binding* WireframeBinding;
+
 		InputEmulator();
 		~InputEmulator();
 
@@ -111,5 +113,6 @@ namespace TLAC::Components
 
 		void addCoin();
 		void toggleNpr1();
+		void toggleWireframe();
 	};
 }

@@ -306,10 +306,10 @@ namespace TLAC::Components
 		if (buttonTestFunc(RightBinding))
 			buttons |= JVS_R;
 
-		if (buttonTestFunc(CoinBinding))
+		if (CoinBinding->AnyTapped())
 			addCoin();
 
-		if (buttonTestFunc(WireframeBinding))
+		if (WireframeBinding->AnyTapped())
 			toggleWireframe();
 
 		return buttons;

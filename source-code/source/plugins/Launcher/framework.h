@@ -54,6 +54,7 @@ LPCWSTR PLAYERDATA_FILE = PLAYERDATA_FILE_STRING.c_str();
 wstring KEYCONFIG_FILE_STRING = PLUGINS_DIR + L"\\keyconfig.ini";
 LPCWSTR KEYCONFIG_FILE = KEYCONFIG_FILE_STRING.c_str();
 
+LPCWSTR GLOBAL_SECTION = L"global";
 LPCWSTR PATCHES_SECTION = L"patches";
 LPCWSTR GRAPHICS_SECTION = L"graphics";
 LPCWSTR RESOLUTION_SECTION = L"resolution";
@@ -65,6 +66,24 @@ LPCWSTR KEYCONFIG_SECTION = L"keyconfig";
 int nSkipLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"skip", FALSE, CONFIG_FILE);
 int nNoGPUDialog = GetPrivateProfileIntW(LAUNCHER_SECTION, L"no_gpu_dialog", FALSE, CONFIG_FILE);
 
+void SetBackCol(Control^ elem, System::Drawing::Color color, System::Windows::Forms::FlatStyle cbxStyle)
+{
+	Type^ elemType = elem->GetType();
+
+	if (elem->HasChildren)
+	{
+		for (int i = 0; i < elem->Controls->Count; i++)
+		{
+			SetBackCol(elem->Controls[i], color, cbxStyle);
+		}
+	}
+	else if (elemType == ComboBox::typeid)
+	{
+		((ComboBox^)elem)->FlatStyle = cbxStyle;
+		elem->BackColor = System::Drawing::Color::White;
+	}
+	else if (elemType == CheckBox::typeid || elemType == Button::typeid) elem->BackColor = color;
+}
 
 resolution getCurrentScreenResolution() {
 	return resolution(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
@@ -140,7 +159,7 @@ static std::vector<int> getScreenRatesVec(std::vector<DEVMODEW> &screenModes) {
 std::vector<DEVMODEW> screenModes = getScreenModes();
 
 
-DropdownOption* DisplayModeDropdown = new DropdownOption(L"display", RESOLUTION_SECTION, CONFIG_FILE, L"Display:", L"Sets the window/screen mode.", 1, std::vector<LPCWSTR>({ L"Windowed", L"Fast", L"Exclusive", L"Safe" }));
+DropdownOption* DisplayModeDropdown = new DropdownOption(L"display", RESOLUTION_SECTION, CONFIG_FILE, L"Display:", L"Sets the window/screen mode.\n\n\nFast: Popup borderless window (can cause issues with screenshots if Windows 10/11 fullscreen optimizations are enabled).\n\nExclusive: Takes control of the screen and allows you to change the resolution and refresh rate. Makes switching between applications harder.\n\nSafe: Simple borderless window. A little bit laggier than Fast, but with less issues.", 1, std::vector<LPCWSTR>({ L"Windowed", L"Fast", L"Exclusive", L"Safe" }));
 ResolutionOption* DisplayResolutionOption = new ResolutionOption(L"width", L"height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the display resolution.", resolution(-1, -1), getScreenResolutionsVec(screenModes), true, RESOPT_INCLUDE_MATCH_SCREEN);
 
 ConfigOptionBase* screenResolutionArray[] = {
@@ -172,13 +191,17 @@ ConfigOptionBase* graphicsArray[] = {
 	new BooleanOption(L"glare", GRAPHICS_SECTION, CONFIG_FILE, L"Glare", L"Enable or disable glare.", true, false),
 	new BooleanOption(L"shader", GRAPHICS_SECTION, CONFIG_FILE, L"Shader", L"Enable or disable high-quality shaders.", true, false),
 	new DropdownOption(L"NPR1", GRAPHICS_SECTION, CONFIG_FILE, L"Toon (F9):", L"NPR1 shader\n\nPress F9 to toggle.", 0, std::vector<LPCWSTR>({ L"Default", L"Force on", L"Force off" })),
-	new BooleanOption(L"2D", GRAPHICS_SECTION, CONFIG_FILE, L"Disable 3D rendering", L"Disable all 3D passes.\n\nWARNING: The extended data will be deleted unless Prevent Data Deletion is enabled.", false, false),
-
+	new BooleanOption(L"2D", GRAPHICS_SECTION, CONFIG_FILE, L"Disable 3D rendering", L"Disable all 3D passes.\n\nWARNING: The extended data will be deleted unless Prevent Data Deletion is enabled. Don't enable on Intel GPUs, enable \"Disable Extended Data\" instead.", false, false),
 };
 
 ConfigOptionBase* optionsArray[] = {
+	new BooleanOption(L"builtin_patches", GLOBAL_SECTION, CONFIG_FILE, L"Enable Built-In Patches", L"Enables the built-in patches, including the options below.", true, false),
+	new BooleanOption(L"custom_patches", GLOBAL_SECTION, CONFIG_FILE, L"Enable Custom Patches", L"Enables all custom patches.", true, false),
+	new BooleanOption(L"builtin_render", GLOBAL_SECTION, CONFIG_FILE, L"Enable Built-In Render", L"Enables the built-in render patches.", true, false),
+	new OptionMetaSeparator(),
+	new OptionMetaSpacer(8),
+
 	new BooleanOption(L"no_movies", PATCHES_SECTION, CONFIG_FILE, L"Disable Movies", L"Disable movies (enable this if the game hangs when loading certain PVs).", false, false),
-	new BooleanOption(L"mp4_movies", PATCHES_SECTION, CONFIG_FILE, L"Custom MP4 Adv Movies", L"Enable MP4 (instead of WMV) advertise/attract movies.", false, false),
 	new BooleanOption(L"cursor", PATCHES_SECTION, CONFIG_FILE, L"Cursor", L"Enable or disable the mouse cursor.", true, false),
 	new BooleanOption(L"stereo", PATCHES_SECTION, CONFIG_FILE, L"Stereo", L"Use 2 channels instead of 4 (when not using DivaSound).", true, false),
 	new OptionMetaSeparator(),
@@ -210,15 +233,19 @@ ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"no_lyrics", PATCHES_SECTION, CONFIG_FILE, L"Disable Lyrics", L"Disable showing lyrics.", false, false),
 	new BooleanOption(L"no_error", PATCHES_SECTION, CONFIG_FILE, L"Disable Error Banner", L"Disable the error banner on the attract screen.", true, false),
 	new BooleanOption(L"hide_freeplay", PATCHES_SECTION, CONFIG_FILE, L"Hide \"FREE PLAY\"/\"CREDIT(S)\"", L"Hide the \"FREE PLAY\"/\"CREDIT(S)\" text.", false, false),
-	new BooleanOption(L"freeplay", PATCHES_SECTION, CONFIG_FILE, L"FREE PLAY", L"Show \"FREE PLAY\" instead of \"CREDIT(S)\" and don't require credits.", true, false),
 	new BooleanOption(L"pdloadertext", PATCHES_SECTION, CONFIG_FILE, L"PD Loader FREE PLAY", L"Show \"PD Loader\" instead of \"FREE PLAY\".", true, false),
 	new BooleanOption(L"no_timer", PATCHES_SECTION, CONFIG_FILE, L"Freeze Timer", L"Disable the timer.", true, false),
 	new BooleanOption(L"no_timer_sprite", PATCHES_SECTION, CONFIG_FILE, L"Disable Timer Sprite", L"Disable the timer sprite.", true, false),
+	new BooleanOption(L"no_message_bar", PATCHES_SECTION, CONFIG_FILE, L"Hide Message Bar", L"Hide the top message bar.", false, false),
+	new BooleanOption(L"no_stage_text", PATCHES_SECTION, CONFIG_FILE, L"Disable Stage Text", L"Disable Stage 1/2/Final.", false, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"unlock_pseudo", PATCHES_SECTION, CONFIG_FILE, L"Unlock PSEUDO modules (incomplete)", L"Lets you play any PV with any performer.\n(incomplete, recommended modules will default to Miku)", false, false),
-	new BooleanOption(L"card", PATCHES_SECTION, CONFIG_FILE, L"Unlock card menu (incomplete)", L"Enables the card menu.\n(incomplete, it doesn't bypass the card prompt)", false, false),
+	new BooleanOption(L"unlock_pseudo", PATCHES_SECTION, CONFIG_FILE, L"Unlock \"PSEUDO\" Modules (incomplete)", L"Lets you play any PV with any performer.\n(incomplete, recommended modules will default to Miku)", false, false),
+	new BooleanOption(L"card", PATCHES_SECTION, CONFIG_FILE, L"Unlock Card Menu (incomplete)", L"Enables the card menu.\n(incomplete, it doesn't bypass the card prompt)", false, false),
+	new BooleanOption(L"no_opd", PATCHES_SECTION, CONFIG_FILE, L"Disable Extended Data", L"AKA Skyth's \"No Osage Play Data\" patch.\n\nDisables baked physics in edits to save space.\nMay break physics in some edits.", false, false),
+	new BooleanOption(L"dwgui_scaling", PATCHES_SECTION, CONFIG_FILE, L"Scale Debug Windows", L"AKA somewhatlurker's dwgui patch.\n\nMakes debug windows bigger above HD internal resolution.", false, false),
+	new BooleanOption(L"freeplay", PATCHES_SECTION, CONFIG_FILE, L"FREE PLAY", L"Show \"FREE PLAY\" instead of \"CREDIT(S)\" and don't require credits.", true, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
@@ -246,7 +273,6 @@ ConfigOptionBase* optionsArray[] = {
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"custom_patches", PATCHES_SECTION, CONFIG_FILE, L"Enable Custom Patches", L"Enables all custom patches.", true, false),
 	//new BooleanOption(L"ignore_exe_checksum", PATCHES_SECTION, CONFIG_FILE, L"Ignore exe checksum", L"Use at your own risk.", false, false),
 	new BooleanOption(L"prevent_data_deletion", PATCHES_SECTION, CONFIG_FILE, L"Prevent Data Deletion", L"Prevents the game from deleting files.", false, false),
 	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"Command Line:", L"Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.", L"", false),
@@ -255,7 +281,7 @@ ConfigOptionBase* optionsArray[] = {
 	new OptionMetaSpacer(8),
 
 	new BooleanOption(L"dark_launcher", LAUNCHER_SECTION, CONFIG_FILE, L"Dark Launcher", L"Sets the dark colour scheme in the launcher.", false, false),
-	new BooleanOption(L"acrylic_blur", LAUNCHER_SECTION, CONFIG_FILE, L"Acrylic Blur", L"Enables acrylic blur in the launcher on Windows 10 20H2 or later.", false, false),
+	//new BooleanOption(L"acrylic_blur", LAUNCHER_SECTION, CONFIG_FILE, L"Acrylic Blur", L"Enables acrylic blur in the launcher on Windows 10 20H2 or later.", false, false),
 	new BooleanOption(L"no_gpu_dialog", LAUNCHER_SECTION, CONFIG_FILE, L"Disable GPU Warning", L"Disables the warning dialog for unsupported GPUs.", false, false),
 };
 
@@ -378,7 +404,6 @@ void PrependFile(LPCSTR newStr, LPCWSTR fileName)
 	fileStream.close();
 }
 
-
 struct PluginInfo {
 	HMODULE handle;
 	std::wstring filename;
@@ -459,7 +484,7 @@ std::vector<PluginOption*> GetPluginOptions(std::vector<PluginInfo>* plugins)
 
 	for (PluginInfo &pi : *plugins)
 	{
-		PluginOption* opt = new PluginOption(pi.filename.c_str(), L"plugins", CONFIG_FILE, pi.name.c_str(), pi.description.c_str(), true, pi.configopts);
+		PluginOption* opt = new PluginOption(pi.filename.c_str(), L"plugins", CONFIG_FILE, pi.name.c_str(), pi.description.c_str(), false, pi.configopts);
 		outvec.push_back(opt);
 	}
 
@@ -513,7 +538,7 @@ std::vector<PluginOption*> GetCustomOptions(std::vector<PluginInfo>* patches)
 
 	for (PluginInfo& pi : *patches)
 	{
-		PluginOption* opt = new PluginOption(pi.filename.c_str(), L"plugins", CONFIG_FILE, pi.name.c_str(), pi.description.c_str(), true, pi.configopts);
+		PluginOption* opt = new PluginOption(pi.filename.c_str(), L"plugins", CONFIG_FILE, pi.name.c_str(), pi.description.c_str(), false, pi.configopts);
 		outvec.push_back(opt);
 	}
 

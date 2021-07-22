@@ -43,10 +43,15 @@ bool setBlur(HWND hWnd, AccentState accentState)
 		if (queryBuild)
 		{
 			int BuildNum = _wtoi(DataPtr);
+			free(DataPtr);
 			//MessageBox::Show(BuildNum.ToString());
 			if (BuildNum < 19042) return 0;
 		}
-		else return 0;
+		else
+		{
+			free(DataPtr);
+			return 0;
+		}
 	}
 	else return 0;
 

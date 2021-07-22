@@ -114,6 +114,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="IniReader.h" />
     <ClInclude Include="PluginConfig.h" />
+    <ClInclude Include="registry.h" />
     <ClInclude Include="SkinnedMessageBox.h" />
     <ClInclude Include="TabPadding.h" />
     <ClInclude Include="ui.h">

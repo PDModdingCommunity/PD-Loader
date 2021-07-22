@@ -47,6 +47,8 @@ int nFpsLimit = GetPrivateProfileIntW(L"graphics", L"fps.limit", 60, CONFIG_FILE
 int nUseLightLimiter = GetPrivateProfileIntW(L"graphics", L"fps.limit.lightmode", TRUE, CONFIG_FILE);
 int nVerboseLimiter = GetPrivateProfileIntW(L"graphics", L"fps.limit.verbose", FALSE, CONFIG_FILE);
 
+int nBuiltinRender = GetPrivateProfileIntW(L"global", L"builtin_render", TRUE, CONFIG_FILE);
+
 // used to trick Optimus into switching to the NVIDIA GPU
 HMODULE nvcudaModule = LoadLibraryW(L"nvcuda.dll");
 // cuInit actually returns a CUresult, but we don't really care about it

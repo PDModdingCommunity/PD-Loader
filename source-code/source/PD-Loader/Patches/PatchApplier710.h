@@ -3,7 +3,7 @@
 #pragma once
 #include <vector>
 #include "PatchApplier.h"
-#include "framework.h"
+#include "patches-framework.h"
 
 class PatchApplier710 : public PatchApplier {
 	virtual void ApplyPatches() {
@@ -129,17 +129,6 @@ class PatchApplier710 : public PatchApplier {
 			printf("[Patches] MLAA disabled\n");
 		}
 
-		// Replace the hardcoded videos with MP4s, if they exist
-		if (nMP4Movies)
-		{
-			patchMovieExt("adv_cm_01", (void*)0x00000001409A53CC);
-			patchMovieExt("adv_cm_02", (void*)0x00000001409A53E4);
-			patchMovieExt("adv_cm_03", (void*)0x00000001409A53FC);
-			patchMovieExt("adv_cfm_cm", (void*)0x00000001409C22CD);
-			patchMovieExt("adv_sega_cm", (void*)0x00000001409C22EE);
-			patchMovieExt("diva_adv02", (void*)0x00000001409FF455);
-			patchMovieExt("diva_adv", (void*)0x00000001409FF483);
-		}
 		// Hide "FREE PLAY"
 		if (nHideFreeplay)
 		{
@@ -157,7 +146,10 @@ class PatchApplier710 : public PatchApplier {
 
 			if (nPDLoaderText && !nHideFreeplay)
 			{
-				InjectCode((void*)0x00000001409F61F0, { 0x50, 0x44, 0x20, 0x4C, 0x6F, 0x61, 0x64, 0x65, 0x72, 0x20, 0x00 });
+				InjectCode((void*)0x00000001409F61F0, { 0x50, 0x44, 0x20 });
+				InjectCode((void*)0x00000001409F61F3, { 0x4C, 0x6F, 0x61 });
+				InjectCode((void*)0x00000001409F61F6, { 0x64, 0x65, 0x72 });
+				InjectCode((void*)0x00000001409F61F9, { 0x20, 0x00 });
 				printf("[Patches] Show PD Loader text\n");
 			}
 		}
@@ -689,5 +681,109 @@ class PatchApplier710 : public PatchApplier {
 		
 			printf("[Patches] Lag Compensation: %f\n", startPos);
 		}
+
+		// no message bar
+		if (nNoMessageBar)
+		{
+			InjectCode((void*)(0x1409F6470), { 0x00 });
+
+			// no scrolling message by snakemi
+			InjectCode((void*)(0x1403B98FD), { 0x00, 0x00, 0x00, 0x00 });
+			InjectCode((void*)(0x1403B9904), { 0x00, 0x00, 0x00, 0x00 });
+			InjectCode((void*)(0x1403B990B), { 0x00, 0x00, 0x00, 0x00 });
+		}
+
+		// no stage text
+		if (nNoStageText)
+		{
+			InjectCode((void*)(0x140A3D4C8), { 0x00 });
+			InjectCode((void*)(0x140A3D4D8), { 0x00 });
+			InjectCode((void*)(0x140A3D4E8), { 0x00 });
+			InjectCode((void*)(0x140A3D4F8), { 0x00 });
+			InjectCode((void*)(0x140A3D508), { 0x00 });
+			InjectCode((void*)(0x140A3D518), { 0x00 });
+			InjectCode((void*)(0x140A3D530), { 0x00 });
+			InjectCode((void*)(0x140A3D540), { 0x00 });
+			InjectCode((void*)(0x140A3D550), { 0x00 });
+		}
+
+		// no osage play data by Skyth
+		if (nNoOpd)
+		{
+			InjectCode((void*)(0x1404728C0), { 0xC3 });
+			InjectCode((void*)(0x1404789C3), { 0x0D });
+		}
+
+		// debug scaling by somewhatlurker
+		if (nDwguiScaling)
+		{
+			InjectCode((void*)(0x1402ffccf), { 0x0d, 0x00, 0x00, 0x00 });  // 720p res index
+
+			InjectCode((void*)(0x1403025f2), { 0x48, 0x8d, 0x05, 0x17, 0x65, 0x6b, 0x00 });  // LEA  RAX, [0x1409b8b10] (720p res info at +0xc, +-x10)
+			InjectCode((void*)(0x1403025f9), { 0xeb, 0xb3 });  // JMP  0x1403025ae
+			InjectCode((void*)(0x1403025a9), { 0xeb, 0x47 });  // JMP  0x1403025f2
+
+
+			// hacky fix for mouse input scaling
+			// someone please fix this properly if possible
+
+			// directly load mouse coordinates to xmm0 to save code space
+			InjectCode((void*)(0x140300a62), { 0x0f, 0x2a, 0x86, 0xa0, 0x00, 0x00, 0x00 });  // CVTPI2PS  XMM0, qword ptr[RSI + 0xa0]
+			// load 720p
+			InjectCode((void*)(0x140300a69), { 0x0f, 0x2a, 0x0d, 0xac, 0x80, 0x6b, 0x00 });  // CVTPI2PS  XMM1, qword ptr [0x1409b8b1c]
+			// load native res (140eda8b0 is the native res version of the above 720p res info)
+			InjectCode((void*)(0x140300a70), { 0x0f, 0x2a, 0x15, 0x45, 0x9e, 0xbd, 0x00 });  // CVTPI2PS  XMM2, qword ptr [0x140eda8bc]
+			// math
+			InjectCode((void*)(0x140300a77), { 0x0f, 0x59, 0xc1 });  // MULPS  XMM0, XMM1
+			InjectCode((void*)(0x140300a7a), { 0x0f, 0x5e, 0xc2 });  // DIVPS  XMM0, XMM2
+			// used this space, go elsewhere
+			InjectCode((void*)(0x140300a7d), { 0xe9, 0x83, 0x06, 0x00, 0x00 });  // JMP  0x140301105
+
+			// need to restore this instruction
+			InjectCode((void*)(0x140301105), { 0x0f, 0x57, 0xe4 });  // XORPS  XMM4, XMM4
+			// need to unpack XMM0 into XMM1 and XMM0
+			InjectCode((void*)(0x140301108), { 0xf3, 0x0f, 0x10, 0xc8 });  // MOVSS  XMM1, XMM0
+			// move to new space
+			InjectCode((void*)(0x14030110c), { 0xeb, 0x07 });  // JMP  0x140301115
+			// copy high float of xmm0 to low float of xmm0
+			InjectCode((void*)(0x140301115), { 0x0f, 0xc6, 0xc0, 0x55 });  // SHUFPS  XMM0, XMM0, 0x55
+			// finally back to original code
+			InjectCode((void*)(0x140301119), { 0xe9, 0x64, 0xf9, 0xff, 0xff });  // JMP  0x140300a82
+
+			// don't need these anymore
+			InjectCode((void*)(0x140300a82), { 0x90, 0x90, 0x90 });  // NOPs
+			InjectCode((void*)(0x140300a88), { 0x90, 0x90, 0x90 });  // NOPs
+		}
+
+		// modpack redirection
+		/*{
+			wchar_t* mpstr = NULL;
+			mpstr = (wchar_t*)malloc(256);
+			memset(mpstr, 0, 256);
+			GetPrivateProfileStringW(L"Mods", L"Modpack", L"", mpstr, 256, CONFIG_FILE_NAME);
+			std::string modpack_name(std::filesystem::path(mpstr).string());
+			free(mpstr);
+			std::cout << "[Patches] Modpack name: " << modpack_name << std::endl;
+
+			if (modpack_name != "")
+			{
+				// ram
+				std::string modpack_path = "modpacks\\" + modpack_name;
+				std::cout << "[Patches] New ram path: " << modpack_path << std::endl;
+				char* mpstr_path = (char*)malloc(modpack_path.size());
+				memcpy(mpstr_path, modpack_path.c_str(), modpack_path.size());
+				InjectLong((void*)0x0000000014096C120, (long)mpstr_path);
+
+				// mdata
+				std::string modpack_mdata = "modpacks\\" + modpack_name + "\\mdata";
+				std::cout << "[Patches] New mdata path: " << modpack_mdata << std::endl;
+				char* mpstr_mdata = (char*)malloc(modpack_mdata.size());
+				memcpy(mpstr_mdata, modpack_mdata.c_str(), modpack_mdata.size());
+				InjectCode((void*)0x000000014066CEA0, { 0x48, 0xC7, 0xC2 });
+				InjectInt((void*)0x000000014066CEA3, (int)mpstr_mdata);
+				InjectCode((void*)0x000000014066CE9C, { (unsigned char)modpack_mdata.size() });
+				InjectCode((void*)0x000000014066CEAE, { (unsigned char)modpack_mdata.size() });
+			}
+		}*/
 	}
 };

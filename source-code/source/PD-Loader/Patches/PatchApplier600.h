@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "PatchApplier.h"
-#include "framework.h"
+#include "patches-framework.h"
 
 class PatchApplier600 : public PatchApplier {
 	virtual void ApplyPatches() {
@@ -127,14 +127,6 @@ class PatchApplier600 : public PatchApplier {
 			printf("[Patches] MLAA disabled\n");
 		}
 
-		// Replace the hardcoded videos with MP4s, if they exist
-		if (nMP4Movies)
-		{
-			patchMovieExt("adv_cfm_cm", (void*)0x0000000140989ED5);
-			patchMovieExt("adv_sega_cm", (void*)0x0000000140989EF6);
-			patchMovieExt("diva_adv02", (void*)0x00000001409C537D);
-			patchMovieExt("diva_adv", (void*)0x00000001409C53AB);
-		}
 		// Hide "FREE PLAY"
 		if (nHideFreeplay)
 		{

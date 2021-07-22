@@ -167,7 +167,7 @@ public:
 		OkBtn->Left = 4;
 		OkBtn->Top = optspanel->Bottom + 4;
 		OkBtn->AutoSize = true;
-		OkBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		//OkBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		form->ClientSize = Drawing::Size(optspanel->Width, OkBtn->Bottom + 4);
 
@@ -363,7 +363,7 @@ public:
 		cb->Left = left + 2;
 		cb->Top = top;
 		cb->AutoSize = true;
-		cb->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		//cb->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		// hack to ensure high contrast
 		cb->BackColor = System::Drawing::Color::FromArgb(0, 127, 127, 127);
@@ -429,7 +429,7 @@ public:
 		label->Top = top + 3;
 		label->Width = Col1Width;
 		label->AutoSize = true;
-		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		//label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		numberbox->Minimum = _minVal;
 		numberbox->Maximum = _maxVal;
@@ -505,7 +505,7 @@ public:
 		label->Top = top + 3;
 		label->Width = Col1Width;
 		label->AutoSize = true;
-		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		//label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		stringBuf = GetIniString(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath, _useUtf8);
 
@@ -594,7 +594,7 @@ public:
 		label->Top = top + 3;
 		label->Width = Col1Width;
 		label->AutoSize = true;
-		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		//label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		for (LPCWSTR& choice : _valueStrings) {
 			combobox->Items->Add(msclr::interop::marshal_as<System::String^>(choice));
@@ -604,7 +604,7 @@ public:
 		combobox->Top = top;
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
-		combobox->FlatStyle = System::Windows::Forms::FlatStyle::System;
+		//combobox->FlatStyle = System::Windows::Forms::FlatStyle::System;
 		combobox->DropDownStyle = ComboBoxStyle::DropDownList;
 
 		Form^ RootForm = panel->FindForm();
@@ -675,7 +675,7 @@ public:
 		label->Top = top + 3;
 		label->Width = Col1Width;
 		label->AutoSize = true;
-		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		//label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		for (LPCWSTR& choice : _valueStrings) {
 			combobox->Items->Add(msclr::interop::marshal_as<System::String^>(choice));
@@ -688,7 +688,7 @@ public:
 		combobox->Top = top;
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
-		combobox->FlatStyle = System::Windows::Forms::FlatStyle::System;
+		//combobox->FlatStyle = System::Windows::Forms::FlatStyle::System;
 
 		if (_editable)
 			combobox->DropDownStyle = ComboBoxStyle::DropDown;
@@ -780,7 +780,7 @@ public:
 		label->Top = top + 3;
 		label->Width = Col1Width;
 		label->AutoSize = true;
-		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		//label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		for (int& choice : _valueInts) {
 			combobox->Items->Add(Convert::ToInt32(choice).ToString());
@@ -793,7 +793,7 @@ public:
 		combobox->Top = top;
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
-		combobox->FlatStyle = System::Windows::Forms::FlatStyle::System;
+		//combobox->FlatStyle = System::Windows::Forms::FlatStyle::System;
 		
 		if (_editable)
 			combobox->DropDownStyle = ComboBoxStyle::DropDown;
@@ -888,7 +888,7 @@ public:
 		label->Top = top + 3;
 		label->Width = Col1Width;
 		label->AutoSize = true;
-		label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		//label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		if (_opts & RESOPT_INCLUDE_MATCH_WINDOW)
 			combobox->Items->Add(RESOPT_MATCH_WINDOW_TEXT);
@@ -926,7 +926,7 @@ public:
 		combobox->Top = top;
 		combobox->Width = Col2Width;
 		combobox->AutoSize = true;
-		combobox->FlatStyle = System::Windows::Forms::FlatStyle::System;
+		//combobox->FlatStyle = System::Windows::Forms::FlatStyle::System;
 
 		if (_editable)
 			combobox->DropDownStyle = ComboBoxStyle::DropDown;
@@ -1013,7 +1013,7 @@ public:
 		button->Left = left;
 		button->Top = top;
 		button->AutoSize = true;
-		button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		//button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		Form^ RootForm = panel->FindForm();
 		float ScaleWidth = 1.0f;
@@ -1066,7 +1066,7 @@ public:
 		cb->Left = left + 2;
 		cb->Top = top + 3;
 		cb->AutoSize = true;
-		cb->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		//cb->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		// hack to ensure high contrast
 		cb->BackColor = System::Drawing::Color::FromArgb(0, 127, 127, 127);
@@ -1075,7 +1075,7 @@ public:
 		button->Left = left + ConfigBtnLeft;
 		button->Top = top;
 		button->AutoSize = true;
-		button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		//button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		Form^ RootForm = panel->FindForm();
 		float ScaleWidth = 1.0f;

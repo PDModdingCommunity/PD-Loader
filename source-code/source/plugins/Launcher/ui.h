@@ -10,6 +10,8 @@
 #include "GPUModel.h"
 #include "WineVer.h"
 #include "composition.h"
+#include "registry.h"
+#include <filesystem>
 
 namespace Launcher {
 
@@ -26,6 +28,7 @@ namespace Launcher {
 	/// <summary>
 	/// Summary for ui
 	/// </summary>
+
 	public ref class ui : public System::Windows::Forms::Form
 	{
 	public:
@@ -71,6 +74,8 @@ namespace Launcher {
 			DisplayTypeChangedHandler(this, gcnew EventArgs); // run handler now
 			this->panel_ScreenRes->ResumeLayout(false);
 			this->panel_ScreenRes->PerformLayout();
+			this->checkBox_nofsopt->Checked = !getFullscreenOptimizations();
+			this->checkBox_nofsopt->CheckedChanged += gcnew System::EventHandler(this, &ui::checkBox_nofsopt_CheckedChanged);
 
 
 			this->panel_IntRes->SuspendLayout();
@@ -108,12 +113,31 @@ namespace Launcher {
 
 			// populate options (patches) from array in framework
 			// (easier than manually setting everything up)
-			int optionsY = 3;
+			int optionsY = 33;
 			for (ConfigOptionBase* option : optionsArray)
 			{
 				option->hasChanged = OptionsConfigChanged;
 				optionsY += option->AddToPanel(panel_Patches, 12, optionsY, toolTip1);
 			}
+
+			Button^ keycfg_button = gcnew Button();
+			keycfg_button->Left = 12;
+			keycfg_button->Top = 3;
+			keycfg_button->Width = 200;
+			Form^ RootForm = panel_Patches->FindForm();
+			float ScaleWidth = 1.0f;
+			float ScaleHeight = 1.0f;
+			if (RootForm)
+			{
+				Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+				ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+				ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+			}
+			keycfg_button->Scale(ScaleWidth, ScaleHeight);
+			keycfg_button->Text = gcnew String("Keyboard/Controller Configuration");
+			keycfg_button->Click += gcnew EventHandler(this, &ui::keycfg_button_Click);
+			panel_Patches->Controls->Add(keycfg_button);
+
 			this->panel_Patches->ResumeLayout(false);
 			this->panel_Patches->PerformLayout();
 
@@ -189,6 +213,8 @@ namespace Launcher {
 
 			updateStyle();
 
+			scanModpacks();
+
 
 			glutInit(&argc, argv);
 			int window = glutCreateWindow("glut"); // a context must be created to use glGetString
@@ -208,7 +234,7 @@ namespace Launcher {
 
 			if (wineVersion != "")
 			{
-				this->labelGPU->Text = "Wine " + wineVersion + " (at least 4.12.1 is required)\n";
+				this->labelGPU->Text = "Wine " + wineVersion + " (remember to disable movies!)\n";
 			}
 			else this->labelGPU->Text = "GPU Info:\n";
 			this->labelGPU->Text += vendor + " " + renderer + "\n";
@@ -352,26 +378,29 @@ namespace Launcher {
 			int nDarkLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"dark_launcher", FALSE, CONFIG_FILE);
 			int nAcrylicLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"acrylic_blur", FALSE, CONFIG_FILE);
 
-			bool useAcrylic = nAcrylicLauncher && setBlur(hWnd, AccentState::ACCENT_ENABLE_ACRYLICBLURBEHIND);
+			//bool useAcrylic = nAcrylicLauncher && setBlur(hWnd, AccentState::ACCENT_ENABLE_ACRYLICBLURBEHIND);
 
 			Color colourBg, colourBg2, colourFg;
+			System::Windows::Forms::FlatStyle cbxStyle;
 
 			if (nDarkLauncher)
 			{
 				setDarkTheme(hWnd);
 				colourFg = Color::White;
-				colourBg = Color::FromArgb(32, 32, 32); // tabControl
-				colourBg2 = Color::FromArgb(25, 25, 25);
+				colourBg = Color::FromArgb(255, 32, 32, 32); // tabControl
+				colourBg2 = Color::FromArgb(255, 25, 25, 25);
+				cbxStyle = System::Windows::Forms::FlatStyle::Flat;
 			}
 			else
 			{
 				setDarkTheme(hWnd, false);
-				colourFg = Color::FromArgb(64, 64, 64);
+				colourFg = Color::FromArgb(255, 64, 64, 64);
 				colourBg = Color::White; // tabControl
-				colourBg2 = Color::FromArgb(242, 242, 242);
+				colourBg2 = Color::FromArgb(255, 242, 242, 242);
+				cbxStyle = System::Windows::Forms::FlatStyle::System;
 			}
 
-			if (useAcrylic)
+			/*if (useAcrylic)
 			{
 				this->button_Discord->BackColor = colourBg2;
 				this->button_github->BackColor = colourBg2;
@@ -381,12 +410,12 @@ namespace Launcher {
 			}
 			else
 			{
-				setBlur(hWnd, AccentState::ACCENT_DISABLED);
+				setBlur(hWnd, AccentState::ACCENT_DISABLED);*/
 
 				this->button_Discord->BackColor = Color::Transparent;
 				this->button_github->BackColor = Color::Transparent;
 				this->button_Wiki->BackColor = Color::Transparent;
-			}
+			//}
 
 			this->tabPage_Resolution->BackColor = colourBg;
 			this->tabPage_Resolution->ForeColor = colourFg;
@@ -417,6 +446,26 @@ namespace Launcher {
 			this->groupBox_InternalRes->ForeColor = colourFg;
 			this->groupBox_Lag->ForeColor = colourFg;
 			this->groupBox_ScreenRes->ForeColor = colourFg;
+
+			/*for (int i = 0; i < this->panel_ScreenRes->Controls->Count; i++) this->panel_ScreenRes->Controls[i]->BackColor = colourBg;
+			for (int i = 0; i < this->panel_IntRes->Controls->Count; i++) this->panel_IntRes->Controls[i]->BackColor = colourBg;
+			for (int i = 0; i < this->panel_Details->Controls->Count; i++) this->panel_Details->Controls[i]->BackColor = colourBg;
+			for (int i = 0; i < this->panel_Patches->Controls->Count; i++) this->panel_Patches->Controls[i]->BackColor = colourBg;
+			for (int i = 0; i < this->panel_Custom->Controls->Count; i++) this->panel_Custom->Controls[i]->BackColor = colourBg;
+			for (int i = 0; i < this->panel_Playerdata->Controls->Count; i++) this->panel_Playerdata->Controls[i]->BackColor = colourBg;
+			for (int i = 0; i < this->panel_Components->Controls->Count; i++) this->panel_Components->Controls[i]->BackColor = colourBg;
+			for (int i = 0; i < this->panel_Plugins->Controls->Count; i++) this->panel_Plugins->Controls[i]->BackColor = colourBg;*/
+
+			SetBackCol(this->panel_ScreenRes, colourBg, cbxStyle);
+			SetBackCol(this->panel_IntRes, colourBg, cbxStyle);
+			SetBackCol(this->panel_Details, colourBg, cbxStyle);
+			SetBackCol(this->panel_Patches, colourBg, cbxStyle);
+			SetBackCol(this->panel_Custom, colourBg, cbxStyle);
+			SetBackCol(this->panel_Playerdata, colourBg, cbxStyle);
+			SetBackCol(this->panel_Components, colourBg, cbxStyle);
+			SetBackCol(this->panel_Plugins, colourBg, cbxStyle);
+
+			tabPage_Modpacks->Enabled = false;
 		}
 
 	private:
@@ -454,6 +503,36 @@ private: System::Windows::Forms::Button^ button_Apply;
 private: System::Windows::Forms::GroupBox^ groupBox_Lag;
 private: System::Windows::Forms::TrackBar^ trackBar_LagCompensation;
 private: System::Windows::Forms::Button^ button_Wiki;
+private: System::Windows::Forms::TabPage^ tabPage_Update;
+private: System::Windows::Forms::Label^ label_Update_2;
+
+private: System::Windows::Forms::Label^ label_Update_1;
+private: System::Windows::Forms::Button^ button_Clean_installation;
+
+private: System::Windows::Forms::Button^ button_Instructions;
+
+private: System::Windows::Forms::Button^ button_Unstable_builds;
+
+private: System::Windows::Forms::Button^ button_Releases_page;
+private: System::Windows::Forms::LinkLabel^ linkLabel_Changelog;
+private: System::Windows::Forms::LinkLabel^ linkLabel_Official_Discord;
+private: System::Windows::Forms::LinkLabel^ linkLabel_Help;
+private: System::Windows::Forms::LinkLabel^ linkLabel_Repo;
+private: System::Windows::Forms::CheckBox^ checkBox_nofsopt;
+private: System::Windows::Forms::TabPage^ tabPage_Modpacks;
+private: System::Windows::Forms::CheckBox^ checkBox_ModPatches;
+private: System::Windows::Forms::Button^ button_ModDelete;
+
+private: System::Windows::Forms::Button^ button_ModClone;
+
+private: System::Windows::Forms::Button^ button_ModSetActive;
+private: System::Windows::Forms::ListBox^ listBox_Mods;
+
+private: System::Windows::Forms::Button^ button_ModFiles;
+private: System::Windows::Forms::Button^ button_ModRescan;
+private: System::Windows::Forms::Button^ button_ModRename;
+private: System::Windows::Forms::LinkLabel^ linkLabel_Console;
+
 
 
 
@@ -494,6 +573,7 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->button_Launch = (gcnew System::Windows::Forms::Button());
 			this->groupBox_ScreenRes = (gcnew System::Windows::Forms::GroupBox());
 			this->panel_ScreenRes = (gcnew System::Windows::Forms::Panel());
+			this->checkBox_nofsopt = (gcnew System::Windows::Forms::CheckBox());
 			this->tabControl = (gcnew System::Windows::Forms::TabControl());
 			this->tabPage_Resolution = (gcnew System::Windows::Forms::TabPage());
 			this->groupBox_Lag = (gcnew System::Windows::Forms::GroupBox());
@@ -508,18 +588,40 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabPage_Playerdata = (gcnew System::Windows::Forms::TabPage());
 			this->panel_Playerdata = (gcnew System::Windows::Forms::Panel());
 			this->tabPage_Components = (gcnew System::Windows::Forms::TabPage());
+			this->linkLabel_Console = (gcnew System::Windows::Forms::LinkLabel());
 			this->panel_Components = (gcnew System::Windows::Forms::Panel());
 			this->tabPage_Plugins = (gcnew System::Windows::Forms::TabPage());
 			this->panel_Custom = (gcnew System::Windows::Forms::Panel());
 			this->panel_Plugins = (gcnew System::Windows::Forms::Panel());
+			this->tabPage_Modpacks = (gcnew System::Windows::Forms::TabPage());
+			this->button_ModRename = (gcnew System::Windows::Forms::Button());
+			this->button_ModRescan = (gcnew System::Windows::Forms::Button());
+			this->button_ModFiles = (gcnew System::Windows::Forms::Button());
+			this->checkBox_ModPatches = (gcnew System::Windows::Forms::CheckBox());
+			this->button_ModDelete = (gcnew System::Windows::Forms::Button());
+			this->button_ModClone = (gcnew System::Windows::Forms::Button());
+			this->button_ModSetActive = (gcnew System::Windows::Forms::Button());
+			this->listBox_Mods = (gcnew System::Windows::Forms::ListBox());
 			this->tabPage_Credits = (gcnew System::Windows::Forms::TabPage());
 			this->creditsTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->tabPage_Update = (gcnew System::Windows::Forms::TabPage());
+			this->linkLabel_Repo = (gcnew System::Windows::Forms::LinkLabel());
+			this->linkLabel_Help = (gcnew System::Windows::Forms::LinkLabel());
+			this->linkLabel_Official_Discord = (gcnew System::Windows::Forms::LinkLabel());
+			this->linkLabel_Changelog = (gcnew System::Windows::Forms::LinkLabel());
+			this->button_Clean_installation = (gcnew System::Windows::Forms::Button());
+			this->button_Instructions = (gcnew System::Windows::Forms::Button());
+			this->button_Unstable_builds = (gcnew System::Windows::Forms::Button());
+			this->button_Releases_page = (gcnew System::Windows::Forms::Button());
+			this->label_Update_2 = (gcnew System::Windows::Forms::Label());
+			this->label_Update_1 = (gcnew System::Windows::Forms::Label());
 			this->button_Discord = (gcnew System::Windows::Forms::Button());
 			this->button_github = (gcnew System::Windows::Forms::Button());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->button_Apply = (gcnew System::Windows::Forms::Button());
 			this->button_Wiki = (gcnew System::Windows::Forms::Button());
 			this->groupBox_ScreenRes->SuspendLayout();
+			this->panel_ScreenRes->SuspendLayout();
 			this->tabControl->SuspendLayout();
 			this->tabPage_Resolution->SuspendLayout();
 			this->groupBox_Lag->SuspendLayout();
@@ -530,7 +632,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabPage_Playerdata->SuspendLayout();
 			this->tabPage_Components->SuspendLayout();
 			this->tabPage_Plugins->SuspendLayout();
+			this->tabPage_Modpacks->SuspendLayout();
 			this->tabPage_Credits->SuspendLayout();
+			this->tabPage_Update->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// button_Launch
@@ -538,10 +642,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->button_Launch->BackColor = System::Drawing::Color::White;
 			this->button_Launch->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Launch->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Launch->Location = System::Drawing::Point(258, 584);
-			this->button_Launch->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button_Launch->Location = System::Drawing::Point(172, 409);
 			this->button_Launch->Name = L"button_Launch";
-			this->button_Launch->Size = System::Drawing::Size(326, 34);
+			this->button_Launch->Size = System::Drawing::Size(217, 23);
 			this->button_Launch->TabIndex = 20;
 			this->button_Launch->Text = L"Launch";
 			this->button_Launch->UseVisualStyleBackColor = false;
@@ -551,11 +654,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			// 
 			this->groupBox_ScreenRes->Controls->Add(this->panel_ScreenRes);
 			this->groupBox_ScreenRes->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->groupBox_ScreenRes->Location = System::Drawing::Point(8, 9);
-			this->groupBox_ScreenRes->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->groupBox_ScreenRes->Location = System::Drawing::Point(5, 6);
 			this->groupBox_ScreenRes->Name = L"groupBox_ScreenRes";
-			this->groupBox_ScreenRes->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
-			this->groupBox_ScreenRes->Size = System::Drawing::Size(394, 170);
+			this->groupBox_ScreenRes->Size = System::Drawing::Size(263, 120);
 			this->groupBox_ScreenRes->TabIndex = 10;
 			this->groupBox_ScreenRes->TabStop = false;
 			this->groupBox_ScreenRes->Text = L"Screen Resolution";
@@ -563,11 +664,24 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			// panel_ScreenRes
 			// 
 			this->panel_ScreenRes->AutoScroll = true;
-			this->panel_ScreenRes->Location = System::Drawing::Point(8, 28);
-			this->panel_ScreenRes->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->panel_ScreenRes->Controls->Add(this->checkBox_nofsopt);
+			this->panel_ScreenRes->Location = System::Drawing::Point(5, 19);
 			this->panel_ScreenRes->Name = L"panel_ScreenRes";
-			this->panel_ScreenRes->Size = System::Drawing::Size(380, 134);
+			this->panel_ScreenRes->Size = System::Drawing::Size(253, 99);
 			this->panel_ScreenRes->TabIndex = 0;
+			// 
+			// checkBox_nofsopt
+			// 
+			this->checkBox_nofsopt->AutoSize = true;
+			this->checkBox_nofsopt->Location = System::Drawing::Point(14, 77);
+			this->checkBox_nofsopt->Margin = System::Windows::Forms::Padding(2);
+			this->checkBox_nofsopt->Name = L"checkBox_nofsopt";
+			this->checkBox_nofsopt->Size = System::Drawing::Size(177, 17);
+			this->checkBox_nofsopt->TabIndex = 0;
+			this->checkBox_nofsopt->Text = L"Disable Fullscreen Optimizations";
+			this->toolTip1->SetToolTip(this->checkBox_nofsopt, L"Disables Windows 10/11 fullscreen optimizations, which can cause issues with scre"
+				L"enshots and/or framerate.");
+			this->checkBox_nofsopt->UseVisualStyleBackColor = true;
 			// 
 			// tabControl
 			// 
@@ -576,12 +690,13 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabControl->Controls->Add(this->tabPage_Playerdata);
 			this->tabControl->Controls->Add(this->tabPage_Components);
 			this->tabControl->Controls->Add(this->tabPage_Plugins);
+			this->tabControl->Controls->Add(this->tabPage_Modpacks);
 			this->tabControl->Controls->Add(this->tabPage_Credits);
+			this->tabControl->Controls->Add(this->tabPage_Update);
 			this->tabControl->Location = System::Drawing::Point(0, 0);
-			this->tabControl->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->tabControl->Name = L"tabControl";
 			this->tabControl->SelectedIndex = 0;
-			this->tabControl->Size = System::Drawing::Size(840, 576);
+			this->tabControl->Size = System::Drawing::Size(560, 404);
 			this->tabControl->TabIndex = 10;
 			// 
 			// tabPage_Resolution
@@ -595,11 +710,10 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabPage_Resolution->Controls->Add(this->groupBox_ScreenRes);
 			this->tabPage_Resolution->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Resolution->Location = System::Drawing::Point(4, 29);
-			this->tabPage_Resolution->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->tabPage_Resolution->Location = System::Drawing::Point(4, 22);
 			this->tabPage_Resolution->Name = L"tabPage_Resolution";
-			this->tabPage_Resolution->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
-			this->tabPage_Resolution->Size = System::Drawing::Size(832, 543);
+			this->tabPage_Resolution->Padding = System::Windows::Forms::Padding(3);
+			this->tabPage_Resolution->Size = System::Drawing::Size(552, 378);
 			this->tabPage_Resolution->TabIndex = 0;
 			this->tabPage_Resolution->Text = L"Graphics";
 			// 
@@ -607,11 +721,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			// 
 			this->groupBox_Lag->Controls->Add(this->trackBar_LagCompensation);
 			this->groupBox_Lag->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->groupBox_Lag->Location = System::Drawing::Point(8, 449);
-			this->groupBox_Lag->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->groupBox_Lag->Location = System::Drawing::Point(5, 303);
 			this->groupBox_Lag->Name = L"groupBox_Lag";
-			this->groupBox_Lag->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
-			this->groupBox_Lag->Size = System::Drawing::Size(394, 79);
+			this->groupBox_Lag->Size = System::Drawing::Size(263, 69);
 			this->groupBox_Lag->TabIndex = 21;
 			this->groupBox_Lag->TabStop = false;
 			this->groupBox_Lag->Text = L"Lag Compensation";
@@ -619,11 +731,10 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			// trackBar_LagCompensation
 			// 
 			this->trackBar_LagCompensation->LargeChange = 1;
-			this->trackBar_LagCompensation->Location = System::Drawing::Point(10, 30);
-			this->trackBar_LagCompensation->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->trackBar_LagCompensation->Location = System::Drawing::Point(7, 20);
 			this->trackBar_LagCompensation->Maximum = 500;
 			this->trackBar_LagCompensation->Name = L"trackBar_LagCompensation";
-			this->trackBar_LagCompensation->Size = System::Drawing::Size(375, 69);
+			this->trackBar_LagCompensation->Size = System::Drawing::Size(250, 45);
 			this->trackBar_LagCompensation->TabIndex = 0;
 			this->trackBar_LagCompensation->TickStyle = System::Windows::Forms::TickStyle::None;
 			this->trackBar_LagCompensation->ValueChanged += gcnew System::EventHandler(this, &ui::trackBar_LagCompensation_ValueChanged);
@@ -632,11 +743,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			// 
 			this->groupBox_Details->Controls->Add(this->panel_Details);
 			this->groupBox_Details->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->groupBox_Details->Location = System::Drawing::Point(411, 9);
-			this->groupBox_Details->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->groupBox_Details->Location = System::Drawing::Point(274, 6);
 			this->groupBox_Details->Name = L"groupBox_Details";
-			this->groupBox_Details->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
-			this->groupBox_Details->Size = System::Drawing::Size(408, 519);
+			this->groupBox_Details->Size = System::Drawing::Size(272, 366);
 			this->groupBox_Details->TabIndex = 11;
 			this->groupBox_Details->TabStop = false;
 			this->groupBox_Details->Text = L"Details";
@@ -644,10 +753,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			// panel_Details
 			// 
 			this->panel_Details->AutoScroll = true;
-			this->panel_Details->Location = System::Drawing::Point(8, 28);
-			this->panel_Details->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->panel_Details->Location = System::Drawing::Point(5, 19);
 			this->panel_Details->Name = L"panel_Details";
-			this->panel_Details->Size = System::Drawing::Size(392, 482);
+			this->panel_Details->Size = System::Drawing::Size(261, 341);
 			this->panel_Details->TabIndex = 0;
 			// 
 			// labelGPU
@@ -655,10 +763,11 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->labelGPU->AutoSize = true;
 			this->labelGPU->BackColor = System::Drawing::Color::Transparent;
 			this->labelGPU->ForeColor = System::Drawing::Color::Black;
-			this->labelGPU->Location = System::Drawing::Point(8, 314);
-			this->labelGPU->MinimumSize = System::Drawing::Size(394, 20);
+			this->labelGPU->Location = System::Drawing::Point(5, 213);
+			this->labelGPU->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->labelGPU->MinimumSize = System::Drawing::Size(263, 13);
 			this->labelGPU->Name = L"labelGPU";
-			this->labelGPU->Size = System::Drawing::Size(394, 20);
+			this->labelGPU->Size = System::Drawing::Size(263, 13);
 			this->labelGPU->TabIndex = 21;
 			this->labelGPU->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 			// 
@@ -666,11 +775,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			// 
 			this->groupBox_InternalRes->Controls->Add(this->panel_IntRes);
 			this->groupBox_InternalRes->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->groupBox_InternalRes->Location = System::Drawing::Point(8, 186);
-			this->groupBox_InternalRes->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->groupBox_InternalRes->Location = System::Drawing::Point(5, 127);
 			this->groupBox_InternalRes->Name = L"groupBox_InternalRes";
-			this->groupBox_InternalRes->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
-			this->groupBox_InternalRes->Size = System::Drawing::Size(394, 124);
+			this->groupBox_InternalRes->Size = System::Drawing::Size(263, 83);
 			this->groupBox_InternalRes->TabIndex = 20;
 			this->groupBox_InternalRes->TabStop = false;
 			this->groupBox_InternalRes->Text = L"Internal Resolution (Quality)";
@@ -678,10 +785,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			// panel_IntRes
 			// 
 			this->panel_IntRes->AutoScroll = true;
-			this->panel_IntRes->Location = System::Drawing::Point(8, 28);
-			this->panel_IntRes->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->panel_IntRes->Location = System::Drawing::Point(5, 19);
 			this->panel_IntRes->Name = L"panel_IntRes";
-			this->panel_IntRes->Size = System::Drawing::Size(380, 88);
+			this->panel_IntRes->Size = System::Drawing::Size(253, 59);
 			this->panel_IntRes->TabIndex = 1;
 			// 
 			// tabPage_Patches
@@ -690,10 +796,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabPage_Patches->Controls->Add(this->panel_Patches);
 			this->tabPage_Patches->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Patches->Location = System::Drawing::Point(4, 29);
-			this->tabPage_Patches->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->tabPage_Patches->Location = System::Drawing::Point(4, 22);
 			this->tabPage_Patches->Name = L"tabPage_Patches";
-			this->tabPage_Patches->Size = System::Drawing::Size(832, 543);
+			this->tabPage_Patches->Size = System::Drawing::Size(552, 378);
 			this->tabPage_Patches->TabIndex = 1;
 			this->tabPage_Patches->Text = L"Options";
 			// 
@@ -701,9 +806,8 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			// 
 			this->panel_Patches->AutoScroll = true;
 			this->panel_Patches->Location = System::Drawing::Point(0, 0);
-			this->panel_Patches->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->panel_Patches->Name = L"panel_Patches";
-			this->panel_Patches->Size = System::Drawing::Size(828, 537);
+			this->panel_Patches->Size = System::Drawing::Size(552, 378);
 			this->panel_Patches->TabIndex = 9;
 			// 
 			// tabPage_Playerdata
@@ -712,10 +816,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabPage_Playerdata->Controls->Add(this->panel_Playerdata);
 			this->tabPage_Playerdata->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Playerdata->Location = System::Drawing::Point(4, 29);
-			this->tabPage_Playerdata->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->tabPage_Playerdata->Location = System::Drawing::Point(4, 22);
 			this->tabPage_Playerdata->Name = L"tabPage_Playerdata";
-			this->tabPage_Playerdata->Size = System::Drawing::Size(832, 543);
+			this->tabPage_Playerdata->Size = System::Drawing::Size(552, 378);
 			this->tabPage_Playerdata->TabIndex = 3;
 			this->tabPage_Playerdata->Text = L"Player";
 			// 
@@ -723,32 +826,42 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			// 
 			this->panel_Playerdata->AutoScroll = true;
 			this->panel_Playerdata->Location = System::Drawing::Point(0, 0);
-			this->panel_Playerdata->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->panel_Playerdata->Name = L"panel_Playerdata";
-			this->panel_Playerdata->Size = System::Drawing::Size(828, 537);
+			this->panel_Playerdata->Size = System::Drawing::Size(552, 378);
 			this->panel_Playerdata->TabIndex = 1;
 			// 
 			// tabPage_Components
 			// 
 			this->tabPage_Components->BackColor = System::Drawing::Color::White;
+			this->tabPage_Components->Controls->Add(this->linkLabel_Console);
 			this->tabPage_Components->Controls->Add(this->panel_Components);
 			this->tabPage_Components->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Components->Location = System::Drawing::Point(4, 29);
-			this->tabPage_Components->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->tabPage_Components->Location = System::Drawing::Point(4, 22);
 			this->tabPage_Components->Name = L"tabPage_Components";
-			this->tabPage_Components->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
-			this->tabPage_Components->Size = System::Drawing::Size(832, 543);
+			this->tabPage_Components->Padding = System::Windows::Forms::Padding(3);
+			this->tabPage_Components->Size = System::Drawing::Size(552, 378);
 			this->tabPage_Components->TabIndex = 2;
 			this->tabPage_Components->Text = L"Components";
+			// 
+			// linkLabel_Console
+			// 
+			this->linkLabel_Console->AutoSize = true;
+			this->linkLabel_Console->Location = System::Drawing::Point(504, 362);
+			this->linkLabel_Console->Name = L"linkLabel_Console";
+			this->linkLabel_Console->Size = System::Drawing::Size(45, 13);
+			this->linkLabel_Console->TabIndex = 1;
+			this->linkLabel_Console->TabStop = true;
+			this->linkLabel_Console->Text = L"Console";
+			this->linkLabel_Console->TextAlign = System::Drawing::ContentAlignment::BottomRight;
+			this->linkLabel_Console->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &ui::linkLabel_Console_LinkClicked);
 			// 
 			// panel_Components
 			// 
 			this->panel_Components->AutoScroll = true;
 			this->panel_Components->Location = System::Drawing::Point(0, 0);
-			this->panel_Components->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->panel_Components->Name = L"panel_Components";
-			this->panel_Components->Size = System::Drawing::Size(828, 537);
+			this->panel_Components->Size = System::Drawing::Size(276, 378);
 			this->panel_Components->TabIndex = 0;
 			// 
 			// tabPage_Plugins
@@ -758,39 +871,152 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabPage_Plugins->Controls->Add(this->panel_Plugins);
 			this->tabPage_Plugins->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Plugins->Location = System::Drawing::Point(4, 29);
-			this->tabPage_Plugins->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->tabPage_Plugins->Location = System::Drawing::Point(4, 22);
 			this->tabPage_Plugins->Name = L"tabPage_Plugins";
-			this->tabPage_Plugins->Padding = System::Windows::Forms::Padding(4, 4, 4, 4);
-			this->tabPage_Plugins->Size = System::Drawing::Size(832, 543);
+			this->tabPage_Plugins->Padding = System::Windows::Forms::Padding(3);
+			this->tabPage_Plugins->Size = System::Drawing::Size(552, 378);
 			this->tabPage_Plugins->TabIndex = 3;
 			this->tabPage_Plugins->Text = L"Plugins and Patches";
 			// 
 			// panel_Custom
 			// 
 			this->panel_Custom->AutoScroll = true;
-			this->panel_Custom->Location = System::Drawing::Point(414, 0);
-			this->panel_Custom->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->panel_Custom->Location = System::Drawing::Point(276, 0);
 			this->panel_Custom->Name = L"panel_Custom";
-			this->panel_Custom->Size = System::Drawing::Size(414, 537);
+			this->panel_Custom->Size = System::Drawing::Size(276, 378);
 			this->panel_Custom->TabIndex = 3;
 			// 
 			// panel_Plugins
 			// 
 			this->panel_Plugins->AutoScroll = true;
 			this->panel_Plugins->Location = System::Drawing::Point(0, 0);
-			this->panel_Plugins->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->panel_Plugins->Name = L"panel_Plugins";
-			this->panel_Plugins->Size = System::Drawing::Size(414, 537);
+			this->panel_Plugins->Size = System::Drawing::Size(276, 378);
 			this->panel_Plugins->TabIndex = 0;
+			// 
+			// tabPage_Modpacks
+			// 
+			this->tabPage_Modpacks->Controls->Add(this->button_ModRename);
+			this->tabPage_Modpacks->Controls->Add(this->button_ModRescan);
+			this->tabPage_Modpacks->Controls->Add(this->button_ModFiles);
+			this->tabPage_Modpacks->Controls->Add(this->checkBox_ModPatches);
+			this->tabPage_Modpacks->Controls->Add(this->button_ModDelete);
+			this->tabPage_Modpacks->Controls->Add(this->button_ModClone);
+			this->tabPage_Modpacks->Controls->Add(this->button_ModSetActive);
+			this->tabPage_Modpacks->Controls->Add(this->listBox_Mods);
+			this->tabPage_Modpacks->Location = System::Drawing::Point(4, 22);
+			this->tabPage_Modpacks->Margin = System::Windows::Forms::Padding(2);
+			this->tabPage_Modpacks->Name = L"tabPage_Modpacks";
+			this->tabPage_Modpacks->Padding = System::Windows::Forms::Padding(2);
+			this->tabPage_Modpacks->Size = System::Drawing::Size(552, 378);
+			this->tabPage_Modpacks->TabIndex = 7;
+			this->tabPage_Modpacks->Text = L"Modpacks";
+			this->tabPage_Modpacks->UseVisualStyleBackColor = true;
+			this->tabPage_Modpacks->Enter += gcnew System::EventHandler(this, &ui::tabPage_Modpacks_Enter);
+			// 
+			// button_ModRename
+			// 
+			this->button_ModRename->Enabled = false;
+			this->button_ModRename->Location = System::Drawing::Point(279, 357);
+			this->button_ModRename->Margin = System::Windows::Forms::Padding(2);
+			this->button_ModRename->Name = L"button_ModRename";
+			this->button_ModRename->Size = System::Drawing::Size(65, 21);
+			this->button_ModRename->TabIndex = 8;
+			this->button_ModRename->Text = L"Rename";
+			this->button_ModRename->UseVisualStyleBackColor = true;
+			this->button_ModRename->Click += gcnew System::EventHandler(this, &ui::button_ModRename_Click);
+			// 
+			// button_ModRescan
+			// 
+			this->button_ModRescan->Location = System::Drawing::Point(348, 357);
+			this->button_ModRescan->Margin = System::Windows::Forms::Padding(2);
+			this->button_ModRescan->Name = L"button_ModRescan";
+			this->button_ModRescan->Size = System::Drawing::Size(65, 21);
+			this->button_ModRescan->TabIndex = 7;
+			this->button_ModRescan->Text = L"Rescan";
+			this->button_ModRescan->UseVisualStyleBackColor = true;
+			this->button_ModRescan->Click += gcnew System::EventHandler(this, &ui::button_ModRescan_Click);
+			// 
+			// button_ModFiles
+			// 
+			this->button_ModFiles->Enabled = false;
+			this->button_ModFiles->Location = System::Drawing::Point(73, 357);
+			this->button_ModFiles->Margin = System::Windows::Forms::Padding(2);
+			this->button_ModFiles->Name = L"button_ModFiles";
+			this->button_ModFiles->Size = System::Drawing::Size(65, 21);
+			this->button_ModFiles->TabIndex = 6;
+			this->button_ModFiles->Text = L"Files...";
+			this->button_ModFiles->UseVisualStyleBackColor = true;
+			this->button_ModFiles->Click += gcnew System::EventHandler(this, &ui::button_ModFiles_Click);
+			// 
+			// checkBox_ModPatches
+			// 
+			this->checkBox_ModPatches->AutoSize = true;
+			this->checkBox_ModPatches->Checked = true;
+			this->checkBox_ModPatches->CheckState = System::Windows::Forms::CheckState::Checked;
+			this->checkBox_ModPatches->Enabled = false;
+			this->checkBox_ModPatches->Location = System::Drawing::Point(430, 358);
+			this->checkBox_ModPatches->Margin = System::Windows::Forms::Padding(2);
+			this->checkBox_ModPatches->Name = L"checkBox_ModPatches";
+			this->checkBox_ModPatches->Size = System::Drawing::Size(123, 17);
+			this->checkBox_ModPatches->TabIndex = 5;
+			this->checkBox_ModPatches->Text = L"Plugins and Patches";
+			this->checkBox_ModPatches->UseVisualStyleBackColor = true;
+			// 
+			// button_ModDelete
+			// 
+			this->button_ModDelete->Enabled = false;
+			this->button_ModDelete->Location = System::Drawing::Point(211, 357);
+			this->button_ModDelete->Margin = System::Windows::Forms::Padding(2);
+			this->button_ModDelete->Name = L"button_ModDelete";
+			this->button_ModDelete->Size = System::Drawing::Size(65, 21);
+			this->button_ModDelete->TabIndex = 4;
+			this->button_ModDelete->Text = L"Delete";
+			this->button_ModDelete->UseVisualStyleBackColor = true;
+			this->button_ModDelete->Click += gcnew System::EventHandler(this, &ui::button_ModDelete_Click);
+			// 
+			// button_ModClone
+			// 
+			this->button_ModClone->Enabled = false;
+			this->button_ModClone->Location = System::Drawing::Point(142, 357);
+			this->button_ModClone->Margin = System::Windows::Forms::Padding(2);
+			this->button_ModClone->Name = L"button_ModClone";
+			this->button_ModClone->Size = System::Drawing::Size(65, 21);
+			this->button_ModClone->TabIndex = 3;
+			this->button_ModClone->Text = L"New/Clone";
+			this->button_ModClone->UseVisualStyleBackColor = true;
+			this->button_ModClone->Click += gcnew System::EventHandler(this, &ui::button_ModClone_Click);
+			// 
+			// button_ModSetActive
+			// 
+			this->button_ModSetActive->Enabled = false;
+			this->button_ModSetActive->Location = System::Drawing::Point(5, 357);
+			this->button_ModSetActive->Margin = System::Windows::Forms::Padding(2);
+			this->button_ModSetActive->Name = L"button_ModSetActive";
+			this->button_ModSetActive->Size = System::Drawing::Size(65, 21);
+			this->button_ModSetActive->TabIndex = 2;
+			this->button_ModSetActive->Text = L"Set Active";
+			this->button_ModSetActive->UseVisualStyleBackColor = true;
+			this->button_ModSetActive->Click += gcnew System::EventHandler(this, &ui::button_ModSetActive_Click);
+			// 
+			// listBox_Mods
+			// 
+			this->listBox_Mods->FormattingEnabled = true;
+			this->listBox_Mods->Location = System::Drawing::Point(5, 5);
+			this->listBox_Mods->Margin = System::Windows::Forms::Padding(2);
+			this->listBox_Mods->Name = L"listBox_Mods";
+			this->listBox_Mods->Size = System::Drawing::Size(546, 342);
+			this->listBox_Mods->TabIndex = 0;
+			this->listBox_Mods->SelectedValueChanged += gcnew System::EventHandler(this, &ui::listBox_Mods_SelectedValueChanged);
 			// 
 			// tabPage_Credits
 			// 
 			this->tabPage_Credits->Controls->Add(this->creditsTextBox);
-			this->tabPage_Credits->Location = System::Drawing::Point(4, 29);
+			this->tabPage_Credits->Location = System::Drawing::Point(4, 22);
+			this->tabPage_Credits->Margin = System::Windows::Forms::Padding(2);
 			this->tabPage_Credits->Name = L"tabPage_Credits";
-			this->tabPage_Credits->Padding = System::Windows::Forms::Padding(3, 3, 3, 3);
-			this->tabPage_Credits->Size = System::Drawing::Size(832, 543);
+			this->tabPage_Credits->Padding = System::Windows::Forms::Padding(2);
+			this->tabPage_Credits->Size = System::Drawing::Size(552, 378);
 			this->tabPage_Credits->TabIndex = 5;
 			this->tabPage_Credits->Text = L"Credits";
 			this->tabPage_Credits->UseVisualStyleBackColor = true;
@@ -801,13 +1027,153 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->creditsTextBox->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->creditsTextBox->Location = System::Drawing::Point(0, 0);
+			this->creditsTextBox->Margin = System::Windows::Forms::Padding(2);
 			this->creditsTextBox->Multiline = true;
 			this->creditsTextBox->Name = L"creditsTextBox";
 			this->creditsTextBox->ReadOnly = true;
 			this->creditsTextBox->ScrollBars = System::Windows::Forms::ScrollBars::Both;
-			this->creditsTextBox->Size = System::Drawing::Size(826, 535);
+			this->creditsTextBox->Size = System::Drawing::Size(552, 378);
 			this->creditsTextBox->TabIndex = 0;
 			this->creditsTextBox->Text = resources->GetString(L"creditsTextBox.Text");
+			// 
+			// tabPage_Update
+			// 
+			this->tabPage_Update->Controls->Add(this->linkLabel_Repo);
+			this->tabPage_Update->Controls->Add(this->linkLabel_Help);
+			this->tabPage_Update->Controls->Add(this->linkLabel_Official_Discord);
+			this->tabPage_Update->Controls->Add(this->linkLabel_Changelog);
+			this->tabPage_Update->Controls->Add(this->button_Clean_installation);
+			this->tabPage_Update->Controls->Add(this->button_Instructions);
+			this->tabPage_Update->Controls->Add(this->button_Unstable_builds);
+			this->tabPage_Update->Controls->Add(this->button_Releases_page);
+			this->tabPage_Update->Controls->Add(this->label_Update_2);
+			this->tabPage_Update->Controls->Add(this->label_Update_1);
+			this->tabPage_Update->Location = System::Drawing::Point(4, 22);
+			this->tabPage_Update->Margin = System::Windows::Forms::Padding(2);
+			this->tabPage_Update->Name = L"tabPage_Update";
+			this->tabPage_Update->Padding = System::Windows::Forms::Padding(2);
+			this->tabPage_Update->Size = System::Drawing::Size(552, 378);
+			this->tabPage_Update->TabIndex = 6;
+			this->tabPage_Update->Text = L"UPDATE";
+			this->tabPage_Update->UseVisualStyleBackColor = true;
+			// 
+			// linkLabel_Repo
+			// 
+			this->linkLabel_Repo->AutoSize = true;
+			this->linkLabel_Repo->Location = System::Drawing::Point(169, 297);
+			this->linkLabel_Repo->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->linkLabel_Repo->Name = L"linkLabel_Repo";
+			this->linkLabel_Repo->Size = System::Drawing::Size(87, 13);
+			this->linkLabel_Repo->TabIndex = 9;
+			this->linkLabel_Repo->TabStop = true;
+			this->linkLabel_Repo->Text = L"Official repository";
+			this->linkLabel_Repo->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &ui::linkLabel_Repo_LinkClicked);
+			// 
+			// linkLabel_Help
+			// 
+			this->linkLabel_Help->AutoSize = true;
+			this->linkLabel_Help->Location = System::Drawing::Point(169, 257);
+			this->linkLabel_Help->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->linkLabel_Help->Name = L"linkLabel_Help";
+			this->linkLabel_Help->Size = System::Drawing::Size(29, 13);
+			this->linkLabel_Help->TabIndex = 8;
+			this->linkLabel_Help->TabStop = true;
+			this->linkLabel_Help->Text = L"Help";
+			this->linkLabel_Help->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &ui::linkLabel_Help_LinkClicked);
+			// 
+			// linkLabel_Official_Discord
+			// 
+			this->linkLabel_Official_Discord->AutoSize = true;
+			this->linkLabel_Official_Discord->Location = System::Drawing::Point(169, 277);
+			this->linkLabel_Official_Discord->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->linkLabel_Official_Discord->Name = L"linkLabel_Official_Discord";
+			this->linkLabel_Official_Discord->Size = System::Drawing::Size(78, 13);
+			this->linkLabel_Official_Discord->TabIndex = 7;
+			this->linkLabel_Official_Discord->TabStop = true;
+			this->linkLabel_Official_Discord->Text = L"Official Discord";
+			this->linkLabel_Official_Discord->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &ui::linkLabel_Official_Discord_LinkClicked);
+			// 
+			// linkLabel_Changelog
+			// 
+			this->linkLabel_Changelog->AutoSize = true;
+			this->linkLabel_Changelog->Location = System::Drawing::Point(169, 238);
+			this->linkLabel_Changelog->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->linkLabel_Changelog->Name = L"linkLabel_Changelog";
+			this->linkLabel_Changelog->Size = System::Drawing::Size(58, 13);
+			this->linkLabel_Changelog->TabIndex = 6;
+			this->linkLabel_Changelog->TabStop = true;
+			this->linkLabel_Changelog->Text = L"Changelog";
+			this->linkLabel_Changelog->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &ui::linkLabel_Changelog_LinkClicked);
+			// 
+			// button_Clean_installation
+			// 
+			this->button_Clean_installation->Location = System::Drawing::Point(295, 207);
+			this->button_Clean_installation->Margin = System::Windows::Forms::Padding(2);
+			this->button_Clean_installation->Name = L"button_Clean_installation";
+			this->button_Clean_installation->Size = System::Drawing::Size(92, 26);
+			this->button_Clean_installation->TabIndex = 5;
+			this->button_Clean_installation->Text = L"Clean installation";
+			this->button_Clean_installation->UseVisualStyleBackColor = true;
+			this->button_Clean_installation->Click += gcnew System::EventHandler(this, &ui::button_Clean_installation_Click);
+			// 
+			// button_Instructions
+			// 
+			this->button_Instructions->Location = System::Drawing::Point(295, 177);
+			this->button_Instructions->Margin = System::Windows::Forms::Padding(2);
+			this->button_Instructions->Name = L"button_Instructions";
+			this->button_Instructions->Size = System::Drawing::Size(92, 26);
+			this->button_Instructions->TabIndex = 4;
+			this->button_Instructions->Text = L"Instructions";
+			this->button_Instructions->UseVisualStyleBackColor = true;
+			this->button_Instructions->Click += gcnew System::EventHandler(this, &ui::button_Instructions_Click);
+			// 
+			// button_Unstable_builds
+			// 
+			this->button_Unstable_builds->Location = System::Drawing::Point(169, 207);
+			this->button_Unstable_builds->Margin = System::Windows::Forms::Padding(2);
+			this->button_Unstable_builds->Name = L"button_Unstable_builds";
+			this->button_Unstable_builds->Size = System::Drawing::Size(92, 26);
+			this->button_Unstable_builds->TabIndex = 3;
+			this->button_Unstable_builds->Text = L"Unstable builds";
+			this->button_Unstable_builds->UseVisualStyleBackColor = true;
+			this->button_Unstable_builds->Click += gcnew System::EventHandler(this, &ui::button_Unstable_builds_Click);
+			// 
+			// button_Releases_page
+			// 
+			this->button_Releases_page->Location = System::Drawing::Point(169, 177);
+			this->button_Releases_page->Margin = System::Windows::Forms::Padding(2);
+			this->button_Releases_page->Name = L"button_Releases_page";
+			this->button_Releases_page->Size = System::Drawing::Size(92, 26);
+			this->button_Releases_page->TabIndex = 2;
+			this->button_Releases_page->Text = L"Releases page";
+			this->button_Releases_page->UseVisualStyleBackColor = true;
+			this->button_Releases_page->Click += gcnew System::EventHandler(this, &ui::button_Releases_page_Click);
+			// 
+			// label_Update_2
+			// 
+			this->label_Update_2->AutoSize = true;
+			this->label_Update_2->Location = System::Drawing::Point(48, 73);
+			this->label_Update_2->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->label_Update_2->Name = L"label_Update_2";
+			this->label_Update_2->Size = System::Drawing::Size(467, 26);
+			this->label_Update_2->TabIndex = 1;
+			this->label_Update_2->Text = L"It is highly recommended to download updates directly from the official repositor"
+				L"y.\r\nIf you have downloaded PD Loader from a third-party, it is recommended to do"
+				L" a clean installation.";
+			this->label_Update_2->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// label_Update_1
+			// 
+			this->label_Update_1->AutoSize = true;
+			this->label_Update_1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label_Update_1->Location = System::Drawing::Point(11, 30);
+			this->label_Update_1->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->label_Update_1->Name = L"label_Update_1";
+			this->label_Update_1->Size = System::Drawing::Size(555, 20);
+			this->label_Update_1->TabIndex = 0;
+			this->label_Update_1->Text = L"Update PD Loader regularly to get the latest fixes and new features!";
+			this->label_Update_1->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// button_Discord
 			// 
@@ -817,10 +1183,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->button_Discord->FlatAppearance->BorderSize = 0;
 			this->button_Discord->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_Discord->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_Discord.Image")));
-			this->button_Discord->Location = System::Drawing::Point(744, 576);
-			this->button_Discord->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button_Discord->Location = System::Drawing::Point(496, 404);
 			this->button_Discord->Name = L"button_Discord";
-			this->button_Discord->Size = System::Drawing::Size(48, 48);
+			this->button_Discord->Size = System::Drawing::Size(32, 32);
 			this->button_Discord->TabIndex = 31;
 			this->button_Discord->UseVisualStyleBackColor = false;
 			this->button_Discord->Click += gcnew System::EventHandler(this, &ui::button_Discord_Click);
@@ -833,10 +1198,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->button_github->FlatAppearance->BorderSize = 0;
 			this->button_github->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_github->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_github.Image")));
-			this->button_github->Location = System::Drawing::Point(792, 576);
-			this->button_github->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button_github->Location = System::Drawing::Point(528, 404);
 			this->button_github->Name = L"button_github";
-			this->button_github->Size = System::Drawing::Size(48, 48);
+			this->button_github->Size = System::Drawing::Size(32, 32);
 			this->button_github->TabIndex = 32;
 			this->button_github->UseVisualStyleBackColor = false;
 			this->button_github->Click += gcnew System::EventHandler(this, &ui::button_github_Click);
@@ -846,10 +1210,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->button_Apply->BackColor = System::Drawing::Color::White;
 			this->button_Apply->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Apply->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Apply->Location = System::Drawing::Point(6, 584);
-			this->button_Apply->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button_Apply->Location = System::Drawing::Point(4, 409);
 			this->button_Apply->Name = L"button_Apply";
-			this->button_Apply->Size = System::Drawing::Size(104, 34);
+			this->button_Apply->Size = System::Drawing::Size(69, 23);
 			this->button_Apply->TabIndex = 33;
 			this->button_Apply->Text = L"Apply";
 			this->button_Apply->UseVisualStyleBackColor = false;
@@ -864,10 +1227,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->button_Wiki->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->button_Wiki->FlatAppearance->BorderSize = 0;
 			this->button_Wiki->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Wiki->Location = System::Drawing::Point(696, 576);
-			this->button_Wiki->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button_Wiki->Location = System::Drawing::Point(464, 404);
 			this->button_Wiki->Name = L"button_Wiki";
-			this->button_Wiki->Size = System::Drawing::Size(48, 48);
+			this->button_Wiki->Size = System::Drawing::Size(32, 32);
 			this->button_Wiki->TabIndex = 34;
 			this->button_Wiki->UseVisualStyleBackColor = false;
 			this->button_Wiki->Click += gcnew System::EventHandler(this, &ui::button_Wiki_Click);
@@ -875,13 +1237,13 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			// ui
 			// 
 			this->AcceptButton = this->button_Launch;
-			this->AutoScaleDimensions = System::Drawing::SizeF(144, 144);
+			this->AutoScaleDimensions = System::Drawing::SizeF(96, 96);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Dpi;
 			this->AutoSize = true;
 			this->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 			this->BackColor = System::Drawing::Color::Magenta;
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			this->ClientSize = System::Drawing::Size(840, 626);
+			this->ClientSize = System::Drawing::Size(560, 437);
 			this->Controls->Add(this->button_Wiki);
 			this->Controls->Add(this->button_Apply);
 			this->Controls->Add(this->tabControl);
@@ -895,15 +1257,16 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->HelpButton = true;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->KeyPreview = true;
-			this->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->MaximizeBox = false;
 			this->Name = L"ui";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"PD Launcher";
+			this->Text = L"PD Loader 3 - Launcher";
 			this->TransparencyKey = System::Drawing::Color::Magenta;
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &ui::Ui_FormClosing);
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &ui::Ui_FormClosed);
 			this->groupBox_ScreenRes->ResumeLayout(false);
+			this->panel_ScreenRes->ResumeLayout(false);
+			this->panel_ScreenRes->PerformLayout();
 			this->tabControl->ResumeLayout(false);
 			this->tabPage_Resolution->ResumeLayout(false);
 			this->tabPage_Resolution->PerformLayout();
@@ -915,13 +1278,40 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabPage_Patches->ResumeLayout(false);
 			this->tabPage_Playerdata->ResumeLayout(false);
 			this->tabPage_Components->ResumeLayout(false);
+			this->tabPage_Components->PerformLayout();
 			this->tabPage_Plugins->ResumeLayout(false);
+			this->tabPage_Modpacks->ResumeLayout(false);
+			this->tabPage_Modpacks->PerformLayout();
 			this->tabPage_Credits->ResumeLayout(false);
 			this->tabPage_Credits->PerformLayout();
+			this->tabPage_Update->ResumeLayout(false);
+			this->tabPage_Update->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
+		private: System::Void scanModpacks() {
+			button_ModSetActive->Enabled = false;
+			button_ModClone->Enabled = false;
+			button_ModDelete->Enabled = false;
+			button_ModFiles->Enabled = false;
+			button_ModRename->Enabled = false;
+			listBox_Mods->Items->Clear();
+			listBox_Mods->Items->Add("(base)");
+			try {
+				for (std::filesystem::path p : std::filesystem::directory_iterator("./modpacks"))
+				{
+					if (std::filesystem::exists(p.string() + "/ram") && std::filesystem::exists(p.string() + "/mdata") &&
+						std::filesystem::exists(p.string() + "/plugins") && std::filesystem::exists(p.string() + "/patches"))
+					{
+						listBox_Mods->Items->Add(gcnew String(p.filename().c_str()));
+					}
+				}
+			}
+			catch (const std::filesystem::filesystem_error& e) {
+				std::cout << "[Launcher] File system error " << e.what() << " " << e.path1() << " " << e.path2() << " " << e.code() << std::endl;
+			}
+		}
 private: System::Void SaveSettings() {
 	if (*ResolutionConfigChanged)
 	{
@@ -934,6 +1324,9 @@ private: System::Void SaveSettings() {
 		{
 			option->SaveOption();
 		}
+
+		/*if (getFullscreenOptimizations() == this->checkBox_nofsopt->Checked)*/ setFullscreenOptimizations(!this->checkBox_nofsopt->Checked);
+		this->checkBox_nofsopt->Checked = !getFullscreenOptimizations();
 
 		*ResolutionConfigChanged = false;
 	}
@@ -1111,8 +1504,8 @@ private: System::Void button_github_Click(System::Object^ sender, System::EventA
 private: System::Void button_Apply_Click(System::Object^ sender, System::EventArgs^ e) {
 	SaveSettings();
 	updateStyle();
-	ShowWindow(hWnd, SW_HIDE);
-	ShowWindow(hWnd, SW_SHOW);
+	//ShowWindow(hWnd, SW_HIDE);
+	//ShowWindow(hWnd, SW_SHOW);
 }
 private: System::Void Ui_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
 	if (e->KeyCode == Keys::Escape) this->Close();
@@ -1151,6 +1544,83 @@ private: System::Void button_Wiki_Click(System::Object^ sender, System::EventArg
 	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki");
 }
 private: System::Void trackBar_LagCompensation_Scroll(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void button_Releases_page_Click(System::Object^ sender, System::EventArgs^ e) {
+	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/releases");
+}
+private: System::Void button_Instructions_Click(System::Object^ sender, System::EventArgs^ e) {
+	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki/2%29+Installation");
+}
+private: System::Void button_Unstable_builds_Click(System::Object^ sender, System::EventArgs^ e) {
+	System::Diagnostics::Process::Start("https://ci.appveyor.com/project/nastys/pd-loader/build/artifacts");
+}
+private: System::Void button_Clean_installation_Click(System::Object^ sender, System::EventArgs^ e) {
+	SkinnedMessageBox::Show(this, "Delete:\n- dnsapi.dll or dinput8.dll\n- patches/\n- plugins/\n\nRestore:\n- glut32.dll\n\nThen install PD Loader from the official repository.", "How to do a clean installation", MessageBoxButtons::OK, MessageBoxIcon::Information);
+}
+private: System::Void linkLabel_Changelog_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
+	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki/Changelog");
+}
+private: System::Void linkLabel_Official_Discord_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
+	System::Diagnostics::Process::Start("https://discord.gg/cvBVGDZ");
+}
+private: System::Void linkLabel_Help_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
+	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki");
+}
+private: System::Void linkLabel_Repo_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
+	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader");
+}
+private: System::Void checkBox_nofsopt_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	*ResolutionConfigChanged = true;
+}
+private: System::Void keycfg_button_Click(System::Object^ sender, System::EventArgs^ e)
+{
+    System::Diagnostics::Process::Start("\"" + System::Environment::GetEnvironmentVariable("WINDIR") + "\\write.exe\"", "plugins\\keyconfig.ini");
+}
+private: System::Void linkLabel_Console_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
+	HWND consoleHandle = GetConsoleWindow();
+	ShowWindow(consoleHandle, SW_SHOW);
+	linkLabel_Console->Visible = false;
+}
+private: System::Void listBox_Mods_SelectedValueChanged(System::Object^ sender, System::EventArgs^ e) {
+	button_ModSetActive->Enabled = true;
+	button_ModClone->Enabled = true;
+	button_ModDelete->Enabled = true;
+	button_ModFiles->Enabled = true;
+	button_ModRename->Enabled = true;
+}
+private: System::Void button_ModRescan_Click(System::Object^ sender, System::EventArgs^ e) {
+	scanModpacks();
+}
+private: System::Void button_ModSetActive_Click(System::Object^ sender, System::EventArgs^ e) {
+	LPCWSTR mpname;
+	if (listBox_Mods->SelectedIndex == 0) mpname = L"";
+	else
+	{
+		auto str = listBox_Mods->GetItemText(listBox_Mods->SelectedItem);
+		IntPtr strptr = System::Runtime::InteropServices::Marshal::StringToHGlobalUni(str);
+		mpname = (LPCWSTR)strptr.ToPointer();
+	}
+	WritePrivateProfileStringW(L"Mods", L"Modpack", mpname, CONFIG_FILE);
+}
+private: System::Void button_ModFiles_Click(System::Object^ sender, System::EventArgs^ e) {
+	auto mpstr = listBox_Mods->SelectedItem->ToString();
+	if(mpstr == "(base)") System::Diagnostics::Process::Start(".");
+	else System::Diagnostics::Process::Start("modpacks\\"+mpstr);
+}
+private: System::Void button_ModClone_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void button_ModDelete_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void button_ModRename_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void tabPage_Modpacks_Enter(System::Object^ sender, System::EventArgs^ e) {
+	scanModpacks();
+	wchar_t* mpstr = NULL;
+	mpstr = (wchar_t*)malloc(256);
+	memset(mpstr, 0, 256);
+	GetPrivateProfileStringW(L"Mods", L"Modpack", L"", mpstr, 256, CONFIG_FILE);
+	listBox_Mods->SelectedIndex = listBox_Mods->FindString(gcnew String(mpstr));
+	free(mpstr);
 }
 };
 }

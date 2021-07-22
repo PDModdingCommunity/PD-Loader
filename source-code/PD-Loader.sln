@@ -7,11 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PD-Loader", "source\PD-Load
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TLAC", "source\plugins\TLAC\TLAC.vcxproj", "{2B5533BB-04A1-424F-9BCA-1CA963B46B7F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Patches", "source\plugins\Patches\Patches.vcxproj", "{3FD6ACA9-E613-4FD6-BDA2-55A91C2CF65C}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Launcher", "source\plugins\Launcher\Launcher.vcxproj", "{60D5E9F4-335F-402B-9A07-D78674DFFC9B}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Render", "source\plugins\Render\Render.vcxproj", "{89F87459-768F-4638-9267-0F90CD74452D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fakedll", "source\fakedll\fakedll.vcxproj", "{B49C6ABE-931C-4F91-9A94-21A41A305FEE}"
 EndProject
@@ -41,18 +37,10 @@ Global
 		{2B5533BB-04A1-424F-9BCA-1CA963B46B7F}.Debug|x64.Build.0 = Debug|x64
 		{2B5533BB-04A1-424F-9BCA-1CA963B46B7F}.Release|x64.ActiveCfg = Release|x64
 		{2B5533BB-04A1-424F-9BCA-1CA963B46B7F}.Release|x64.Build.0 = Release|x64
-		{3FD6ACA9-E613-4FD6-BDA2-55A91C2CF65C}.Debug|x64.ActiveCfg = Debug|x64
-		{3FD6ACA9-E613-4FD6-BDA2-55A91C2CF65C}.Debug|x64.Build.0 = Debug|x64
-		{3FD6ACA9-E613-4FD6-BDA2-55A91C2CF65C}.Release|x64.ActiveCfg = Release|x64
-		{3FD6ACA9-E613-4FD6-BDA2-55A91C2CF65C}.Release|x64.Build.0 = Release|x64
 		{60D5E9F4-335F-402B-9A07-D78674DFFC9B}.Debug|x64.ActiveCfg = Debug|x64
 		{60D5E9F4-335F-402B-9A07-D78674DFFC9B}.Debug|x64.Build.0 = Debug|x64
 		{60D5E9F4-335F-402B-9A07-D78674DFFC9B}.Release|x64.ActiveCfg = Release|x64
 		{60D5E9F4-335F-402B-9A07-D78674DFFC9B}.Release|x64.Build.0 = Release|x64
-		{89F87459-768F-4638-9267-0F90CD74452D}.Debug|x64.ActiveCfg = Debug|x64
-		{89F87459-768F-4638-9267-0F90CD74452D}.Debug|x64.Build.0 = Debug|x64
-		{89F87459-768F-4638-9267-0F90CD74452D}.Release|x64.ActiveCfg = Release|x64
-		{89F87459-768F-4638-9267-0F90CD74452D}.Release|x64.Build.0 = Release|x64
 		{B49C6ABE-931C-4F91-9A94-21A41A305FEE}.Debug|x64.ActiveCfg = Debug|x64
 		{B49C6ABE-931C-4F91-9A94-21A41A305FEE}.Debug|x64.Build.0 = Debug|x64
 		{B49C6ABE-931C-4F91-9A94-21A41A305FEE}.Release|x64.ActiveCfg = Release|x64

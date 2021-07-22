@@ -1,5 +1,8 @@
 #include "framework.h"
 #include "exception.hpp"
+#include "Patches\patches.h"
+#include "Render\render.h"
+#include "templates.h"
 #include <VersionHelpers.h>
 #include <Shlwapi.h>
 #pragma comment(lib, "Shlwapi.lib")
@@ -12,6 +15,8 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 HMODULE hm;
 std::vector<std::wstring> iniPaths;
+
+unsigned short game_version = 710;
 
 bool iequals(std::wstring_view s1, std::wstring_view s2)
 {
@@ -215,13 +220,19 @@ void FindFiles(WIN32_FIND_DATAW* fd)
 		do {
 			if (!(fd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
+				if (!_wcsicmp(fd->cFileName, L"Patches.dva") || !_wcsicmp(fd->cFileName, L"Render.dva"))
+				{
+					DeleteFileW(fd->cFileName);
+					continue;
+				}
+
 				auto pos = wcslen(fd->cFileName);
 
 				if (fd->cFileName[pos - 4] == '.' &&
 					(fd->cFileName[pos - 3] == 'd' || fd->cFileName[pos - 3] == 'D') &&
 					(fd->cFileName[pos - 2] == 'v' || fd->cFileName[pos - 2] == 'V') &&
 					(fd->cFileName[pos - 1] == 'a' || fd->cFileName[pos - 1] == 'A') &&
-					GetPrivateProfileIntW(L"plugins", fd->cFileName, TRUE, iniPaths))
+					GetPrivateProfileIntW(L"plugins", fd->cFileName, FALSE, iniPaths))
 				{
 					auto path = dir + L'\\' + fd->cFileName;
 
@@ -246,20 +257,23 @@ void LoadPlugins()
 	{
 		if (SetCurrentDirectoryW(szSelfPath.c_str()))
 		{
-			WIN32_FIND_DATAW dh;
+			/*WIN32_FIND_DATAW dh;
 			HANDLE divaHook = FindFirstFileW(L"divahook.dll", &dh);
 			if (divaHook != INVALID_HANDLE_VALUE && !(dh.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
 				printf("[PD Loader] Loading divahook.dll\n");
 				auto path = szSelfPath + L'\\' + dh.cFileName;
 				LoadDVA(path, szSelfPath.c_str(), dh.cFileName);
-			}
+			}*/
 			if (SetCurrentDirectoryW(L"plugins\\"))
 			{
 				WIN32_FIND_DATAW fd;
 				FindFiles(&fd);
 			}
 		}
+		ApplyPatches();
+		if (SetCurrentDirectoryW(szSelfPath.c_str())) ApplyAllCustomPatches();
+		ApplyRender(hm);
 	}
 
 	SetCurrentDirectoryW(oldDir.c_str()); // Reset the current directory
@@ -737,40 +751,55 @@ void Init()
 	moduleName.resize(moduleName.find_last_of(L'.'));
 	modulePath.resize(modulePath.find_last_of(L"/\\") + 1);
 	iniPaths.emplace_back(modulePath + moduleName + L".ini");
+
 	const auto CONFIG_FILE = L"plugins\\config.ini";
-	const auto CONFIG_FILE_TEMPLATE = L"plugins\\config_template.bin";
 	iniPaths.emplace_back(modulePath + CONFIG_FILE);
 
 
 	// initialize configuration files.
-	CopyFileW(CONFIG_FILE_TEMPLATE, CONFIG_FILE, true);
-	const auto COMPONENTS_TEMPLATE = L"plugins\\components_template.bin";
-	const auto COMPONENTS = L"plugins\\components.ini";
-	CopyFileW(COMPONENTS_TEMPLATE, COMPONENTS, true);
-	const auto KEYCONFIG_TEMPLATE = L"plugins\\keyconfig_template.bin";
-	const auto KEYCONFIG = L"plugins\\keyconfig.ini";
-	CopyFileW(KEYCONFIG_TEMPLATE, KEYCONFIG, true);
-	const auto PLAYERDATA_TEMPLATE = L"plugins\\playerdata_template.bin";
-	const auto PLAYERDATA = L"plugins\\playerdata.ini";
-	CopyFileW(PLAYERDATA_TEMPLATE, PLAYERDATA, true);
-	const auto DIVASOUND_TEMPLATE = L"plugins\\DivaSound_template.bin";
-	const auto DIVASOUND = L"plugins\\DivaSound.ini";
-	CopyFileW(DIVASOUND_TEMPLATE, DIVASOUND, true);
-	const auto SHADERPATCH_TEMPLATE = L"plugins\\ShaderPatch_template.bin";
-	const auto SHADERPATCH = L"plugins\\ShaderPatch.ini";
-	CopyFileW(SHADERPATCH_TEMPLATE, SHADERPATCH, true);
-	const auto SHADERPATCHCONFIG_TEMPLATE = L"plugins\\ShaderPatchConfig_template.bin";
-	const auto SHADERPATCHCONFIG = L"plugins\\ShaderPatchConfig.ini";
-	CopyFileW(SHADERPATCHCONFIG_TEMPLATE, SHADERPATCHCONFIG, true);
+	WCHAR config_pcname[MAX_COMPUTERNAME_LENGTH + 1];
+	GetPrivateProfileStringW(L"global", L"pc", L"", config_pcname, MAX_COMPUTERNAME_LENGTH + 1, CONFIG_FILE);
+	WCHAR this_pcname[MAX_COMPUTERNAME_LENGTH + 1];
+	DWORD count = MAX_COMPUTERNAME_LENGTH + 1;
+	if(GetComputerNameW(this_pcname, &count) && PathFileExistsW(CONFIG_FILE) && wcscmp(config_pcname, this_pcname)!=0)
+	{
+		auto cfgsel = MessageBoxW(nullptr, L"Incompatible configuration found. This can happen if you are upgrading.\n\nIf you are not upgrading, then this version of PD Loader was likely hacked or used on another computer.\nIt is recommended to download the latest version from the official repository and do a clean installation (delete plugins/, patches/, dnsapi.dll and/or dinput8.dll, and restore glut32.dll).\n\nRestore the default settings?", L"PD Loader", MB_YESNOCANCEL | MB_ICONWARNING);
+		if (cfgsel == IDYES) if(!DeleteFileW(CONFIG_FILE))
+		{
+			MessageBoxW(nullptr, L"Cannot delete config.ini.\n\nThe file might be read-only or in use (is the game still running?).", L"PD Loader", MB_OK | MB_ICONERROR);
+			exit(1);
+		}
+		else if(cfgsel != IDNO) exit(1);
+	}
 
-	if ((PathFileExistsW(CONFIG_FILE_TEMPLATE) && !PathFileExistsW(CONFIG_FILE)) ||
-		(PathFileExistsW(COMPONENTS_TEMPLATE) && !PathFileExistsW(COMPONENTS)) ||
-		(PathFileExistsW(KEYCONFIG_TEMPLATE) && !PathFileExistsW(KEYCONFIG)) ||
-		(PathFileExistsW(PLAYERDATA_TEMPLATE) && !PathFileExistsW(PLAYERDATA)) ||
-		(PathFileExistsW(DIVASOUND_TEMPLATE) && !PathFileExistsW(DIVASOUND)) ||
-		(PathFileExistsW(SHADERPATCH_TEMPLATE) && !PathFileExistsW(SHADERPATCH)) ||
-		(PathFileExistsW(SHADERPATCHCONFIG_TEMPLATE) && !PathFileExistsW(SHADERPATCHCONFIG))
-		)
+
+	if (!PathFileExistsW(CONFIG_FILE))
+	{
+		writeTemplate(config_template, CONFIG_FILE);
+		WritePrivateProfileStringW(L"global", L"pc", this_pcname, CONFIG_FILE);
+		WritePrivateProfileStringW(L"plugins", L"Launcher.dva", L"1", CONFIG_FILE);
+		WritePrivateProfileStringW(L"plugins", L"DivaSound.dva", L"1", CONFIG_FILE);
+		WritePrivateProfileStringW(L"plugins", L"TLAC.dva", L"1", CONFIG_FILE);
+		WritePrivateProfileStringW(L"plugins", L"Novidia.dva", L"1", CONFIG_FILE);
+		WritePrivateProfileStringW(L"plugins", L"ShaderPatch.dva", L"1", CONFIG_FILE);
+	}
+	const auto COMPONENTS = L"plugins\\components.ini";
+	if (!PathFileExistsW(COMPONENTS)) writeTemplate(components_template, COMPONENTS);
+	const auto KEYCONFIG = L"plugins\\keyconfig.ini";
+	if (!PathFileExistsW(KEYCONFIG)) writeTemplate(keyconfig_template, KEYCONFIG);
+	const auto PLAYERDATA = L"plugins\\playerdata.ini";
+	if (!PathFileExistsW(PLAYERDATA)) writeTemplate(playerdata_template, PLAYERDATA);
+	const auto DIVASOUND = L"plugins\\DivaSound.ini";
+	if (!PathFileExistsW(DIVASOUND)) writeTemplate(divasound_template, DIVASOUND);
+	const auto SHADERPATCHCONFIG = L"plugins\\ShaderPatchConfig.ini";
+	if (!PathFileExistsW(SHADERPATCHCONFIG)) writeTemplate(shaderpatchconfig_template, SHADERPATCHCONFIG);
+
+	if (!PathFileExistsW(CONFIG_FILE) ||
+	    !PathFileExistsW(COMPONENTS) ||
+	    !PathFileExistsW(KEYCONFIG) ||
+	    !PathFileExistsW(PLAYERDATA) ||
+	    !PathFileExistsW(DIVASOUND) ||
+	    !PathFileExistsW(SHADERPATCHCONFIG))
 		MessageBoxW(0, L"Could not install configuration files. Is the game in a read-only folder?", L"PD Loader", MB_ICONWARNING);
 
 	CreateDirectoryW(L"plugins\\pv_equip", NULL);
@@ -858,7 +887,7 @@ void Init()
 			}
 			else if (!MoveFileExW(L"dinput8.dll", L"~dinput8.dll", MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH))
 			{
-				MessageBoxW(0, L"PD Loader was loaded from \"dnsapi.dll\", but \"dinput8.dll\" was found and PD Loader could not delete it automatically\nIs it read-only?", L"PD Loader", MB_ICONERROR);
+				MessageBoxW(0, L"PD Loader was loaded from \"dnsapi.dll\", but \"dinput8.dll\" was found and PD Loader could not delete it automatically\nIs the file read-only? Or is the game still running?", L"PD Loader", MB_ICONERROR);
 				exit(1);
 			}
 		}

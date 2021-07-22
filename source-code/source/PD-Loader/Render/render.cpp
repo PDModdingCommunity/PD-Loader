@@ -1,4 +1,5 @@
-#include "framework.h"
+#include "render-framework.h"
+#include "render.h"
 #include <detours.h>
 #pragma comment(lib, "detours.lib")
 #include <GL\freeglut.h>
@@ -11,11 +12,11 @@
 
 #include <chrono>
 
-#include "PluginConfigApi.h"
+//#include "PluginConfigApi.h"
 
 using namespace std::chrono;
 
-unsigned short game_version = 710;
+extern unsigned short game_version;
 
 void exitGameClean(int)
 {
@@ -262,12 +263,9 @@ extern "C" __declspec(dllexport) void setFramerateLimit(int framerate)
 	return;
 }
 
-BOOL APIENTRY DllMain(HMODULE hModule,
-	DWORD  ul_reason_for_call,
-	LPVOID lpReserved
-)
+void ApplyRender(HMODULE hModule)
 {
-	if (ul_reason_for_call == DLL_PROCESS_ATTACH)
+	if (nBuiltinRender)
 	{
 		if (*(char*)0x140A570F0 == '6') game_version = 600;
 
@@ -342,7 +340,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 			case 600:
 			{
 				DWORD oldProtect, bck;
-					VirtualProtect((BYTE*)0x0000000140980954, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+				VirtualProtect((BYTE*)0x0000000140980954, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
 				*((int*)0x0000000140980954) = nIntResWidth;
 				VirtualProtect((BYTE*)0x0000000140980954, 6, oldProtect, &bck);
 			}
@@ -354,33 +352,44 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 			}
 			break;
 			default:
-				{
-					DWORD oldProtect, bck;
-					VirtualProtect((BYTE*)0x00000001409B8B68, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-					*((int*)0x00000001409B8B68) = nIntResWidth;
-					VirtualProtect((BYTE*)0x00000001409B8B68, 6, oldProtect, &bck);
-				}
-				{
-					DWORD oldProtect, bck;
-					VirtualProtect((BYTE*)0x00000001409B8B6C, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-					*((int*)0x00000001409B8B6C) = nIntResHeight;
-					VirtualProtect((BYTE*)0x00000001409B8B6C, 6, oldProtect, &bck);
-				}
+			{
+				DWORD oldProtect, bck;
+				VirtualProtect((BYTE*)0x00000001409B8B68, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((int*)0x00000001409B8B68) = nIntResWidth;
+				VirtualProtect((BYTE*)0x00000001409B8B68, 6, oldProtect, &bck);
+			}
+			{
+				DWORD oldProtect, bck;
+				VirtualProtect((BYTE*)0x00000001409B8B6C, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+				*((int*)0x00000001409B8B6C) = nIntResHeight;
+				VirtualProtect((BYTE*)0x00000001409B8B6C, 6, oldProtect, &bck);
+			}
 
-				//*((int*)0x00000001409B8B6C) = maxHeight;
-				//*((int*)0x00000001409B8B14) = maxWidth;
-				//*((int*)0x00000001409B8B18) = maxHeight;
+			//*((int*)0x00000001409B8B6C) = maxHeight;
+			//*((int*)0x00000001409B8B14) = maxWidth;
+			//*((int*)0x00000001409B8B18) = maxHeight;
 
-				//*((int*)0x00000001409B8B1C) = maxWidth; // No parameters width?
-				//*((int*)0x00000001409B8B20) = maxHeight; // No parameters height?
+			//*((int*)0x00000001409B8B1C) = maxWidth; // No parameters width?
+			//*((int*)0x00000001409B8B20) = maxHeight; // No parameters height?
 			}
 		}
 	}
-	return TRUE;
 }
 
+/*BOOL APIENTRY DllMain(HMODULE hModule,
+	DWORD  ul_reason_for_call,
+	LPVOID lpReserved
+)
+{
+	if (ul_reason_for_call == DLL_PROCESS_ATTACH)
+	{
+		ApplyRender(hModule);
+	}
+	return TRUE;
+}*/
 
-using namespace PluginConfig;
+
+/*using namespace PluginConfig;
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
 {
@@ -390,4 +399,4 @@ extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
 extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
 {
 	return L"Applies window mode/size and FPS limiting.";
-}
+}*/

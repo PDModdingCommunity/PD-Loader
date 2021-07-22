@@ -7,24 +7,19 @@
 #include <filesystem>
 #include <sstream>
 #include <iomanip>
-#include "PluginConfigApi.h"
+#include "patches.h"
+//#include "PluginConfigApi.h"
 #include "PatchApplier.h"
 #include "PatchApplier600.h"
 #include "PatchApplier710.h"
 
 #include <detours.h>
-#include "framework.h"
+#include "patches-framework.h"
 #pragma comment(lib, "detours.lib")
 
-unsigned short game_version = 710;
+extern unsigned short game_version;
 
-void InjectCode(void* address, const std::vector<uint8_t> data);
-void ApplyPatches();
-void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING);
-
-
-
-HMODULE *hModulePtr;
+/*HMODULE* hModulePtr;
 
 BOOL APIENTRY DllMain(HMODULE hModule,
 	DWORD  ul_reason_for_call,
@@ -35,7 +30,6 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	{
 	case DLL_PROCESS_ATTACH:
 		hModulePtr = &hModule;
-		if (*(char*)0x140A570F0 == '6') game_version = 600;
 		ApplyPatches();
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:
@@ -43,51 +37,60 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		break;
 	}
 	return TRUE;
-}
+}*/
 
 void ApplyPatches() {
-	std::string version_string = std::to_string(game_version);
-	version_string.insert(version_string.begin()+1, '.');
-	std::cout << "[Patches] Game version " + version_string << std::endl;
-
-	PatchApplier* pa;
-
-	switch (game_version)
+	if (nBuiltinPatches)
 	{
-	case 600:
-		pa = new PatchApplier600;
-		break;
-	default:
-		pa = new PatchApplier710;
+		if (*(char*)0x140A570F0 == '6') game_version = 600;
+
+		std::string version_string = std::to_string(game_version);
+		version_string.insert(version_string.begin()+1, '.');
+		std::cout << "[Patches] Game version " + version_string << std::endl;
+
+		PatchApplier* pa;
+
+		switch (game_version)
+		{
+		case 600:
+			pa = new PatchApplier600;
+			break;
+		default:
+			pa = new PatchApplier710;
+		}
+
+		pa->ApplyPatches();
+		printf("[Patches] Patches applied\n");
 	}
+}
 
-	pa->ApplyPatches();
-	printf("[Patches] Patches applied\n");
-
+void ApplyAllCustomPatches()
+{
 	if (nCustomPatches)
 	{
-		std::cout << "[Patches] Reading custom patches...\n";
+		std::cout << "[Patches] Reading custom patches in " << std::filesystem::current_path().string() << "\\patches" << std::endl;
 		try {
-			for (std::filesystem::path p : std::filesystem::directory_iterator("../patches"))
+			for (std::filesystem::path p : std::filesystem::directory_iterator("patches"))
 			{
 				std::string extension = std::filesystem::path(p).extension().string();
-				if ((extension == ".p" || extension == ".P" || extension == ".p2" || extension == ".P2") &&
-					GetPrivateProfileIntW(L"plugins", std::filesystem::path(p).filename().c_str(), TRUE, CONFIG_FILE))
+				if ((extension == ".p" || extension == ".P" || extension == ".p2" || extension == ".P2"))
 				{
-					std::cout << "[Patches] Reading custom patch file: " << std::filesystem::path(p).filename().string() << std::endl;
-					ApplyCustomPatches(std::filesystem::path(p).wstring());
+					if (GetPrivateProfileIntW(L"plugins", std::filesystem::path(p).filename().c_str(), FALSE, CONFIG_FILE))
+					{
+						std::cout << "[Patches] Reading custom patch file: " << std::filesystem::path(p).filename().string() << std::endl;
+						ApplyCustomPatches(std::filesystem::path(p).wstring());
+					}
+					else std::cout << "[Patches] Skipping disabled patch file: " << std::filesystem::path(p).filename().string() << std::endl;
 				}
 			}
 		}
-		catch (const std::filesystem::filesystem_error &e) {
+		catch (const std::filesystem::filesystem_error& e) {
 			std::cout << "[Patches] File system error " << e.what() << " " << e.path1() << " " << e.path2() << " " << e.code() << std::endl;
 		}
 
 		std::cout << "[Patches] All custom patches applied\n";
 	}
 }
-
-
 
 void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING)
 {
@@ -242,7 +245,7 @@ void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING)
 }
 
 
-using namespace PluginConfig;
+/*using namespace PluginConfig;
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
 {
@@ -252,4 +255,4 @@ extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
 extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
 {
 	return L"Applies patches/tweaks to the game before it starts.\nThis plugin is required.";
-}
+}*/

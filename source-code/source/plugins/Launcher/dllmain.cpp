@@ -8,6 +8,8 @@ using namespace System::Windows::Forms;
 
 [STAThread]
 int showUI() {
+	AppDomain::CurrentDomain->AppendPrivatePath(Path::GetDirectoryName(Assembly::GetExecutingAssembly()->Location)); // directory of Launcher.dva, "...\plugins"
+
 	SetProcessDPIAware();
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);

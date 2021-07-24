@@ -26,6 +26,8 @@ after_build:
     
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\full\plugins\
     
+    xcopy /E %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\zh-Hans\ %TMP%\full\plugins\zh-Hans\
+    
     copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\full\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_base_game.sfv %TMP%\full\

@@ -21,6 +21,8 @@ namespace Launcher {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Threading;
+	using namespace System::Globalization;
 	using namespace msclr::interop;
 
 	HWND hWnd;
@@ -34,12 +36,11 @@ namespace Launcher {
 	public:
 		ui(void)
 		{
+			SetLanguage();
+
 			InitializeComponent();
 
 			hWnd = (HWND)Control::Handle.ToPointer();
-
-			this->ClientSize = Drawing::Size(444, 323);
-			TabPadding^ tabpad = gcnew TabPadding(tabControl);
 
 			// if components.ini has no section name, add one
 			if (!IsLineInFile("[components]", COMPONENTS_FILE))
@@ -59,7 +60,19 @@ namespace Launcher {
 				PrependFile("[keyconfig]\n", KEYCONFIG_FILE);
 			}
 
+			// trick Optimus into switching to the NVIDIA GPU
+			if (cuInit != NULL) cuInit(0);
 
+			int argc = 1;
+			char* argv[1] = { (char*)"" };
+
+			glutInit(&argc, argv);
+
+			addOptions();
+			updateStyle();
+		}
+
+		void addOptions() {
 			this->panel_ScreenRes->SuspendLayout();
 
 			// populate options (patches) from array in framework
@@ -202,21 +215,11 @@ namespace Launcher {
 			this->panel_Custom->PerformLayout();
 
 
-			// trick Optimus into switching to the NVIDIA GPU
-			if (cuInit != NULL) cuInit(0);
-
-			int argc = 1;
-			char* argv[1] = { (char*)"" };
-
-
 			updateLagCompMsec();
-
-			updateStyle();
 
 			scanModpacks();
 
 
-			glutInit(&argc, argv);
 			int window = glutCreateWindow("glut"); // a context must be created to use glGetString
 			glutHideWindow();
 
@@ -471,6 +474,26 @@ namespace Launcher {
 			tabPage_Modpacks->Enabled = false;
 		}
 
+		void updateLanguage() {
+			int language = GetPrivateProfileIntW(LAUNCHER_SECTION, L"launcher_language", FALSE, CONFIG_FILE);
+			if (nLanguage == language)
+				return;
+			nLanguage = language;
+
+			SetLanguage();
+
+			this->Controls->Clear();
+			this->InitializeComponent();
+			this->addOptions();
+		}
+
+		void SetLanguage() {
+			if (nLanguage == 0) {
+				Thread::CurrentThread->CurrentUICulture = gcnew CultureInfo(GetUserDefaultLCID());
+			} else if (nLanguage <= languages.size() - 1) {
+				Thread::CurrentThread->CurrentUICulture = CultureInfo::CreateSpecificCulture(gcnew String(languages[nLanguage]));
+			}
+		}
 	private:
 
 
@@ -1340,9 +1363,8 @@ private: System::Void button_github_Click(System::Object^ sender, System::EventA
 }
 private: System::Void button_Apply_Click(System::Object^ sender, System::EventArgs^ e) {
 	SaveSettings();
+	updateLanguage();
 	updateStyle();
-	//ShowWindow(hWnd, SW_HIDE);
-	//ShowWindow(hWnd, SW_SHOW);
 }
 private: System::Void Ui_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
 	if (e->KeyCode == Keys::Escape) this->Close();

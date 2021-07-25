@@ -148,6 +148,8 @@ USE_DIVAHOOK_BAT_NAME=Use divahook.bat
 USE_DIVAHOOK_BAT_HINT=Launches divahook.bat intead of diva.exe.
 DARK_LAUNCHER_NAME=Dark Launcher
 DARK_LAUNCHER_HINT=Sets the dark colour scheme in the launcher.
+LAUNCHER_LANGUAGE_NAME=Launcher Language:
+LAUNCHER_LANGUAGE_HINT=Sets the Language of the launcher.
 NO_GPU_DIALOG_NAME=Disable GPU Warning
 NO_GPU_DIALOG_HINT=Disables the warning dialog for unsupported GPUs.
 

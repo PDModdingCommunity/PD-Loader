@@ -65,6 +65,9 @@ LPCWSTR KEYCONFIG_SECTION = L"keyconfig";
 
 int nSkipLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"skip", FALSE, CONFIG_FILE);
 int nNoGPUDialog = GetPrivateProfileIntW(LAUNCHER_SECTION, L"no_gpu_dialog", FALSE, CONFIG_FILE);
+int nLanguage = GetPrivateProfileIntW(LAUNCHER_SECTION, L"launcher_language", FALSE, CONFIG_FILE);
+
+std::vector<LPCWSTR> languages = std::vector<LPCWSTR>({ L"Automatic", L"en", L"zh-Hans" });
 
 void SetBackCol(Control^ elem, System::Drawing::Color color, System::Windows::Forms::FlatStyle cbxStyle)
 {
@@ -281,6 +284,7 @@ ConfigOptionBase* optionsArray[] = {
 	new OptionMetaSpacer(8),
 
 	new BooleanOption(L"dark_launcher", LAUNCHER_SECTION, CONFIG_FILE, L"DARK_LAUNCHER_NAME", L"DARK_LAUNCHER_HINT", false, false),
+	new DropdownOption(L"launcher_language",LAUNCHER_SECTION,CONFIG_FILE, L"LAUNCHER_LANGUAGE_NAME",L"LAUNCHER_LANGUAGE_HINT", 0, languages),
 	//new BooleanOption(L"acrylic_blur", LAUNCHER_SECTION, CONFIG_FILE, L"ACRYLIC_BLUR_NAME", L"ACRYLIC_BLUR_HINT", false, false),
 	new BooleanOption(L"no_gpu_dialog", LAUNCHER_SECTION, CONFIG_FILE, L"NO_GPU_DIALOG_NAME", L"NO_GPU_DIALOG_HINT", false, false),
 };

@@ -7,46 +7,6 @@ build:
   project: source-code/PD-Loader.sln
   verbosity: minimal
 after_build:
-- cmd: >-
-    md %TMP%\full\
-
-    md %TMP%\full\patches\
-
-    md %TMP%\full\plugins\
-
-    md "%TMP%\full\plugins\Novidia Shaders"
-    
-    md %TMP%\full\ram\
-
-    md %TMP%\full\ram\databank_template\
-
-
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dnsapi.dll %TMP%\full\
-    
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\full\plugins\
-    
-    xcopy /E %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\zh-Hans\ %TMP%\full\plugins\zh-Hans\
-    
-    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\full\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_base_game.sfv %TMP%\full\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_mount_data.sfv %TMP%\full\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\*.* %TMP%\full\plugins\
-    
-    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\Novidia Shaders\*.*" "%TMP%\full\plugins\Novidia Shaders\"
-    
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\ram\databank_template\*.dat %TMP%\full\ram\databank_template\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\patches\custom_freeplay_text_example.p %TMP%\full\patches\
-
-    
-
-    cd %TMP%\full\
-
-    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AppVeyor.zip *
-
+- ps: .\package.ps1 -Clean:$false
 artifacts:
 - path: PD-Loader-*.zip

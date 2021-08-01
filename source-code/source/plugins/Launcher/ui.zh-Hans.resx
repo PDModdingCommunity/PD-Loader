@@ -158,7 +158,7 @@
     <value>插件设定</value>
   </data>
   <data name="tabPage_Credits.Text" xml:space="preserve">
-    <value>归属</value>
+    <value>关于</value>
   </data>
   <data name="tabPage_Update.Text" xml:space="preserve">
     <value>更新</value>

@@ -18,3 +18,4 @@ You should also read the wiki if you have any issues, before asking questions.
 教程中包含了如何下载PD-Loader可执行文件的链接
 
 PS:由于Wiki中已包含部分在运行PDAFT时的常见问题，所以在Discord询问问题前，请确保您已经阅读Wiki
+注: 现Wiki中的数据暂时还未进行翻译，请配合翻译软件查看，我们很快会更新简体中文的翻译文档

@@ -7,6 +7,8 @@ DISPLAY_HINT=设置窗口显示模式
 Windowed=窗口化
 Fast=无边框窗口
 Exclusive=独占全屏
+MATCH_WINDOW=匹配窗口分辨率
+MATCH_SCREEN=匹配显示分辨率
 #Safe=
 RESOLUTION_NAME=游戏分辨率:
 RESOLUTION_HINT=设置游戏的显示分辨率
@@ -19,7 +21,7 @@ R.RESOLUTION_HINT=设置内部渲染分辨率（除 1280x720 外）
 
 # graphics
 MODEL_NAME=NVIDIA GPU 架构:
-MODEL_HINT=请选择你的 NVIDIA GPU 架构以便于应用必要的设定\n\n请注意：自动检测 GPU 架构功能无法在 GNU/Linux 上工作\n\n架构类型:\n开普勒：GTX10 系\n麦克斯韦：GTX900 系\n图灵：RTX20/GTX16 系\n安培：RTX30 系
+MODEL_HINT=请选择你的 NVIDIA GPU 架构以便于应用必要的设定\n\n请注意：自动检测 GPU 架构功能无法在 GNU/Linux 上工作\n\n架构类型:\nKepler：GTX10 系\nMaxwell：GTX900 系\nTuring：RTX20/GTX16 系\nAmpere：RTX30 系
 Automatic=自动
 TAA_NAME=TAA
 TAA_HINT=时间抗锯齿
@@ -39,7 +41,7 @@ REFRACT_RES_WIDTH_NAME=折射分辨率:
 REFRACT_RES_WIDTH_HINT=设置折射缓冲区的分辨率（除 512x256 外）
 SHADOWS_NAME=阴影
 SHADOWS_HINT=启用或者停用游戏内的阴影效果
-PUNCHTHROUGH_NAME=透明网格舞厅
+PUNCHTHROUGH_NAME=透明网格物体
 PUNCHTHROUGH_HINT=显示透明网格物体
 GLARE_NAME=光晕
 GLARE_HINT=启用或者停用游戏内的光晕效果
@@ -54,12 +56,12 @@ NPR1_HINT=启用 NPR1 着色器\n\n按 F9 以进行切换
 Default=默认
 Force on=强制开启
 Force off=强制关闭
-BUILTIN_PATCHES_NAME=Enable Built-In Patches
-BUILTIN_PATCHES_HINT=Enables the built-in patches，including the options below.
-CUSTOM_PATCHES_NAME=Enable Custom Patches
-CUSTOM_PATCHES_HINT=Enables all custom patches.
-BUILTIN_RENDER_NAME=Enable Built-In Render
-BUILTIN_RENDER_HINT=Enables the built-in render patches.
+BUILTIN_PATCHES_NAME=启用内部补丁
+BUILTIN_PATCHES_HINT=启用包括此选项下的内部补丁文件
+CUSTOM_PATCHES_NAME=启用自定义补丁
+CUSTOM_PATCHES_HINT=启用全部自定义补丁文件
+BUILTIN_RENDER_NAME=启用内部渲染补丁
+BUILTIN_RENDER_HINT=启用内部渲染补丁文件
 
 NO_MOVIES_NAME=停用视频
 NO_MOVIES_HINT=停用包含视频文件的 PV (如 Catch The Wave 背景，砂之行星等)(如果在游戏加载包含视频文件的 PV 时卡死，请启用此选项)
@@ -118,20 +120,20 @@ NO_TIMER_NAME=停用计时器
 NO_TIMER_HINT=停用选歌界面的计时器
 NO_TIMER_SPRITE_NAME=隐藏计时器图标
 NO_TIMER_SPRITE_HINT=隐藏选歌界面的计时器图标
-NO_MESSAGE_BAR_NAME=Hide Message Bar
-NO_MESSAGE_BAR_HINT=Hide the top message bar.
-NO_STAGE_TEXT_NAME=Disable Stage Text
-NO_STAGE_TEXT_HINT=Disable Stage 1/2/Final.
+NO_MESSAGE_BAR_NAME=隐藏信息栏
+NO_MESSAGE_BAR_HINT=隐藏游戏窗口顶部的信息栏
+NO_STAGE_TEXT_NAME=隐藏游玩次数
+NO_STAGE_TEXT_HINT=隐藏游戏窗口左下角的1/2/Final文字
 
 
 UNLOCK_PSEUDO_NAME=解锁 PSEUDO 模块 (未完成)
 UNLOCK_PSEUDO_HINT=允许您使用所有模型游玩游戏\n(未完成，推荐的默认模型为 Miku)
 CARD_NAME=解锁刷卡菜单 (未完成)
 CARD_HINT=启用刷卡菜单\n(未完成，且此功能不会绕过刷卡提示)
-NO_OPD_NAME=Disable Extended Data
-NO_OPD_HINT=AKA Skyth's "No Osage Play Data" patch.\n\nDisables baked physics in edits to save space.\nMay break physics in some edits.
-DWGUI_SCALING_NAME=Scale Debug Windows
-DWGUI_SCALING_HINT=AKA somewhatlurker's dwgui patch.\n\nMakes debug windows bigger above HD internal resolution.
+NO_OPD_NAME=停用物理烘焙
+NO_OPD_HINT=即由Skyth制作的 "No Osage Play Data"补丁\n\n此功能将禁用游戏默认的物理烘焙以节省磁盘空间\n但可能会破坏游戏内的物理效果
+DWGUI_SCALING_NAME=缩放调试窗口
+DWGUI_SCALING_HINT=即由somewhatlurker制作的"dwgui"补丁\n\n此功能将允许对调试窗口进行缩放
 FREEPLAY_NAME=免费游玩
 FREEPLAY_HINT=替换游戏右上角的 "CREDIT (S)" 文字为 "FREE PLAY" 且在此模式下无需投币
 
@@ -181,8 +183,8 @@ LEVEL_PLATE_ID_NAME=签名栏背景:
 LEVEL_PLATE_ID_HINT=设置签名栏背景图片
 LEVEL_PLATE_EFFECT_NAME=签名栏效果:
 LEVEL_PLATE_EFFECT_HINT=设置签名栏所显示的效果
-SKIN_EQUIP _NAME=打歌界面:
-SKIN_EQUIP _HINT=设置打歌界面皮肤
+SKIN_EQUIP_NAME=打歌界面:
+SKIN_EQUIP_HINT=设置打歌界面皮肤
 BTN_SE_EQUIP_NAME=按键音效:
 BTN_SE_EQUIP_HINT=设置按键音效.\n-1 = 默认音效
 SLIDE_SE_EQUIP_NAME=连续拖拽音效:
@@ -239,6 +241,9 @@ SCORE_SAVER_NAME=Score Saver
 SCORE_SAVER_HINT=通过 Score Saver 将游戏内的最佳纪录保存在游戏 plugins 目录下的 scores.ini 中
 PAUSE_NAME=启用暂停菜单
 PAUSE_HINT=启用游戏内的暂停菜单
+
+#plugins
+CONFIG=设定
 
 ###############################################
 # ui

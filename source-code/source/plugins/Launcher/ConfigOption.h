@@ -32,9 +32,9 @@ class ConfigOptionBase;
 Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, ToolTip^ tooltip, bool* hasChanged);
 
 
-#define RESOPT_MATCH_WINDOW_TEXT "Match Window"
-#define RESOPT_MATCH_SCREEN_TEXT "Match Screen"
-
+#define RESOPT_MATCH_WINDOW_TEXT i18n::GetStringFallback("MATCH_WINDOW")
+#define RESOPT_MATCH_SCREEN_TEXT i18n::GetStringFallback("MATCH_SCREEN")
+#define CONFIG_TEXT i18n::GetStringFallback("CONFIG")
 ref class ComboboxValidation
 {
 public:
@@ -1073,7 +1073,7 @@ public:
 		// hack to ensure high contrast
 		cb->BackColor = System::Drawing::Color::FromArgb(0, 127, 127, 127);
 
-		button->Text = L"Config";
+		button->Text = CONFIG_TEXT;
 		button->Left = left + ConfigBtnLeft;
 		button->Top = top;
 		button->AutoSize = true;

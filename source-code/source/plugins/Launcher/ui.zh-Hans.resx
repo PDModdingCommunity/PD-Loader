@@ -1570,4 +1570,38 @@
         +AAAAAAAAAAAAP/+AAf///8AAAAAAAAAAAA=
 </value>
   </data>
+  <data name="button_Clean_installation.Text" xml:space="preserve">
+    <value>清洁安装</value>
+  </data>
+  <data name="button_Instructions.Text" xml:space="preserve">
+    <value>安装教程</value>
+  </data>
+  <data name="button_Releases_page.Text" xml:space="preserve">
+    <value>获取稳定版本</value>
+  </data>
+  <data name="button_Unstable_builds.Text" xml:space="preserve">
+    <value>获取开发版本</value>
+  </data>
+  <data name="label_Update_1.Text" xml:space="preserve">
+    <value>请经常更新PD Loader以获取最新的补丁以及功能！</value>
+  </data>
+  <data name="label_Update_2.Text" xml:space="preserve">
+    <value>PD Loader开发团队强烈建议您从官方渠道获取PD Loader构建
+如果您的PD Loader是由非官方渠道获取的，我们建议您进行一次清洁安装</value>
+  </data>
+  <data name="linkLabel_Changelog.Text" xml:space="preserve">
+    <value>更新日志</value>
+  </data>
+  <data name="linkLabel_Console.Text" xml:space="preserve">
+    <value>调试窗口</value>
+  </data>
+  <data name="linkLabel_Help.Text" xml:space="preserve">
+    <value>帮助</value>
+  </data>
+  <data name="linkLabel_Official_Discord.Text" xml:space="preserve">
+    <value>官方Discord群聊</value>
+  </data>
+  <data name="linkLabel_Repo.Text" xml:space="preserve">
+    <value>官方代码仓库</value>
+  </data>
 </root>

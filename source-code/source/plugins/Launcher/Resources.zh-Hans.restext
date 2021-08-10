@@ -7,6 +7,8 @@ DISPLAY_HINT=设置窗口显示模式
 Windowed=窗口化
 Fast=无边框窗口
 Exclusive=独占全屏
+MATCH_WINDOW=匹配窗口分辨率
+MATCH_SCREEN=匹配显示分辨率
 #Safe=
 RESOLUTION_NAME=游戏分辨率:
 RESOLUTION_HINT=设置游戏的显示分辨率
@@ -181,8 +183,8 @@ LEVEL_PLATE_ID_NAME=签名栏背景:
 LEVEL_PLATE_ID_HINT=设置签名栏背景图片
 LEVEL_PLATE_EFFECT_NAME=签名栏效果:
 LEVEL_PLATE_EFFECT_HINT=设置签名栏所显示的效果
-SKIN_EQUIP _NAME=打歌界面:
-SKIN_EQUIP _HINT=设置打歌界面皮肤
+SKIN_EQUIP_NAME=打歌界面:
+SKIN_EQUIP_HINT=设置打歌界面皮肤
 BTN_SE_EQUIP_NAME=按键音效:
 BTN_SE_EQUIP_HINT=设置按键音效.\n-1 = 默认音效
 SLIDE_SE_EQUIP_NAME=连续拖拽音效:
@@ -239,6 +241,9 @@ SCORE_SAVER_NAME=Score Saver
 SCORE_SAVER_HINT=通过 Score Saver 将游戏内的最佳纪录保存在游戏 plugins 目录下的 scores.ini 中
 PAUSE_NAME=启用暂停菜单
 PAUSE_HINT=启用游戏内的暂停菜单
+
+#plugins
+CONFIG=设定
 
 ###############################################
 # ui

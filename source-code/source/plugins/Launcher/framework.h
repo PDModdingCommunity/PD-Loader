@@ -65,6 +65,9 @@ LPCWSTR KEYCONFIG_SECTION = L"keyconfig";
 
 int nSkipLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"skip", FALSE, CONFIG_FILE);
 int nNoGPUDialog = GetPrivateProfileIntW(LAUNCHER_SECTION, L"no_gpu_dialog", FALSE, CONFIG_FILE);
+int nLanguage = GetPrivateProfileIntW(LAUNCHER_SECTION, L"launcher_language", FALSE, CONFIG_FILE);
+
+std::vector<LPCWSTR> languages = std::vector<LPCWSTR>({ L"Automatic", L"en", L"zh-Hans" });
 
 void SetBackCol(Control^ elem, System::Drawing::Color color, System::Windows::Forms::FlatStyle cbxStyle)
 {
@@ -159,18 +162,18 @@ static std::vector<int> getScreenRatesVec(std::vector<DEVMODEW> &screenModes) {
 std::vector<DEVMODEW> screenModes = getScreenModes();
 
 
-DropdownOption* DisplayModeDropdown = new DropdownOption(L"display", RESOLUTION_SECTION, CONFIG_FILE, L"Display:", L"Sets the window/screen mode.\n\n\nFast: Popup borderless window (can cause issues with screenshots if Windows 10/11 fullscreen optimizations are enabled).\n\nExclusive: Takes control of the screen and allows you to change the resolution and refresh rate. Makes switching between applications harder.\n\nSafe: Simple borderless window. A little bit laggier than Fast, but with less issues.", 1, std::vector<LPCWSTR>({ L"Windowed", L"Fast", L"Exclusive", L"Safe" }));
-ResolutionOption* DisplayResolutionOption = new ResolutionOption(L"width", L"height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the display resolution.", resolution(-1, -1), getScreenResolutionsVec(screenModes), true, RESOPT_INCLUDE_MATCH_SCREEN);
+DropdownOption* DisplayModeDropdown = new DropdownOption(L"display", RESOLUTION_SECTION, CONFIG_FILE, L"DISPLAY_NAME", L"DISPLAY_HINT", 1, std::vector<LPCWSTR>({ L"Windowed", L"Fast", L"Exclusive", L"Safe" }));
+ResolutionOption* DisplayResolutionOption = new ResolutionOption(L"width", L"height", RESOLUTION_SECTION, CONFIG_FILE, L"RESOLUTION_NAME", L"RESOLUTION_HINT", resolution(-1, -1), getScreenResolutionsVec(screenModes), true, RESOPT_INCLUDE_MATCH_SCREEN);
 
 ConfigOptionBase* screenResolutionArray[] = {
 	DisplayModeDropdown,
 	DisplayResolutionOption,
 	//new DropdownNumberOption(L"bitdepth", RESOLUTION_SECTION, CONFIG_FILE, L"Bit Depth:", L"Sets the display bit depth.", 32, getScreenDepthsVec(screenModes), true),
-	new DropdownNumberOption(L"refreshrate", RESOLUTION_SECTION, CONFIG_FILE, L"Refresh Rate:", L"Sets the display refresh rate.", 60, getScreenRatesVec(screenModes), true),
+	new DropdownNumberOption(L"refreshrate", RESOLUTION_SECTION, CONFIG_FILE, L"REFRESHRATE_NAME", L"REFRESHRATE_HINT", 60, getScreenRatesVec(screenModes), true),
 };
 
-BooleanOption* InternalResolutionCheckbox = new BooleanOption(L"r.enable", RESOLUTION_SECTION, CONFIG_FILE, L"Enable", L"Enable or disable custom internal resolution.", false, false);
-ResolutionOption* InternalResolutionOption = new ResolutionOption(L"r.width", L"r.height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the internal resolution (instead of 1280x720).", resolution(1920, 1080), std::vector<resolution>({ resolution(1,1), resolution(320,240), resolution(426,240), resolution(640,480), resolution(854,480), resolution(960,540), resolution(1280,720),  resolution(1366,768), resolution(1600,900), resolution(1920,1080), resolution(2560,1440), resolution(3200,1800), resolution(3840,2160), resolution(5120,2880), resolution(7680,4320) }), true, RESOPT_INCLUDE_MATCH_WINDOW);
+BooleanOption* InternalResolutionCheckbox = new BooleanOption(L"r.enable", RESOLUTION_SECTION, CONFIG_FILE, L"R.ENABLE_NAME", L"R.ENABLE_HINT", false, false);
+ResolutionOption* InternalResolutionOption = new ResolutionOption(L"r.width", L"r.height", RESOLUTION_SECTION, CONFIG_FILE, L"R.RESOLUTION_NAME", L"R.RESOLUTION_HINT", resolution(1920, 1080), std::vector<resolution>({ resolution(1,1), resolution(320,240), resolution(426,240), resolution(640,480), resolution(854,480), resolution(960,540), resolution(1280,720),  resolution(1366,768), resolution(1600,900), resolution(1920,1080), resolution(2560,1440), resolution(3200,1800), resolution(3840,2160), resolution(5120,2880), resolution(7680,4320) }), true, RESOPT_INCLUDE_MATCH_WINDOW);
 
 ConfigOptionBase* internalResolutionArray[] = {
 	InternalResolutionCheckbox,
@@ -178,165 +181,166 @@ ConfigOptionBase* internalResolutionArray[] = {
 };
 
 ConfigOptionBase* graphicsArray[] = {
-	new DropdownOption(L"model", L"GPU", CONFIG_FILE, L"NVIDIA GPU:", L"Select your NVIDIA GPU's architecture to apply the necessary workarounds.\n\nNOTE: Automatic detection does not currently work on GNU/Linux.", -1, std::vector<LPCWSTR>({ L"Automatic", L"Kepler", L"Maxwell", L"Turing", L"Ampere" }), -1),
-	new BooleanOption(L"TAA", GRAPHICS_SECTION, CONFIG_FILE, L"TAA", L"Temporal Anti-Aliasing", true, false),
-	new BooleanOption(L"MLAA", GRAPHICS_SECTION, CONFIG_FILE, L"MLAA", L"Morphological Anti-Aliasing", true, false),
-	new DropdownOption(L"MAG", GRAPHICS_SECTION, CONFIG_FILE, L"Filter:", L"Image filter.\n\nBilinear: default filter\nNearest-neighbour: sharpest, but blocky\nSharpen: sharp filter\nCone: smooth filter", 0, std::vector<LPCWSTR>({ L"Bilinear", L"Nearest-neighbour", L"Sharpen", L"Cone" })),
-	new BooleanOption(L"DOF", GRAPHICS_SECTION, CONFIG_FILE, L"Depth of Field", L"Blurs the background. Disable for better performance.", true, false),
-	new BooleanOption(L"reflections", GRAPHICS_SECTION, CONFIG_FILE, L"Reflections", L"Enable or disable reflections.", true, false),
-	new ResolutionOption(L"reflect_res_width", L"reflect_res_height", GRAPHICS_SECTION, CONFIG_FILE, L"Reflection Res:", L"Sets the reflection buffer resolution (instead of 512x256).", resolution(512, 256), std::vector<resolution>({resolution(256,256), resolution(512,256), resolution(512,512), resolution(1024,1024), resolution(2048,2048), resolution(4096,4096)}), true, (ResolutionOptionOpts)0),
-	new ResolutionOption(L"refract_res_width", L"refract_res_height", GRAPHICS_SECTION, CONFIG_FILE, L"Refraction Res:", L"Sets the refraction buffer resolution (instead of 512x256).", resolution(512, 256), std::vector<resolution>({resolution(256,256), resolution(512,256), resolution(512,512), resolution(1024,1024), resolution(2048,2048), resolution(4096,4096)}), true, (ResolutionOptionOpts)0),
-	new BooleanOption(L"shadows", GRAPHICS_SECTION, CONFIG_FILE, L"Shadows", L"Enable or disable shadows.", true, false),
-	new BooleanOption(L"punchthrough", GRAPHICS_SECTION, CONFIG_FILE, L"Transparent Meshes", L"Show transparent meshes.", true, false),
-	new BooleanOption(L"glare", GRAPHICS_SECTION, CONFIG_FILE, L"Glare", L"Enable or disable glare.", true, false),
-	new BooleanOption(L"shader", GRAPHICS_SECTION, CONFIG_FILE, L"Shader", L"Enable or disable high-quality shaders.", true, false),
-	new DropdownOption(L"NPR1", GRAPHICS_SECTION, CONFIG_FILE, L"Toon (F9):", L"NPR1 shader\n\nPress F9 to toggle.", 0, std::vector<LPCWSTR>({ L"Default", L"Force on", L"Force off" })),
-	new BooleanOption(L"2D", GRAPHICS_SECTION, CONFIG_FILE, L"Disable 3D rendering", L"Disable all 3D passes.\n\nWARNING: The extended data will be deleted unless Prevent Data Deletion is enabled. Don't enable on Intel GPUs, enable \"Disable Extended Data\" instead.", false, false),
+	new DropdownOption(L"model", L"GPU", CONFIG_FILE, L"MODEL_NAME", L"MODEL_HINT", -1, std::vector<LPCWSTR>({ L"Automatic", L"Kepler", L"Maxwell", L"Turing", L"Ampere" }), -1),
+	new BooleanOption(L"TAA", GRAPHICS_SECTION, CONFIG_FILE, L"TAA_NAME", L"TAA_HINT", true, false),
+	new BooleanOption(L"MLAA", GRAPHICS_SECTION, CONFIG_FILE, L"MLAA_NAME", L"MLAA_HINT", true, false),
+	new DropdownOption(L"MAG", GRAPHICS_SECTION, CONFIG_FILE, L"MAG_NAME", L"MAG_HINT", 0, std::vector<LPCWSTR>({ L"Bilinear", L"Nearest-neighbour", L"Sharpen", L"Cone" })),
+	new BooleanOption(L"DOF", GRAPHICS_SECTION, CONFIG_FILE, L"DOF_NAME", L"DOF_HINT", true, false),
+	new BooleanOption(L"reflections", GRAPHICS_SECTION, CONFIG_FILE, L"REFLECTIONS_NAME", L"REFLECTIONS_HINT", true, false),
+	new ResolutionOption(L"reflect_res_width", L"reflect_res_height", GRAPHICS_SECTION, CONFIG_FILE, L"REFLECT_RES_WIDTH_NAME", L"REFLECT_RES_WIDTH_HINT", resolution(512, 256), std::vector<resolution>({resolution(256,256), resolution(512,256), resolution(512,512), resolution(1024,1024), resolution(2048,2048), resolution(4096,4096)}), true, (ResolutionOptionOpts)0),
+	new ResolutionOption(L"refract_res_width", L"refract_res_height", GRAPHICS_SECTION, CONFIG_FILE, L"REFRACT_RES_WIDTH_NAME", L"REFRACT_RES_WIDTH_HINT", resolution(512, 256), std::vector<resolution>({resolution(256,256), resolution(512,256), resolution(512,512), resolution(1024,1024), resolution(2048,2048), resolution(4096,4096)}), true, (ResolutionOptionOpts)0),
+	new BooleanOption(L"shadows", GRAPHICS_SECTION, CONFIG_FILE, L"SHADOWS_NAME", L"SHADOWS_HINT", true, false),
+	new BooleanOption(L"punchthrough", GRAPHICS_SECTION, CONFIG_FILE, L"PUNCHTHROUGH_NAME", L"PUNCHTHROUGH_HINT", true, false),
+	new BooleanOption(L"glare", GRAPHICS_SECTION, CONFIG_FILE, L"GLARE_NAME", L"GLARE_HINT", true, false),
+	new BooleanOption(L"shader", GRAPHICS_SECTION, CONFIG_FILE, L"SHADER_NAME", L"SHADER_HINT", true, false),
+	new DropdownOption(L"NPR1", GRAPHICS_SECTION, CONFIG_FILE, L"NPR1_NAME", L"NPR1_HINT", 0, std::vector<LPCWSTR>({ L"Default", L"Force on", L"Force off" })),
+	new BooleanOption(L"2D", GRAPHICS_SECTION, CONFIG_FILE, L"2D_NAME", L"2D_HINT", false, false),
 };
 
 ConfigOptionBase* optionsArray[] = {
-	new BooleanOption(L"builtin_patches", GLOBAL_SECTION, CONFIG_FILE, L"Enable Built-In Patches", L"Enables the built-in patches, including the options below.", true, false),
-	new BooleanOption(L"custom_patches", GLOBAL_SECTION, CONFIG_FILE, L"Enable Custom Patches", L"Enables all custom patches.", true, false),
-	new BooleanOption(L"builtin_render", GLOBAL_SECTION, CONFIG_FILE, L"Enable Built-In Render", L"Enables the built-in render patches.", true, false),
+	new BooleanOption(L"builtin_patches", GLOBAL_SECTION, CONFIG_FILE, L"BUILTIN_PATCHES_NAME", L"BUILTIN_PATCHES_HINT", true, false),
+	new BooleanOption(L"custom_patches", GLOBAL_SECTION, CONFIG_FILE, L"CUSTOM_PATCHES_NAME", L"CUSTOM_PATCHES_HINT", true, false),
+	new BooleanOption(L"builtin_render", GLOBAL_SECTION, CONFIG_FILE, L"BUILTIN_RENDER_NAME", L"BUILTIN_RENDER_HINT", true, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"no_movies", PATCHES_SECTION, CONFIG_FILE, L"Disable Movies", L"Disable movies (enable this if the game hangs when loading certain PVs).", false, false),
-	new BooleanOption(L"cursor", PATCHES_SECTION, CONFIG_FILE, L"Cursor", L"Enable or disable the mouse cursor.", true, false),
-	new BooleanOption(L"stereo", PATCHES_SECTION, CONFIG_FILE, L"Stereo", L"Use 2 channels instead of 4 (when not using DivaSound).", true, false),
+	new BooleanOption(L"no_movies", PATCHES_SECTION, CONFIG_FILE, L"NO_MOVIES_NAME", L"NO_MOVIES_HINT", false, false),
+	new BooleanOption(L"cursor", PATCHES_SECTION, CONFIG_FILE, L"CURSOR_NAME", L"CURSOR_HINT", true, false),
+	new BooleanOption(L"stereo", PATCHES_SECTION, CONFIG_FILE, L"STEREO_NAME", L"STEREO_HINT", true, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new DropdownOption(L"quick_start", PATCHES_SECTION, CONFIG_FILE, L"Quick Start:", L"Skip one or more menus.", 1, std::vector<LPCWSTR>({ L"Disabled", L"Guest", L"Guest + Normal" })),
-	new BooleanOption(L"no_scrolling_sfx", PATCHES_SECTION, CONFIG_FILE, L"Disable Scrolling SFX", L"Disable the scrolling sound effect.", false, false),
+	new DropdownOption(L"quick_start", PATCHES_SECTION, CONFIG_FILE, L"QUICK_START_NAME", L"QUICK_START_HINT", 1, std::vector<LPCWSTR>({ L"Disabled", L"Guest", L"Guest + Normal" })),
+	new BooleanOption(L"no_scrolling_sfx", PATCHES_SECTION, CONFIG_FILE, L"NO_SCROLLING_SFX_NAME", L"NO_SCROLLING_SFX_HINT", false, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new NumericOption(L"Enhanced_Stage_Manager", PATCHES_SECTION, CONFIG_FILE, L"Number of Stages:", L"Set the number of stages (0 = default).", 0, 0, INT_MAX),
-	new BooleanOption(L"Enhanced_Stage_Manager_Encore", PATCHES_SECTION, CONFIG_FILE, L"Encore", L"Enable encore stages.", true, false),
+	new NumericOption(L"Enhanced_Stage_Manager", PATCHES_SECTION, CONFIG_FILE, L"ENHANCED_STAGE_MANAGER_NAME", L"ENHANCED_STAGE_MANAGER_HINT", 0, 0, INT_MAX),
+	new BooleanOption(L"Enhanced_Stage_Manager_Encore", PATCHES_SECTION, CONFIG_FILE, L"ENHANCED_STAGE_MANAGER_ENCORE_NAME", L"ENHANCED_STAGE_MANAGER_ENCORE_HINT", true, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new DropdownOption(L"force_mouth", PATCHES_SECTION, CONFIG_FILE, L"Mouth Type:", L"Change the mouth animations.", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
-	new DropdownOption(L"force_expressions", PATCHES_SECTION, CONFIG_FILE, L"Expression Type:", L"Change the expressions.", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
-	new DropdownOption(L"force_look", PATCHES_SECTION, CONFIG_FILE, L"Look Type:", L"Change the look animations.", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
-	new BooleanOption(L"no_hand_scaling", PATCHES_SECTION, CONFIG_FILE, L"No Hand Scaling", L"Disable hand scaling.", false, false),
-	new NumericOption(L"default_hand_size", PATCHES_SECTION, CONFIG_FILE, L"Default Hand Size:", L"-1: default\n12200: PDA", -1, -1, INT_MAX),
-	new BooleanOption(L"sing_missed", PATCHES_SECTION, CONFIG_FILE, L"Sing Missed", L"Sing missed notes.", false, false),
+	new DropdownOption(L"force_mouth", PATCHES_SECTION, CONFIG_FILE, L"FORCE_MOUTH_NAME", L"FORCE_MOUTH_HINT", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
+	new DropdownOption(L"force_expressions", PATCHES_SECTION, CONFIG_FILE, L"FORCE_EXPRESSIONS_NAME", L"FORCE_EXPRESSIONS_HINT", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
+	new DropdownOption(L"force_look", PATCHES_SECTION, CONFIG_FILE, L"FORCE_LOOK_NAME", L"FORCE_LOOK_HINT", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
+	new BooleanOption(L"no_hand_scaling", PATCHES_SECTION, CONFIG_FILE, L"NO_HAND_SCALING_NAME", L"NO_HAND_SCALING_HINT", false, false),
+	new NumericOption(L"default_hand_size", PATCHES_SECTION, CONFIG_FILE, L"DEFAULT_HAND_SIZE_NAME", L"DEFAULT_HAND_SIZE_HINT", -1, -1, INT_MAX),
+	new BooleanOption(L"sing_missed", PATCHES_SECTION, CONFIG_FILE, L"SING_MISSED_NAME", L"SING_MISSED_HINT", false, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"hide_volume", PATCHES_SECTION, CONFIG_FILE, L"Hide Volume Buttons", L"Hide the volume and SE control buttons.", false, false),
-	new BooleanOption(L"no_pv_ui", PATCHES_SECTION, CONFIG_FILE, L"Disable PV UI", L"Remove the photo controls during PV playback.", false, false),
-	new BooleanOption(L"hide_pv_watermark", PATCHES_SECTION, CONFIG_FILE, L"Hide PV Watermark", L"Hide the watermark that's usually shown in PV viewing mode.", false, false),
-	new DropdownOption(L"status_icons", PATCHES_SECTION, CONFIG_FILE, L"Top-Right Corner Icons:", L"Set the state of card reader and network status icons.", 3, std::vector<LPCWSTR>({ L"Default", L"Hidden", L"Error", L"OK", L"Partial OK" })),
-	new BooleanOption(L"no_lyrics", PATCHES_SECTION, CONFIG_FILE, L"Disable Lyrics", L"Disable showing lyrics.", false, false),
-	new BooleanOption(L"no_error", PATCHES_SECTION, CONFIG_FILE, L"Disable Error Banner", L"Disable the error banner on the attract screen.", true, false),
-	new BooleanOption(L"hide_freeplay", PATCHES_SECTION, CONFIG_FILE, L"Hide \"FREE PLAY\"/\"CREDIT(S)\"", L"Hide the \"FREE PLAY\"/\"CREDIT(S)\" text.", false, false),
-	new BooleanOption(L"pdloadertext", PATCHES_SECTION, CONFIG_FILE, L"PD Loader FREE PLAY", L"Show \"PD Loader\" instead of \"FREE PLAY\".", true, false),
-	new BooleanOption(L"no_timer", PATCHES_SECTION, CONFIG_FILE, L"Freeze Timer", L"Disable the timer.", true, false),
-	new BooleanOption(L"no_timer_sprite", PATCHES_SECTION, CONFIG_FILE, L"Disable Timer Sprite", L"Disable the timer sprite.", true, false),
-	new BooleanOption(L"no_message_bar", PATCHES_SECTION, CONFIG_FILE, L"Hide Message Bar", L"Hide the top message bar.", false, false),
-	new BooleanOption(L"no_stage_text", PATCHES_SECTION, CONFIG_FILE, L"Disable Stage Text", L"Disable Stage 1/2/Final.", false, false),
+	new BooleanOption(L"hide_volume", PATCHES_SECTION, CONFIG_FILE, L"HIDE_VOLUME_NAME", L"HIDE_VOLUME_HINT", false, false),
+	new BooleanOption(L"no_pv_ui", PATCHES_SECTION, CONFIG_FILE, L"NO_PV_UI_NAME", L"NO_PV_UI_HINT", false, false),
+	new BooleanOption(L"hide_pv_watermark", PATCHES_SECTION, CONFIG_FILE, L"HIDE_PV_WATERMARK_NAME", L"HIDE_PV_WATERMARK_HINT", false, false),
+	new DropdownOption(L"status_icons", PATCHES_SECTION, CONFIG_FILE, L"STATUS_ICONS_NAME", L"STATUS_ICONS_HINT", 3, std::vector<LPCWSTR>({ L"Default", L"Hidden", L"Error", L"OK", L"Partial OK" })),
+	new BooleanOption(L"no_lyrics", PATCHES_SECTION, CONFIG_FILE, L"NO_LYRICS_NAME", L"NO_LYRICS_HINT", false, false),
+	new BooleanOption(L"no_error", PATCHES_SECTION, CONFIG_FILE, L"NO_ERROR_NAME", L"NO_ERROR_HINT", true, false),
+	new BooleanOption(L"hide_freeplay", PATCHES_SECTION, CONFIG_FILE, L"HIDE_FREEPLAY_NAME", L"HIDE_FREEPLAY_HINT", false, false),
+	new BooleanOption(L"pdloadertext", PATCHES_SECTION, CONFIG_FILE, L"PDLOADERTEXT_NAME", L"PDLOADERTEXT_HINT", true, false),
+	new BooleanOption(L"no_timer", PATCHES_SECTION, CONFIG_FILE, L"NO_TIMER_NAME", L"NO_TIMER_HINT", true, false),
+	new BooleanOption(L"no_timer_sprite", PATCHES_SECTION, CONFIG_FILE, L"NO_TIMER_SPRITE_NAME", L"NO_TIMER_SPRITE_HINT", true, false),
+	new BooleanOption(L"no_message_bar", PATCHES_SECTION, CONFIG_FILE, L"NO_MESSAGE_BAR_NAME", L"NO_MESSAGE_BAR_HINT", false, false),
+	new BooleanOption(L"no_stage_text", PATCHES_SECTION, CONFIG_FILE, L"NO_STAGE_TEXT_NAME", L"NO_STAGE_TEXT_HINT", false, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"unlock_pseudo", PATCHES_SECTION, CONFIG_FILE, L"Unlock \"PSEUDO\" Modules (incomplete)", L"Lets you play any PV with any performer.\n(incomplete, recommended modules will default to Miku)", false, false),
-	new BooleanOption(L"card", PATCHES_SECTION, CONFIG_FILE, L"Unlock Card Menu (incomplete)", L"Enables the card menu.\n(incomplete, it doesn't bypass the card prompt)", false, false),
-	new BooleanOption(L"no_opd", PATCHES_SECTION, CONFIG_FILE, L"Disable Extended Data", L"AKA Skyth's \"No Osage Play Data\" patch.\n\nDisables baked physics in edits to save space.\nMay break physics in some edits.", false, false),
-	new BooleanOption(L"dwgui_scaling", PATCHES_SECTION, CONFIG_FILE, L"Scale Debug Windows", L"AKA somewhatlurker's dwgui patch.\n\nMakes debug windows bigger above HD internal resolution.", false, false),
-	new BooleanOption(L"freeplay", PATCHES_SECTION, CONFIG_FILE, L"FREE PLAY", L"Show \"FREE PLAY\" instead of \"CREDIT(S)\" and don't require credits.", true, false),
+	new BooleanOption(L"unlock_pseudo", PATCHES_SECTION, CONFIG_FILE, L"UNLOCK_PSEUDO_NAME", L"UNLOCK_PSEUDO_HINT", false, false),
+	new BooleanOption(L"card", PATCHES_SECTION, CONFIG_FILE, L"CARD_NAME", L"CARD_HINT", false, false),
+	new BooleanOption(L"no_opd", PATCHES_SECTION, CONFIG_FILE, L"NO_OPD_NAME", L"NO_OPD_HINT", false, false),
+	new BooleanOption(L"dwgui_scaling", PATCHES_SECTION, CONFIG_FILE, L"DWGUI_SCALING_NAME", L"DWGUI_SCALING_HINT", false, false),
+	new BooleanOption(L"freeplay", PATCHES_SECTION, CONFIG_FILE, L"FREEPLAY_NAME", L"FREEPLAY_HINT", true, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"FPS.Limit.LightMode", GRAPHICS_SECTION, CONFIG_FILE, L"Use Lightweight Limiter", L"Makes the FPS limiter use less CPU.\nMay have less consistent performance.", true, false),
-	new NumericOption(L"FPS.Limit", GRAPHICS_SECTION, CONFIG_FILE, L"FPS Limit:", L"Allows you to set a frame rate cap. Set to -1 to unlock the frame rate.", 60, -1, INT_MAX),
-	new NumericOption(L"frm.motion.rate", GRAPHICS_SECTION, CONFIG_FILE, L"FRM Motion Rate:", L"Sets the motion rate (fps) for the Frame Rate Manager component.\nLarger values should be smoother, but more CPU intensive and possibly buggier.", 300, 1, INT_MAX),
+	new BooleanOption(L"FPS.Limit.LightMode", GRAPHICS_SECTION, CONFIG_FILE, L"FPS.LIMIT.LIGHTMODE_NAME", L"FPS.LIMIT.LIGHTMODE_HINT", true, false),
+	new NumericOption(L"FPS.Limit", GRAPHICS_SECTION, CONFIG_FILE, L"FPS.LIMIT_NAME", L"FPS.LIMIT_HINT", 60, -1, INT_MAX),
+	new NumericOption(L"frm.motion.rate", GRAPHICS_SECTION, CONFIG_FILE, L"FRM.MOTION.RATE_NAME", L"FRM.MOTION.RATE_HINT", 300, 1, INT_MAX),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"autopause", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"Pause Automatically", L"Pause when focus is lost.", true, true),
+	new BooleanOption(L"autopause", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"AUTOPAUSE_NAME", L"AUTOPAUSE_HINT", true, true),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"rumble", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Rumble", L"Enables rumble during chainslides.", true, true),
-	new NumericOption(L"xinput_preferred", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Controller Num:", L"Sets the preferred XInput controller.\nIf unavailable, the next connected controller is used.", 0, 0, 3),
+	new BooleanOption(L"rumble", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"RUMBLE_NAME", L"RUMBLE_HINT", true, true),
+	new NumericOption(L"xinput_preferred", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XINPUT_PREFERRED_NAME", L"XINPUT_PREFERRED_HINT", 0, 0, 3),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"hardware_slider", PATCHES_SECTION, CONFIG_FILE, L"Use Hardware Slider", L"Enable this if using a real arcade slider.\n(set the slider to port COM11)", false, false),
+	new BooleanOption(L"hardware_slider", PATCHES_SECTION, CONFIG_FILE, L"HARDWARE_SLIDER_NAME", L"HARDWARE_SLIDER_HINT", false, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"opengl_patch_a", LAUNCHER_SECTION, CONFIG_FILE, L"OpenGL Patch A", L"Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.", false, false),
-	new BooleanOption(L"opengl_patch_b", LAUNCHER_SECTION, CONFIG_FILE, L"OpenGL Patch B", L"Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.", false, false),
+	new BooleanOption(L"opengl_patch_a", LAUNCHER_SECTION, CONFIG_FILE, L"OPENGL_PATCH_A_NAME", L"OPENGL_PATCH_A_HINT", false, false),
+	new BooleanOption(L"opengl_patch_b", LAUNCHER_SECTION, CONFIG_FILE, L"OPENGL_PATCH_B_NAME", L"OPENGL_PATCH_B_HINT", false, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	//new BooleanOption(L"ignore_exe_checksum", PATCHES_SECTION, CONFIG_FILE, L"Ignore exe checksum", L"Use at your own risk.", false, false),
-	new BooleanOption(L"prevent_data_deletion", PATCHES_SECTION, CONFIG_FILE, L"Prevent Data Deletion", L"Prevents the game from deleting files.", false, false),
-	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"Command Line:", L"Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.", L"", false),
-	new BooleanOption(L"use_divahook_bat", LAUNCHER_SECTION, CONFIG_FILE, L"Use divahook.bat", L"Launches divahook.bat intead of diva.exe.", false, false),
+	//new BooleanOption(L"ignore_exe_checksum", PATCHES_SECTION, CONFIG_FILE, L"IGNORE_EXE_CHECKSUM_NAME", L"IGNORE_EXE_CHECKSUM_HINT", false, false),
+	new BooleanOption(L"prevent_data_deletion", PATCHES_SECTION, CONFIG_FILE, L"PREVENT_DATA_DELETION_NAME", L"PREVENT_DATA_DELETION_HINT", false, false),
+	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"COMMAND_LINE_NAME", L"COMMAND_LINE_HINT", L"", false),
+	new BooleanOption(L"use_divahook_bat", LAUNCHER_SECTION, CONFIG_FILE, L"USE_DIVAHOOK_BAT_NAME", L"USE_DIVAHOOK_BAT_HINT", false, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"dark_launcher", LAUNCHER_SECTION, CONFIG_FILE, L"Dark Launcher", L"Sets the dark colour scheme in the launcher.", false, false),
-	//new BooleanOption(L"acrylic_blur", LAUNCHER_SECTION, CONFIG_FILE, L"Acrylic Blur", L"Enables acrylic blur in the launcher on Windows 10 20H2 or later.", false, false),
-	new BooleanOption(L"no_gpu_dialog", LAUNCHER_SECTION, CONFIG_FILE, L"Disable GPU Warning", L"Disables the warning dialog for unsupported GPUs.", false, false),
+	new BooleanOption(L"dark_launcher", LAUNCHER_SECTION, CONFIG_FILE, L"DARK_LAUNCHER_NAME", L"DARK_LAUNCHER_HINT", false, false),
+	new DropdownOption(L"launcher_language",LAUNCHER_SECTION,CONFIG_FILE, L"LAUNCHER_LANGUAGE_NAME",L"LAUNCHER_LANGUAGE_HINT", 0, languages),
+	//new BooleanOption(L"acrylic_blur", LAUNCHER_SECTION, CONFIG_FILE, L"ACRYLIC_BLUR_NAME", L"ACRYLIC_BLUR_HINT", false, false),
+	new BooleanOption(L"no_gpu_dialog", LAUNCHER_SECTION, CONFIG_FILE, L"NO_GPU_DIALOG_NAME", L"NO_GPU_DIALOG_HINT", false, false),
 };
 
 ConfigOptionBase* playerdataArray[] = {
-	new StringOption(L"player_name", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Player Name:", L"Player name shown in game.", L"ＮＯ－ＮＡＭＥ", true),
-	new StringOption(L"level_name", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Level Name:", L"Level (plate) name shown in game.", L"忘れないでね私の声を", true),
+	new StringOption(L"player_name", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"PLAYER_NAME_NAME", L"PLAYER_NAME_HINT", L"ＮＯ－ＮＡＭＥ", true),
+	new StringOption(L"level_name", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"LEVEL_NAME_NAME", L"LEVEL_NAME_HINT", L"忘れないでね私の声を", true),
 
-	new NumericOption(L"level_plate_id", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Level Plate:", L"Sets the level background image (plate).", 0, 0, INT_MAX),
-	new NumericOption(L"level_plate_effect", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Level Plate Effect:", L"Sets the effect on the level background image (plate).", -1, -1, 2),
-	new NumericOption(L"skin_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Skin:", L"Sets the gameplay UI skin.", 0, 0, INT_MAX),
+	new NumericOption(L"level_plate_id", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"LEVEL_PLATE_ID_NAME", L"LEVEL_PLATE_ID_HINT", 0, 0, INT_MAX),
+	new NumericOption(L"level_plate_effect", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"LEVEL_PLATE_EFFECT_NAME", L"LEVEL_PLATE_EFFECT_HINT", -1, -1, 2),
+	new NumericOption(L"skin_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"SKIN_EQUIP_NAME", L"SKIN_EQUIP_HINT", 0, 0, INT_MAX),
 
-	new NumericOption(L"btn_se_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Button Sound:", L"Sets the sound effect for buttons.\n-1 = song default", -1, -1, INT_MAX),
-	new NumericOption(L"slide_se_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Slide Sound:", L"Sets the sound effect for slides.\n-1 = song default", -1, -1, INT_MAX),
-	new NumericOption(L"chainslide_se_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Chainslide Sound:", L"Sets the sound effect for chain slides.\n-1 = song default", -1, -1, INT_MAX),
-	new NumericOption(L"slidertouch_se_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Slider Touch Sound:", L"Sets the sound effect for touching the slider with no note.\n-1 = song default", -1, -1, INT_MAX),
-	new BooleanOption(L"act_toggle", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Button SE", L"Enables button/slider sounds.", true, true),
+	new NumericOption(L"btn_se_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"BTN_SE_EQUIP_NAME", L"BTN_SE_EQUIP_HINT", -1, -1, INT_MAX),
+	new NumericOption(L"slide_se_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"SLIDE_SE_EQUIP_NAME", L"SLIDE_SE_EQUIP_HINT", -1, -1, INT_MAX),
+	new NumericOption(L"chainslide_se_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"CHAINSLIDE_SE_EQUIP_NAME", L"CHAINSLIDE_SE_EQUIP_HINT", -1, -1, INT_MAX),
+	new NumericOption(L"slidertouch_se_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"SLIDERTOUCH_SE_EQUIP_NAME", L"SLIDERTOUCH_SE_EQUIP_HINT", -1, -1, INT_MAX),
+	new BooleanOption(L"act_toggle", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"ACT_TOGGLE_NAME", L"ACT_TOGGLE_HINT", true, true),
 
-	new BooleanOption(L"border_great", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Clear Border (Great)", L"Shows the clear border for a great rating on the progress bar.", true, true),
-	new BooleanOption(L"border_excellent", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Clear Border (Excellent)", L"Shows the clear border for an excellent rating on the progress bar.", true, true),
-	new BooleanOption(L"border_rival", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Clear Border (Rival)", L"Shows the clear border for beating your rival on the progress bar.", false, true),
+	new BooleanOption(L"border_great", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"BORDER_GREAT_NAME", L"BORDER_GREAT_HINT", true, true),
+	new BooleanOption(L"border_excellent", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"BORDER_EXCELLENT_NAME", L"BORDER_EXCELLENT_HINT", true, true),
+	new BooleanOption(L"border_rival", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"BORDER_RIVAL_NAME", L"BORDER_RIVAL_HINT", false, true),
 
-	new BooleanOption(L"use_card", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Use Card", L"Enables IC card. This allows module selection.", false, true),
-	new BooleanOption(L"module_card_workaround", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Module Selection Workaround", L"Allows module selection without card and tries to improve menu performance.\n(BETA)", true, true),
-	new BooleanOption(L"use_pv_module_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Song Specific Modules", L"Allows song-specific module selection.", false, true),
-	new BooleanOption(L"use_pv_skin_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Song Specific Skins", L"Allows song-specific skin settings.\nValues stored in skins.ini", false, true),
-	new BooleanOption(L"use_pv_sfx_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Song Specific Sound Effects", L"Allows song-specific sound effect settings.\nValues stored in sfx.ini", false, true),
+	new BooleanOption(L"use_card", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"USE_CARD_NAME", L"USE_CARD_HINT", false, true),
+	new BooleanOption(L"module_card_workaround", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"MODULE_CARD_WORKAROUND_NAME", L"MODULE_CARD_WORKAROUND_HINT", true, true),
+	new BooleanOption(L"use_pv_module_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"USE_PV_MODULE_EQUIP_NAME", L"USE_PV_MODULE_EQUIP_HINT", false, true),
+	new BooleanOption(L"use_pv_skin_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"USE_PV_SKIN_EQUIP_NAME", L"USE_PV_SKIN_EQUIP_HINT", false, true),
+	new BooleanOption(L"use_pv_sfx_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"USE_PV_SFX_EQUIP_NAME", L"USE_PV_SFX_EQUIP_HINT", false, true),
 
-	new BooleanOption(L"gamemode_options", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Game Modifiers", L"Allows use of game mode modifiers (hi-speed, hidden, and sudden).", true, true),
+	new BooleanOption(L"gamemode_options", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"GAMEMODE_OPTIONS_NAME", L"GAMEMODE_OPTIONS_HINT", true, true),
 };
 
 
 ConfigOptionBase* componentsArray[] = {
-	new BooleanOption(L"input_emulator", COMPONENTS_SECTION, COMPONENTS_FILE, L"Input Emulator", L"Emulates input through keyboard and/or mouse.", false, true),
-	new BooleanOption(L"touch_slider_emulator", COMPONENTS_SECTION, COMPONENTS_FILE, L"Slider Emulator", L"Emulates slider through keyboard and/or mouse.", false, true),
-	new BooleanOption(L"touch_panel_emulator", COMPONENTS_SECTION, COMPONENTS_FILE, L"Touch Panel Emulator", L"Emulates touch panel through mouse.", false, true),
+	new BooleanOption(L"input_emulator", COMPONENTS_SECTION, COMPONENTS_FILE, L"INPUT_EMULATOR_NAME", L"INPUT_EMULATOR_HINT", false, true),
+	new BooleanOption(L"touch_slider_emulator", COMPONENTS_SECTION, COMPONENTS_FILE, L"TOUCH_SLIDER_EMULATOR_NAME", L"TOUCH_SLIDER_EMULATOR_HINT", false, true),
+	new BooleanOption(L"touch_panel_emulator", COMPONENTS_SECTION, COMPONENTS_FILE, L"TOUCH_PANEL_EMULATOR_NAME", L"TOUCH_PANEL_EMULATOR_HINT", false, true),
 
-	new BooleanOption(L"player_data_manager", COMPONENTS_SECTION, COMPONENTS_FILE, L"Player Data Manager", L"Loads user-defined values into the PlayerData struct.\nRequired for modules and game mode modifiers.", false, true),
+	new BooleanOption(L"player_data_manager", COMPONENTS_SECTION, COMPONENTS_FILE, L"PLAYER_DATA_MANAGER_NAME", L"PLAYER_DATA_MANAGER_HINT", false, true),
 
-	new BooleanOption(L"frame_rate_manager", COMPONENTS_SECTION, COMPONENTS_FILE, L"Frame Rate Manager", L"Adjusts animations to the correct speed at different frame rates.\nOnly needed when FPS isn't locked at 60.", false, true),
+	new BooleanOption(L"frame_rate_manager", COMPONENTS_SECTION, COMPONENTS_FILE, L"FRAME_RATE_MANAGER_NAME", L"FRAME_RATE_MANAGER_HINT", false, true),
 
-	new BooleanOption(L"fast_loader", COMPONENTS_SECTION, COMPONENTS_FILE, L"Fast Loader", L"Skip or speed up unnecessary loading steps.", false, true),
+	new BooleanOption(L"fast_loader", COMPONENTS_SECTION, COMPONENTS_FILE, L"FAST_LOADER_NAME", L"FAST_LOADER_HINT", false, true),
 
-	new NumericOption(L"fast_loader_speed", COMPONENTS_SECTION, COMPONENTS_FILE, L"Fast Loader Speed", L"Set this to 4 or less when playing online.\nDefault: 39", 39, 2, 1024),
+	new NumericOption(L"fast_loader_speed", COMPONENTS_SECTION, COMPONENTS_FILE, L"FAST_LOADER_SPEED_NAME", L"FAST_LOADER_SPEED_HINT", 39, 2, 1024),
 
-	new BooleanOption(L"camera_controller", COMPONENTS_SECTION, COMPONENTS_FILE, L"Camera Controller", L"Enables freecam (toggled using F3).\nWASD to move, SPACE/CTRL for up/down, Q/R to rotate, R/F for zoom.\nHolding SHIFT/ALT changes control speed.", false, true),
+	new BooleanOption(L"camera_controller", COMPONENTS_SECTION, COMPONENTS_FILE, L"CAMERA_CONTROLLER_NAME", L"CAMERA_CONTROLLER_HINT", false, true),
 
-	new BooleanOption(L"scale_component", COMPONENTS_SECTION, COMPONENTS_FILE, L"Scale Component", L"Scales the graphics output framebuffer to fill the screen/window.", false, true),
+	new BooleanOption(L"scale_component", COMPONENTS_SECTION, COMPONENTS_FILE, L"SCALE_COMPONENT_NAME", L"SCALE_COMPONENT_HINT", false, true),
 
-	new BooleanOption(L"debug_component", COMPONENTS_SECTION, COMPONENTS_FILE, L"Debug Component", L"Allows for changing game state (F4-F8 keys), using dev GUI and tests, and speeding up 2d animations/menus (hold SHIFT+TAB).", false, true),
+	new BooleanOption(L"debug_component", COMPONENTS_SECTION, COMPONENTS_FILE, L"DEBUG_COMPONENT_NAME", L"DEBUG_COMPONENT_HINT", false, true),
 
-	new BooleanOption(L"target_inspector", COMPONENTS_SECTION, COMPONENTS_FILE, L"Target Inspector", L"Enables hold transfers.", false, true),
+	new BooleanOption(L"target_inspector", COMPONENTS_SECTION, COMPONENTS_FILE, L"TARGET_INSPECTOR_NAME", L"TARGET_INSPECTOR_HINT", false, true),
 
-	new BooleanOption(L"score_saver", COMPONENTS_SECTION, COMPONENTS_FILE, L"Score Saver", L"Saves high scores to plugins/scores.ini.", false, true),
+	new BooleanOption(L"score_saver", COMPONENTS_SECTION, COMPONENTS_FILE, L"SCORE_SAVER_NAME", L"SCORE_SAVER_HINT", false, true),
 
-	new BooleanOption(L"pause", COMPONENTS_SECTION, COMPONENTS_FILE, L"Pause", L"Adds a pause menu.", false, true),
+	new BooleanOption(L"pause", COMPONENTS_SECTION, COMPONENTS_FILE, L"PAUSE_NAME", L"PAUSE_HINT", false, true),
 };
 
 bool IsLineInFile(LPCSTR searchLine, LPCWSTR fileName)

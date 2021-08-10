@@ -117,398 +117,261 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <data name="creditsTextBox.Text" xml:space="preserve">
-    <value>PD Loader is intended for educational purposes only; not for piracy.
-Users should possess a legally-obtained dump of the game to use this software.
-Please check your local laws/regulataions to verify the legality of tampering
-with and dumping data from protected arcade machine hardware.
-
-Project Contributors:
-akasaka, Brolijah, crash5b, Jay39w, korenkonder, Kyberal, lybxlpsv, nastys,
-Nezarn, samyuu, Skyth, somewhatlurker, Stewie1.0, SwigS-27, zsccat
-
-
-PD Loader and the included plugins are distributed under MIT License:
-  
-  Copyright (c) Project DIVA Modding 2nd Community
-  Copyright (c) samyuu (nop) (original TLAC code)
-  Copyright (c) ThirteenAG (original Ultimate ASI Loader code)
-  
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-  
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-  
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-
-
-Microsoft Detours, utilized by many plugins, is licensed under MIT License:
-  
-  # Copyright (c) Microsoft Corporation
-  
-  All rights reserved.
-  
-  # MIT License
-  
-  Permission is hereby granted, free of charge, to any person obtaining a copy of
-  this software and associated documentation files (the "Software"), to deal in
-  the Software without restriction, including without limitation the rights to
-  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-  of the Software, and to permit persons to whom the Software is furnished to do
-  so, subject to the following conditions:
-  
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-  
-  THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-
-
-Launcher, Patches, Render and TLAC plugins utilize files from FreeGLUT:
-  
-  Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
-  Permission is hereby granted, free of charge,  to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction,  including without limitation the rights
-  to use, copy,  modify, merge,  publish, distribute,  sublicense,  and/or sell
-  copies or substantial portions of the Software.
-  
-  The above  copyright notice  and this permission notice  shall be included in
-  all copies or substantial portions of the Software.
-  
-  THE SOFTWARE  IS PROVIDED "AS IS",  WITHOUT WARRANTY OF ANY KIND,  EXPRESS OR
-  IMPLIED,  INCLUDING  BUT  NOT LIMITED  TO THE WARRANTIES  OF MERCHANTABILITY,
-  FITNESS  FOR  A PARTICULAR PURPOSE  AND NONINFRINGEMENT.  IN  NO EVENT  SHALL
-  PAWEL W. OLSZTA BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER LIABILITY, WHETHER
-  IN  AN ACTION  OF CONTRACT,  TORT OR OTHERWISE,  ARISING FROM,  OUT OF  OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-  
-  Except as contained in this notice,  the name of Pawel W. Olszta shall not be
-  used  in advertising  or otherwise to promote the sale, use or other dealings
-  in this Software without prior written authorization from Pawel W. Olszta.
-
-
-Launcher uses SimpleIni, licensed under MIT License:
-  
-  The MIT License (MIT)
-  
-  Copyright (c) 2006-2013 Brodie Thiesfield
-  
-  Permission is hereby granted, free of charge, to any person obtaining a copy of
-  this software and associated documentation files (the "Software"), to deal in
-  the Software without restriction, including without limitation the rights to
-  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-  the Software, and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-  
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-  
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
-DivaSound uses miniaudio (public domain or MIT-0) and BASSASIO (free for
-non-commercial use only)
-
-
-AMD compatibilty pack dependencies have additional licenses, detailed in the AMD</value>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="listBox_Mods.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="button_Discord.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAACoAAAApCAYAAABDV7v1AAAABGdBTUEAALGPC/xhBQAAA7dJREFUWEft
-        mElME2EUxwdDgh6NVw8e9OzZGwcv3ryZePKmUQodREAN1Ah0BmQTVJZgQFABE1kEl7iAEQWjAiIEOtMW
-        aJGyFWgpbWG6PL+vnSmFDrL0KyHaf/LPtPNm3vtN37dMSkUVlYwuqMYOJmRz52g1n0UzfF4knKTmmERG
-        p1CotEfFsjsTTU8colmuKTmXh70wzfL6S6qxY2L57SsxZ0SBEng2JoyklSzXp1Bo40SE7Qm1xSaXLOJm
-        uZMiwtaKj++MlU2yB1aqtadEjK0VBd2G/2/QtAItFFSPQ2HNOKQX+s9dzeMh5Y7/c2o+D8W141BWb4Rb
-        93Xr7t3MxEFLHxugd8gCtS2T0PJhBj73LsCwfhkMJicYp5y+Y9+wFd53m6Gh3QSD/BJ0fJ2HG0Va2XyS
-        iYLWtZpgbn4FBjkrCIIHtpLb7QXNKH4IB3oYm2xOyURBdQY7rKxuDbhRHo8XvF4vlKBuyOXFJgaaXa4X
-        y+5eliXBN5bl8hMDHUDtDleCywO5VWOy+YmAXkcTYWPLcSttdhcsLbt8rQ2W3ekCq83lA8PXScKf2z7O
-        huTHJgJaXGsAFyoqCRcc0FjRcBiFzFIdfPqxIEYA5i0C5FePwc1iLTS8nl53H1YXWiXkahABbe+cC/ll
-        1BVrLax89luMANQ0TwbOq+7pYcEqiBG/8CogxYNNBPTtF7NYxi8MipcqKf7w+RpoT/9i4PztB6Ngd7jE
-        iF+rgjsQDzYR0K6g1mJhUDz+Wjtm4enLKVhddYsRf6y7f9Fb0zLpnTE713VCUlpBaA0ioD0DFrEEoEnl
-        BtOMM2QCbSbHitu34OPFX1JGSei2SgT0TdfaGPWg4y/eCnUvTGgDWN4UGK8SPT8XoR5to0vLQuB+86IA
-        19C7wMYaREBTUas6vy2AxeYviD1jXoHiR+OQiSZMeeMENL6agqZ30/CkzQR364yQjl5c8Nh2OP3DwuX2
-        gH7CDiV18rsTEVDJORWj0IpeREbQvv0dvZjgtyi56yQX1RhAb7T7JlhZg9G3ZMldh00UNJKOgpL2vwlK
-        UaoDNMs75RKFYzqX96K8NnyUi2PvEJSiaDVXKJcoXCsZTaWS5Zo3g90x6Pl0w2Ga5Yb+9vS7Mc1q6uNV
-        nbFKhm+Qy71jUKyLWboTKGFGMstXo6S1RMxyVTj3FfXIkSRGU4bOCWGDBimGooCgA4pRMhyLAAN/xoUL
-        GjGdUWjj0JhNQZNsfl+DSkpQc2fpXM6x70GxFAx3+jIzdFz8GlVUFEVRfwDiv42+8CmffAAAAABJRU5E
-        rkJggg==
-</value>
+  <data name="groupBox_ScreenRes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 6</value>
   </data>
-  <data name="button_github.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        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
-</value>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="label_Update_2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="button_Wiki.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        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
-</value>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterScreen</value>
+  </data>
+  <data name="&gt;&gt;panel_Details.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;button_ModSetActive.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="panel_IntRes.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="linkLabel_Official_Discord.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="listBox_Mods.ItemHeight" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="&gt;&gt;panel_Playerdata.Name" xml:space="preserve">
+    <value>panel_Playerdata</value>
+  </data>
+  <data name="&gt;&gt;button_Launch.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;button_github.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="button_ModFiles.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="tabPage_Modpacks.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="panel_Components.Size" type="System.Drawing.Size, System.Drawing">
+    <value>276, 378</value>
+  </data>
+  <data name="groupBox_InternalRes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>263, 83</value>
+  </data>
+  <data name="tabPage_Resolution.Text" xml:space="preserve">
+    <value>Graphics</value>
+  </data>
+  <data name="button_Apply.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="panel_Custom.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;checkBox_nofsopt.Name" xml:space="preserve">
+    <value>checkBox_nofsopt</value>
+  </data>
+  <data name="&gt;&gt;label_Update_2.Name" xml:space="preserve">
+    <value>label_Update_2</value>
+  </data>
+  <data name="creditsTextBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;groupBox_Details.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="button_Apply.Size" type="System.Drawing.Size, System.Drawing">
+    <value>69, 23</value>
+  </data>
+  <data name="button_ModDelete.Location" type="System.Drawing.Point, System.Drawing">
+    <value>211, 357</value>
+  </data>
+  <data name="creditsTextBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="button_Launch.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="button_ModDelete.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="groupBox_ScreenRes.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="checkBox_ModPatches.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="linkLabel_Repo.Text" xml:space="preserve">
+    <value>Official repository</value>
+  </data>
+  <data name="&gt;&gt;label_Update_1.Name" xml:space="preserve">
+    <value>label_Update_1</value>
+  </data>
+  <data name="&gt;&gt;groupBox_ScreenRes.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="linkLabel_Official_Discord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="&gt;&gt;labelGPU.Name" xml:space="preserve">
+    <value>labelGPU</value>
+  </data>
+  <data name="button_ModSetActive.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tabPage_Credits.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;button_ModFiles.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;panel_ScreenRes.Parent" xml:space="preserve">
+    <value>groupBox_ScreenRes</value>
+  </data>
+  <data name="&gt;&gt;groupBox_InternalRes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Update.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;groupBox_Lag.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="linkLabel_Changelog.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="tabPage_Plugins.Text" xml:space="preserve">
+    <value>Plugins and Patches</value>
+  </data>
+  <data name="panel_Playerdata.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="button_ModRename.Location" type="System.Drawing.Point, System.Drawing">
+    <value>279, 357</value>
+  </data>
+  <data name="button_ModRename.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 21</value>
+  </data>
+  <data name="groupBox_Lag.TabIndex" type="System.Int32, mscorlib">
+    <value>21</value>
+  </data>
+  <data name="button_ModRename.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;panel_Patches.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Resolution.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_Discord.Name" xml:space="preserve">
+    <value>button_Discord</value>
+  </data>
+  <data name="button_ModRescan.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 21</value>
+  </data>
+  <data name="panel_Details.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 19</value>
+  </data>
+  <data name="tabPage_Resolution.Size" type="System.Drawing.Size, System.Drawing">
+    <value>552, 378</value>
+  </data>
+  <data name="button_github.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;button_ModDelete.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="button_Instructions.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;button_ModSetActive.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="button_Clean_installation.Text" xml:space="preserve">
+    <value>Clean installation</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Components.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="button_ModSetActive.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tabPage_Components.Size" type="System.Drawing.Size, System.Drawing">
+    <value>552, 378</value>
+  </data>
+  <data name="&gt;&gt;button_ModFiles.Name" xml:space="preserve">
+    <value>button_ModFiles</value>
+  </data>
+  <data name="button_Unstable_builds.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;button_ModClone.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;button_Instructions.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="button_Discord.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;groupBox_ScreenRes.Name" xml:space="preserve">
+    <value>groupBox_ScreenRes</value>
+  </data>
+  <data name="trackBar_LagCompensation.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tabPage_Update.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="button_Unstable_builds.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;groupBox_Details.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;button_Wiki.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;panel_IntRes.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="panel_Patches.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="groupBox_InternalRes.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="button_Wiki.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
+  </data>
+  <data name="label_Update_2.Text" xml:space="preserve">
+    <value>It is highly recommended to download updates directly from the official repository.
+If you have downloaded PD Loader from a third-party, it is recommended to do a clean installation.</value>
+  </data>
+  <data name="&gt;&gt;groupBox_Lag.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="button_ModDelete.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="trackBar_LagCompensation.Size" type="System.Drawing.Size, System.Drawing">
+    <value>250, 45</value>
+  </data>
+  <data name="&gt;&gt;button_ModDelete.Name" xml:space="preserve">
+    <value>button_ModDelete</value>
+  </data>
+  <data name="tabPage_Patches.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1642,4 +1505,1668 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
         +AAAAAAAAAAAAP/+AAf///8AAAAAAAAAAAA=
 </value>
   </data>
+  <data name="&gt;&gt;button_github.Name" xml:space="preserve">
+    <value>button_github</value>
+  </data>
+  <data name="linkLabel_Repo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>119, 12</value>
+  </data>
+  <data name="&gt;&gt;button_ModRescan.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="trackBar_LagCompensation.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tabPage_Update.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="checkBox_ModPatches.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="labelGPU.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;panel_Playerdata.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Patches.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="button_ModDelete.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="groupBox_Details.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="panel_Custom.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="button_Launch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>217, 23</value>
+  </data>
+  <data name="linkLabel_Repo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>169, 297</value>
+  </data>
+  <data name="linkLabel_Official_Discord.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="checkBox_nofsopt.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Credits.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Modpacks.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="panel_Playerdata.Size" type="System.Drawing.Size, System.Drawing">
+    <value>552, 378</value>
+  </data>
+  <data name="&gt;&gt;button_Releases_page.Name" xml:space="preserve">
+    <value>button_Releases_page</value>
+  </data>
+  <data name="panel_Patches.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="tabPage_Modpacks.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tabPage_Credits.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="groupBox_Details.Text" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="tabPage_Credits.Size" type="System.Drawing.Size, System.Drawing">
+    <value>552, 378</value>
+  </data>
+  <data name="linkLabel_Console.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 12</value>
+  </data>
+  <data name="linkLabel_Console.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;button_ModDelete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="button_Clean_installation.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Repo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_Unstable_builds.Name" xml:space="preserve">
+    <value>button_Unstable_builds</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Modpacks.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="checkBox_nofsopt.ToolTip" xml:space="preserve">
+    <value>Disables Windows 10/11 fullscreen optimizations, which can cause issues with screenshots and/or framerate.</value>
+  </data>
+  <data name="label_Update_1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="panel_Patches.Size" type="System.Drawing.Size, System.Drawing">
+    <value>552, 378</value>
+  </data>
+  <data name="checkBox_ModPatches.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="panel_Plugins.Size" type="System.Drawing.Size, System.Drawing">
+    <value>276, 378</value>
+  </data>
+  <data name="button_github.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACoAAAAnCAYAAAB5XdqFAAABgGlDQ1BJQ0MgcHJvZmlsZQAAKM+VkU8o
+        BFEcxz8GESsHmySHOeBECclRS6Rsaa2yOJiZtUvtjG1m5eKoXJWDPxeLg4szVwdXpZQ/JRdXJ+Iijd+b
+        VbupVV693qfve99v730faPmMZXtVPWA7OTc2FtFnErN6zTO1aDRTD4blZaNTo3HKjo9bKtR6062y+N9o
+        SC56FlTowkNW1s0JLwgPrOWyineFw9aSkRQ+Fe5y5YLC90o3C/yiOB2wpjLDbjw2LBwW1tMlbJawteTa
+        wv3C7UnbkXxtpsBJxeuK7cyq9XNP9cLQojM9pXSZbYwxTpRJdExWWSZDjm5ZHVE8YrIfKeNvDfyT4jLF
+        tYwljhFWsDECP+oPfnfrpfp6C0mhCFQ/+f5bB9Rsw9eW738e+v7XEVQ+woVT9K/kYfBd9K2i1n4AjRtw
+        dlnUzB0434SWh6zhGoFUKVNLpeD1RL4pAU3XUDdX6O1nn+M7iEtXE1ewtw+dacmeL/Pu2tLe/jwT9Efk
+        G/NTcnSGxsDZAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH4wgCFgswG/t2YwAABb5JREFUWEfF
+        mHlIZWUYh9Vcs2zazWm3orLG9qKVKa1sj6agjGnRVqwo2qCdpFLaCNoksj3BjKKmzVbK9oWQIK0kYeyP
+        qEgTpGz6eh7zytF77qI2+oMHvPeee877vfs1Zy1qK9j1vz8XVrmTZKMSuAlugzzfWEgVweawzsSr1PIw
+        O8Ib8BAUwoJKA6vhSEj38AI4A56Ge6AUFlybwo1wKaQydhN4HM6Bq2E9WHDprX3hVaiFmTlrPh4OnbAM
+        6mBdWBRtDJfD65N/R2Ue3wlng56tgmxz1ENbhLvDbpOv56V82BM+gJUQreqNQG/qVQ1cApmq3s/9nrl/
+        B9wNHvYgmGasL2Zr/YbQBO9AhW9Majt4EzxIunv6mQfZHhrgObgPTgA9qtHXwF4wJcNXCcfAEXAg7AM7
+        wwYQJ71qWJ+C0yBxWG/8Htie4mRqbAsnwSPQAxbeqbADWHjWwTagLeeCh5+QX94aDoHj4XS4EKxuT3k0
+        xBWE4fJGj0Ex2L4M+buwFKIyvLa2F+Br+AIehFNgJ1gfoinivbaEg8HoTH2WCIU5tQUYEj3mg28GDd4D
+        9GRCXu/h9KDe0BN65i2IFpn39qHPw6Ngj9UAPWuPTZXDvl8OHsR7x8qb+6GhNwXOg9fgXtgPvIkYYqv/
+        TLBiL4ZVUAYJGc5boBv2ByPhIX1GJnmN99LjGaUXXTBOhk9gNZjsGuoAsEJfnvz7djDnNFppUD0Y6mNh
+        rlMqGsmU8kQXwQNwLRjqPjAtDM0V8CNo/LOg4eZ9Ime/Ar+fqjDnLd3umtYBH8OT8C28Ahr7A3wGP8Ma
+        +AmG4RlwebEDfArmtzmaTahnLU/vdPkc3IDsBuamufol/AIaF2IYB439EMxXR6mhE7uH3p63THxzycQ3
+        rwzrAaCHbEFWtzmYysgEft4LHtBu4YJiz30fbFHHgUU1Ky97scVi/3wbDKFj0FZj6C2AiRsWFBQsr6io
+        +LWwsDDOuCh/gimiYd+DKeBotPr1tqnzEtj67NO2IKdd2qKx5zm3/wBDfSUcCo7GiS+WlpbmNDQ0LOns
+        7FzV29sb2tvbQ2VlZcjLywvV1dWhqqoq5ObmRg39CzSwHS4Ai8rGrXedfBaeE80iuxV0jFE0n/V0rBxX
+        nvB6MOzTvKgwIqerq2vF6Ojo+MjISGhubg51dXWhpaUlDAwMhJ6enonXXJqgH54A91ZHoCllqxJTyMFi
+        FN2SNNyV0V7cCpdB7K+IXeBhcL7bC5MuKisry8GbK8fGxtagMDQ0FFpbW8Pg4GAYHx8PbW1tobGxMZSU
+        lGjkb+AQcEJ9B47OOOkII+YhnIYuI853I2oBJmlvuAucz7HJrUfr6+uXYezqvr6+gHdDbW1t6O/vD2p4
+        eDh0dHSEoqKiMS7XK65r5p4/RRwCsR6KyOfaDSzWGrAIk76j611AXHTTaSnF9FF5eXnIz8+fyMmmpqbQ
+        3d0dOECoqan5m2teBIvQInFfcMO3RemtbGRa6E2jkGToYWAbmrmtz5S91amjQVP5WFxcbFFZiF2gN5xe
+        l4APdRe4AczXbMenxWSdJHUAK9LKzDTiXFLMITuDxv4Dv4ON/SpwI9cwW5xFqUccv1a4O4IzPza1Zsgd
+        wpy18KbJluHSnFgk0snGfyJcB4b3fDgK9IBF4UG+AcOnUT7UHun1dharPRtpZNJq5xy2TWRKeOU1Gqsh
+        9kWT34f7vqGyxenRzSAhD7AcXGqm/bSYrXRz9MbZSMMkGkoNuh9s4tHoeI292m3+LN+Yq0zelBv0LOTv
+        LovGVDLkUVlYetOlJin3stWcvxiRhq0A/zMSNwL1qr/LzOe5Ls//i3y4Td5Wlyo6dhVXxUX7z4myuBwa
+        KacbcvJYtItmqGF337R3moup5AH86ZLumrUqR6//1bCyU3kzITvFzEJbMLl1ubEvau5lkk3eEezoXDRP
+        ZSNnuf0xq38QLKYcn/7WyZSb81ROzr/0gUC6FNUQmwAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="&gt;&gt;toolTip1.Name" xml:space="preserve">
+    <value>toolTip1</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Console.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tabPage_Components.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="button_Wiki.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;tabPage_Update.Name" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;button_ModFiles.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="linkLabel_Changelog.Location" type="System.Drawing.Point, System.Drawing">
+    <value>169, 238</value>
+  </data>
+  <data name="groupBox_InternalRes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 127</value>
+  </data>
+  <data name="tabPage_Plugins.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tabControl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>560, 404</value>
+  </data>
+  <data name="&gt;&gt;button_Launch.Name" xml:space="preserve">
+    <value>button_Launch</value>
+  </data>
+  <data name="button_ModRename.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="labelGPU.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="checkBox_nofsopt.Text" xml:space="preserve">
+    <value>Disable Fullscreen Optimizations</value>
+  </data>
+  <data name="groupBox_Lag.Text" xml:space="preserve">
+    <value>Lag Compensation</value>
+  </data>
+  <data name="button_ModRescan.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="panel_Plugins.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="panel_Patches.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="button_ModSetActive.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;checkBox_ModPatches.Name" xml:space="preserve">
+    <value>checkBox_ModPatches</value>
+  </data>
+  <data name="tabPage_Modpacks.Text" xml:space="preserve">
+    <value>Modpacks</value>
+  </data>
+  <data name="&gt;&gt;button_Apply.Name" xml:space="preserve">
+    <value>button_Apply</value>
+  </data>
+  <data name="&gt;&gt;button_Discord.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="label_Update_1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="button_Instructions.Location" type="System.Drawing.Point, System.Drawing">
+    <value>295, 177</value>
+  </data>
+  <data name="&gt;&gt;button_Apply.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="panel_Plugins.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox_Lag.Name" xml:space="preserve">
+    <value>groupBox_Lag</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Changelog.Name" xml:space="preserve">
+    <value>linkLabel_Changelog</value>
+  </data>
+  <data name="checkBox_ModPatches.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;panel_Patches.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="label_Update_2.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="linkLabel_Help.Size" type="System.Drawing.Size, System.Drawing">
+    <value>29, 12</value>
+  </data>
+  <data name="&gt;&gt;button_Releases_page.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel_Details.Name" xml:space="preserve">
+    <value>panel_Details</value>
+  </data>
+  <data name="&gt;&gt;button_ModSetActive.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelGPU.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="label_Update_2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="tabPage_Modpacks.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="labelGPU.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="button_ModClone.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;linkLabel_Help.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox_InternalRes.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="linkLabel_Official_Discord.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="button_Unstable_builds.Text" xml:space="preserve">
+    <value>Unstable builds</value>
+  </data>
+  <data name="button_Releases_page.Size" type="System.Drawing.Size, System.Drawing">
+    <value>92, 26</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Credits.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tabPage_Modpacks.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Plugins.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox_ScreenRes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;listBox_Mods.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="button_ModFiles.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="button_Clean_installation.Location" type="System.Drawing.Point, System.Drawing">
+    <value>295, 207</value>
+  </data>
+  <data name="tabControl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="&gt;&gt;button_Clean_installation.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox_InternalRes.Name" xml:space="preserve">
+    <value>groupBox_InternalRes</value>
+  </data>
+  <data name="button_github.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="button_Releases_page.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;labelGPU.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="linkLabel_Help.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>560, 437</value>
+  </data>
+  <data name="groupBox_InternalRes.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="panel_ScreenRes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>253, 99</value>
+  </data>
+  <data name="&gt;&gt;groupBox_Details.Name" xml:space="preserve">
+    <value>groupBox_Details</value>
+  </data>
+  <data name="&gt;&gt;panel_Custom.Parent" xml:space="preserve">
+    <value>tabPage_Plugins</value>
+  </data>
+  <data name="groupBox_Lag.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 303</value>
+  </data>
+  <data name="&gt;&gt;button_ModClone.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Resolution.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="creditsTextBox.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
+    <value>Both</value>
+  </data>
+  <data name="&gt;&gt;panel_Patches.Name" xml:space="preserve">
+    <value>panel_Patches</value>
+  </data>
+  <data name="tabPage_Update.Size" type="System.Drawing.Size, System.Drawing">
+    <value>552, 378</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Changelog.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="linkLabel_Console.Text" xml:space="preserve">
+    <value>Console</value>
+  </data>
+  <data name="panel_Details.Size" type="System.Drawing.Size, System.Drawing">
+    <value>261, 341</value>
+  </data>
+  <data name="button_ModClone.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="tabPage_Components.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="button_ModFiles.Location" type="System.Drawing.Point, System.Drawing">
+    <value>73, 357</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Repo.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="tabPage_Resolution.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="button_ModSetActive.Text" xml:space="preserve">
+    <value>Set Active</value>
+  </data>
+  <data name="$this.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="&gt;&gt;checkBox_nofsopt.Parent" xml:space="preserve">
+    <value>panel_ScreenRes</value>
+  </data>
+  <data name="&gt;&gt;button_ModRename.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="creditsTextBox.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tabPage_Components.Text" xml:space="preserve">
+    <value>Components</value>
+  </data>
+  <data name="tabPage_Playerdata.Text" xml:space="preserve">
+    <value>Player</value>
+  </data>
+  <data name="tabPage_Plugins.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="&gt;&gt;button_Releases_page.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Repo.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;button_Clean_installation.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;button_ModDelete.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;groupBox_Lag.Parent" xml:space="preserve">
+    <value>tabPage_Resolution</value>
+  </data>
+  <data name="&gt;&gt;panel_Components.Parent" xml:space="preserve">
+    <value>tabPage_Components</value>
+  </data>
+  <data name="tabPage_Playerdata.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="&gt;&gt;label_Update_2.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="tabControl.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="labelGPU.TabIndex" type="System.Int32, mscorlib">
+    <value>21</value>
+  </data>
+  <data name="label_Update_1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>11, 30</value>
+  </data>
+  <data name="button_Launch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>172, 409</value>
+  </data>
+  <data name="&gt;&gt;button_ModRename.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="groupBox_ScreenRes.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="linkLabel_Help.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="button_Releases_page.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;label_Update_1.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="checkBox_nofsopt.Size" type="System.Drawing.Size, System.Drawing">
+    <value>216, 16</value>
+  </data>
+  <data name="tabPage_Patches.Size" type="System.Drawing.Size, System.Drawing">
+    <value>552, 378</value>
+  </data>
+  <data name="panel_Plugins.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tabPage_Update.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="linkLabel_Repo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="linkLabel_Console.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>BottomRight</value>
+  </data>
+  <data name="button_Wiki.Location" type="System.Drawing.Point, System.Drawing">
+    <value>464, 404</value>
+  </data>
+  <data name="tabPage_Modpacks.Size" type="System.Drawing.Size, System.Drawing">
+    <value>552, 378</value>
+  </data>
+  <data name="&gt;&gt;groupBox_InternalRes.Parent" xml:space="preserve">
+    <value>tabPage_Resolution</value>
+  </data>
+  <data name="tabPage_Patches.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="linkLabel_Help.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="&gt;&gt;label_Update_2.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="button_Wiki.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Official_Discord.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="tabPage_Playerdata.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tabPage_Credits.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;label_Update_1.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;button_Clean_installation.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="panel_Playerdata.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="panel_ScreenRes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 19</value>
+  </data>
+  <data name="label_Update_1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Modpacks.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tabPage_Plugins.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="checkBox_ModPatches.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;panel_ScreenRes.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="checkBox_nofsopt.Location" type="System.Drawing.Point, System.Drawing">
+    <value>14, 77</value>
+  </data>
+  <data name="&gt;&gt;panel_Custom.Name" xml:space="preserve">
+    <value>panel_Custom</value>
+  </data>
+  <data name="listBox_Mods.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 5</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Plugins.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;panel_Playerdata.Parent" xml:space="preserve">
+    <value>tabPage_Playerdata</value>
+  </data>
+  <data name="listBox_Mods.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="button_github.Location" type="System.Drawing.Point, System.Drawing">
+    <value>528, 404</value>
+  </data>
+  <data name="button_ModRescan.Location" type="System.Drawing.Point, System.Drawing">
+    <value>348, 357</value>
+  </data>
+  <data name="button_Clean_installation.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="button_ModRescan.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="linkLabel_Changelog.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;panel_Plugins.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Console.Parent" xml:space="preserve">
+    <value>tabPage_Components</value>
+  </data>
+  <data name="&gt;&gt;labelGPU.Parent" xml:space="preserve">
+    <value>tabPage_Resolution</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Plugins.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="tabPage_Update.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="panel_Components.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="panel_Components.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="creditsTextBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="labelGPU.Size" type="System.Drawing.Size, System.Drawing">
+    <value>263, 13</value>
+  </data>
+  <data name="groupBox_Details.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="&gt;&gt;button_Apply.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tabPage_Resolution.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tabPage_Credits.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Plugins.Name" xml:space="preserve">
+    <value>tabPage_Plugins</value>
+  </data>
+  <data name="tabPage_Playerdata.Size" type="System.Drawing.Size, System.Drawing">
+    <value>552, 378</value>
+  </data>
+  <data name="&gt;&gt;button_Wiki.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;listBox_Mods.Name" xml:space="preserve">
+    <value>listBox_Mods</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Credits.Name" xml:space="preserve">
+    <value>tabPage_Credits</value>
+  </data>
+  <data name="button_Releases_page.Location" type="System.Drawing.Point, System.Drawing">
+    <value>169, 177</value>
+  </data>
+  <data name="panel_Playerdata.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;trackBar_LagCompensation.Name" xml:space="preserve">
+    <value>trackBar_LagCompensation</value>
+  </data>
+  <data name="&gt;&gt;groupBox_Details.Parent" xml:space="preserve">
+    <value>tabPage_Resolution</value>
+  </data>
+  <data name="button_Wiki.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+</value>
+  </data>
+  <data name="button_Clean_installation.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;groupBox_ScreenRes.Parent" xml:space="preserve">
+    <value>tabPage_Resolution</value>
+  </data>
+  <data name="button_ModClone.Text" xml:space="preserve">
+    <value>New/Clone</value>
+  </data>
+  <data name="button_ModFiles.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 21</value>
+  </data>
+  <data name="label_Update_1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="button_ModRescan.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;listBox_Mods.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="button_Instructions.Size" type="System.Drawing.Size, System.Drawing">
+    <value>92, 26</value>
+  </data>
+  <data name="button_Instructions.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Patches.Name" xml:space="preserve">
+    <value>tabPage_Patches</value>
+  </data>
+  <data name="checkBox_ModPatches.Location" type="System.Drawing.Point, System.Drawing">
+    <value>430, 358</value>
+  </data>
+  <data name="linkLabel_Help.Location" type="System.Drawing.Point, System.Drawing">
+    <value>169, 257</value>
+  </data>
+  <data name="&gt;&gt;trackBar_LagCompensation.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TrackBar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="button_Apply.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 409</value>
+  </data>
+  <data name="button_ModClone.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="button_Discord.TabIndex" type="System.Int32, mscorlib">
+    <value>31</value>
+  </data>
+  <data name="&gt;&gt;panel_Details.Parent" xml:space="preserve">
+    <value>groupBox_Details</value>
+  </data>
+  <data name="checkBox_ModPatches.Text" xml:space="preserve">
+    <value>Plugins and Patches</value>
+  </data>
+  <data name="&gt;&gt;button_Unstable_builds.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel_ScreenRes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="panel_Details.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;checkBox_ModPatches.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Update.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="linkLabel_Changelog.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="tabPage_Update.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Name" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="panel_IntRes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 19</value>
+  </data>
+  <data name="&gt;&gt;button_Instructions.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="tabPage_Patches.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="button_Launch.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="&gt;&gt;button_Launch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="button_ModDelete.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 21</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Credits.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="button_Wiki.TabIndex" type="System.Int32, mscorlib">
+    <value>34</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Changelog.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="linkLabel_Help.Text" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="panel_Components.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;button_ModRescan.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="&gt;&gt;listBox_Mods.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="listBox_Mods.Size" type="System.Drawing.Size, System.Drawing">
+    <value>546, 340</value>
+  </data>
+  <data name="panel_Details.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="tabPage_Playerdata.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="button_ModSetActive.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 21</value>
+  </data>
+  <data name="button_github.TabIndex" type="System.Int32, mscorlib">
+    <value>32</value>
+  </data>
+  <data name="button_ModSetActive.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="button_Clean_installation.Size" type="System.Drawing.Size, System.Drawing">
+    <value>92, 26</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Help.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;panel_Playerdata.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Patches.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Modpacks.Name" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Update.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="tabPage_Plugins.Size" type="System.Drawing.Size, System.Drawing">
+    <value>552, 378</value>
+  </data>
+  <data name="button_ModRescan.Text" xml:space="preserve">
+    <value>Rescan</value>
+  </data>
+  <data name="&gt;&gt;trackBar_LagCompensation.Parent" xml:space="preserve">
+    <value>groupBox_Lag</value>
+  </data>
+  <data name="labelGPU.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;button_ModClone.Name" xml:space="preserve">
+    <value>button_ModClone</value>
+  </data>
+  <data name="button_Releases_page.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="linkLabel_Console.Location" type="System.Drawing.Point, System.Drawing">
+    <value>504, 362</value>
+  </data>
+  <data name="button_Launch.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;button_Unstable_builds.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="button_Instructions.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="creditsTextBox.Multiline" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="panel_IntRes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>253, 59</value>
+  </data>
+  <data name="button_ModClone.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Changelog.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;button_github.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;tabControl.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;trackBar_LagCompensation.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="button_Launch.Text" xml:space="preserve">
+    <value>Launch</value>
+  </data>
+  <data name="tabPage_Plugins.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="button_Apply.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="label_Update_2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>593, 24</value>
+  </data>
+  <data name="&gt;&gt;creditsTextBox.Parent" xml:space="preserve">
+    <value>tabPage_Credits</value>
+  </data>
+  <data name="$this.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="tabPage_Components.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="groupBox_ScreenRes.Text" xml:space="preserve">
+    <value>Screen Resolution</value>
+  </data>
+  <data name="groupBox_Lag.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;tabPage_Playerdata.Name" xml:space="preserve">
+    <value>tabPage_Playerdata</value>
+  </data>
+  <data name="tabControl.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;label_Update_1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel_Plugins.Name" xml:space="preserve">
+    <value>panel_Plugins</value>
+  </data>
+  <data name="&gt;&gt;panel_Plugins.Parent" xml:space="preserve">
+    <value>tabPage_Plugins</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Console.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="linkLabel_Official_Discord.Location" type="System.Drawing.Point, System.Drawing">
+    <value>169, 277</value>
+  </data>
+  <data name="checkBox_nofsopt.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="linkLabel_Console.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="button_ModFiles.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="button_ModRename.Text" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="panel_ScreenRes.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="button_Apply.Text" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="panel_Custom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>276, 378</value>
+  </data>
+  <data name="label_Update_2.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="linkLabel_Repo.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Playerdata.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="groupBox_ScreenRes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>263, 120</value>
+  </data>
+  <data name="linkLabel_Repo.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="linkLabel_Console.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="button_ModRename.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="tabPage_Resolution.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
+  </data>
+  <data name="&gt;&gt;checkBox_nofsopt.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;panel_Details.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_ModSetActive.Name" xml:space="preserve">
+    <value>button_ModSetActive</value>
+  </data>
+  <data name="button_Apply.TabIndex" type="System.Int32, mscorlib">
+    <value>33</value>
+  </data>
+  <data name="&gt;&gt;button_ModRescan.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="linkLabel_Changelog.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;label_Update_2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="panel_Details.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;panel_Plugins.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;button_Instructions.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="creditsTextBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>552, 378</value>
+  </data>
+  <data name="tabPage_Resolution.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;toolTip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_github.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox_nofsopt.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Help.Name" xml:space="preserve">
+    <value>linkLabel_Help</value>
+  </data>
+  <data name="tabPage_Components.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="button_Unstable_builds.Size" type="System.Drawing.Size, System.Drawing">
+    <value>92, 26</value>
+  </data>
+  <data name="button_Discord.Location" type="System.Drawing.Point, System.Drawing">
+    <value>496, 404</value>
+  </data>
+  <data name="button_Unstable_builds.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="panel_Custom.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;creditsTextBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="button_ModClone.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 21</value>
+  </data>
+  <data name="&gt;&gt;button_Discord.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="label_Update_1.Text" xml:space="preserve">
+    <value>Update PD Loader regularly to get the latest fixes and new features!</value>
+  </data>
+  <data name="&gt;&gt;button_Releases_page.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="button_Unstable_builds.Location" type="System.Drawing.Point, System.Drawing">
+    <value>169, 207</value>
+  </data>
+  <data name="&gt;&gt;button_ModRename.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="tabPage_Credits.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="linkLabel_Changelog.Text" xml:space="preserve">
+    <value>Changelog</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>96, 96</value>
+  </data>
+  <data name="&gt;&gt;panel_Components.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Official_Discord.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="groupBox_InternalRes.Text" xml:space="preserve">
+    <value>Internal Resolution (Quality)</value>
+  </data>
+  <data name="&gt;&gt;button_ModFiles.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="linkLabel_Official_Discord.Text" xml:space="preserve">
+    <value>Official Discord</value>
+  </data>
+  <data name="checkBox_ModPatches.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 16</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tabPage_Modpacks.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="$this.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;panel_IntRes.Name" xml:space="preserve">
+    <value>panel_IntRes</value>
+  </data>
+  <data name="linkLabel_Help.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="panel_IntRes.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tabPage_Update.Text" xml:space="preserve">
+    <value>UPDATE</value>
+  </data>
+  <data name="button_Discord.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="tabPage_Resolution.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="button_Discord.Size" type="System.Drawing.Size, System.Drawing">
+    <value>32, 32</value>
+  </data>
+  <data name="trackBar_LagCompensation.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 20</value>
+  </data>
+  <data name="tabPage_Credits.Text" xml:space="preserve">
+    <value>Credits</value>
+  </data>
+  <data name="button_ModFiles.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Components.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Playerdata.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="button_ModFiles.Text" xml:space="preserve">
+    <value>Files...</value>
+  </data>
+  <data name="creditsTextBox.Text" xml:space="preserve">
+    <value>PD Loader is intended for educational purposes only; not for piracy.
+Users should possess a legally-obtained dump of the game to use this software.
+Please check your local laws/regulataions to verify the legality of tampering
+with and dumping data from protected arcade machine hardware.
+
+Project Contributors:
+akasaka, Brolijah, crash5b, Jay39w, korenkonder, Kyberal, lybxlpsv, nastys,
+Nezarn, samyuu, Skyth, somewhatlurker, Stewie1.0, SwigS-27, zsccat
+
+
+PD Loader and the included plugins are distributed under MIT License:
+  
+  Copyright (c) Project DIVA Modding 2nd Community
+  Copyright (c) samyuu (nop) (original TLAC code)
+  Copyright (c) ThirteenAG (original Ultimate ASI Loader code)
+  
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+
+Microsoft Detours, utilized by many plugins, is licensed under MIT License:
+  
+  # Copyright (c) Microsoft Corporation
+  
+  All rights reserved.
+  
+  # MIT License
+  
+  Permission is hereby granted, free of charge, to any person obtaining a copy of
+  this software and associated documentation files (the "Software"), to deal in
+  the Software without restriction, including without limitation the rights to
+  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+  of the Software, and to permit persons to whom the Software is furnished to do
+  so, subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+
+Launcher, Patches, Render and TLAC plugins utilize files from FreeGLUT:
+  
+  Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
+  Permission is hereby granted, free of charge,  to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction,  including without limitation the rights
+  to use, copy,  modify, merge,  publish, distribute,  sublicense,  and/or sell
+  copies or substantial portions of the Software.
+  
+  The above  copyright notice  and this permission notice  shall be included in
+  all copies or substantial portions of the Software.
+  
+  THE SOFTWARE  IS PROVIDED "AS IS",  WITHOUT WARRANTY OF ANY KIND,  EXPRESS OR
+  IMPLIED,  INCLUDING  BUT  NOT LIMITED  TO THE WARRANTIES  OF MERCHANTABILITY,
+  FITNESS  FOR  A PARTICULAR PURPOSE  AND NONINFRINGEMENT.  IN  NO EVENT  SHALL
+  PAWEL W. OLSZTA BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER LIABILITY, WHETHER
+  IN  AN ACTION  OF CONTRACT,  TORT OR OTHERWISE,  ARISING FROM,  OUT OF  OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  
+  Except as contained in this notice,  the name of Pawel W. Olszta shall not be
+  used  in advertising  or otherwise to promote the sale, use or other dealings
+  in this Software without prior written authorization from Pawel W. Olszta.
+
+
+Launcher uses SimpleIni, licensed under MIT License:
+  
+  The MIT License (MIT)
+  
+  Copyright (c) 2006-2013 Brodie Thiesfield
+  
+  Permission is hereby granted, free of charge, to any person obtaining a copy of
+  this software and associated documentation files (the "Software"), to deal in
+  the Software without restriction, including without limitation the rights to
+  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+  the Software, and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+DivaSound uses miniaudio (public domain or MIT-0) and BASSASIO (free for
+non-commercial use only)
+
+
+AMD compatibilty pack dependencies have additional licenses, detailed in the AMD</value>
+  </data>
+  <data name="groupBox_Details.Location" type="System.Drawing.Point, System.Drawing">
+    <value>274, 6</value>
+  </data>
+  <data name="&gt;&gt;panel_IntRes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Patches.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="panel_IntRes.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;panel_ScreenRes.Name" xml:space="preserve">
+    <value>panel_ScreenRes</value>
+  </data>
+  <data name="&gt;&gt;panel_Components.Name" xml:space="preserve">
+    <value>panel_Components</value>
+  </data>
+  <data name="&gt;&gt;button_ModRescan.Name" xml:space="preserve">
+    <value>button_ModRescan</value>
+  </data>
+  <data name="panel_Plugins.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;creditsTextBox.Name" xml:space="preserve">
+    <value>creditsTextBox</value>
+  </data>
+  <data name="button_ModDelete.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Resolution.Name" xml:space="preserve">
+    <value>tabPage_Resolution</value>
+  </data>
+  <data name="button_ModSetActive.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 357</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>PD Loader 3 - Launcher</value>
+  </data>
+  <data name="panel_ScreenRes.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="button_Discord.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACoAAAApCAYAAABDV7v1AAAABGdBTUEAALGPC/xhBQAAA7dJREFUWEft
+        mElME2EUxwdDgh6NVw8e9OzZGwcv3ryZePKmUQodREAN1Ah0BmQTVJZgQFABE1kEl7iAEQWjAiIEOtMW
+        aJGyFWgpbWG6PL+vnSmFDrL0KyHaf/LPtPNm3vtN37dMSkUVlYwuqMYOJmRz52g1n0UzfF4knKTmmERG
+        p1CotEfFsjsTTU8colmuKTmXh70wzfL6S6qxY2L57SsxZ0SBEng2JoyklSzXp1Bo40SE7Qm1xSaXLOJm
+        uZMiwtaKj++MlU2yB1aqtadEjK0VBd2G/2/QtAItFFSPQ2HNOKQX+s9dzeMh5Y7/c2o+D8W141BWb4Rb
+        93Xr7t3MxEFLHxugd8gCtS2T0PJhBj73LsCwfhkMJicYp5y+Y9+wFd53m6Gh3QSD/BJ0fJ2HG0Va2XyS
+        iYLWtZpgbn4FBjkrCIIHtpLb7QXNKH4IB3oYm2xOyURBdQY7rKxuDbhRHo8XvF4vlKBuyOXFJgaaXa4X
+        y+5eliXBN5bl8hMDHUDtDleCywO5VWOy+YmAXkcTYWPLcSttdhcsLbt8rQ2W3ekCq83lA8PXScKf2z7O
+        huTHJgJaXGsAFyoqCRcc0FjRcBiFzFIdfPqxIEYA5i0C5FePwc1iLTS8nl53H1YXWiXkahABbe+cC/ll
+        1BVrLax89luMANQ0TwbOq+7pYcEqiBG/8CogxYNNBPTtF7NYxi8MipcqKf7w+RpoT/9i4PztB6Ngd7jE
+        iF+rgjsQDzYR0K6g1mJhUDz+Wjtm4enLKVhddYsRf6y7f9Fb0zLpnTE713VCUlpBaA0ioD0DFrEEoEnl
+        BtOMM2QCbSbHitu34OPFX1JGSei2SgT0TdfaGPWg4y/eCnUvTGgDWN4UGK8SPT8XoR5to0vLQuB+86IA
+        19C7wMYaREBTUas6vy2AxeYviD1jXoHiR+OQiSZMeeMENL6agqZ30/CkzQR364yQjl5c8Nh2OP3DwuX2
+        gH7CDiV18rsTEVDJORWj0IpeREbQvv0dvZjgtyi56yQX1RhAb7T7JlhZg9G3ZMldh00UNJKOgpL2vwlK
+        UaoDNMs75RKFYzqX96K8NnyUi2PvEJSiaDVXKJcoXCsZTaWS5Zo3g90x6Pl0w2Ga5Yb+9vS7Mc1q6uNV
+        nbFKhm+Qy71jUKyLWboTKGFGMstXo6S1RMxyVTj3FfXIkSRGU4bOCWGDBimGooCgA4pRMhyLAAN/xoUL
+        GjGdUWjj0JhNQZNsfl+DSkpQc2fpXM6x70GxFAx3+jIzdFz8GlVUFEVRfwDiv42+8CmffAAAAABJRU5E
+        rkJggg==
+</value>
+  </data>
+  <data name="button_ModDelete.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Help.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Official_Discord.Name" xml:space="preserve">
+    <value>linkLabel_Official_Discord</value>
+  </data>
+  <data name="&gt;&gt;panel_Custom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_Clean_installation.Name" xml:space="preserve">
+    <value>button_Clean_installation</value>
+  </data>
+  <data name="panel_Playerdata.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="&gt;&gt;button_ModClone.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="label_Update_1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 12pt, style=Bold</value>
+  </data>
+  <data name="button_Wiki.Size" type="System.Drawing.Size, System.Drawing">
+    <value>32, 32</value>
+  </data>
+  <data name="checkBox_nofsopt.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;panel_Patches.Parent" xml:space="preserve">
+    <value>tabPage_Patches</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Components.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_Apply.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="label_Update_2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>48, 73</value>
+  </data>
+  <data name="panel_Custom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>276, 0</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Console.Name" xml:space="preserve">
+    <value>linkLabel_Console</value>
+  </data>
+  <data name="&gt;&gt;panel_Components.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="button_ModClone.Location" type="System.Drawing.Point, System.Drawing">
+    <value>142, 357</value>
+  </data>
+  <data name="&gt;&gt;button_Discord.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panel_Custom.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="linkLabel_Official_Discord.Size" type="System.Drawing.Size, System.Drawing">
+    <value>101, 12</value>
+  </data>
+  <data name="label_Update_1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;button_Instructions.Name" xml:space="preserve">
+    <value>button_Instructions</value>
+  </data>
+  <data name="&gt;&gt;button_Wiki.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="button_ModRename.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>ui</value>
+  </data>
+  <data name="panel_Components.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="button_github.Size" type="System.Drawing.Size, System.Drawing">
+    <value>32, 32</value>
+  </data>
+  <data name="panel_ScreenRes.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;button_Unstable_builds.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;button_Launch.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Official_Discord.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="panel_Patches.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Resolution.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="groupBox_Details.Size" type="System.Drawing.Size, System.Drawing">
+    <value>272, 366</value>
+  </data>
+  <data name="listBox_Mods.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Components.Name" xml:space="preserve">
+    <value>tabPage_Components</value>
+  </data>
+  <data name="&gt;&gt;panel_IntRes.Parent" xml:space="preserve">
+    <value>groupBox_InternalRes</value>
+  </data>
+  <data name="&gt;&gt;button_Wiki.Name" xml:space="preserve">
+    <value>button_Wiki</value>
+  </data>
+  <data name="tabPage_Patches.Text" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="label_Update_2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="linkLabel_Changelog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 12</value>
+  </data>
+  <data name="button_Releases_page.Text" xml:space="preserve">
+    <value>Releases page</value>
+  </data>
+  <data name="label_Update_1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>555, 20</value>
+  </data>
+  <data name="&gt;&gt;checkBox_ModPatches.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="&gt;&gt;creditsTextBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="$this.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
+  </data>
+  <data name="labelGPU.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 213</value>
+  </data>
+  <data name="button_Instructions.Text" xml:space="preserve">
+    <value>Instructions</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Repo.Name" xml:space="preserve">
+    <value>linkLabel_Repo</value>
+  </data>
+  <data name="&gt;&gt;checkBox_ModPatches.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;button_ModRename.Name" xml:space="preserve">
+    <value>button_ModRename</value>
+  </data>
+  <data name="linkLabel_Repo.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="labelGPU.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>263, 13</value>
+  </data>
+  <data name="groupBox_Lag.Size" type="System.Drawing.Size, System.Drawing">
+    <value>263, 69</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Playerdata.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

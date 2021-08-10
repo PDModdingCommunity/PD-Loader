@@ -1,0 +1,278 @@
+###############################################
+# framework
+
+# display
+DISPLAY_NAME=显示模式:
+DISPLAY_HINT=设置窗口显示模式
+Windowed=窗口化
+Fast=无边框窗口
+Exclusive=独占全屏
+#Safe=
+RESOLUTION_NAME=游戏分辨率:
+RESOLUTION_HINT=设置游戏的显示分辨率
+REFRESHRATE_NAME=刷新率:
+REFRESHRATE_HINT=设置显示的刷新率.
+R.ENABLE_NAME=启用
+R.ENABLE_HINT=启用或禁用自定义内部渲染分辨率.
+R.RESOLUTION_NAME=分辨率:
+R.RESOLUTION_HINT=设置内部渲染分辨率（除 1280x720 外）
+
+# graphics
+MODEL_NAME=NVIDIA GPU 架构:
+MODEL_HINT=请选择你的 NVIDIA GPU 架构以便于应用必要的设定\n\n请注意：自动检测 GPU 架构功能无法在 GNU/Linux 上工作\n\n架构类型:\n开普勒：GTX10 系\n麦克斯韦：GTX900 系\n图灵：RTX20/GTX16 系\n安培：RTX30 系
+Automatic=自动
+TAA_NAME=TAA
+TAA_HINT=时间抗锯齿
+MLAA_NAME=MLAA
+MLAA_HINT=形态抗锯齿
+MAG_NAME=图像滤镜:
+MAG_HINT=图像滤镜\n\n双线性插值：默认滤镜\n最近邻插值：最锐利，但是容易产生色块\nSharpen：锐化滤镜\nCone：平滑滤镜
+Bilinear=双线性插值
+Nearest-neighbour=最近邻插值
+DOF_NAME=景深
+DOF_HINT=模糊背景，停用后可以在低配机器上获得更好性能
+REFLECTIONS_NAME=反射
+REFLECTIONS_HINT=启用或者停用游戏内中的反射效果.
+REFLECT_RES_WIDTH_NAME=反射分辨率:
+REFLECT_RES_WIDTH_HINT=设置反射缓冲区的分辨率（除 512x256 外）
+REFRACT_RES_WIDTH_NAME=折射分辨率:
+REFRACT_RES_WIDTH_HINT=设置折射缓冲区的分辨率（除 512x256 外）
+SHADOWS_NAME=阴影
+SHADOWS_HINT=启用或者停用游戏内的阴影效果
+PUNCHTHROUGH_NAME=透明网格舞厅
+PUNCHTHROUGH_HINT=显示透明网格物体
+GLARE_NAME=光晕
+GLARE_HINT=启用或者停用游戏内的光晕效果
+SHADER_NAME=高清着色器
+SHADER_HINT=启用或者停用高清着色器
+NPR1_NAME=Toon (F9):
+NPR1_HINT=启用 NPR1 着色器\n\n按 F9 以进行切换
+2D_NAME=停用 3D 渲染
+2D_HINT=停用游戏内所有的 3D 渲染\n\n警告：在 “游戏数据保护” 未启用前，停用 3D 渲染将会导致所有扩展数据被删除
+
+# options
+Default=默认
+Force on=强制开启
+Force off=强制关闭
+BUILTIN_PATCHES_NAME=Enable Built-In Patches
+BUILTIN_PATCHES_HINT=Enables the built-in patches，including the options below.
+CUSTOM_PATCHES_NAME=Enable Custom Patches
+CUSTOM_PATCHES_HINT=Enables all custom patches.
+BUILTIN_RENDER_NAME=Enable Built-In Render
+BUILTIN_RENDER_HINT=Enables the built-in render patches.
+
+NO_MOVIES_NAME=停用视频
+NO_MOVIES_HINT=停用包含视频文件的 PV (如 Catch The Wave 背景，砂之行星等)(如果在游戏加载包含视频文件的 PV 时卡死，请启用此选项)
+CURSOR_NAME=显示光标
+CURSOR_HINT=在游戏内显示或者隐藏鼠标指针
+STEREO_NAME=声道设定
+STEREO_HINT=当禁用 DivaSound 时，强制将 4 声道转为 2 声道
+
+QUICK_START_NAME=快速启动:
+QUICK_START_HINT=跳过一个或者更多菜单 (如刷卡菜单)
+Disabled=禁用
+Guest=访客模式
+Guest + Normal=访客模式+正常模式
+NO_SCROLLING_SFX_NAME=停用滑动音效
+NO_SCROLLING_SFX_HINT=停用在选歌界面的滑动音效
+
+ENHANCED_STAGE_MANAGER_NAME=游玩次数:
+ENHANCED_STAGE_MANAGER_HINT=设置一次投币 (游戏) 最多可以游玩的次数 (0 = 默认)
+ENHANCED_STAGE_MANAGER_ENCORE_NAME=启用 EncoreStage
+ENHANCED_STAGE_MANAGER_ENCORE_HINT=启用 Encore Stage\n(在 EncoreStage 下所有难度的歌曲最低达成率均为 80%)
+
+FORCE_MOUTH_NAME=嘴部动作设定:
+FORCE_MOUTH_HINT=调整模型的嘴部动作样式
+FORCE_EXPRESSIONS_NAME=表情设定:
+FORCE_EXPRESSIONS_HINT=调整模型的表情样式
+FORCE_LOOK_NAME=外观设定:
+FORCE_LOOK_HINT=调整外观样式
+NO_HAND_SCALING_NAME=停用手部缩放
+NO_HAND_SCALING_HINT=停用手部缩放
+DEFAULT_HAND_SIZE_NAME=默认手部大小:
+DEFAULT_HAND_SIZE_HINT=默认值:-1\nPDA:12200
+SING_MISSED_NAME=停用停止歌唱
+SING_MISSED_HINT=停用当 Note 判定为 Miss 时，歌姬暂停歌唱的功能
+
+HIDE_VOLUME_NAME=隐藏音量设定
+HIDE_VOLUME_HINT=隐藏游戏内音量控制和案件音效控制按钮
+NO_PV_UI_NAME=隐藏 PV UI
+NO_PV_UI_HINT=隐藏欣赏模式下的摄像按钮
+HIDE_PV_WATERMARK_NAME=隐藏 PV 水印
+HIDE_PV_WATERMARK_HINT=隐藏 PV 水印
+STATUS_ICONS_NAME=状态栏图标设定:
+STATUS_ICONS_HINT=设定网络功能以及读卡器的状态图标
+Hidden=隐藏
+Error=错误
+OK=正常
+Partial OK=部分正常
+NO_LYRICS_NAME=隐藏歌词
+NO_LYRICS_HINT=隐藏歌词
+NO_ERROR_NAME=隐藏错误横幅
+NO_ERROR_HINT=隐藏在待机模式下显示的错误横幅
+HIDE_FREEPLAY_NAME=隐藏 "FREE PLAY"/"CREDIT (S)"
+HIDE_FREEPLAY_HINT=隐藏游戏右上角的 "FREE PLAY"/"CREDIT (S)" 文字
+PDLOADERTEXT_NAME=替换 "FREE PLAY" 文字
+PDLOADERTEXT_HINT=替换游戏右上角的 "FREE PLAY" 为 "PD Loader"
+NO_TIMER_NAME=停用计时器
+NO_TIMER_HINT=停用选歌界面的计时器
+NO_TIMER_SPRITE_NAME=隐藏计时器图标
+NO_TIMER_SPRITE_HINT=隐藏选歌界面的计时器图标
+NO_MESSAGE_BAR_NAME=Hide Message Bar
+NO_MESSAGE_BAR_HINT=Hide the top message bar.
+NO_STAGE_TEXT_NAME=Disable Stage Text
+NO_STAGE_TEXT_HINT=Disable Stage 1/2/Final.
+
+
+UNLOCK_PSEUDO_NAME=解锁 PSEUDO 模块 (未完成)
+UNLOCK_PSEUDO_HINT=允许您使用所有模型游玩游戏\n(未完成，推荐的默认模型为 Miku)
+CARD_NAME=解锁刷卡菜单 (未完成)
+CARD_HINT=启用刷卡菜单\n(未完成，且此功能不会绕过刷卡提示)
+NO_OPD_NAME=Disable Extended Data
+NO_OPD_HINT=AKA Skyth's "No Osage Play Data" patch.\n\nDisables baked physics in edits to save space.\nMay break physics in some edits.
+DWGUI_SCALING_NAME=Scale Debug Windows
+DWGUI_SCALING_HINT=AKA somewhatlurker's dwgui patch.\n\nMakes debug windows bigger above HD internal resolution.
+FREEPLAY_NAME=免费游玩
+FREEPLAY_HINT=替换游戏右上角的 "CREDIT (S)" 文字为 "FREE PLAY" 且在此模式下无需投币
+
+FPS.LIMIT.LIGHTMODE_NAME=启用轻量 FPS 限制器
+FPS.LIMIT.LIGHTMODE_HINT=限制 FPS 限制器的 CPU 使用量\n此功能可能会造成轻微的性能损失
+FPS.LIMIT_NAME=FPS 限制器:
+FPS.LIMIT_HINT=允许您设定 FPS 上限，将其设置为 -1 可解锁帧率限制
+FRM.MOTION.RATE_NAME=FRM 运动速率:
+FRM.MOTION.RATE_HINT=设置设置帧速率管理器的运动速率（fps）\n更大的数字理论上会更加流畅，但可能会极大的增加 CPU 占用且更容易发生错误
+
+AUTOPAUSE_NAME=自动暂停
+AUTOPAUSE_HINT=在窗口为未激活状态时自动暂停游戏
+
+RUMBLE_NAME=启用 XInput 震动
+RUMBLE_HINT=启用在滑条滑动时的 XInput 震动功能
+XINPUT_PREFERRED_NAME=XInput 控制器设定:
+XINPUT_PREFERRED_HINT=设置 XInput 控制器偏好\n如果此控制器暂时无法使用，将使用下一个已连接的 XInput 控制器
+
+HARDWARE_SLIDER_NAME=启用硬件手台
+HARDWARE_SLIDER_HINT=如果你准备使用硬件手台，请将其启用\n(请将硬件手台的连接端口设置为 COM11）
+
+OPENGL_PATCH_A_NAME=OpenGL Patch A
+OPENGL_PATCH_A_HINT=忽略一些与 OpenGL 相关的错误；除非您知道自己在做什么，否则不要同时启用两个 Patch
+OPENGL_PATCH_B_NAME=OpenGL Patch B
+OPENGL_PATCH_B_HINT=忽略一些与 OpenGL 相关的错误；除非您知道自己在做什么，否则不要同时启用两个 Patch
+
+PREVENT_DATA_DELETION_NAME=游戏数据保护
+PREVENT_DATA_DELETION_HINT=避免游戏自动删除数据
+COMMAND_LINE_NAME=启动设定:
+COMMAND_LINE_HINT=允许在使用启动器时为游戏设置命令行参数\n如果启动器被停用则会跳过此步骤
+USE_DIVAHOOK_BAT_NAME=使用 divahook.bat
+USE_DIVAHOOK_BAT_HINT=启动 divahook.bat 而非 diva.exe
+DARK_LAUNCHER_NAME=暗黑模式
+DARK_LAUNCHER_HINT=启用启动器自带的暗黑主题
+LAUNCHER_LANGUAGE_NAME=启动器语言
+LAUNCHER_LANGUAGE_HINT=设置启动器语言。
+NO_GPU_DIALOG_NAME=停用 GPU 警告信息
+NO_GPU_DIALOG_HINT=停用对于不支持的 GPU 的警告信息
+
+
+# player data
+PLAYER_NAME_NAME=玩家昵称:
+PLAYER_NAME_HINT=设置游戏中显示的玩家昵称
+LEVEL_NAME_NAME=玩家签名:
+LEVEL_NAME_HINT=设置游戏中显示玩家签名
+LEVEL_PLATE_ID_NAME=签名栏背景:
+LEVEL_PLATE_ID_HINT=设置签名栏背景图片
+LEVEL_PLATE_EFFECT_NAME=签名栏效果:
+LEVEL_PLATE_EFFECT_HINT=设置签名栏所显示的效果
+SKIN_EQUIP _NAME=打歌界面:
+SKIN_EQUIP _HINT=设置打歌界面皮肤
+BTN_SE_EQUIP_NAME=按键音效:
+BTN_SE_EQUIP_HINT=设置按键音效.\n-1 = 默认音效
+SLIDE_SE_EQUIP_NAME=连续拖拽音效:
+SLIDE_SE_EQUIP_HINT=设置滑条连续拖拽音效\n-1 = 默认音效
+CHAINSLIDE_SE_EQUIP_NAME=拖拽音效:
+CHAINSLIDE_SE_EQUIP_HINT=设置滑条拖拽音效.\n-1 = 默认音效
+SLIDERTOUCH_SE_EQUIP_NAME=拖拽条操作音效:
+SLIDERTOUCH_SE_EQUIP_HINT=设置不带音符触摸滑块的音效.\n-1 = 默认音效
+ACT_TOGGLE_NAME=按键声
+ACT_TOGGLE_HINT=启用 按键 / 滑条的声音.
+BORDER_GREAT_NAME=评分刻度线 (Great)
+BORDER_GREAT_HINT=在进度条上显示一条线来提示您是否到达 Great 评分.
+BORDER_EXCELLENT_NAME=评分刻度线 (Excellent)
+BORDER_EXCELLENT_HINT=在进度条上显示一条线来提示您是否到达 Excellent 评分.
+BORDER_RIVAL_NAME=评分刻度线 (对手)
+BORDER_RIVAL_HINT=在进度条上显示一条线来提示您是否超过了您的对手.
+USE_CARD_NAME=启用刷卡功能
+USE_CARD_HINT=启用 IC 卡检测功能以解锁模型选择功能
+MODULE_CARD_WORKAROUND_NAME=解锁模型选择功能
+MODULE_CARD_WORKAROUND_HINT=在未使用 IC 卡的情况下解锁模型选择功能，且尝试提高菜单流畅度\n(Beta 功能)
+USE_PV_MODULE_EQUIP_NAME=解锁特定模型选择功能
+USE_PV_MODULE_EQUIP_HINT=允许选择特定歌曲的模型
+USE_PV_SKIN_EQUIP_NAME=解锁特定游戏界面选择功能
+USE_PV_SKIN_EQUIP_HINT=允许歌曲使用特定的游戏界面\n且将此数值储存在 skin.ini
+USE_PV_SFX_EQUIP_NAME=解锁特定音效选择功能
+USE_PV_SFX_EQUIP_HINT=允许歌曲使用特定打击音效.\n且将此数值储存在 sfx.ini
+GAMEMODE_OPTIONS_NAME=解锁游戏玩法修改器
+GAMEMODE_OPTIONS_HINT=解锁游戏玩法修改器 (hi-speed，hidden,sudden).
+
+# components
+INPUT_EMULATOR_NAME=Input Emulator
+INPUT_EMULATOR_HINT=通过 Input Emulator 将键盘 / 鼠标模拟为游戏控制器输入
+TOUCH_SLIDER_EMULATOR_NAME=Slider Emulator
+TOUCH_SLIDER_EMULATOR_HINT=通过 Slider Emulator 将键盘 / 鼠标模拟为滑条输入
+TOUCH_PANEL_EMULATOR_NAME=Touch Panel Emulator
+TOUCH_PANEL_EMULATOR_HINT=通过 Touch Panel Emulator 将鼠标点击模拟为游戏内触摸操作
+PLAYER_DATA_MANAGER_NAME=Player Data Manager
+PLAYER_DATA_MANAGER_HINT=通过 Player Data Manager 将玩家自定义的玩家资料加载到游戏默认的玩家资料中\n如果在游戏内需要解锁模型选择功能或游戏玩法修改 器，请启用此模块
+FRAME_RATE_MANAGER_NAME=Frame Rate Manager
+FRAME_RATE_MANAGER_HINT=通过 Frame Rate Manager 将不同的帧速率的动画修正到正确的速度\n如果游戏 FPS 未锁定在 60 帧，请启用此模块
+FAST_LOADER_NAME=Fast Loader
+FAST_LOADER_HINT=通过 Fast Loader 跳过或加速不必要的加载步骤
+FAST_LOADER_SPEED_NAME=Fast Loader Speed
+FAST_LOADER_SPEED_HINT=设置 Fast Loader 的加速程度\n请注意：联机游玩时请将该值设置为 4 及以下，否则将会无法连接服务器\n默认值：39
+CAMERA_CONTROLLER_NAME=Camera Controller
+CAMERA_CONTROLLER_HINT=通过 Camera Controller，您可以控制游戏内的摄像机方向位置等参数 (通过按 F3 键切换启动状态)\n使用方法\nWASD 移动摄像机，SPACE/CTRL 控制摄像机向上 / 向下，Q/R 控制摄像机旋转角度，R/F 控制摄像机缩放\n通过按 SHIFT（加速）/ALT（减速) 控制摄像机移动速度
+SCALE_COMPONENT_NAME=Scale Component
+SCALE_COMPONENT_HINT=通过 Scale Component 缩放图形输出帧缓冲区以填充屏幕 / 窗口
+DEBUG_COMPONENT_NAME=Debug Component
+DEBUG_COMPONENT_HINT=通过 Debug Component，您可以更改游戏状态 (通过按 F4-F8 键)，使用开发人员 GUI 和测试，并加速 2D 动画 / 菜单 (按住 SHIFT+TAB 键).
+TARGET_INSPECTOR_NAME=Target Inspector
+TARGET_INSPECTOR_HINT=通过 Target Inspector 启用 Hold 系统切替
+SCORE_SAVER_NAME=Score Saver
+SCORE_SAVER_HINT=通过 Score Saver 将游戏内的最佳纪录保存在游戏 plugins 目录下的 scores.ini 中
+PAUSE_NAME=启用暂停菜单
+PAUSE_HINT=启用游戏内的暂停菜单
+
+###############################################
+# ui
+
+# dialog
+CONFIRM_SAVE_SETTINGS=是否保存设置？
+CONFIRM_DISCORD_OR_GUIDE=您是否想阅读用户指南，以排除故障？
+HOWTO_CLEAN_INSTALL=如何清洁安装
+HOWTO_CLEAN_INSTALL_HINT=删除:\n- dnsapi.dll 或 dinput8.dll\n- patches/\n- plugins/\n\n恢复:\n- glut32.dll\n\n然后从官方仓库下载安装 PD Loader。
+
+#gpu
+GPU_INFO_NAME=显卡信息：
+GPU_AMD_NOVIDIA_NAME=信息：AMD GPU 为非官方支持
+GPU_AMD_NOVIDIA_HINT=在没有插件的情况下并不支持 AMD GPU\nPD Loader AMDPack 应该已经正确安装，但是还请持续留意游戏中可能出现的错误
+GPU_AMD_NAME=警告：需要插件以支持 AMD GPU
+GPU_AMD_HINT=在没有插件的情况下并不支持 AMD GPU\nPD Loader AMDPack 可以使 3D 渲染工作 请下载它并且根据内置的帮助文件进行安装\n\n如果您的笔记本电脑带有 NVIDIA GPU 并且您希望使用它，您可能需要在 Windows 设置或者 NVIDIA 显卡控制面版中设置 diva.exe 使用 NVIDIA 显卡运行
+GPU_UNSUPPORTED_NAME=警告：不受支持的显卡
+GPU_UNSUPPORTED_HINT=您所使用的显卡不受支持。我们仅建议您使用 NVIDIA GPU。（尽管 AMD 显卡可以配合插件使用）\n请使用 GTX600 系列或更高版本的 NVIDIA GPU\n\n如果您的笔记本电脑带有 NVIDIA GPU 并且您希望使用它，则可能需要在 Windows 设置或 NVIDIA 控制面板中设置 diva.exe 使用 NVIDIA 显卡运行。\n\n其他 GPU 用户在使用了插件或 MOD 后能正常运行游戏，但是 3D 图形可能不会工作
+GPU_GA_NAME=信息:检测到安培系列显卡！错误未知\n(点击以获取更多信息)
+GPU_GA_HINT=安培系列显卡暂时还没有被测试 在上一代图灵系列显卡中（GTX 16 系/RTX 20 系），部分重要的角色着色器在渲染中可能会出现水波纹或者是噪点问题\n请确保 ShaderPatch 插件已经被启用并且将其他问题反馈给开发团队
+GPU_TU_NAME=信息：检测到图灵系列显卡!渲染可能会出现噪点\n(点击以获取更多信息)
+GPU_TU_HINT=在图灵系列显卡中（GTX16 系/RTX20 系），部分重要的角色着色器在渲染中可能会出现水波纹或者是噪点问题\n请确保 ShaderPatch 插件已经被启用
+GPU_GM_NEWER_NAME=信息：某些场景可能会出现噪点\n(点击以获取更多信息)
+GPU_GM_NEWER_HINT=在麦克斯韦系列（GTX900 系），更新的显卡上，某些次要的场景着色器会出现噪点问题\n请确保 ShaderPatch 插件已经被启用
+GPU_GK_NAME=信息：无错误
+GPU_GK_HINT=你的 GPU 应该可以正常游玩这个游戏
+GPU_GF_DRIVER_OLD_NAME=信息：驱动版本太旧
+GPU_GF_DRIVER_OLD_HINT=你的 GPU 应该可以运行游戏，但是看起来你的 OpenGL 版本太旧了\n更新驱动程序应该会解决此问题。
+GPU_GF_NAME=信息:无已知错误
+GPU_GF_HINT=你的 GPU 应该可以正常运行此游戏，但是他比此游戏所适配的 GPU (GTX 650 Ti) 要旧\n游戏中可能会存在一些图形方面的问题\n请向开发团队反应这些问题以便于定位和修复
+GPU_TOO_NEW_NAME=信息：GPU 可能太新了\n(点击以获取更多信息)
+GPU_TOO_NEW_HINT=你的 GPU 看来太新了。目前只支持图灵架构 (GTX16 系 / RTX20 系)。\n好消息是：游戏应该可以运行，但是 ShaderPatch 可能还不支持它\n你可能会在部分角色或场景上看到水波纹或者是噪点\n请将这些问题反馈给开发团队以帮助我们更新 ShaderPatch 插件
+GPU_OLD_NAME=信息:GPU 过旧！3D 渲染可能会出现错误\n(点击以获取更多信息)
+GPU_OLD_HINT=您的 GPU 非常旧，它不支持游戏使用的渲染技术\n您可能可以运行游戏 但是图形可能会出现严重错误\n请升级到 GTX600 系列以后的 GPU。
+GPU_UNKNOWN_NAME=信息：无法检测 GPU 架构。\n(点击以获取更多信息)
+GPU_UNKNOWN_HINT=看起来您有一个 NVIDIA GPU，但在尝试确定 GPU 的架构时出错。\n这可能是由一个 bug 引起的，但它也可能表明潜在的问题。\n请确保您有 GTX600 系列或更高版本的 GPU。(GTX 400 系列或更高版本也支持）
+SHOW_GPU_DIALOG_HINT=你可以在选项中停用这个警告信息

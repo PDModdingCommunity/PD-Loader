@@ -12,6 +12,8 @@ R.ENABLE_NAME=Enable
 R.ENABLE_HINT=Enable or disable custom internal resolution.
 R.RESOLUTION_NAME=Resolution:
 R.RESOLUTION_HINT=Sets the internal resolution (instead of 1280x720).
+MATCH_WINDOW=Match Window
+MATCH_SCREEN=Match Screen
 
 # graphics
 MODEL_NAME=NVIDIA GPU:
@@ -221,6 +223,9 @@ SCORE_SAVER_NAME=Score Saver
 SCORE_SAVER_HINT=Saves high scores to plugins/scores.ini.
 PAUSE_NAME=Pause
 PAUSE_HINT=Adds a pause menu.
+
+#plugins
+CONFIG=Config
 
 ###############################################
 # ui

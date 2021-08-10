@@ -13,6 +13,7 @@
 
 #include "PluginConfigApi.h"
 #include "IniReader.h"
+#include "i18n.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -358,7 +359,7 @@ public:
 	{
 		CheckBox^ cb = gcnew CheckBox();
 
-		cb->Text = gcnew String(_friendlyName);
+		cb->Text = i18n::GetStringFallback(gcnew String(_friendlyName));
 		cb->Checked = GetIniBool(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath);
 		cb->Left = left + 2;
 		cb->Top = top;
@@ -379,7 +380,7 @@ public:
 		}
 		cb->Scale(ScaleWidth, ScaleHeight);
 
-		tooltip->SetToolTip(cb, gcnew String(_description));
+		tooltip->SetToolTip(cb, i18n::GetStringFallback(gcnew String(_description)));
 
 		if (hasChanged == nullptr)
 			hasChanged = new bool(false);
@@ -424,7 +425,7 @@ public:
 		Label^ label = gcnew Label();
 		NumericUpDown^ numberbox = gcnew NumericUpDown();
 
-		label->Text = gcnew String(_friendlyName);
+		label->Text = i18n::GetStringFallback(gcnew String(_friendlyName));
 		label->Left = left;
 		label->Top = top + 3;
 		label->Width = Col1Width;
@@ -453,8 +454,8 @@ public:
 		label->Scale(ScaleWidth, ScaleHeight);
 		numberbox->Scale(ScaleWidth, ScaleHeight);
 
-		tooltip->SetToolTip(label, gcnew String(_description));
-		tooltip->SetToolTip(numberbox, gcnew String(_description));
+		tooltip->SetToolTip(label, i18n::GetStringFallback(gcnew String(_description)));
+		tooltip->SetToolTip(numberbox, i18n::GetStringFallback(gcnew String(_description)));
 
 		if (hasChanged == nullptr)
 			hasChanged = new bool(false);
@@ -500,7 +501,7 @@ public:
 
 		const wchar_t* stringBuf;
 
-		label->Text = gcnew String(_friendlyName);
+		label->Text = i18n::GetStringFallback(gcnew String(_friendlyName));
 		label->Left = left;
 		label->Top = top + 3;
 		label->Width = Col1Width;
@@ -532,8 +533,8 @@ public:
 		//	textbox->Enabled = false;
 		//}
 
-		tooltip->SetToolTip(label, gcnew String(_description));
-		tooltip->SetToolTip(textbox, gcnew String(_description));
+		tooltip->SetToolTip(label, i18n::GetStringFallback(gcnew String(_description)));
+		tooltip->SetToolTip(textbox, i18n::GetStringFallback(gcnew String(_description)));
 
 		if (hasChanged == nullptr)
 			hasChanged = new bool(false);
@@ -589,7 +590,7 @@ public:
 		Label^ label = gcnew Label();
 		ComboBox^ combobox = gcnew ComboBox();
 
-		label->Text = gcnew String(_friendlyName);
+		label->Text = i18n::GetStringFallback(gcnew String(_friendlyName));
 		label->Left = left;
 		label->Top = top + 3;
 		label->Width = Col1Width;
@@ -597,7 +598,8 @@ public:
 		//label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 
 		for (LPCWSTR& choice : _valueStrings) {
-			combobox->Items->Add(msclr::interop::marshal_as<System::String^>(choice));
+			String^ displayString = i18n::GetStringFallback(msclr::interop::marshal_as<System::String^>(choice));
+			combobox->Items->Add(displayString);
 		}
 		combobox->SelectedIndex = GetIniInt(_iniSectionName, _iniVarName, _defaultVal, _iniFilePath)-_indexOffset;
 		combobox->Left = left + Col2Left;
@@ -619,8 +621,8 @@ public:
 		label->Scale(ScaleWidth, ScaleHeight);
 		combobox->Scale(ScaleWidth, ScaleHeight);
 
-		tooltip->SetToolTip(label, gcnew String(_description));
-		tooltip->SetToolTip(combobox, gcnew String(_description));
+		tooltip->SetToolTip(label, i18n::GetStringFallback(gcnew String(_description)));
+		tooltip->SetToolTip(combobox, i18n::GetStringFallback(gcnew String(_description)));
 
 		if (hasChanged == nullptr)
 			hasChanged = new bool(false);
@@ -670,7 +672,7 @@ public:
 
 		const wchar_t* stringBuf;
 
-		label->Text = gcnew String(_friendlyName);
+		label->Text = i18n::GetStringFallback(gcnew String(_friendlyName));
 		label->Left = left;
 		label->Top = top + 3;
 		label->Width = Col1Width;
@@ -713,8 +715,8 @@ public:
 		//	combobox->Enabled = false;
 		//}
 
-		tooltip->SetToolTip(label, gcnew String(_description));
-		tooltip->SetToolTip(combobox, gcnew String(_description));
+		tooltip->SetToolTip(label, i18n::GetStringFallback(gcnew String(_description)));
+		tooltip->SetToolTip(combobox, i18n::GetStringFallback(gcnew String(_description)));
 
 		if (hasChanged == nullptr)
 			hasChanged = new bool(false);
@@ -775,7 +777,7 @@ public:
 
 		System::String^ tempSysStr;
 
-		label->Text = gcnew String(_friendlyName);
+		label->Text = i18n::GetStringFallback(gcnew String(_friendlyName));
 		label->Left = left;
 		label->Top = top + 3;
 		label->Width = Col1Width;
@@ -812,8 +814,8 @@ public:
 		label->Scale(ScaleWidth, ScaleHeight);
 		combobox->Scale(ScaleWidth, ScaleHeight);
 
-		tooltip->SetToolTip(label, gcnew String(_description));
-		tooltip->SetToolTip(combobox, gcnew String(_description));
+		tooltip->SetToolTip(label, i18n::GetStringFallback(gcnew String(_description)));
+		tooltip->SetToolTip(combobox, i18n::GetStringFallback(gcnew String(_description)));
 
 		ComboboxValidation^ validation = gcnew ComboboxValidation(combobox);
 		combobox->Leave += gcnew System::EventHandler(validation, &ComboboxValidation::CheckNumberLeave);
@@ -883,7 +885,7 @@ public:
 
 		System::String^ tempSysStr;
 
-		label->Text = gcnew String(_friendlyName);
+		label->Text = i18n::GetStringFallback(gcnew String(_friendlyName));
 		label->Left = left;
 		label->Top = top + 3;
 		label->Width = Col1Width;
@@ -945,8 +947,8 @@ public:
 		label->Scale(ScaleWidth, ScaleHeight);
 		combobox->Scale(ScaleWidth, ScaleHeight);
 
-		tooltip->SetToolTip(label, gcnew String(_description));
-		tooltip->SetToolTip(combobox, gcnew String(_description));
+		tooltip->SetToolTip(label, i18n::GetStringFallback(gcnew String(_description)));
+		tooltip->SetToolTip(combobox, i18n::GetStringFallback(gcnew String(_description)));
 
 		if (hasChanged == nullptr)
 			hasChanged = new bool(false);
@@ -1026,7 +1028,7 @@ public:
 		}
 		button->Scale(ScaleWidth, ScaleHeight);
 
-		tooltip->SetToolTip(button, gcnew String(_description));
+		tooltip->SetToolTip(button, i18n::GetStringFallback(gcnew String(_description)));
 
 		CustomFuncHandler^ funchandler = gcnew CustomFuncHandler(_func);
 		button->Click += gcnew System::EventHandler(funchandler, &CustomFuncHandler::RunFunc);
@@ -1089,7 +1091,7 @@ public:
 		cb->Scale(ScaleWidth, ScaleHeight);
 		button->Scale(ScaleWidth, ScaleHeight);
 
-		tooltip->SetToolTip(cb, gcnew String(_description));
+		tooltip->SetToolTip(cb, i18n::GetStringFallback(gcnew String(_description)));
 
 		if (hasChanged == nullptr)
 			hasChanged = new bool(false);

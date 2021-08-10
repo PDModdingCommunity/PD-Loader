@@ -1,0 +1,260 @@
+###############################################
+# framework
+
+# display
+DISPLAY_NAME=Display:
+DISPLAY_HINT=Sets the window/screen mode.\n\n\nFast: Popup borderless window (can cause issues with screenshots if Windows 10/11 fullscreen optimizations are enabled).\n\nExclusive: Takes control of the screen and allows you to change the resolution and refresh rate. Makes switching between applications harder.\n\nSafe: Simple borderless window. A little bit laggier than Fast, but with less issues.
+RESOLUTION_NAME=Resolution:
+RESOLUTION_HINT=Sets the display resolution.
+REFRESHRATE_NAME=Refresh Rate:
+REFRESHRATE_HINT=Sets the display refresh rate.
+R.ENABLE_NAME=Enable
+R.ENABLE_HINT=Enable or disable custom internal resolution.
+R.RESOLUTION_NAME=Resolution:
+R.RESOLUTION_HINT=Sets the internal resolution (instead of 1280x720).
+
+# graphics
+MODEL_NAME=NVIDIA GPU:
+MODEL_HINT=Select your NVIDIA GPU's architecture to apply the necessary workarounds.\n\nNOTE: Automatic detection does not currently work on GNU/Linux.
+TAA_NAME=TAA
+TAA_HINT=Temporal Anti-Aliasing
+MLAA_NAME=MLAA
+MLAA_HINT=Morphological Anti-Aliasing
+MAG_NAME=Filter:
+MAG_HINT=Image filter.\n\nBilinear: default filter\nNearest-neighbour: sharpest, but blocky\nSharpen: sharp filter\nCone: smooth filter
+DOF_NAME=Depth of Field
+DOF_HINT=Blurs the background. Disable for better performance.
+REFLECTIONS_NAME=Reflections
+REFLECTIONS_HINT=Enable or disable reflections.
+REFLECT_RES_WIDTH_NAME=Reflection Res:
+REFLECT_RES_WIDTH_HINT=Sets the reflection buffer resolution (instead of 512x256).
+REFRACT_RES_WIDTH_NAME=Refraction Res:
+REFRACT_RES_WIDTH_HINT=Sets the refraction buffer resolution (instead of 512x256).
+SHADOWS_NAME=Shadows
+SHADOWS_HINT=Enable or disable shadows.
+PUNCHTHROUGH_NAME=Transparent Meshes
+PUNCHTHROUGH_HINT=Show transparent meshes.
+GLARE_NAME=Glare
+GLARE_HINT=Enable or disable glare.
+SHADER_NAME=Shader
+SHADER_HINT=Enable or disable high-quality shaders.
+NPR1_NAME=Toon (F9):
+NPR1_HINT=NPR1 shader\n\nPress F9 to toggle.
+2D_NAME=Disable 3D rendering
+2D_HINT=Disable all 3D passes.\n\nWARNING: The extended data will be deleted unless Prevent Data Deletion is enabled. Don't enable on Intel GPUs, enable "Disable Extended Data" instead.
+
+# options
+BUILTIN_PATCHES_NAME=Enable Built-In Patches
+BUILTIN_PATCHES_HINT=Enables the built-in patches, including the options below.
+CUSTOM_PATCHES_NAME=Enable Custom Patches
+CUSTOM_PATCHES_HINT=Enables all custom patches.
+BUILTIN_RENDER_NAME=Enable Built-In Render
+BUILTIN_RENDER_HINT=Enables the built-in render patches.
+
+NO_MOVIES_NAME=Disable Movies
+NO_MOVIES_HINT=Disable movies (enable this if the game hangs when loading certain PVs).
+CURSOR_NAME=Cursor
+CURSOR_HINT=Enable or disable the mouse cursor.
+STEREO_NAME=Stereo
+STEREO_HINT=Use 2 channels instead of 4 (when not using DivaSound).
+
+QUICK_START_NAME=Quick Start:
+QUICK_START_HINT=Skip one or more menus.
+NO_SCROLLING_SFX_NAME=Disable Scrolling SFX
+NO_SCROLLING_SFX_HINT=Disable the scrolling sound effect.
+
+ENHANCED_STAGE_MANAGER_NAME=Number of Stages:
+ENHANCED_STAGE_MANAGER_HINT=Set the number of stages (0 = default).
+ENHANCED_STAGE_MANAGER_ENCORE_NAME=Encore
+ENHANCED_STAGE_MANAGER_ENCORE_HINT=Enable encore stages.
+
+FORCE_MOUTH_NAME=Mouth Type:
+FORCE_MOUTH_HINT=Change the mouth animations.
+FORCE_EXPRESSIONS_NAME=Expression Type:
+FORCE_EXPRESSIONS_HINT=Change the expressions.
+FORCE_LOOK_NAME=Look Type:
+FORCE_LOOK_HINT=Change the look animations.
+NO_HAND_SCALING_NAME=No Hand Scaling
+NO_HAND_SCALING_HINT=Disable hand scaling.
+DEFAULT_HAND_SIZE_NAME=Default Hand Size:
+DEFAULT_HAND_SIZE_HINT=-1: default\n12200: PDA
+SING_MISSED_NAME=Sing Missed
+SING_MISSED_HINT=Sing missed notes.
+
+HIDE_VOLUME_NAME=Hide Volume Buttons
+HIDE_VOLUME_HINT=Hide the volume and SE control buttons.
+NO_PV_UI_NAME=Disable PV UI
+NO_PV_UI_HINT=Remove the photo controls during PV playback.
+HIDE_PV_WATERMARK_NAME=Hide PV Watermark
+HIDE_PV_WATERMARK_HINT=Hide the watermark that's usually shown in PV viewing mode.
+STATUS_ICONS_NAME=Top-Right Corner Icons:
+STATUS_ICONS_HINT=Set the state of card reader and network status icons.
+NO_LYRICS_NAME=Disable Lyrics
+NO_LYRICS_HINT=Disable showing lyrics.
+NO_ERROR_NAME=Disable Error Banner
+NO_ERROR_HINT=Disable the error banner on the attract screen.
+HIDE_FREEPLAY_NAME=Hide "FREE PLAY"/"CREDIT(S)"
+HIDE_FREEPLAY_HINT=Hide the "FREE PLAY"/"CREDIT(S)" text.
+PDLOADERTEXT_NAME=PD Loader FREE PLAY
+PDLOADERTEXT_HINT=Show "PD Loader" instead of "FREE PLAY".
+NO_TIMER_NAME=Freeze Timer
+NO_TIMER_HINT=Disable the timer.
+NO_TIMER_SPRITE_NAME=Disable Timer Sprite
+NO_TIMER_SPRITE_HINT=Disable the timer sprite.
+NO_MESSAGE_BAR_NAME=Hide Message Bar
+NO_MESSAGE_BAR_HINT=Hide the top message bar.
+NO_STAGE_TEXT_NAME=Disable Stage Text
+NO_STAGE_TEXT_HINT=Disable Stage 1/2/Final.
+
+UNLOCK_PSEUDO_NAME=Unlock "PSEUDO" Modules (incomplete)
+UNLOCK_PSEUDO_HINT=Lets you play any PV with any performer.\n(incomplete, recommended modules will default to Miku)
+CARD_NAME=Unlock Card Menu (incomplete)
+CARD_HINT=Enables the card menu.\n(incomplete, it doesn't bypass the card prompt)
+NO_OPD_NAME=Disable Extended Data
+NO_OPD_HINT=AKA Skyth's "No Osage Play Data" patch.\n\nDisables baked physics in edits to save space.\nMay break physics in some edits.
+DWGUI_SCALING_NAME=Scale Debug Windows
+DWGUI_SCALING_HINT=AKA somewhatlurker's dwgui patch.\n\nMakes debug windows bigger above HD internal resolution.
+FREEPLAY_NAME=FREE PLAY
+FREEPLAY_HINT=Show "FREE PLAY" instead of "CREDIT(S)" and don't require credits.
+
+FPS.LIMIT.LIGHTMODE_NAME=Use Lightweight Limiter
+FPS.LIMIT.LIGHTMODE_HINT=Makes the FPS limiter use less CPU.\nMay have less consistent performance.
+FPS.LIMIT_NAME=FPS Limit:
+FPS.LIMIT_HINT=Allows you to set a frame rate cap. Set to -1 to unlock the frame rate.
+FRM.MOTION.RATE_NAME=FRM Motion Rate:
+FRM.MOTION.RATE_HINT=Sets the motion rate (fps) for the Frame Rate Manager component.\nLarger values should be smoother, but more CPU intensive and possibly buggier.
+
+AUTOPAUSE_NAME=Pause Automatically
+AUTOPAUSE_HINT=Pause when focus is lost.
+
+RUMBLE_NAME=XInput Rumble
+RUMBLE_HINT=Enables rumble during chainslides.
+XINPUT_PREFERRED_NAME=XInput Controller Num:
+XINPUT_PREFERRED_HINT=Sets the preferred XInput controller.\nIf unavailable, the next connected controller is used.
+
+HARDWARE_SLIDER_NAME=Use Hardware Slider
+HARDWARE_SLIDER_HINT=Enable this if using a real arcade slider.\n(set the slider to port COM11)
+
+OPENGL_PATCH_A_NAME=OpenGL Patch A
+OPENGL_PATCH_A_HINT=Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.
+OPENGL_PATCH_B_NAME=OpenGL Patch B
+OPENGL_PATCH_B_HINT=Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.
+
+PREVENT_DATA_DELETION_NAME=Prevent Data Deletion
+PREVENT_DATA_DELETION_HINT=Prevents the game from deleting files.
+COMMAND_LINE_NAME=Command Line:
+COMMAND_LINE_HINT=Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.
+USE_DIVAHOOK_BAT_NAME=Use divahook.bat
+USE_DIVAHOOK_BAT_HINT=Launches divahook.bat intead of diva.exe.
+DARK_LAUNCHER_NAME=Dark Launcher
+DARK_LAUNCHER_HINT=Sets the dark colour scheme in the launcher.
+LAUNCHER_LANGUAGE_NAME=Launcher Language:
+LAUNCHER_LANGUAGE_HINT=Sets the Language of the launcher.
+NO_GPU_DIALOG_NAME=Disable GPU Warning
+NO_GPU_DIALOG_HINT=Disables the warning dialog for unsupported GPUs.
+
+
+# player data
+PLAYER_NAME_NAME=Player Name:
+PLAYER_NAME_HINT=Player name shown in game.
+LEVEL_NAME_NAME=Level Name:
+LEVEL_NAME_HINT=Level (plate) name shown in game.
+LEVEL_PLATE_ID_NAME=Level Plate:
+LEVEL_PLATE_ID_HINT=Sets the level background image (plate).
+LEVEL_PLATE_EFFECT_NAME=Level Plate Effect:
+LEVEL_PLATE_EFFECT_HINT=Sets the effect on the level background image (plate).
+SKIN_EQUIP _NAME=Skin:
+SKIN_EQUIP _HINT=Sets the gameplay UI skin.
+BTN_SE_EQUIP_NAME=Button Sound:
+BTN_SE_EQUIP_HINT=Sets the sound effect for buttons.\n-1 = song default
+SLIDE_SE_EQUIP_NAME=Slide Sound:
+SLIDE_SE_EQUIP_HINT=Sets the sound effect for slides.\n-1 = song default
+CHAINSLIDE_SE_EQUIP_NAME=Chainslide Sound:
+CHAINSLIDE_SE_EQUIP_HINT=Sets the sound effect for chain slides.\n-1 = song default
+SLIDERTOUCH_SE_EQUIP_NAME=Slider Touch Sound:
+SLIDERTOUCH_SE_EQUIP_HINT=Sets the sound effect for touching the slider with no note.\n-1 = song default
+ACT_TOGGLE_NAME=Button SE
+ACT_TOGGLE_HINT=Enables button/slider sounds.
+BORDER_GREAT_NAME=Clear Border (Great)
+BORDER_GREAT_HINT=Shows the clear border for a great rating on the progress bar.
+BORDER_EXCELLENT_NAME=Clear Border (Excellent)
+BORDER_EXCELLENT_HINT=Shows the clear border for an excellent rating on the progress bar.
+BORDER_RIVAL_NAME=Clear Border (Rival)
+BORDER_RIVAL_HINT=Shows the clear border for beating your rival on the progress bar.
+USE_CARD_NAME=Use Card
+USE_CARD_HINT=Enables IC card. This allows module selection.
+MODULE_CARD_WORKAROUND_NAME=Module Selection Workaround
+MODULE_CARD_WORKAROUND_HINT=Allows module selection without card and tries to improve menu performance.\n(BETA)
+USE_PV_MODULE_EQUIP_NAME=Song Specific Modules
+USE_PV_MODULE_EQUIP_HINT=Allows song-specific module selection.
+USE_PV_SKIN_EQUIP_NAME=Song Specific Skins
+USE_PV_SKIN_EQUIP_HINT=Allows song-specific skin settings.\nValues stored in skins.ini
+USE_PV_SFX_EQUIP_NAME=Song Specific Sound Effects
+USE_PV_SFX_EQUIP_HINT=Allows song-specific sound effect settings.\nValues stored in sfx.ini
+GAMEMODE_OPTIONS_NAME=Game Modifiers
+GAMEMODE_OPTIONS_HINT=Allows use of game mode modifiers (hi-speed, hidden, and sudden).
+
+# components
+INPUT_EMULATOR_NAME=Input Emulator
+INPUT_EMULATOR_HINT=Emulates input through keyboard and/or mouse.
+TOUCH_SLIDER_EMULATOR_NAME=Slider Emulator
+TOUCH_SLIDER_EMULATOR_HINT=Emulates slider through keyboard and/or mouse.
+TOUCH_PANEL_EMULATOR_NAME=Touch Panel Emulator
+TOUCH_PANEL_EMULATOR_HINT=Emulates touch panel through mouse.
+PLAYER_DATA_MANAGER_NAME=Player Data Manager
+PLAYER_DATA_MANAGER_HINT=Loads user-defined values into the PlayerData struct.\nRequired for modules and game mode modifiers.
+FRAME_RATE_MANAGER_NAME=Frame Rate Manager
+FRAME_RATE_MANAGER_HINT=Adjusts animations to the correct speed at different frame rates.\nOnly needed when FPS isn't locked at 60.
+FAST_LOADER_NAME=Fast Loader
+FAST_LOADER_HINT=Skip or speed up unnecessary loading steps.
+FAST_LOADER_SPEED_NAME=Fast Loader Speed
+FAST_LOADER_SPEED_HINT=Set this to 4 or less when playing online.\nDefault: 39
+CAMERA_CONTROLLER_NAME=Camera Controller
+CAMERA_CONTROLLER_HINT=Enables freecam (toggled using F3).\nWASD to move, SPACE/CTRL for up/down, Q/R to rotate, R/F for zoom.\nHolding SHIFT/ALT changes control speed.
+SCALE_COMPONENT_NAME=Scale Component
+SCALE_COMPONENT_HINT=Scales the graphics output framebuffer to fill the screen/window.
+DEBUG_COMPONENT_NAME=Debug Component
+DEBUG_COMPONENT_HINT=Allows for changing game state (F4-F8 keys), using dev GUI and tests, and speeding up 2d animations/menus (hold SHIFT+TAB).
+TARGET_INSPECTOR_NAME=Target Inspector
+TARGET_INSPECTOR_HINT=Enables hold transfers.
+SCORE_SAVER_NAME=Score Saver
+SCORE_SAVER_HINT=Saves high scores to plugins/scores.ini.
+PAUSE_NAME=Pause
+PAUSE_HINT=Adds a pause menu.
+
+###############################################
+# ui
+
+# dialog
+CONFIRM_SAVE_SETTINGS=Do you want to save your settings?
+CONFIRM_DISCORD_OR_GUIDE=Would you like to read the user guide for troubleshooting?
+HOWTO_CLEAN_INSTALL=How to do a clean installation
+HOWTO_CLEAN_INSTALL_HINT=Delete:\n- dnsapi.dll or dinput8.dll\n- patches/\n- plugins/\n\nRestore:\n- glut32.dll\n\nThen install PD Loader from the official repository.
+
+# gpu
+GPU_INFO_NAME=GPU Info:
+GPU_AMD_NOVIDIA_NAME=Issues: AMD GPU support is unofficial.
+GPU_AMD_NOVIDIA_HINT=AMD GPUs are not supported without mods.\nThe PD Loader AMDPack seems to be installed, but please keep in mind that it may have issues.
+GPU_AMD_NAME=Issues: Mods needed for AMD compatibility!
+GPU_AMD_HINT=AMD GPUs are not supported without mods.\nThe PD Loader AMDPack can be used to make 3D rendering work. Please download it and follow the included instructions.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.
+GPU_UNSUPPORTED_NAME=Issues: UNSUPPORTED GPU!
+GPU_UNSUPPORTED_HINT=Your graphics card is not supported. Only NVIDIA GPUs are recommended. (though AMD ones can be used with mods)\nPlease use a GTX 600 series or later NVIDIA GPU.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.\n\nOwners of other GPUs may be able to run the game using plugins or mods, but 3D graphics will probably not work.
+GPU_GA_NAME=Issues: Ampere GPU detected! Unknown issues.\n(Click for more information)
+GPU_GA_HINT=Ampere GPUs have not been tested yet. On the previous generation Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled and report any further issues to the developers.
+GPU_TU_NAME=Issues: Turing GPU detected! Possible noise.\n(Click for more information)
+GPU_TU_HINT=On Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.
+GPU_GM_NEWER_NAME=Issues: May have minor noise on some stages.\n(Click for more information)
+GPU_GM_NEWER_HINT=On Maxwell GPUs (~GTX 900) or newer, some minor stage shaders create noise.\nPlease make sure the ShaderPatch plugin is enabled.
+GPU_GK_NAME=Issues: None.
+GPU_GK_HINT=Your GPU should have no issues running the game.
+GPU_GF_DRIVER_OLD_NAME=Issues: Driver too old.
+GPU_GF_DRIVER_OLD_HINT=Your GPU should be able to run the game, but it looks like your OpenGL version is too old.\nA driver update should fix this.
+GPU_GF_NAME=Issues: No known issues.
+GPU_GF_HINT=Your GPU should have no issues running the game, but it is older than the GPU the game was originally designed for (GTX 650 Ti).\nThere may be some issues with graphics.\nPlease report any issues so that they can be analysed and potentially fixed.
+GPU_TOO_NEW_NAME=Issues: GPU may be too new.\n(Click for more information)
+GPU_TOO_NEW_HINT=It looks like your GPU may be too new. Only up to Turing (GTX 16xx/RTX 20xx) is currently supported.\nGood news: the game should be capable of running, but shader patches (probably needed) may not support it yet.\nYou will likely see lines/noise on important character shaders and some minor stage shaders.\nPlease report any issues so that ShaderPatch can be updated.
+GPU_OLD_NAME=Issues: GPU too old! 3D rendering might be broken.\n(Click for more information)
+GPU_OLD_HINT=Your GPU is very old and does not support rendering techniques used by the game.\nYou may be able to play, but graphics will likely have major issues.\nPlease upgrade to a GTX 600 series or later GPU.
+GPU_UNKNOWN_NAME=Issues: Unable to detect GPU architecture.\n(Click for more information)
+GPU_UNKNOWN_HINT=It looks like you have an NVIDIA GPU, but something went wrong while trying to determine your GPU's architecture (type).\nThis may be a caused by a bug, but it probably indicates potential issues.\nPlease make sure you have a GTX 600 series or later GPU. (GTX 400 series or later should also work)
+SHOW_GPU_DIALOG_HINT=You can disable this message from the options tab.

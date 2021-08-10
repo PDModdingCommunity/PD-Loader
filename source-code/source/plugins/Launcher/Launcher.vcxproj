@@ -99,6 +99,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="i18n.h" />
     <ClCompile Include="TabPadding.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -123,7 +124,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SkinnedMessageBox.resx" />
+    <EmbeddedResource Include="Resources.restext" />
+    <EmbeddedResource Include="Resources.zh-Hans.restext" />
     <EmbeddedResource Include="ui.resx">
+      <DependentUpon>ui.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui.zh-Hans.resx">
       <DependentUpon>ui.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

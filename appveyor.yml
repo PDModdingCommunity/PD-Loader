@@ -1,7 +1,4 @@
 version: '{build}'
-branches:
-  except:
-  - git-sync
 image: Visual Studio 2019
 configuration:
 - Release

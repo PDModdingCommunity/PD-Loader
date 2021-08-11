@@ -10,7 +10,6 @@
 #include "patches.h"
 //#include "PluginConfigApi.h"
 #include "PatchApplier.h"
-#include "PatchApplier600.h"
 #include "PatchApplier710.h"
 
 #include <detours.h>
@@ -42,22 +41,15 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 void ApplyPatches() {
 	if (nBuiltinPatches)
 	{
-		if (*(char*)0x140A570F0 == '6') game_version = 600;
-
-		std::string version_string = std::to_string(game_version);
-		version_string.insert(version_string.begin()+1, '.');
-		std::cout << "[Patches] Game version " + version_string << std::endl;
+		const char* exe_ver_string = (const char*)0x140A92CB8;
+		if (strcmp(exe_ver_string, "7.10.00") != 0)
+		{
+			MessageBoxW(nullptr, L"Game version not 7.10. Please verify your files.", L"Patches", MB_ICONERROR);
+			exit(1);
+		}
 
 		PatchApplier* pa;
-
-		switch (game_version)
-		{
-		case 600:
-			pa = new PatchApplier600;
-			break;
-		default:
-			pa = new PatchApplier710;
-		}
+		pa = new PatchApplier710;
 
 		pa->ApplyPatches();
 		printf("[Patches] Patches applied\n");

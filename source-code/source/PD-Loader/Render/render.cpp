@@ -16,18 +16,9 @@
 
 using namespace std::chrono;
 
-extern unsigned short game_version;
-
 void exitGameClean(int)
 {
-	switch (game_version)
-	{
-	case 600:
-		*(bool*)0x0000000140E8DF20 = true; // 6.00
-		break;
-	default:
-		*(bool*)0x0000000140EDA6B0 = true; // 7.10
-	}
+	*(bool*)0x0000000140EDA6B0 = true; // 7.10
 }
 
 int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
@@ -53,27 +44,13 @@ int hookedCreateWindow(const char* title, void(__cdecl* exit_function)(int))
 			printf("[Render Manager] Requested display mode not supported. Using non-exclusive fullscreen instead.\n");
 			printf(GameModeString);
 			printf("\n");
-			switch (game_version)
-			{
-			case 600:
-				*fullScreenFlag_600 = 1;
-				break;
-			default:
-				*fullScreenFlag_710 = 1;
-			}
+			*fullScreenFlag_710 = 1;
 			__glutCreateWindowWithExit(title, exitGameClean);
 		}
 	}
 	else // windowed or borderless
 	{
-		switch (game_version)
-		{
-		case 600:
-			*fullScreenFlag_600 = 0;
-			break;
-		default:
-			*fullScreenFlag_710 = 0;
-		}
+		*fullScreenFlag_710 = 0;
 
 		RECT xy;
 		SystemParametersInfo(SPI_GETWORKAREA, 0, &xy, 0);
@@ -131,23 +108,9 @@ __int64 hookedParseParameters(int a1, __int64* a2)
 {
 	// Force -wqhd if Custom Internal Resolution is enabled
 	if (nIntRes)
-		switch (game_version)
-		{
-		case 600:
-			*resolutionType_600 = 15;
-			break;
-		default:
-			*resolutionType_710 = 15;
-		}
+		*resolutionType_710 = 15;
 	// Return to the original function
-	switch (game_version)
-	{
-	case 600:
-		return divaParseParameters_600(a1, a2);
-		break;
-	default:
-		return divaParseParameters_710(a1, a2);
-	}
+	return divaParseParameters_710(a1, a2);
 }
 
 time_point<high_resolution_clock> sleepUntil = high_resolution_clock::now();
@@ -174,13 +137,7 @@ __int64 __fastcall limiterFuncNormal(__int64 a1)
 	if (nextUpdate < timeNow)
 		nextUpdate = timeNow;
 
-	switch (game_version)
-	{
-	case 600:
-		return divaEngineUpdate_600(a1);
-	default:
-		return divaEngineUpdate_710(a1);
-	}
+	return divaEngineUpdate_710(a1);
 }
 
 __int64 __fastcall limiterFuncLight(__int64 a1)
@@ -223,25 +180,13 @@ __int64 __fastcall limiterFuncLight(__int64 a1)
 
 	sleepUntil = nextUpdate - sleepWindow;
 
-	switch (game_version)
-	{
-	case 600:
-		return divaEngineUpdate_600(a1);
-	default:
-		return divaEngineUpdate_710(a1);
-	}
+	return divaEngineUpdate_710(a1);
 }
 
 __int64 __fastcall hookedEngineUpdate(__int64 a1)
 {
 	if (nFpsLimit < 1)
-		switch (game_version)
-		{
-		case 600:
-			return divaEngineUpdate_600(a1);
-		default:
-			return divaEngineUpdate_710(a1);
-		}
+		return divaEngineUpdate_710(a1);
 	else if (nUseLightLimiter)
 		return limiterFuncLight(a1);
 	else
@@ -267,31 +212,15 @@ void ApplyRender(HMODULE hModule)
 {
 	if (nBuiltinRender)
 	{
-		if (*(char*)0x140A570F0 == '6') game_version = 600;
-
 		DisableThreadLibraryCalls(hModule);
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		switch (game_version)
-		{
-		case 600:
-			DetourAttach(&(PVOID&)divaCreateWindow_600, hookedCreateWindow);
-			break;
-		default:
-			DetourAttach(&(PVOID&)divaCreateWindow_710, hookedCreateWindow);
-		}
+		DetourAttach(&(PVOID&)divaCreateWindow_710, hookedCreateWindow);
 		DetourTransactionCommit();
 
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		switch (game_version)
-		{
-		case 600:
-			DetourAttach(&(PVOID&)divaParseParameters_600, hookedParseParameters);
-			break;
-		default:
-			DetourAttach(&(PVOID&)divaParseParameters_710, hookedParseParameters);
-		}
+		DetourAttach(&(PVOID&)divaParseParameters_710, hookedParseParameters);
 		DetourTransactionCommit();
 
 
@@ -307,14 +236,7 @@ void ApplyRender(HMODULE hModule)
 		setFramerateLimit(nFpsLimit);
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		switch (game_version)
-		{
-		case 600:
-			DetourAttach(&(PVOID&)divaEngineUpdate_600, hookedEngineUpdate);
-			break;
-		default:
-			DetourAttach(&(PVOID&)divaEngineUpdate_710, hookedEngineUpdate);
-		}
+		DetourAttach(&(PVOID&)divaEngineUpdate_710, hookedEngineUpdate);
 		DetourTransactionCommit();
 
 		// if window is set to screen res, process that now so it can be used for auto internal res
@@ -335,23 +257,6 @@ void ApplyRender(HMODULE hModule)
 
 			printf("[Render] Custom internal resolution enabled\n");
 			printf("[Render] X: %d Y: %d\n", nIntResWidth, nIntResHeight);
-			switch (game_version)
-			{
-			case 600:
-			{
-				DWORD oldProtect, bck;
-				VirtualProtect((BYTE*)0x0000000140980954, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((int*)0x0000000140980954) = nIntResWidth;
-				VirtualProtect((BYTE*)0x0000000140980954, 6, oldProtect, &bck);
-			}
-			{
-				DWORD oldProtect, bck;
-				VirtualProtect((BYTE*)0x0000000140980958, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((int*)0x0000000140980958) = nIntResHeight;
-				VirtualProtect((BYTE*)0x0000000140980958, 6, oldProtect, &bck);
-			}
-			break;
-			default:
 			{
 				DWORD oldProtect, bck;
 				VirtualProtect((BYTE*)0x00000001409B8B68, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
@@ -371,7 +276,6 @@ void ApplyRender(HMODULE hModule)
 
 			//*((int*)0x00000001409B8B1C) = maxWidth; // No parameters width?
 			//*((int*)0x00000001409B8B20) = maxHeight; // No parameters height?
-			}
 		}
 	}
 }

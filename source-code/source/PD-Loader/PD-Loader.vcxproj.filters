@@ -30,9 +30,6 @@
     <ClInclude Include="Patches\PatchApplier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Patches\PatchApplier600.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Patches\PatchApplier710.h">
       <Filter>Header Files</Filter>
     </ClInclude>

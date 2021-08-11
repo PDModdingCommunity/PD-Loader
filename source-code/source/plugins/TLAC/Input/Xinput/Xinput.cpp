@@ -16,6 +16,8 @@ namespace TLAC::Input
 		config.OpenRead();
 		xinput_num = config.GetIntegerValue("xinput_preferred");
 		rumble = config.GetBooleanValue("rumble");
+		rumble_left = config.GetIntegerValue("xinput_rumble_intensity_left", 8000);
+		rumble_right = config.GetIntegerValue("xinput_rumble_intensity_right", 4000);
 	}
 
 	Xinput* Xinput::GetInstance()
@@ -256,8 +258,8 @@ namespace TLAC::Input
 				{
 					XINPUT_VIBRATION vibration;
 					ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
-					vibration.wLeftMotorSpeed = 8000; // use any value between 0-65535 here
-					vibration.wRightMotorSpeed = 4000; // use any value between 0-65535 here
+					vibration.wLeftMotorSpeed = rumble_left; // use any value between 0-65535 here
+					vibration.wRightMotorSpeed = rumble_right; // use any value between 0-65535 here
 					XInputSetState(xc_pref, &vibration);
 				}
 				else

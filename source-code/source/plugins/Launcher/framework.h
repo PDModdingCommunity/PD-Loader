@@ -198,37 +198,65 @@ ConfigOptionBase* graphicsArray[] = {
 };
 
 ConfigOptionBase* optionsArray[] = {
+	new OptionMetaSectionLabel(L"SECTION_LOADER"),
 	new BooleanOption(L"builtin_patches", GLOBAL_SECTION, CONFIG_FILE, L"BUILTIN_PATCHES_NAME", L"BUILTIN_PATCHES_HINT", true, false),
 	new BooleanOption(L"custom_patches", GLOBAL_SECTION, CONFIG_FILE, L"CUSTOM_PATCHES_NAME", L"CUSTOM_PATCHES_HINT", true, false),
 	new BooleanOption(L"builtin_render", GLOBAL_SECTION, CONFIG_FILE, L"BUILTIN_RENDER_NAME", L"BUILTIN_RENDER_HINT", true, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
+	new OptionMetaSectionLabel(L"SECTION_COMPATIBILITY"),
 	new BooleanOption(L"no_movies", PATCHES_SECTION, CONFIG_FILE, L"NO_MOVIES_NAME", L"NO_MOVIES_HINT", false, false),
-	new BooleanOption(L"cursor", PATCHES_SECTION, CONFIG_FILE, L"CURSOR_NAME", L"CURSOR_HINT", true, false),
 	new BooleanOption(L"stereo", PATCHES_SECTION, CONFIG_FILE, L"STEREO_NAME", L"STEREO_HINT", true, false),
+	new BooleanOption(L"prevent_data_deletion", PATCHES_SECTION, CONFIG_FILE, L"PREVENT_DATA_DELETION_NAME", L"PREVENT_DATA_DELETION_HINT", false, false),
+	new BooleanOption(L"no_opd", PATCHES_SECTION, CONFIG_FILE, L"NO_OPD_NAME", L"NO_OPD_HINT", false, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
+	new OptionMetaSectionLabel(L"SECTION_FRAMERATE"),
+	new BooleanOption(L"FPS.Limit.LightMode", GRAPHICS_SECTION, CONFIG_FILE, L"FPS.LIMIT.LIGHTMODE_NAME", L"FPS.LIMIT.LIGHTMODE_HINT", true, false),
+	new NumericOption(L"FPS.Limit", GRAPHICS_SECTION, CONFIG_FILE, L"FPS.LIMIT_NAME", L"FPS.LIMIT_HINT", 60, -1, INT_MAX),
+	new NumericOption(L"frm.motion.rate", GRAPHICS_SECTION, CONFIG_FILE, L"FRM.MOTION.RATE_NAME", L"FRM.MOTION.RATE_HINT", 300, 1, INT_MAX),
+	new OptionMetaSeparator(),
+	new OptionMetaSpacer(8),
+
+	new OptionMetaSectionLabel(L"SECTION_CONTROLLER_OPTIONS"),
+	new BooleanOption(L"rumble", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"RUMBLE_NAME", L"RUMBLE_HINT", true, true),
+	new NumericOption(L"xinput_rumble_intensity_left", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XINPUT_RUMBLE_INTENSITY_LEFT_NAME", L"XINPUT_RUMBLE_INTENSITY_LEFT_HINT", 8000, 0, USHRT_MAX),
+	new NumericOption(L"xinput_rumble_intensity_right", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XINPUT_RUMBLE_INTENSITY_RIGHT_NAME", L"XINPUT_RUMBLE_INTENSITY_RIGHT_HINT", 4000, 0, USHRT_MAX),
+	new NumericOption(L"xinput_preferred", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XINPUT_PREFERRED_NAME", L"XINPUT_PREFERRED_HINT", 0, 0, 3),
+	new BooleanOption(L"hardware_slider", PATCHES_SECTION, CONFIG_FILE, L"HARDWARE_SLIDER_NAME", L"HARDWARE_SLIDER_HINT", false, false),
+	new OptionMetaSeparator(),
+	new OptionMetaSpacer(8),
+
+	new OptionMetaSectionLabel(L"SECTION_LAUNCHER"),
+	new DropdownOption(L"launcher_language",LAUNCHER_SECTION,CONFIG_FILE, L"LAUNCHER_LANGUAGE_NAME",L"LAUNCHER_LANGUAGE_HINT", 0, languages),
+	new BooleanOption(L"dark_launcher", LAUNCHER_SECTION, CONFIG_FILE, L"DARK_LAUNCHER_NAME", L"DARK_LAUNCHER_HINT", false, false),
+	//new BooleanOption(L"acrylic_blur", LAUNCHER_SECTION, CONFIG_FILE, L"ACRYLIC_BLUR_NAME", L"ACRYLIC_BLUR_HINT", false, false),
+	new BooleanOption(L"no_gpu_dialog", LAUNCHER_SECTION, CONFIG_FILE, L"NO_GPU_DIALOG_NAME", L"NO_GPU_DIALOG_HINT", false, false),
+	new BooleanOption(L"use_divahook_bat", LAUNCHER_SECTION, CONFIG_FILE, L"USE_DIVAHOOK_BAT_NAME", L"USE_DIVAHOOK_BAT_HINT", false, false),
+	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"COMMAND_LINE_NAME", L"COMMAND_LINE_HINT", L"", false),
+};
+
+ConfigOptionBase* options2Array[] = {
+	new OptionMetaSectionLabel(L"SECTION_PV_SELECTOR"),
 	new DropdownOption(L"quick_start", PATCHES_SECTION, CONFIG_FILE, L"QUICK_START_NAME", L"QUICK_START_HINT", 1, std::vector<LPCWSTR>({ L"Disabled", L"Guest", L"Guest + Normal" })),
+	new BooleanOption(L"freeplay", PATCHES_SECTION, CONFIG_FILE, L"FREEPLAY_NAME", L"FREEPLAY_HINT", true, false),
 	new BooleanOption(L"no_scrolling_sfx", PATCHES_SECTION, CONFIG_FILE, L"NO_SCROLLING_SFX_NAME", L"NO_SCROLLING_SFX_HINT", false, false),
+	new BooleanOption(L"unlock_pseudo", PATCHES_SECTION, CONFIG_FILE, L"UNLOCK_PSEUDO_NAME", L"UNLOCK_PSEUDO_HINT", false, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
+	new OptionMetaSectionLabel(L"SECTION_ESM"),
 	new NumericOption(L"Enhanced_Stage_Manager", PATCHES_SECTION, CONFIG_FILE, L"ENHANCED_STAGE_MANAGER_NAME", L"ENHANCED_STAGE_MANAGER_HINT", 0, 0, INT_MAX),
 	new BooleanOption(L"Enhanced_Stage_Manager_Encore", PATCHES_SECTION, CONFIG_FILE, L"ENHANCED_STAGE_MANAGER_ENCORE_NAME", L"ENHANCED_STAGE_MANAGER_ENCORE_HINT", true, false),
-	new OptionMetaSeparator(),
-	new OptionMetaSpacer(8),
-
-	new DropdownOption(L"force_mouth", PATCHES_SECTION, CONFIG_FILE, L"FORCE_MOUTH_NAME", L"FORCE_MOUTH_HINT", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
-	new DropdownOption(L"force_expressions", PATCHES_SECTION, CONFIG_FILE, L"FORCE_EXPRESSIONS_NAME", L"FORCE_EXPRESSIONS_HINT", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
-	new DropdownOption(L"force_look", PATCHES_SECTION, CONFIG_FILE, L"FORCE_LOOK_NAME", L"FORCE_LOOK_HINT", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
-	new BooleanOption(L"no_hand_scaling", PATCHES_SECTION, CONFIG_FILE, L"NO_HAND_SCALING_NAME", L"NO_HAND_SCALING_HINT", false, false),
-	new NumericOption(L"default_hand_size", PATCHES_SECTION, CONFIG_FILE, L"DEFAULT_HAND_SIZE_NAME", L"DEFAULT_HAND_SIZE_HINT", -1, -1, INT_MAX),
 	new BooleanOption(L"sing_missed", PATCHES_SECTION, CONFIG_FILE, L"SING_MISSED_NAME", L"SING_MISSED_HINT", false, false),
+	new BooleanOption(L"autopause", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"AUTOPAUSE_NAME", L"AUTOPAUSE_HINT", true, true),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
+	new OptionMetaSectionLabel(L"SECTION_UI_ELM"),
+	new BooleanOption(L"cursor", PATCHES_SECTION, CONFIG_FILE, L"CURSOR_NAME", L"CURSOR_HINT", true, false),
 	new BooleanOption(L"hide_volume", PATCHES_SECTION, CONFIG_FILE, L"HIDE_VOLUME_NAME", L"HIDE_VOLUME_HINT", false, false),
 	new BooleanOption(L"no_pv_ui", PATCHES_SECTION, CONFIG_FILE, L"NO_PV_UI_NAME", L"NO_PV_UI_HINT", false, false),
 	new BooleanOption(L"hide_pv_watermark", PATCHES_SECTION, CONFIG_FILE, L"HIDE_PV_WATERMARK_NAME", L"HIDE_PV_WATERMARK_HINT", false, false),
@@ -241,52 +269,19 @@ ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"no_timer_sprite", PATCHES_SECTION, CONFIG_FILE, L"NO_TIMER_SPRITE_NAME", L"NO_TIMER_SPRITE_HINT", true, false),
 	new BooleanOption(L"no_message_bar", PATCHES_SECTION, CONFIG_FILE, L"NO_MESSAGE_BAR_NAME", L"NO_MESSAGE_BAR_HINT", false, false),
 	new BooleanOption(L"no_stage_text", PATCHES_SECTION, CONFIG_FILE, L"NO_STAGE_TEXT_NAME", L"NO_STAGE_TEXT_HINT", false, false),
-	new OptionMetaSeparator(),
-	new OptionMetaSpacer(8),
-
-	new BooleanOption(L"unlock_pseudo", PATCHES_SECTION, CONFIG_FILE, L"UNLOCK_PSEUDO_NAME", L"UNLOCK_PSEUDO_HINT", false, false),
 	new BooleanOption(L"card", PATCHES_SECTION, CONFIG_FILE, L"CARD_NAME", L"CARD_HINT", false, false),
-	new BooleanOption(L"no_opd", PATCHES_SECTION, CONFIG_FILE, L"NO_OPD_NAME", L"NO_OPD_HINT", false, false),
 	new BooleanOption(L"dwgui_scaling", PATCHES_SECTION, CONFIG_FILE, L"DWGUI_SCALING_NAME", L"DWGUI_SCALING_HINT", false, false),
-	new BooleanOption(L"freeplay", PATCHES_SECTION, CONFIG_FILE, L"FREEPLAY_NAME", L"FREEPLAY_HINT", true, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"FPS.Limit.LightMode", GRAPHICS_SECTION, CONFIG_FILE, L"FPS.LIMIT.LIGHTMODE_NAME", L"FPS.LIMIT.LIGHTMODE_HINT", true, false),
-	new NumericOption(L"FPS.Limit", GRAPHICS_SECTION, CONFIG_FILE, L"FPS.LIMIT_NAME", L"FPS.LIMIT_HINT", 60, -1, INT_MAX),
-	new NumericOption(L"frm.motion.rate", GRAPHICS_SECTION, CONFIG_FILE, L"FRM.MOTION.RATE_NAME", L"FRM.MOTION.RATE_HINT", 300, 1, INT_MAX),
+	new OptionMetaSectionLabel(L"SECTION_PV_PATCHES"),
+	new DropdownOption(L"force_mouth", PATCHES_SECTION, CONFIG_FILE, L"FORCE_MOUTH_NAME", L"FORCE_MOUTH_HINT", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
+	new DropdownOption(L"force_expressions", PATCHES_SECTION, CONFIG_FILE, L"FORCE_EXPRESSIONS_NAME", L"FORCE_EXPRESSIONS_HINT", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
+	new DropdownOption(L"force_look", PATCHES_SECTION, CONFIG_FILE, L"FORCE_LOOK_NAME", L"FORCE_LOOK_HINT", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
+	new BooleanOption(L"no_hand_scaling", PATCHES_SECTION, CONFIG_FILE, L"NO_HAND_SCALING_NAME", L"NO_HAND_SCALING_HINT", false, false),
+	new NumericOption(L"default_hand_size", PATCHES_SECTION, CONFIG_FILE, L"DEFAULT_HAND_SIZE_NAME", L"DEFAULT_HAND_SIZE_HINT", -1, -1, INT_MAX),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
-
-	new BooleanOption(L"autopause", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"AUTOPAUSE_NAME", L"AUTOPAUSE_HINT", true, true),
-	new OptionMetaSeparator(),
-	new OptionMetaSpacer(8),
-
-	new BooleanOption(L"rumble", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"RUMBLE_NAME", L"RUMBLE_HINT", true, true),
-	new NumericOption(L"xinput_preferred", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XINPUT_PREFERRED_NAME", L"XINPUT_PREFERRED_HINT", 0, 0, 3),
-	new OptionMetaSeparator(),
-	new OptionMetaSpacer(8),
-
-	new BooleanOption(L"hardware_slider", PATCHES_SECTION, CONFIG_FILE, L"HARDWARE_SLIDER_NAME", L"HARDWARE_SLIDER_HINT", false, false),
-	new OptionMetaSeparator(),
-	new OptionMetaSpacer(8),
-
-	new BooleanOption(L"opengl_patch_a", LAUNCHER_SECTION, CONFIG_FILE, L"OPENGL_PATCH_A_NAME", L"OPENGL_PATCH_A_HINT", false, false),
-	new BooleanOption(L"opengl_patch_b", LAUNCHER_SECTION, CONFIG_FILE, L"OPENGL_PATCH_B_NAME", L"OPENGL_PATCH_B_HINT", false, false),
-	new OptionMetaSeparator(),
-	new OptionMetaSpacer(8),
-
-	//new BooleanOption(L"ignore_exe_checksum", PATCHES_SECTION, CONFIG_FILE, L"IGNORE_EXE_CHECKSUM_NAME", L"IGNORE_EXE_CHECKSUM_HINT", false, false),
-	new BooleanOption(L"prevent_data_deletion", PATCHES_SECTION, CONFIG_FILE, L"PREVENT_DATA_DELETION_NAME", L"PREVENT_DATA_DELETION_HINT", false, false),
-	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"COMMAND_LINE_NAME", L"COMMAND_LINE_HINT", L"", false),
-	new BooleanOption(L"use_divahook_bat", LAUNCHER_SECTION, CONFIG_FILE, L"USE_DIVAHOOK_BAT_NAME", L"USE_DIVAHOOK_BAT_HINT", false, false),
-	new OptionMetaSeparator(),
-	new OptionMetaSpacer(8),
-
-	new BooleanOption(L"dark_launcher", LAUNCHER_SECTION, CONFIG_FILE, L"DARK_LAUNCHER_NAME", L"DARK_LAUNCHER_HINT", false, false),
-	new DropdownOption(L"launcher_language",LAUNCHER_SECTION,CONFIG_FILE, L"LAUNCHER_LANGUAGE_NAME",L"LAUNCHER_LANGUAGE_HINT", 0, languages),
-	//new BooleanOption(L"acrylic_blur", LAUNCHER_SECTION, CONFIG_FILE, L"ACRYLIC_BLUR_NAME", L"ACRYLIC_BLUR_HINT", false, false),
-	new BooleanOption(L"no_gpu_dialog", LAUNCHER_SECTION, CONFIG_FILE, L"NO_GPU_DIALOG_NAME", L"NO_GPU_DIALOG_HINT", false, false),
 };
 
 ConfigOptionBase* playerdataArray[] = {

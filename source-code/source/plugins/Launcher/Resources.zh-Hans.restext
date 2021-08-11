@@ -155,11 +155,6 @@ XINPUT_PREFERRED_HINT=设置 XInput 控制器偏好\n如果此控制器暂时无
 HARDWARE_SLIDER_NAME=启用硬件手台
 HARDWARE_SLIDER_HINT=如果你准备使用硬件手台，请将其启用\n(请将硬件手台的连接端口设置为 COM11）
 
-OPENGL_PATCH_A_NAME=OpenGL Patch A
-OPENGL_PATCH_A_HINT=忽略一些与 OpenGL 相关的错误；除非您知道自己在做什么，否则不要同时启用两个 Patch
-OPENGL_PATCH_B_NAME=OpenGL Patch B
-OPENGL_PATCH_B_HINT=忽略一些与 OpenGL 相关的错误；除非您知道自己在做什么，否则不要同时启用两个 Patch
-
 PREVENT_DATA_DELETION_NAME=游戏数据保护
 PREVENT_DATA_DELETION_HINT=避免游戏自动删除数据
 COMMAND_LINE_NAME=启动设定:

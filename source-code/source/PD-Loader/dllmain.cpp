@@ -220,6 +220,8 @@ void FindFiles(WIN32_FIND_DATAW* fd)
 		do {
 			if (!(fd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
+				if (fd->cFileName[0] == '.' && fd->cFileName[1] == '_') continue; // exclude macOS metadata
+
 				if (!_wcsicmp(fd->cFileName, L"Patches.dva") || !_wcsicmp(fd->cFileName, L"Render.dva"))
 				{
 					DeleteFileW(fd->cFileName);

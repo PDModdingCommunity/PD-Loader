@@ -64,6 +64,8 @@ void ApplyAllCustomPatches()
 		try {
 			for (std::filesystem::path p : std::filesystem::directory_iterator("patches"))
 			{
+				if (std::filesystem::path(p).filename().string()._Starts_with("._")) continue; // exclude macOS metadata
+
 				std::string extension = std::filesystem::path(p).extension().string();
 				if ((extension == ".p" || extension == ".P" || extension == ".p2" || extension == ".P2"))
 				{

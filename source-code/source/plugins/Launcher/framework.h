@@ -418,6 +418,8 @@ std::vector<PluginInfo> LoadPlugins()
 	HANDLE hFind;
 	WIN32_FIND_DATAW ffd;
 
+	//LPCWSTR dir = (PLUGINS_DIR + L"\\*.dva").c_str();
+	//wprintf(L"[Launcher] Searching for plugins in %s\n", dir);
 	hFind = FindFirstFileW((PLUGINS_DIR + L"\\*.dva").c_str(), &ffd);
 	if (hFind != INVALID_HANDLE_VALUE) {
 		do {
@@ -465,6 +467,7 @@ std::vector<PluginInfo> LoadPlugins()
 					// sometimes this might screw with custom button config, so let's just not free stuff
 					// FreeLibrary(thisplugin.handle);
 
+					//wprintf(L"[Launcher] Found %s\n", ffd.cFileName);
 					outvec.push_back(thisplugin);
 				}
 			}
@@ -499,7 +502,9 @@ std::vector<PluginInfo> LoadCustom()
 	HANDLE hFind;
 	WIN32_FIND_DATAW ffd;
 
-	hFind = FindFirstFileW((PATCHES_DIR + L"\\*.p?").c_str(), &ffd);
+	//LPCWSTR dir = (PATCHES_DIR + L"\\*.p*").c_str();
+	//wprintf(L"[Launcher] Searching for patches in %s\n", dir);
+	hFind = FindFirstFileW((PATCHES_DIR + L"\\*.p*").c_str(), &ffd);
 	if (hFind != INVALID_HANDLE_VALUE) {
 		do {
 			if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
@@ -520,6 +525,7 @@ std::vector<PluginInfo> LoadCustom()
 					
 					thisplugin.description = L"Custom patch";
 
+					//wprintf(L"[Launcher] Found %s\n", ffd.cFileName);
 					outvec.push_back(thisplugin);
 				}
 			}

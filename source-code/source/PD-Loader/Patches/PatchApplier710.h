@@ -363,6 +363,16 @@ class PatchApplier710 : public PatchApplier {
 		// Default hand size
 		if (nDefaultHandSize != -1)
 		{
+			switch (nDefaultHandSize)
+			{
+			case 0:
+				MessageBoxW(nullptr, L"The default hand size is set to 0 in Options.\nHands may disappear.\n\nIf this is not intentional, set it back to -1.", L"Patches", MB_ICONWARNING);
+				break;
+			case 1:
+				MessageBoxW(nullptr, L"The default hand size is set to 1 in Options.\nHands may be extremely small.\n\nIf this is not intentional, set it back to -1.", L"Patches", MB_ICONWARNING);
+				break;
+			}
+
 			printf("[Patches] Changing default hand size...\n");
 			const float num = (float)nDefaultHandSize / 10000.0;
 			DWORD oldProtect;

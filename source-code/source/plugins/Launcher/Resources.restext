@@ -46,6 +46,16 @@ NPR1_HINT=NPR1 shader\n\nPress F9 to toggle.
 2D_HINT=Disable all 3D passes.\n\nWARNING: The extended data will be deleted unless Prevent Data Deletion is enabled. Don't enable on Intel GPUs, enable "Disable Extended Data" instead.
 
 # options
+SECTION_LOADER=Loader
+SECTION_COMPATIBILITY=Compatibility
+SECTION_PV_SELECTOR=PV Selector
+SECTION_ESM=Stages (Songs)
+SECTION_UI_ELM=UI Elements
+SECTION_PV_PATCHES=PV Patches
+SECTION_FRAMERATE=Framerate
+SECTION_CONTROLLER_OPTIONS=Controller Options
+SECTION_LAUNCHER=Launcher
+
 BUILTIN_PATCHES_NAME=Enable Built-In Patches
 BUILTIN_PATCHES_HINT=Enables the built-in patches, including the options below.
 CUSTOM_PATCHES_NAME=Enable Custom Patches
@@ -89,7 +99,7 @@ NO_PV_UI_NAME=Disable PV UI
 NO_PV_UI_HINT=Remove the photo controls during PV playback.
 HIDE_PV_WATERMARK_NAME=Hide PV Watermark
 HIDE_PV_WATERMARK_HINT=Hide the watermark that's usually shown in PV viewing mode.
-STATUS_ICONS_NAME=Top-Right Corner Icons:
+STATUS_ICONS_NAME=Top-Right Network Icons:
 STATUS_ICONS_HINT=Set the state of card reader and network status icons.
 NO_LYRICS_NAME=Disable Lyrics
 NO_LYRICS_HINT=Disable showing lyrics.
@@ -131,16 +141,15 @@ AUTOPAUSE_HINT=Pause when focus is lost.
 
 RUMBLE_NAME=XInput Rumble
 RUMBLE_HINT=Enables rumble during chainslides.
+XINPUT_RUMBLE_INTENSITY_LEFT_NAME=Left Motor Intensity
+XINPUT_RUMBLE_INTENSITY_LEFT_HINT=Default: 8000.
+XINPUT_RUMBLE_INTENSITY_RIGHT_NAME=Right Motor Intensity
+XINPUT_RUMBLE_INTENSITY_RIGHT_HINT=Default: 4000.
 XINPUT_PREFERRED_NAME=XInput Controller Num:
 XINPUT_PREFERRED_HINT=Sets the preferred XInput controller.\nIf unavailable, the next connected controller is used.
 
 HARDWARE_SLIDER_NAME=Use Hardware Slider
 HARDWARE_SLIDER_HINT=Enable this if using a real arcade slider.\n(set the slider to port COM11)
-
-OPENGL_PATCH_A_NAME=OpenGL Patch A
-OPENGL_PATCH_A_HINT=Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.
-OPENGL_PATCH_B_NAME=OpenGL Patch B
-OPENGL_PATCH_B_HINT=Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.
 
 PREVENT_DATA_DELETION_NAME=Prevent Data Deletion
 PREVENT_DATA_DELETION_HINT=Prevents the game from deleting files.

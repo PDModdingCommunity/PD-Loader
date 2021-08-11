@@ -425,6 +425,8 @@ std::vector<PluginInfo> LoadPlugins()
 		do {
 			if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
+				if (ffd.cFileName[0] == '.' && ffd.cFileName[1] == '_') continue; // exclude macOS metadata
+
 				auto pos = wcslen(ffd.cFileName);
 
 				if (ffd.cFileName[pos - 4] == '.' &&
@@ -509,6 +511,8 @@ std::vector<PluginInfo> LoadCustom()
 		do {
 			if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
+				if (ffd.cFileName[0] == '.' && ffd.cFileName[1] == '_') continue; // exclude macOS metadata
+
 				auto pos = wcslen(ffd.cFileName);
 
 				if ((ffd.cFileName[pos - 2] == '.' && (ffd.cFileName[pos - 1] == 'p' || ffd.cFileName[pos - 1] == 'P')) ||

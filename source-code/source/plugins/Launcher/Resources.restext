@@ -246,6 +246,7 @@ HOWTO_CLEAN_INSTALL=How to do a clean installation
 HOWTO_CLEAN_INSTALL_HINT=Delete:\n- dnsapi.dll or dinput8.dll\n- patches/\n- plugins/\n\nRestore:\n- glut32.dll\n\nThen install PD Loader from the official repository.
 
 # gpu
+GPU_WINE_DISABLE_MOVIES=(remember to disable movies!)
 GPU_INFO_NAME=GPU Info:
 GPU_AMD_NOVIDIA_NAME=Issues: AMD GPU support is unofficial.
 GPU_AMD_NOVIDIA_HINT=AMD GPUs are not supported without mods.\nThe PD Loader AMDPack seems to be installed, but please keep in mind that it may have issues.
@@ -271,4 +272,6 @@ GPU_OLD_NAME=Issues: GPU too old! 3D rendering might be broken.\n(Click for more
 GPU_OLD_HINT=Your GPU is very old and does not support rendering techniques used by the game.\nYou may be able to play, but graphics will likely have major issues.\nPlease upgrade to a GTX 600 series or later GPU.
 GPU_UNKNOWN_NAME=Issues: Unable to detect GPU architecture.\n(Click for more information)
 GPU_UNKNOWN_HINT=It looks like you have an NVIDIA GPU, but something went wrong while trying to determine your GPU's architecture (type).\nThis may be a caused by a bug, but it probably indicates potential issues.\nPlease make sure you have a GTX 600 series or later GPU. (GTX 400 series or later should also work)
+GPU_DRIVER_ISSUES_NAME=Driver has known issues.
+GPU_DRIVER_ISSUES_HINT=The graphics driver you're using has known issues. Please install the latest driver from your GPU vendor's website.
 SHOW_GPU_DIALOG_HINT=You can disable this message from the options tab.

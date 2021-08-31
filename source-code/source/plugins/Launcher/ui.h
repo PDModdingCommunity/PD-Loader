@@ -238,17 +238,24 @@ namespace Launcher {
 			vendor = vendor->Replace(" Corporation", ""); // this is useless..  remove it to help ensure the GPU type line fits
 			String^ renderer = gcnew String((char*)glGetString(GL_RENDERER));
 			String^ version = gcnew String((char*)glGetString(GL_VERSION));
+			version = version->Replace(" Profile Context", ""); // we don't need this, either
 
 			String^ gpuModel = gcnew String(GPUModel::getGpuName().c_str());
 
 			String^ wineVersion = gcnew String(WineVer::getWineVer().c_str());
+
+			auto version_split = version->Split(' ');
+			String^ driver_version = gcnew String(version_split[version_split->Length - 1]);
+			auto driver_version_split_major_minor = driver_version->Split('.');
+			int driver_version_major = int::Parse(driver_version_split_major_minor[0]);
+			int driver_version_minor = int::Parse(driver_version_split_major_minor[1]);
 
 			glutDestroyWindow(window); // destroy the window so it doesn't remain on screen
 			if (glutMainLoopEventDynamic != NULL) glutMainLoopEventDynamic(); // freeglut needs this
 
 			if (wineVersion != "")
 			{
-				this->labelGPU->Text = "Wine " + wineVersion + " (remember to disable movies!)\n";
+				this->labelGPU->Text = "Wine " + wineVersion + " " + i18n::GetStringFallback("GPU_WINE_DISABLE_MOVIES") + "\n";
 			}
 			else this->labelGPU->Text = i18n::GetStringFallback("GPU_INFO_NAME") + "\n";
 			this->labelGPU->Text += i18n::GetStringFallback(vendor + " " + renderer + "\n");
@@ -256,7 +263,7 @@ namespace Launcher {
 
 			int linkStart = this->labelGPU->Text->Length;
 			bool showGpuDialog = false;
-			if (vendor->Contains("AMD") || vendor->Contains("ATI")) // check OpenGL to get actual GPU being used for vendor check (to get accurate results for iGPU)
+			if (vendor->Contains("ATI") || vendor->Contains("AMD")) // check OpenGL to get actual GPU being used for vendor check (to get accurate results for iGPU)
 			{
 				bool hasNovidia = false;
 				for (PluginInfo i : AllPlugins)
@@ -267,9 +274,19 @@ namespace Launcher {
 
 				if (hasNovidia)
 				{
-					this->labelGPU->Text += i18n::GetStringFallback("GPU_AMD_NOVIDIA_NAME");
-					GPUIssueText = i18n::GetStringFallback("GPU_AMD_NOVIDIA_HINT");
-					this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+					if (wineVersion == "" && (driver_version_major < 21 || (driver_version_major == 21 && driver_version_minor < 6)))
+					{
+						this->labelGPU->Text += i18n::GetStringFallback("GPU_DRIVER_ISSUES_NAME");
+						GPUIssueText = i18n::GetStringFallback("GPU_DRIVER_ISSUES_HINT");
+						this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+						showGpuDialog = true;
+					}
+					else
+					{
+						this->labelGPU->Text += i18n::GetStringFallback("GPU_AMD_NOVIDIA_NAME");
+						GPUIssueText = i18n::GetStringFallback("GPU_AMD_NOVIDIA_HINT");
+						this->labelGPU->LinkColor = System::Drawing::Color::Lime;
+					}
 				}
 				else
 				{
@@ -279,65 +296,75 @@ namespace Launcher {
 					showGpuDialog = true;
 				}
 			}
-			else if (!vendor->Contains("NVIDIA"))
+			else if (vendor->Contains("NVIDIA"))
 			{
-				this->labelGPU->Text += i18n::GetStringFallback("GPU_UNSUPPORTED_NAME");
-				GPUIssueText = i18n::GetStringFallback("GPU_UNSUPPORTED_HINT");
-				this->labelGPU->LinkColor = System::Drawing::Color::Red;
-				showGpuDialog = true;
-			}
-			else if (gpuModel->StartsWith("GA")) // unconfirmed??
-			{
-				this->labelGPU->Text += i18n::GetStringFallback("GPU_GA_NAME");
-				GPUIssueText = i18n::GetStringFallback("GPU_GA_HINT");
-				this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
-			}
-			else if (gpuModel->StartsWith("TU"))
-			{
-				this->labelGPU->Text += i18n::GetStringFallback("GPU_TU_NAME");
-				GPUIssueText = i18n::GetStringFallback("GPU_TU_HINT");
-				this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
-			}
-			else if (gpuModel->StartsWith("GM") || gpuModel->StartsWith("GP") || gpuModel->StartsWith("GV"))
-			{
-				this->labelGPU->Text += i18n::GetStringFallback("GPU_GM_NEWER_NAME");
-				GPUIssueText = i18n::GetStringFallback("GPU_GM_NEWER_HINT");
-				this->labelGPU->LinkColor = System::Drawing::Color::Teal;
-			}
-			else if (gpuModel->StartsWith("GK"))
-			{
-				this->labelGPU->Text += i18n::GetStringFallback("GPU_GK_NAME");
-				GPUIssueText = i18n::GetStringFallback("GPU_GK_HINT");
-				this->labelGPU->LinkColor = System::Drawing::Color::LightBlue;
-			}
-			else if (gpuModel->StartsWith("GF"))
-			{
-				if (version[0] < '4')
+				if (wineVersion == "" && (driver_version_major > 446 && driver_version_major < 460))
 				{
-					this->labelGPU->Text += i18n::GetStringFallback("GPU_GF_DRIVER_OLD_NAME");
-					GPUIssueText = i18n::GetStringFallback("GPU_GF_DRIVER_OLD_HINT");
+					this->labelGPU->Text += i18n::GetStringFallback("GPU_DRIVER_ISSUES_NAME");
+					GPUIssueText = i18n::GetStringFallback("GPU_DRIVER_ISSUES_HINT");
 					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
 					showGpuDialog = true;
 				}
-				else
+				else if (gpuModel->StartsWith("GA")) // unconfirmed??
 				{
-					this->labelGPU->Text += i18n::GetStringFallback("GPU_GF_NAME");
-					GPUIssueText = i18n::GetStringFallback("GPU_GF_HINT");
+					this->labelGPU->Text += i18n::GetStringFallback("GPU_GA_NAME");
+					GPUIssueText = i18n::GetStringFallback("GPU_GA_HINT");
+					this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+				}
+				else if (gpuModel->StartsWith("TU"))
+				{
+					this->labelGPU->Text += i18n::GetStringFallback("GPU_TU_NAME");
+					GPUIssueText = i18n::GetStringFallback("GPU_TU_HINT");
+					this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+				}
+				else if (gpuModel->StartsWith("GM") || gpuModel->StartsWith("GP") || gpuModel->StartsWith("GV"))
+				{
+					this->labelGPU->Text += i18n::GetStringFallback("GPU_GM_NEWER_NAME");
+					GPUIssueText = i18n::GetStringFallback("GPU_GM_NEWER_HINT");
 					this->labelGPU->LinkColor = System::Drawing::Color::Teal;
 				}
-			}
-			else if (version[0] >= '4' && gpuModel->Length > 0 && !gpuModel->StartsWith("Unk") && !gpuModel->StartsWith("Oth"))
-			{
-				this->labelGPU->Text += i18n::GetStringFallback("GPU_TOO_NEW_NAME");
-				GPUIssueText = i18n::GetStringFallback("GPU_TOO_NEW_HINT");
-				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
-			}
-			else if (gpuModel->StartsWith("G") || gpuModel->StartsWith("NV") || gpuModel->StartsWith("NB") || gpuModel->StartsWith("N10") || gpuModel->StartsWith("MCP"))
-			{
-				this->labelGPU->Text += i18n::GetStringFallback("GPU_OLD_NAME");
-				GPUIssueText = i18n::GetStringFallback("GPU_OLD_HINT");
-				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
-				showGpuDialog = true;
+				else if (gpuModel->StartsWith("GK"))
+				{
+					this->labelGPU->Text += i18n::GetStringFallback("GPU_GK_NAME");
+					GPUIssueText = i18n::GetStringFallback("GPU_GK_HINT");
+					this->labelGPU->LinkColor = System::Drawing::Color::LightBlue;
+				}
+				else if (gpuModel->StartsWith("GF"))
+				{
+					if (version[0] < '4')
+					{
+						this->labelGPU->Text += i18n::GetStringFallback("GPU_GF_DRIVER_OLD_NAME");
+						GPUIssueText = i18n::GetStringFallback("GPU_GF_DRIVER_OLD_HINT");
+						this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+						showGpuDialog = true;
+					}
+					else
+					{
+						this->labelGPU->Text += i18n::GetStringFallback("GPU_GF_NAME");
+						GPUIssueText = i18n::GetStringFallback("GPU_GF_HINT");
+						this->labelGPU->LinkColor = System::Drawing::Color::Teal;
+					}
+				}
+				else if (gpuModel->StartsWith("G") || gpuModel->StartsWith("NV") || gpuModel->StartsWith("NB") || gpuModel->StartsWith("N10") || gpuModel->StartsWith("MCP"))
+				{
+					this->labelGPU->Text += i18n::GetStringFallback("GPU_OLD_NAME");
+					GPUIssueText = i18n::GetStringFallback("GPU_OLD_HINT");
+					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+					showGpuDialog = true;
+				}
+				else if (version[0] >= '4' && gpuModel->Length > 0 && !gpuModel->StartsWith("Unk") && !gpuModel->StartsWith("Oth"))
+				{
+					this->labelGPU->Text += i18n::GetStringFallback("GPU_TOO_NEW_NAME");
+					GPUIssueText = i18n::GetStringFallback("GPU_TOO_NEW_HINT");
+					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+				}
+				else
+				{
+					this->labelGPU->Text += i18n::GetStringFallback("GPU_UNSUPPORTED_NAME");
+					GPUIssueText = i18n::GetStringFallback("GPU_UNSUPPORTED_HINT");
+					this->labelGPU->LinkColor = System::Drawing::Color::Red;
+					showGpuDialog = true;
+				}
 			}
 			else //if (gpuModel->Length == 0 || gpuModel->StartsWith("Unk") || gpuModel->StartsWith("Oth"))
 			{

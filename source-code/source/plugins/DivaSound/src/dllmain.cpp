@@ -339,7 +339,7 @@ void loadConfig()
 	if (bitDepth != 32 && bitDepth != 24) bitDepth = 16;
 
 
-	requestBuffer = GetPrivateProfileIntW(L"buffer", L"buffer_size", 10, CONFIG_FILE);
+	requestBuffer = GetPrivateProfileIntW(L"buffer", L"period_size", 10, CONFIG_FILE);
 	if (requestBuffer < 0) requestBuffer = 0;
 
 

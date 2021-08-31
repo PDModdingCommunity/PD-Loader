@@ -463,7 +463,7 @@ void hookedAudioInit(initClass *cls, uint64_t unk, uint64_t unk2)
 		if (device.playback.internalSampleRate)
 		{
 			maInternalBufferSizeInMilliseconds = device.playback.internalPeriodSizeInFrames * 1000 / device.playback.internalSampleRate; // because miniaudio doesn't seem to have this
-			printf("[DivaSound] Output buffer size: %d (%dms at %dHz)\n", device.playback.internalPeriodSizeInFrames, maInternalBufferSizeInMilliseconds, device.playback.internalSampleRate);
+			printf("[DivaSound] Output period size: %d (%dms at %dHz)\n", device.playback.internalPeriodSizeInFrames, maInternalBufferSizeInMilliseconds, device.playback.internalSampleRate);
 			printf("[DivaSound] Buffer periods: %d\n", device.playback.internalPeriods);
 
 			divaBufSizeInFrames = device.playback.internalPeriodSizeInFrames * device.sampleRate / device.playback.internalSampleRate; // +128; // 128 is just a bit extra in case resampling needs it or something. idk
@@ -475,7 +475,7 @@ void hookedAudioInit(initClass *cls, uint64_t unk, uint64_t unk2)
 			printf("[DivaSound] Unable to determine output sample rate. Assuming 44100Hz.\n");
 
 			maInternalBufferSizeInMilliseconds = device.playback.internalPeriodSizeInFrames * 1000 / 44100; // because miniaudio doesn't seem to have this
-			printf("[DivaSound] Output buffer size: %d (%dms at %dHz)\n", device.playback.internalPeriodSizeInFrames, maInternalBufferSizeInMilliseconds, 44100);
+			printf("[DivaSound] Output period size: %d (%dms at %dHz)\n", device.playback.internalPeriodSizeInFrames, maInternalBufferSizeInMilliseconds, 44100);
 			printf("[DivaSound] Buffer periods: %d\n", device.playback.internalPeriods);
 
 			divaBufSizeInFrames = device.playback.internalPeriodSizeInFrames * device.sampleRate / 44100;
@@ -563,7 +563,7 @@ PluginConfigOption config[] = {
 	{ CONFIG_BOOLEAN, new PluginConfigBooleanData{ L"alternate_init", L"general", CONFIG_FILE, L"Use new init", L"Use the full initialisation replacement.\nTry unchecking this if DivaSound seems to cause crashes.", true, false } },
 	{ CONFIG_SPACER, new PluginConfigSpacerData{ 8 } },
 	{ CONFIG_GROUP_START, new PluginConfigGroupData{ L"WASAPI Buffer Settings", 75 } },
-	{ CONFIG_NUMERIC, new PluginConfigNumericData{ L"buffer_size", L"buffer", CONFIG_FILE, L"Target Buffer Size:", L"Sets the target buffer size in ms.\nWASAPI will often ignore this and adapt to your hardware config automatically.", 10, 1, 100 } },
+	{ CONFIG_NUMERIC, new PluginConfigNumericData{ L"period_size", L"buffer", CONFIG_FILE, L"Target Period Size:", L"Sets the target period size in ms.\nWASAPI will often ignore this and adapt to your hardware config automatically.", 10, 1, 100 } },
 	{ CONFIG_NUMERIC, new PluginConfigNumericData{ L"periods", L"buffer", CONFIG_FILE, L"Buffer Periods:", L"Sets how often the buffer should be filled.\nFewer periods usually allows for lower latency, but lowering this may cause issues.", 2, 1, 8 } },
 	{ CONFIG_GROUP_END, NULL },
 	{ CONFIG_SPACER, new PluginConfigSpacerData{ 8 } },

@@ -686,7 +686,7 @@ class PatchApplier710 : public PatchApplier {
 		{
 			InjectCode((void*)(0x14011e44e), { 0xf3, 0x0f, 0x10, 0x05, 0x8a, 0xcf, 0x9c, 0x00 });	// hijack xmm0
 			InjectCode((void*)(0x14011e46b), { 0xf3, 0x0f, 0x11, 0x44, 0x24, 0x20 });	// get value from xmm0 instead of xmm1
-			float startPos = (float)nLagCompensation / 1000.0;
+			float startPos = (float)nLagCompensation / 1000.0f;
 			InjectCode((void*)(0x140aeB3e0), { *((uint8_t*)(&startPos)), *((uint8_t*)(&startPos)+1), *((uint8_t*)(&startPos) + 2), *((uint8_t*)(&startPos) + 3) });
 		
 			printf("[Patches] Lag Compensation: %f\n", startPos);
@@ -763,6 +763,15 @@ class PatchApplier710 : public PatchApplier {
 			// don't need these anymore
 			InjectCode((void*)(0x140300a82), { 0x90, 0x90, 0x90 });  // NOPs
 			InjectCode((void*)(0x140300a88), { 0x90, 0x90, 0x90 });  // NOPs
+		}
+
+		// gamma
+		if (nGamma != 100)
+		{
+			float gamma_float = (float)nGamma / 100.0f;
+			InjectCode((void*)(0x1404a863b), { *((uint8_t*)(&gamma_float)), *((uint8_t*)(&gamma_float) + 1), *((uint8_t*)(&gamma_float) + 2), *((uint8_t*)(&gamma_float) + 3) });
+
+			printf("[Patches] Gamma: %f\n", gamma_float);
 		}
 
 		// modpack redirection

@@ -189,6 +189,7 @@ ConfigOptionBase* graphicsArray[] = {
 	new BooleanOption(L"reflections", GRAPHICS_SECTION, CONFIG_FILE, L"REFLECTIONS_NAME", L"REFLECTIONS_HINT", true, false),
 	new ResolutionOption(L"reflect_res_width", L"reflect_res_height", GRAPHICS_SECTION, CONFIG_FILE, L"REFLECT_RES_WIDTH_NAME", L"REFLECT_RES_WIDTH_HINT", resolution(512, 256), std::vector<resolution>({resolution(256,256), resolution(512,256), resolution(512,512), resolution(1024,1024), resolution(2048,2048), resolution(4096,4096)}), true, (ResolutionOptionOpts)0),
 	new ResolutionOption(L"refract_res_width", L"refract_res_height", GRAPHICS_SECTION, CONFIG_FILE, L"REFRACT_RES_WIDTH_NAME", L"REFRACT_RES_WIDTH_HINT", resolution(512, 256), std::vector<resolution>({resolution(256,256), resolution(512,256), resolution(512,512), resolution(1024,1024), resolution(2048,2048), resolution(4096,4096)}), true, (ResolutionOptionOpts)0),
+	new NumericOption(L"gamma", GRAPHICS_SECTION, CONFIG_FILE, L"GAMMA_NAME", L"GAMMA_HINT", 100, 0, 200),
 	new BooleanOption(L"shadows", GRAPHICS_SECTION, CONFIG_FILE, L"SHADOWS_NAME", L"SHADOWS_HINT", true, false),
 	new BooleanOption(L"punchthrough", GRAPHICS_SECTION, CONFIG_FILE, L"PUNCHTHROUGH_NAME", L"PUNCHTHROUGH_HINT", true, false),
 	new BooleanOption(L"glare", GRAPHICS_SECTION, CONFIG_FILE, L"GLARE_NAME", L"GLARE_HINT", true, false),

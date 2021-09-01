@@ -107,6 +107,7 @@ auto nForceExpressions = GetPrivateProfileIntW(L"patches", L"force_expressions",
 auto nForceLook = GetPrivateProfileIntW(L"patches", L"force_look", 0, CONFIG_FILE);
 auto nNpr1 = GetPrivateProfileIntW(L"graphics", L"npr1", 0, CONFIG_FILE);
 auto nReflections = GetPrivateProfileIntW(L"graphics", L"reflections", TRUE, CONFIG_FILE);
+auto nGamma = GetPrivateProfileIntW(L"graphics", L"gamma", 100, CONFIG_FILE);
 auto nShadows = GetPrivateProfileIntW(L"graphics", L"shadows", TRUE, CONFIG_FILE);
 auto nPunchthrough = GetPrivateProfileIntW(L"graphics", L"punchthrough", TRUE, CONFIG_FILE);
 auto nGlare = GetPrivateProfileIntW(L"graphics", L"glare", TRUE, CONFIG_FILE);

@@ -123,13 +123,13 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="button_Launch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>344, 818</value>
+    <value>301, 716</value>
   </data>
   <data name="button_Launch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="button_Launch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>434, 46</value>
+    <value>380, 40</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="button_Launch.TabIndex" type="System.Int32, mscorlib">
@@ -157,13 +157,13 @@
     <value>True</value>
   </data>
   <data name="checkBox_nofsopt.Location" type="System.Drawing.Point, System.Drawing">
-    <value>28, 154</value>
+    <value>24, 150</value>
   </data>
   <data name="checkBox_nofsopt.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="checkBox_nofsopt.Size" type="System.Drawing.Size, System.Drawing">
-    <value>358, 29</value>
+    <value>321, 29</value>
   </data>
   <data name="checkBox_nofsopt.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -190,13 +190,13 @@
     <value>0</value>
   </data>
   <data name="panel_ScreenRes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 38</value>
+    <value>9, 33</value>
   </data>
   <data name="panel_ScreenRes.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="panel_ScreenRes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>506, 198</value>
+    <value>443, 193</value>
   </data>
   <data name="panel_ScreenRes.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -214,16 +214,16 @@
     <value>0</value>
   </data>
   <data name="groupBox_ScreenRes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 12</value>
+    <value>9, 10</value>
   </data>
   <data name="groupBox_ScreenRes.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="groupBox_ScreenRes.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="groupBox_ScreenRes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>526, 240</value>
+    <value>460, 230</value>
   </data>
   <data name="groupBox_ScreenRes.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -246,18 +246,6 @@
   <data name="tabPage_Resolution.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Stretch</value>
   </data>
-  <data name="trackBar_LagCompensation.Location" type="System.Drawing.Point, System.Drawing">
-    <value>14, 40</value>
-  </data>
-  <data name="trackBar_LagCompensation.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
-  </data>
-  <data name="trackBar_LagCompensation.Size" type="System.Drawing.Size, System.Drawing">
-    <value>500, 90</value>
-  </data>
-  <data name="trackBar_LagCompensation.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
   <data name="&gt;&gt;trackBar_LagCompensation.Name" xml:space="preserve">
     <value>trackBar_LagCompensation</value>
   </data>
@@ -271,16 +259,16 @@
     <value>0</value>
   </data>
   <data name="groupBox_Lag.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 606</value>
+    <value>9, 568</value>
   </data>
   <data name="groupBox_Lag.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="groupBox_Lag.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="groupBox_Lag.Size" type="System.Drawing.Size, System.Drawing">
-    <value>526, 138</value>
+    <value>460, 83</value>
   </data>
   <data name="groupBox_Lag.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
@@ -300,21 +288,6 @@
   <data name="&gt;&gt;groupBox_Lag.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="panel_Details.AutoScroll" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="panel_Details.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 38</value>
-  </data>
-  <data name="panel_Details.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
-  </data>
-  <data name="panel_Details.Size" type="System.Drawing.Size, System.Drawing">
-    <value>522, 682</value>
-  </data>
-  <data name="panel_Details.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
   <data name="&gt;&gt;panel_Details.Name" xml:space="preserve">
     <value>panel_Details</value>
   </data>
@@ -328,16 +301,16 @@
     <value>0</value>
   </data>
   <data name="groupBox_Details.Location" type="System.Drawing.Point, System.Drawing">
-    <value>548, 12</value>
+    <value>480, 10</value>
   </data>
   <data name="groupBox_Details.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="groupBox_Details.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="groupBox_Details.Size" type="System.Drawing.Size, System.Drawing">
-    <value>544, 732</value>
+    <value>476, 640</value>
   </data>
   <data name="groupBox_Details.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -361,16 +334,16 @@
     <value>True</value>
   </data>
   <data name="labelGPU.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 426</value>
+    <value>9, 393</value>
   </data>
   <data name="labelGPU.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="labelGPU.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>526, 26</value>
+    <value>460, 23</value>
   </data>
   <data name="labelGPU.Size" type="System.Drawing.Size, System.Drawing">
-    <value>526, 26</value>
+    <value>460, 25</value>
   </data>
   <data name="labelGPU.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
@@ -390,21 +363,6 @@
   <data name="&gt;&gt;labelGPU.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="panel_IntRes.AutoScroll" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="panel_IntRes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 38</value>
-  </data>
-  <data name="panel_IntRes.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
-  </data>
-  <data name="panel_IntRes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>506, 118</value>
-  </data>
-  <data name="panel_IntRes.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
   <data name="&gt;&gt;panel_IntRes.Name" xml:space="preserve">
     <value>panel_IntRes</value>
   </data>
@@ -418,16 +376,16 @@
     <value>0</value>
   </data>
   <data name="groupBox_InternalRes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 254</value>
+    <value>9, 242</value>
   </data>
   <data name="groupBox_InternalRes.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="groupBox_InternalRes.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="groupBox_InternalRes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>526, 166</value>
+    <value>460, 145</value>
   </data>
   <data name="groupBox_InternalRes.TabIndex" type="System.Int32, mscorlib">
     <value>20</value>
@@ -448,16 +406,16 @@
     <value>3</value>
   </data>
   <data name="tabPage_Resolution.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 39</value>
+    <value>4, 33</value>
   </data>
   <data name="tabPage_Resolution.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="tabPage_Resolution.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="tabPage_Resolution.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1104, 761</value>
+    <value>972, 670</value>
   </data>
   <data name="tabPage_Resolution.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -477,17 +435,635 @@
   <data name="&gt;&gt;tabPage_Resolution.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="&gt;&gt;panel_Patches2.Name" xml:space="preserve">
+    <value>panel_Patches2</value>
+  </data>
+  <data name="&gt;&gt;panel_Patches2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel_Patches2.Parent" xml:space="preserve">
+    <value>tabPage_Patches</value>
+  </data>
+  <data name="&gt;&gt;panel_Patches2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;panel_Patches.Name" xml:space="preserve">
+    <value>panel_Patches</value>
+  </data>
+  <data name="&gt;&gt;panel_Patches.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel_Patches.Parent" xml:space="preserve">
+    <value>tabPage_Patches</value>
+  </data>
+  <data name="&gt;&gt;panel_Patches.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabPage_Patches.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabPage_Patches.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="tabPage_Patches.Size" type="System.Drawing.Size, System.Drawing">
+    <value>972, 670</value>
+  </data>
+  <data name="tabPage_Patches.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tabPage_Patches.Text" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Patches.Name" xml:space="preserve">
+    <value>tabPage_Patches</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Patches.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Patches.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Patches.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;panel_Playerdata.Name" xml:space="preserve">
+    <value>panel_Playerdata</value>
+  </data>
+  <data name="&gt;&gt;panel_Playerdata.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel_Playerdata.Parent" xml:space="preserve">
+    <value>tabPage_Playerdata</value>
+  </data>
+  <data name="&gt;&gt;panel_Playerdata.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tabPage_Playerdata.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabPage_Playerdata.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="tabPage_Playerdata.Size" type="System.Drawing.Size, System.Drawing">
+    <value>972, 670</value>
+  </data>
+  <data name="tabPage_Playerdata.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tabPage_Playerdata.Text" xml:space="preserve">
+    <value>Player</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Playerdata.Name" xml:space="preserve">
+    <value>tabPage_Playerdata</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Playerdata.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Playerdata.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Playerdata.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Console.Name" xml:space="preserve">
+    <value>linkLabel_Console</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Console.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Console.Parent" xml:space="preserve">
+    <value>tabPage_Components</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Console.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;panel_Components.Name" xml:space="preserve">
+    <value>panel_Components</value>
+  </data>
+  <data name="&gt;&gt;panel_Components.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel_Components.Parent" xml:space="preserve">
+    <value>tabPage_Components</value>
+  </data>
+  <data name="&gt;&gt;panel_Components.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabPage_Components.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabPage_Components.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="tabPage_Components.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="tabPage_Components.Size" type="System.Drawing.Size, System.Drawing">
+    <value>972, 670</value>
+  </data>
+  <data name="tabPage_Components.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tabPage_Components.Text" xml:space="preserve">
+    <value>Components</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Components.Name" xml:space="preserve">
+    <value>tabPage_Components</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Components.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Components.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Components.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;panel_Custom.Name" xml:space="preserve">
+    <value>panel_Custom</value>
+  </data>
+  <data name="&gt;&gt;panel_Custom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel_Custom.Parent" xml:space="preserve">
+    <value>tabPage_Plugins</value>
+  </data>
+  <data name="&gt;&gt;panel_Custom.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;panel_Plugins.Name" xml:space="preserve">
+    <value>panel_Plugins</value>
+  </data>
+  <data name="&gt;&gt;panel_Plugins.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel_Plugins.Parent" xml:space="preserve">
+    <value>tabPage_Plugins</value>
+  </data>
+  <data name="&gt;&gt;panel_Plugins.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabPage_Plugins.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabPage_Plugins.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="tabPage_Plugins.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="tabPage_Plugins.Size" type="System.Drawing.Size, System.Drawing">
+    <value>972, 670</value>
+  </data>
+  <data name="tabPage_Plugins.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tabPage_Plugins.Text" xml:space="preserve">
+    <value>Plugins and Patches</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Plugins.Name" xml:space="preserve">
+    <value>tabPage_Plugins</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Plugins.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Plugins.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Plugins.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;button_ModRename.Name" xml:space="preserve">
+    <value>button_ModRename</value>
+  </data>
+  <data name="&gt;&gt;button_ModRename.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_ModRename.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="&gt;&gt;button_ModRename.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;button_ModRescan.Name" xml:space="preserve">
+    <value>button_ModRescan</value>
+  </data>
+  <data name="&gt;&gt;button_ModRescan.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_ModRescan.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="&gt;&gt;button_ModRescan.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;button_ModFiles.Name" xml:space="preserve">
+    <value>button_ModFiles</value>
+  </data>
+  <data name="&gt;&gt;button_ModFiles.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_ModFiles.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="&gt;&gt;button_ModFiles.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;checkBox_ModPatches.Name" xml:space="preserve">
+    <value>checkBox_ModPatches</value>
+  </data>
+  <data name="&gt;&gt;checkBox_ModPatches.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox_ModPatches.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="&gt;&gt;checkBox_ModPatches.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;button_ModDelete.Name" xml:space="preserve">
+    <value>button_ModDelete</value>
+  </data>
+  <data name="&gt;&gt;button_ModDelete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_ModDelete.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="&gt;&gt;button_ModDelete.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;button_ModClone.Name" xml:space="preserve">
+    <value>button_ModClone</value>
+  </data>
+  <data name="&gt;&gt;button_ModClone.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_ModClone.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="&gt;&gt;button_ModClone.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;button_ModSetActive.Name" xml:space="preserve">
+    <value>button_ModSetActive</value>
+  </data>
+  <data name="&gt;&gt;button_ModSetActive.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_ModSetActive.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="&gt;&gt;button_ModSetActive.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;listBox_Mods.Name" xml:space="preserve">
+    <value>listBox_Mods</value>
+  </data>
+  <data name="&gt;&gt;listBox_Mods.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;listBox_Mods.Parent" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="&gt;&gt;listBox_Mods.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="tabPage_Modpacks.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabPage_Modpacks.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="tabPage_Modpacks.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="tabPage_Modpacks.Size" type="System.Drawing.Size, System.Drawing">
+    <value>972, 670</value>
+  </data>
+  <data name="tabPage_Modpacks.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="tabPage_Modpacks.Text" xml:space="preserve">
+    <value>Modpacks</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Modpacks.Name" xml:space="preserve">
+    <value>tabPage_Modpacks</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Modpacks.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Modpacks.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Modpacks.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;creditsTextBox.Name" xml:space="preserve">
+    <value>creditsTextBox</value>
+  </data>
+  <data name="&gt;&gt;creditsTextBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;creditsTextBox.Parent" xml:space="preserve">
+    <value>tabPage_Credits</value>
+  </data>
+  <data name="&gt;&gt;creditsTextBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tabPage_Credits.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabPage_Credits.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="tabPage_Credits.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="tabPage_Credits.Size" type="System.Drawing.Size, System.Drawing">
+    <value>972, 670</value>
+  </data>
+  <data name="tabPage_Credits.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="tabPage_Credits.Text" xml:space="preserve">
+    <value>Credits</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Credits.Name" xml:space="preserve">
+    <value>tabPage_Credits</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Credits.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Credits.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Credits.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Repo.Name" xml:space="preserve">
+    <value>linkLabel_Repo</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Repo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Repo.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Repo.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Help.Name" xml:space="preserve">
+    <value>linkLabel_Help</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Help.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Help.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Help.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Official_Discord.Name" xml:space="preserve">
+    <value>linkLabel_Official_Discord</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Official_Discord.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Official_Discord.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Official_Discord.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Changelog.Name" xml:space="preserve">
+    <value>linkLabel_Changelog</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Changelog.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Changelog.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_Changelog.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;button_Clean_installation.Name" xml:space="preserve">
+    <value>button_Clean_installation</value>
+  </data>
+  <data name="&gt;&gt;button_Clean_installation.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_Clean_installation.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;button_Clean_installation.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;button_Instructions.Name" xml:space="preserve">
+    <value>button_Instructions</value>
+  </data>
+  <data name="&gt;&gt;button_Instructions.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_Instructions.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;button_Instructions.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;button_Unstable_builds.Name" xml:space="preserve">
+    <value>button_Unstable_builds</value>
+  </data>
+  <data name="&gt;&gt;button_Unstable_builds.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_Unstable_builds.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;button_Unstable_builds.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;button_Releases_page.Name" xml:space="preserve">
+    <value>button_Releases_page</value>
+  </data>
+  <data name="&gt;&gt;button_Releases_page.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button_Releases_page.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;button_Releases_page.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;label_Update_2.Name" xml:space="preserve">
+    <value>label_Update_2</value>
+  </data>
+  <data name="&gt;&gt;label_Update_2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label_Update_2.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;label_Update_2.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;label_Update_1.Name" xml:space="preserve">
+    <value>label_Update_1</value>
+  </data>
+  <data name="&gt;&gt;label_Update_1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label_Update_1.Parent" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;label_Update_1.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="tabPage_Update.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabPage_Update.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="tabPage_Update.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="tabPage_Update.Size" type="System.Drawing.Size, System.Drawing">
+    <value>972, 670</value>
+  </data>
+  <data name="tabPage_Update.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="tabPage_Update.Text" xml:space="preserve">
+    <value>UPDATE</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Update.Name" xml:space="preserve">
+    <value>tabPage_Update</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Update.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Update.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Update.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="tabControl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tabControl.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="tabControl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>980, 707</value>
+  </data>
+  <data name="tabControl.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Name" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tabControl.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="trackBar_LagCompensation.Location" type="System.Drawing.Point, System.Drawing">
+    <value>11, 35</value>
+  </data>
+  <data name="trackBar_LagCompensation.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 0, 5, 0</value>
+  </data>
+  <data name="trackBar_LagCompensation.Size" type="System.Drawing.Size, System.Drawing">
+    <value>438, 80</value>
+  </data>
+  <data name="trackBar_LagCompensation.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;trackBar_LagCompensation.Name" xml:space="preserve">
+    <value>trackBar_LagCompensation</value>
+  </data>
+  <data name="&gt;&gt;trackBar_LagCompensation.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TrackBar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;trackBar_LagCompensation.Parent" xml:space="preserve">
+    <value>groupBox_Lag</value>
+  </data>
+  <data name="&gt;&gt;trackBar_LagCompensation.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="panel_Details.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="panel_Details.Location" type="System.Drawing.Point, System.Drawing">
+    <value>9, 33</value>
+  </data>
+  <data name="panel_Details.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="panel_Details.Size" type="System.Drawing.Size, System.Drawing">
+    <value>457, 597</value>
+  </data>
+  <data name="panel_Details.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;panel_Details.Name" xml:space="preserve">
+    <value>panel_Details</value>
+  </data>
+  <data name="&gt;&gt;panel_Details.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel_Details.Parent" xml:space="preserve">
+    <value>groupBox_Details</value>
+  </data>
+  <data name="&gt;&gt;panel_Details.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="panel_IntRes.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="panel_IntRes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>9, 33</value>
+  </data>
+  <data name="panel_IntRes.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="panel_IntRes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>443, 103</value>
+  </data>
+  <data name="panel_IntRes.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;panel_IntRes.Name" xml:space="preserve">
+    <value>panel_IntRes</value>
+  </data>
+  <data name="&gt;&gt;panel_IntRes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel_IntRes.Parent" xml:space="preserve">
+    <value>groupBox_InternalRes</value>
+  </data>
+  <data name="&gt;&gt;panel_IntRes.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="panel_Patches2.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="panel_Patches2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>552, 0</value>
+    <value>483, 0</value>
   </data>
   <data name="panel_Patches2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="panel_Patches2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>552, 756</value>
+    <value>483, 662</value>
   </data>
   <data name="panel_Patches2.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -511,10 +1087,10 @@
     <value>0, 0</value>
   </data>
   <data name="panel_Patches.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="panel_Patches.Size" type="System.Drawing.Size, System.Drawing">
-    <value>552, 756</value>
+    <value>483, 662</value>
   </data>
   <data name="panel_Patches.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -531,33 +1107,6 @@
   <data name="&gt;&gt;panel_Patches.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="tabPage_Patches.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 39</value>
-  </data>
-  <data name="tabPage_Patches.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
-  </data>
-  <data name="tabPage_Patches.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1104, 761</value>
-  </data>
-  <data name="tabPage_Patches.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tabPage_Patches.Text" xml:space="preserve">
-    <value>Options</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Patches.Name" xml:space="preserve">
-    <value>tabPage_Patches</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Patches.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Patches.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Patches.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="panel_Playerdata.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -565,10 +1114,10 @@
     <value>0, 0</value>
   </data>
   <data name="panel_Playerdata.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="panel_Playerdata.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1104, 756</value>
+    <value>966, 662</value>
   </data>
   <data name="panel_Playerdata.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -585,44 +1134,17 @@
   <data name="&gt;&gt;panel_Playerdata.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tabPage_Playerdata.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 39</value>
-  </data>
-  <data name="tabPage_Playerdata.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
-  </data>
-  <data name="tabPage_Playerdata.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1104, 761</value>
-  </data>
-  <data name="tabPage_Playerdata.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="tabPage_Playerdata.Text" xml:space="preserve">
-    <value>Player</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Playerdata.Name" xml:space="preserve">
-    <value>tabPage_Playerdata</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Playerdata.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Playerdata.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Playerdata.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="linkLabel_Console.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="linkLabel_Console.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1008, 724</value>
+    <value>882, 634</value>
   </data>
   <data name="linkLabel_Console.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 0, 6, 0</value>
+    <value>5, 0, 5, 0</value>
   </data>
   <data name="linkLabel_Console.Size" type="System.Drawing.Size, System.Drawing">
-    <value>91, 25</value>
+    <value>85, 25</value>
   </data>
   <data name="linkLabel_Console.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -652,10 +1174,10 @@
     <value>0, 0</value>
   </data>
   <data name="panel_Components.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="panel_Components.Size" type="System.Drawing.Size, System.Drawing">
-    <value>552, 756</value>
+    <value>483, 662</value>
   </data>
   <data name="panel_Components.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -672,47 +1194,17 @@
   <data name="&gt;&gt;panel_Components.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="tabPage_Components.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 39</value>
-  </data>
-  <data name="tabPage_Components.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
-  </data>
-  <data name="tabPage_Components.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
-  </data>
-  <data name="tabPage_Components.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1104, 761</value>
-  </data>
-  <data name="tabPage_Components.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tabPage_Components.Text" xml:space="preserve">
-    <value>Components</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Components.Name" xml:space="preserve">
-    <value>tabPage_Components</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Components.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Components.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Components.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
   <data name="panel_Custom.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="panel_Custom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>552, 0</value>
+    <value>483, 0</value>
   </data>
   <data name="panel_Custom.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="panel_Custom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>552, 756</value>
+    <value>483, 662</value>
   </data>
   <data name="panel_Custom.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -736,10 +1228,10 @@
     <value>0, 0</value>
   </data>
   <data name="panel_Plugins.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="panel_Plugins.Size" type="System.Drawing.Size, System.Drawing">
-    <value>552, 756</value>
+    <value>483, 662</value>
   </data>
   <data name="panel_Plugins.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -756,47 +1248,17 @@
   <data name="&gt;&gt;panel_Plugins.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="tabPage_Plugins.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 39</value>
-  </data>
-  <data name="tabPage_Plugins.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
-  </data>
-  <data name="tabPage_Plugins.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
-  </data>
-  <data name="tabPage_Plugins.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1104, 761</value>
-  </data>
-  <data name="tabPage_Plugins.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="tabPage_Plugins.Text" xml:space="preserve">
-    <value>Plugins and Patches</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Plugins.Name" xml:space="preserve">
-    <value>tabPage_Plugins</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Plugins.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Plugins.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Plugins.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
   <data name="button_ModRename.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
   <data name="button_ModRename.Location" type="System.Drawing.Point, System.Drawing">
-    <value>558, 714</value>
+    <value>488, 625</value>
   </data>
   <data name="button_ModRename.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_ModRename.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 42</value>
+    <value>114, 37</value>
   </data>
   <data name="button_ModRename.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -817,13 +1279,13 @@
     <value>0</value>
   </data>
   <data name="button_ModRescan.Location" type="System.Drawing.Point, System.Drawing">
-    <value>696, 714</value>
+    <value>609, 625</value>
   </data>
   <data name="button_ModRescan.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_ModRescan.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 42</value>
+    <value>114, 37</value>
   </data>
   <data name="button_ModRescan.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -847,13 +1309,13 @@
     <value>False</value>
   </data>
   <data name="button_ModFiles.Location" type="System.Drawing.Point, System.Drawing">
-    <value>146, 714</value>
+    <value>128, 625</value>
   </data>
   <data name="button_ModFiles.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_ModFiles.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 42</value>
+    <value>114, 37</value>
   </data>
   <data name="button_ModFiles.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -880,13 +1342,13 @@
     <value>False</value>
   </data>
   <data name="checkBox_ModPatches.Location" type="System.Drawing.Point, System.Drawing">
-    <value>860, 716</value>
+    <value>752, 626</value>
   </data>
   <data name="checkBox_ModPatches.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="checkBox_ModPatches.Size" type="System.Drawing.Size, System.Drawing">
-    <value>241, 29</value>
+    <value>216, 29</value>
   </data>
   <data name="checkBox_ModPatches.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -910,13 +1372,13 @@
     <value>False</value>
   </data>
   <data name="button_ModDelete.Location" type="System.Drawing.Point, System.Drawing">
-    <value>422, 714</value>
+    <value>369, 625</value>
   </data>
   <data name="button_ModDelete.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_ModDelete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 42</value>
+    <value>114, 37</value>
   </data>
   <data name="button_ModDelete.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -940,13 +1402,13 @@
     <value>False</value>
   </data>
   <data name="button_ModClone.Location" type="System.Drawing.Point, System.Drawing">
-    <value>284, 714</value>
+    <value>248, 625</value>
   </data>
   <data name="button_ModClone.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_ModClone.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 42</value>
+    <value>114, 37</value>
   </data>
   <data name="button_ModClone.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -970,13 +1432,13 @@
     <value>False</value>
   </data>
   <data name="button_ModSetActive.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 714</value>
+    <value>9, 625</value>
   </data>
   <data name="button_ModSetActive.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_ModSetActive.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 42</value>
+    <value>114, 37</value>
   </data>
   <data name="button_ModSetActive.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -997,16 +1459,16 @@
     <value>6</value>
   </data>
   <data name="listBox_Mods.ItemHeight" type="System.Int32, mscorlib">
-    <value>25</value>
+    <value>24</value>
   </data>
   <data name="listBox_Mods.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 10</value>
+    <value>9, 9</value>
   </data>
   <data name="listBox_Mods.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="listBox_Mods.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1088, 654</value>
+    <value>952, 556</value>
   </data>
   <data name="listBox_Mods.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1023,36 +1485,6 @@
   <data name="&gt;&gt;listBox_Mods.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
-  <data name="tabPage_Modpacks.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 39</value>
-  </data>
-  <data name="tabPage_Modpacks.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="tabPage_Modpacks.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="tabPage_Modpacks.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1104, 761</value>
-  </data>
-  <data name="tabPage_Modpacks.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="tabPage_Modpacks.Text" xml:space="preserve">
-    <value>Modpacks</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Modpacks.Name" xml:space="preserve">
-    <value>tabPage_Modpacks</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Modpacks.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Modpacks.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Modpacks.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
   <data name="creditsTextBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
@@ -1066,7 +1498,7 @@
     <value>Both</value>
   </data>
   <data name="creditsTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1100, 752</value>
+    <value>963, 658</value>
   </data>
   <data name="creditsTextBox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1201,47 +1633,17 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
   <data name="&gt;&gt;creditsTextBox.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tabPage_Credits.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 39</value>
-  </data>
-  <data name="tabPage_Credits.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="tabPage_Credits.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="tabPage_Credits.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1104, 761</value>
-  </data>
-  <data name="tabPage_Credits.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="tabPage_Credits.Text" xml:space="preserve">
-    <value>Credits</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Credits.Name" xml:space="preserve">
-    <value>tabPage_Credits</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Credits.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Credits.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Credits.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
   <data name="linkLabel_Repo.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="linkLabel_Repo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>338, 594</value>
+    <value>296, 520</value>
   </data>
   <data name="linkLabel_Repo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="linkLabel_Repo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>179, 25</value>
+    <value>161, 25</value>
   </data>
   <data name="linkLabel_Repo.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -1265,13 +1667,13 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>True</value>
   </data>
   <data name="linkLabel_Help.Location" type="System.Drawing.Point, System.Drawing">
-    <value>338, 514</value>
+    <value>296, 450</value>
   </data>
   <data name="linkLabel_Help.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="linkLabel_Help.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 25</value>
+    <value>52, 25</value>
   </data>
   <data name="linkLabel_Help.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -1295,13 +1697,13 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>True</value>
   </data>
   <data name="linkLabel_Official_Discord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>338, 554</value>
+    <value>296, 485</value>
   </data>
   <data name="linkLabel_Official_Discord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="linkLabel_Official_Discord.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 25</value>
+    <value>142, 25</value>
   </data>
   <data name="linkLabel_Official_Discord.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -1325,13 +1727,13 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>True</value>
   </data>
   <data name="linkLabel_Changelog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>338, 476</value>
+    <value>296, 416</value>
   </data>
   <data name="linkLabel_Changelog.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="linkLabel_Changelog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>116, 25</value>
+    <value>108, 25</value>
   </data>
   <data name="linkLabel_Changelog.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -1352,13 +1754,13 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>3</value>
   </data>
   <data name="button_Clean_installation.Location" type="System.Drawing.Point, System.Drawing">
-    <value>590, 414</value>
+    <value>516, 362</value>
   </data>
   <data name="button_Clean_installation.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_Clean_installation.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 52</value>
+    <value>161, 46</value>
   </data>
   <data name="button_Clean_installation.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -1379,13 +1781,13 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>4</value>
   </data>
   <data name="button_Instructions.Location" type="System.Drawing.Point, System.Drawing">
-    <value>590, 354</value>
+    <value>516, 310</value>
   </data>
   <data name="button_Instructions.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_Instructions.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 52</value>
+    <value>161, 46</value>
   </data>
   <data name="button_Instructions.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -1406,13 +1808,13 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>5</value>
   </data>
   <data name="button_Unstable_builds.Location" type="System.Drawing.Point, System.Drawing">
-    <value>338, 414</value>
+    <value>296, 362</value>
   </data>
   <data name="button_Unstable_builds.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_Unstable_builds.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 52</value>
+    <value>161, 46</value>
   </data>
   <data name="button_Unstable_builds.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -1433,13 +1835,13 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>6</value>
   </data>
   <data name="button_Releases_page.Location" type="System.Drawing.Point, System.Drawing">
-    <value>338, 354</value>
+    <value>296, 310</value>
   </data>
   <data name="button_Releases_page.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_Releases_page.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 52</value>
+    <value>161, 46</value>
   </data>
   <data name="button_Releases_page.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1463,13 +1865,13 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>True</value>
   </data>
   <data name="label_Update_2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>96, 146</value>
+    <value>84, 128</value>
   </data>
   <data name="label_Update_2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="label_Update_2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>948, 50</value>
+    <value>852, 50</value>
   </data>
   <data name="label_Update_2.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1500,13 +1902,13 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
     <value>Microsoft Sans Serif, 12pt, style=Bold</value>
   </data>
   <data name="label_Update_1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>22, 60</value>
+    <value>19, 52</value>
   </data>
   <data name="label_Update_1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="label_Update_1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1044, 37</value>
+    <value>933, 32</value>
   </data>
   <data name="label_Update_1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1528,60 +1930,6 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
   </data>
   <data name="&gt;&gt;label_Update_1.ZOrder" xml:space="preserve">
     <value>9</value>
-  </data>
-  <data name="tabPage_Update.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 39</value>
-  </data>
-  <data name="tabPage_Update.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="tabPage_Update.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="tabPage_Update.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1104, 761</value>
-  </data>
-  <data name="tabPage_Update.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="tabPage_Update.Text" xml:space="preserve">
-    <value>UPDATE</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Update.Name" xml:space="preserve">
-    <value>tabPage_Update</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Update.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Update.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabPage_Update.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="tabControl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tabControl.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
-  </data>
-  <data name="tabControl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1120, 808</value>
-  </data>
-  <data name="tabControl.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;tabControl.Name" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabControl.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabControl.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tabControl.ZOrder" xml:space="preserve">
-    <value>2</value>
   </data>
   <data name="button_Discord.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -1609,13 +1957,13 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
 </value>
   </data>
   <data name="button_Discord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>992, 808</value>
+    <value>868, 707</value>
   </data>
   <data name="button_Discord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="button_Discord.Size" type="System.Drawing.Size, System.Drawing">
-    <value>64, 64</value>
+    <value>56, 56</value>
   </data>
   <data name="button_Discord.TabIndex" type="System.Int32, mscorlib">
     <value>31</value>
@@ -1674,13 +2022,13 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
 </value>
   </data>
   <data name="button_github.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1056, 808</value>
+    <value>924, 707</value>
   </data>
   <data name="button_github.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="button_github.Size" type="System.Drawing.Size, System.Drawing">
-    <value>64, 64</value>
+    <value>56, 56</value>
   </data>
   <data name="button_github.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
@@ -1701,13 +2049,13 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
     <value>Flat</value>
   </data>
   <data name="button_Apply.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 818</value>
+    <value>7, 716</value>
   </data>
   <data name="button_Apply.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="button_Apply.Size" type="System.Drawing.Size, System.Drawing">
-    <value>138, 46</value>
+    <value>121, 40</value>
   </data>
   <data name="button_Apply.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -2050,13 +2398,13 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
     <value>Flat</value>
   </data>
   <data name="button_Wiki.Location" type="System.Drawing.Point, System.Drawing">
-    <value>928, 808</value>
+    <value>812, 707</value>
   </data>
   <data name="button_Wiki.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="button_Wiki.Size" type="System.Drawing.Size, System.Drawing">
-    <value>64, 64</value>
+    <value>56, 56</value>
   </data>
   <data name="button_Wiki.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -2077,7 +2425,7 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>192, 192</value>
+    <value>168, 168</value>
   </data>
   <data name="$this.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2089,7 +2437,7 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
     <value>Stretch</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1120, 874</value>
+    <value>980, 765</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3224,7 +3572,7 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
 </value>
   </data>
   <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 6, 6, 6</value>
+    <value>5, 5, 5, 5</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>

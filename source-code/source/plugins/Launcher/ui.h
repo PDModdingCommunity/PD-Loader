@@ -661,6 +661,7 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			this->groupBox_InternalRes = (gcnew System::Windows::Forms::GroupBox());
 			this->panel_IntRes = (gcnew System::Windows::Forms::Panel());
 			this->tabPage_Patches = (gcnew System::Windows::Forms::TabPage());
+			this->panel_Patches2 = (gcnew System::Windows::Forms::Panel());
 			this->panel_Patches = (gcnew System::Windows::Forms::Panel());
 			this->tabPage_Playerdata = (gcnew System::Windows::Forms::TabPage());
 			this->panel_Playerdata = (gcnew System::Windows::Forms::Panel());
@@ -697,7 +698,6 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->button_Apply = (gcnew System::Windows::Forms::Button());
 			this->button_Wiki = (gcnew System::Windows::Forms::Button());
-			this->panel_Patches2 = (gcnew System::Windows::Forms::Panel());
 			this->groupBox_ScreenRes->SuspendLayout();
 			this->panel_ScreenRes->SuspendLayout();
 			this->tabControl->SuspendLayout();
@@ -831,6 +831,11 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			resources->ApplyResources(this->tabPage_Patches, L"tabPage_Patches");
 			this->tabPage_Patches->Name = L"tabPage_Patches";
+			// 
+			// panel_Patches2
+			// 
+			resources->ApplyResources(this->panel_Patches2, L"panel_Patches2");
+			this->panel_Patches2->Name = L"panel_Patches2";
 			// 
 			// panel_Patches
 			// 
@@ -1104,11 +1109,6 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			this->button_Wiki->Name = L"button_Wiki";
 			this->button_Wiki->UseVisualStyleBackColor = false;
 			this->button_Wiki->Click += gcnew System::EventHandler(this, &ui::button_Wiki_Click);
-			// 
-			// panel_Patches2
-			// 
-			resources->ApplyResources(this->panel_Patches2, L"panel_Patches2");
-			this->panel_Patches2->Name = L"panel_Patches2";
 			// 
 			// ui
 			// 

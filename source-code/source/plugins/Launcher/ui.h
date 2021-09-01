@@ -244,11 +244,19 @@ namespace Launcher {
 
 			String^ wineVersion = gcnew String(WineVer::getWineVer().c_str());
 
+			int driver_version_major = 1;
+			int driver_version_minor = 0;
 			auto version_split = version->Split(' ');
-			String^ driver_version = gcnew String(version_split[version_split->Length - 1]);
-			auto driver_version_split_major_minor = driver_version->Split('.');
-			int driver_version_major = int::Parse(driver_version_split_major_minor[0]);
-			int driver_version_minor = int::Parse(driver_version_split_major_minor[1]);
+			if (version_split->Length > 1) // make sure we don't use the OpenGL version instead of the driver version
+			{
+				String^ driver_version = gcnew String(version_split[version_split->Length - 1]);
+				auto driver_version_split_major_minor = driver_version->Split('.');
+				if (driver_version_split_major_minor->Length >= 2)
+				{
+					driver_version_major = int::Parse(driver_version_split_major_minor[0]);
+					driver_version_minor = int::Parse(driver_version_split_major_minor[1]);
+				}
+			}
 
 			glutDestroyWindow(window); // destroy the window so it doesn't remain on screen
 			if (glutMainLoopEventDynamic != NULL) glutMainLoopEventDynamic(); // freeglut needs this
@@ -360,17 +368,17 @@ namespace Launcher {
 				}
 				else
 				{
-					this->labelGPU->Text += i18n::GetStringFallback("GPU_UNSUPPORTED_NAME");
-					GPUIssueText = i18n::GetStringFallback("GPU_UNSUPPORTED_HINT");
-					this->labelGPU->LinkColor = System::Drawing::Color::Red;
+					this->labelGPU->Text += i18n::GetStringFallback("GPU_UNKNOWN_NAME");
+					GPUIssueText = i18n::GetStringFallback("GPU_UNKNOWN_HINT");
+					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
 					showGpuDialog = true;
 				}
 			}
 			else //if (gpuModel->Length == 0 || gpuModel->StartsWith("Unk") || gpuModel->StartsWith("Oth"))
 			{
-				this->labelGPU->Text += i18n::GetStringFallback("GPU_UNKNOWN_NAME");
-				GPUIssueText = i18n::GetStringFallback("GPU_UNKNOWN_HINT");
-				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+				this->labelGPU->Text += i18n::GetStringFallback("GPU_UNSUPPORTED_NAME");
+				GPUIssueText = i18n::GetStringFallback("GPU_UNSUPPORTED_HINT");
+				this->labelGPU->LinkColor = System::Drawing::Color::Red;
 				showGpuDialog = true;
 			}
 			int linkEnd = this->labelGPU->Text->Length - linkStart;

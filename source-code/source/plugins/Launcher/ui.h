@@ -787,7 +787,7 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->MaximizeBox = false;
 			this->Name = L"ui";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"PD Launcher (2.5.2)";
+			this->Text = L"PD Launcher (2.5.3)";
 			this->TransparencyKey = System::Drawing::Color::Magenta;
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &ui::Ui_FormClosing);
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &ui::Ui_FormClosed);

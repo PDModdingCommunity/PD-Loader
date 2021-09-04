@@ -369,7 +369,7 @@ class PatchApplier710 : public PatchApplier {
 			InjectCode((void*)0x0000000140120709, { 0xE9, 0x82, 0x0A, 0x00 });
 		}
 		// Default hand size
-		if (nDefaultHandSize > 0)
+		if (nDefaultHandSize != -1 && nDefaultHandSize != 0)
 		{
 			printf("[Patches] Changing default hand size...\n");
 			const float num = (float)nDefaultHandSize / 10000.0;

@@ -36,7 +36,7 @@ namespace GPUModel
 	{
 		// detected model can be overridden -- 0: Kepler, 1: Maxwell, 2: Turing, 3: Ampere
 		int nGPUModel = GetPrivateProfileIntW(L"gpu", L"model", -1, CONFIG_FILE);
-		if (nGPUModel >= 0 && nGPUModel <= 2)
+		if (nGPUModel >= 0 && nGPUModel <= 3)
 		{
 			std::string arch;
 			switch (nGPUModel)

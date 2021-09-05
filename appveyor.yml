@@ -17,6 +17,8 @@ after_build:
     md "%TMP%\full\plugins\Novidia Shaders"
     
     md %TMP%\full\plugins\zh-Hans\
+
+    md %TMP%\full\plugins\pt-PT\
     
     md %TMP%\full\ram\
 
@@ -29,6 +31,8 @@ after_build:
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\full\plugins\
     
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\zh-Hans\*.dll %TMP%\full\plugins\zh-Hans\
+
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\pt-PT\*.dll %TMP%\full\plugins\pt-PT\
     
     copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\full\
 

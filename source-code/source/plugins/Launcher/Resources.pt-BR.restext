@@ -1,0 +1,294 @@
+###############################################
+# framework
+
+# display
+DISPLAY_NAME=Modo de Exibição:
+DISPLAY_HINT=Configura o modo de exibição da janela.\n\n\nRápido: Janela sem Bordas "pop-up" (pode causar problemas com capturas de tela se as Otimizações de Tela Cheia do Windows 10/11 estiverem ativadas).\n\nExclusivo: Toma o controle da tela e te permite alterar a resolução de exibição e a taxa de atualização. É mais difícil trocar de programas (minimizar, alt+tab...) nesse modo.\n\nSeguro: Janela sem bordas simples. Tem um pouco mais de latência do que o modo Rápido, mas também pode ter menos problemas.
+Windowed=Modo Janela
+Fast=Rápido
+Exclusive=Exclusivo
+Safe=Seguro
+RESOLUTION_NAME=Resolução:
+RESOLUTION_HINT=Configura a resolução de exibição.
+REFRESHRATE_NAME=Taxa de Quadros:
+REFRESHRATE_HINT=Configura a taxa de atualização.
+R.ENABLE_NAME=Habilitar
+R.ENABLE_HINT=Habilita ou desabilita a opção de Resolução Interna.
+R.RESOLUTION_NAME=Resolução:
+R.RESOLUTION_HINT=Configura a resolução interna (ao invés de 1280x720).
+MATCH_WINDOW=Usar Resolução da Janela
+MATCH_SCREEN=Usar Resolução da Tela
+
+# graphics
+MODEL_NAME=Arquitetura da GPU NVIDIA:
+MODEL_HINT=Selecione a arquitetura da sua placa de vídeo NVIDIA para aplicar as correções necessárias.\n\nNota: "Detectar Automaticamente" não funciona em GNU/Linux.\n\nKepler: GT/X600, 700, 800M / Maxwell: GT/X700, 800m, 900 / Turing: RTX2000, GTX1600 / Ampere: RTX3000
+Automatic=Detectar Automaticamente
+TAA_NAME=TAA
+TAA_HINT=Anti-Aliasing Temporal
+MLAA_NAME=MLAA
+MLAA_HINT=Anti-Aliasing Morfológico
+MAG_NAME=Filtro:
+MAG_HINT=Filtros de Imagem.\n\nBilinear: filtro padrão\nNearest-neighbour: mais nítido, mas com artefatos\nSharpen: nítido\nCone: suave
+DOF_NAME=Profundidade de Campo
+DOF_HINT=Aplica um efeito de Blur no cenário mais distante. Desative para melhorar a performance.
+REFLECTIONS_NAME=Reflexos
+REFLECTIONS_HINT=Habilita ou desabilita os reflexos.
+REFLECT_RES_WIDTH_NAME=Res. dos Reflexos:
+REFLECT_RES_WIDTH_HINT=Seleciona a resolução de buffer dos reflexos (ao invés de 512x256).
+REFRACT_RES_WIDTH_NAME=Res. da Refração:
+REFRACT_RES_WIDTH_HINT=Seleciona a resolução de buffer da Refração (ao invés de 512x256).
+GAMMA_NAME=Gamma:
+GAMMA_HINT=Aumente para deixar as sombras mais escuras.\nColoque em 125 para uma experiência parecida com a de consoles.\n\nPadrão: 100
+SHADOWS_NAME=Sombras
+SHADOWS_HINT=Habilita ou desabilita as sombras.
+PUNCHTHROUGH_NAME=Malhas Transparentes
+PUNCHTHROUGH_HINT=Mostrar as malhas transparentes.
+GLARE_NAME=Glare
+GLARE_HINT=Habilita ou desabilita o efeito de glare.
+SHADER_NAME=Shader
+SHADER_HINT=Habilita ou desabilita os shader de alta qualidade.
+NPR1_NAME=Toon (F9):
+NPR1_HINT=Shader NPR1\n\nPressione a tecla F9 para habilitar ou desabilitar.
+2D_NAME=Desabilitar renderização 3D
+2D_HINT=Desativa todas as passagens 3D.\n\nAviso: A menos que "Impedir Apagamento de Arquivos" esteja ligado, isso irá apagar os dados extendidos. Não ative em placas gráficas Intel, nesse caso, habilite "Desativar Dados Extendidos".
+
+# options
+Default=Padrão
+Force on=Forçar "Habilitado"
+Force off=Forçar "Desabilitado"
+SECTION_LOADER=Carregador
+SECTION_COMPATIBILITY=Compatibilidade
+SECTION_PV_SELECTOR=Seletor de PV
+SECTION_ESM=Estágios (Músicas)
+SECTION_UI_ELM=Elementos de IU
+SECTION_PV_PATCHES=Patches para PV
+SECTION_FRAMERATE=Taxa de Quadros
+SECTION_CONTROLLER_OPTIONS=Opções de Controle/Joystick
+SECTION_LAUNCHER=Lançador (Launcher)
+
+BUILTIN_PATCHES_NAME=Habilitar Patches Nativos
+BUILTIN_PATCHES_HINT=Habilita os patches nativos, incluindo as opções abaixo.
+CUSTOM_PATCHES_NAME=Habilitar Patches Externos
+CUSTOM_PATCHES_HINT=Habilita todos os patches externos.
+BUILTIN_RENDER_NAME=Habilitar o Renderizador Nativo
+BUILTIN_RENDER_HINT=Habilita os patches para o renderizador nativo.
+
+NO_MOVIES_NAME=Desabilitar Vídeos
+NO_MOVIES_HINT=Desabilita os vídeos (ative essa opção caso seu jogo "carrega infinitamente" ao tentar jogar certas músicas).
+CURSOR_NAME=Cursor do Mouse
+CURSOR_HINT=Ativa ou desativa o cursor do mouse.
+STEREO_NAME=Estéreo
+STEREO_HINT=Use 2 canais de áudio ao invés de 4 (quando não estiver usando o DivaSound).
+
+QUICK_START_NAME=Início Rápido:
+QUICK_START_HINT=Pula um ou mais menus.
+Disabled=Desativado
+Guest=Jogador
+Guest + Normal=Jogador + Modo de Jogo
+NO_SCROLLING_SFX_NAME=Desativar Som de Navegação
+NO_SCROLLING_SFX_HINT=Desativa o som de navegação da lista de músicas.
+
+ENHANCED_STAGE_MANAGER_NAME=Número de Estágios:
+ENHANCED_STAGE_MANAGER_HINT=Configura o número de estágios (Padrão: 0).
+ENHANCED_STAGE_MANAGER_ENCORE_NAME=Encore
+ENHANCED_STAGE_MANAGER_ENCORE_HINT=Habilita estágios "encore".
+
+FORCE_MOUTH_NAME=Estilo da Boca:
+FORCE_MOUTH_HINT=Muda as animações da boca dos personagens.
+FORCE_EXPRESSIONS_NAME=Estilo de Expressões:
+FORCE_EXPRESSIONS_HINT=Muda as expressões dos personagens.
+FORCE_LOOK_NAME=Estilo dos Olhos:
+FORCE_LOOK_HINT=Muda as animações dos olhos dos personagens.
+NO_HAND_SCALING_NAME=Sem Escala das Mãos
+NO_HAND_SCALING_HINT=Desativa a escala de tamanho das mãos dos personagens.
+DEFAULT_HAND_SIZE_NAME=Tamanho das Mãos Padrão:
+DEFAULT_HAND_SIZE_HINT=Padrão: -1\nPDA: 12200
+SING_MISSED_NAME=Cantar Notas Perdidas
+SING_MISSED_HINT=Os vocais não vão parar ao perder notas.
+
+HIDE_VOLUME_NAME=Esconder Botões de Volume
+HIDE_VOLUME_HINT=Esconde os botões de volume e volume dos efeitos de som.
+NO_PV_UI_NAME=Desativar a interface de PV
+NO_PV_UI_HINT=Esconde os botões de foto nos PVs.
+HIDE_PV_WATERMARK_NAME=Esconder Marca D'Água
+HIDE_PV_WATERMARK_HINT=Esconde a marca d'água que normalmente aparece ao assistir PVs.
+STATUS_ICONS_NAME=Ícones de Rede:
+STATUS_ICONS_HINT=Configura o estado dos ícones de rede e cartão (canto superior direito).
+Hidden=Desabilitado
+Error=Erro
+OK=Funcionando
+Partial OK=Funcionando com Erros
+NO_LYRICS_NAME=Desativar Letras
+NO_LYRICS_HINT=Desativa as letras das músicas (lyrics).
+NO_ERROR_NAME=Desativar o Banner de Erro
+NO_ERROR_HINT=Desativa o banner de erro na tela de "attract".
+HIDE_FREEPLAY_NAME=Hide "FREE PLAY"/"CREDIT(S)"
+HIDE_FREEPLAY_HINT=Esconde a linha "FREE PLAY"/"CREDIT(S)".
+PDLOADERTEXT_NAME=PD Loader FREE PLAY
+PDLOADERTEXT_HINT=Mostra "PD Loader" ao invés de "FREE PLAY".
+NO_TIMER_NAME=Congelar o Temporizador
+NO_TIMER_HINT=Congela/para o temporizador.
+NO_TIMER_SPRITE_NAME=Desabilitar o Ícone do Temporizador
+NO_TIMER_SPRITE_HINT=Desabilita o ícone do temporizador.
+NO_MESSAGE_BAR_NAME=Esconder a Barra de Mensagens
+NO_MESSAGE_BAR_HINT=Esconde a barra de mensagens superior.
+NO_STAGE_TEXT_NAME=Desabilitar o Texto "Stage"
+NO_STAGE_TEXT_HINT=Desabilita o texto "Stage 1/2/Final".
+
+UNLOCK_PSEUDO_NAME=Desbloquear "PSEUDO" Módulos (incompleto)
+UNLOCK_PSEUDO_HINT=Te permite jogar qualquer música com qualquer personagem.\n(Incompleto, os módulos recomendados serão padronizados para Hatsune Miku)
+CARD_NAME=Desbloquear o Menu de Cartões (Incompleto)
+CARD_HINT=Habilita o menu de cartões.\n(Incompleto, não ignora o jogo pedindo pelo cartão)
+NO_OPD_NAME=Desativar Dados Extendidos
+NO_OPD_HINT=Também conhecido como "Skyth's "No Osage Play Data" patch".\n\nDesabilita a física embutida nos estágios para salvar espaço de armazenamento.\nPode quebrar a física em alguns estágios.
+DWGUI_SCALING_NAME=Escalar Janelas de Depuração
+DWGUI_SCALING_HINT=Também conhecido como "somewhatlurker's dwgui patch".\n\nEscala as janelas de depuração (as deixa maiores) em resoluções maiores.
+FREEPLAY_NAME=FREE PLAY
+FREEPLAY_HINT=Mostra "FREE PLAY" ao invés de "CREDIT(S)" e faz com que o jogo não requira créditos.
+
+FPS.LIMIT.LIGHTMODE_NAME=Usar o Limitador Leve
+FPS.LIMIT.LIGHTMODE_HINT=Faz com que o limitador de taxa de quadros use menos CPU.\nPode deixar a performance inconsistente.
+FPS.LIMIT_NAME=Limite de Taxa de Quadros:
+FPS.LIMIT_HINT=Te permite selecionar um limite para a taxa de quadros. Coloque em -1 para desligar o limitador.
+FRM.MOTION.RATE_NAME=Taxa de Movimento do LTQ:
+FRM.MOTION.RATE_HINT=Seleciona a taxa dos movimentos para o componente "Limite de Taxa de Quadros".\nValores maiores os deixarão mais suaves, mas usam mais CPU e podem causar problemas (Padrão: 400).
+
+AUTOPAUSE_NAME=Pausar Automaticamente
+AUTOPAUSE_HINT=Pausar o jogo quando o foco da janela é perdido.
+
+RUMBLE_NAME=Vibração do Controle
+RUMBLE_HINT=Liga ou desliga a vibração do controle em sliders (Apenas funciona em XInput).
+XINPUT_RUMBLE_INTENSITY_LEFT_NAME=Intensidade do Motor Esquerdo:
+XINPUT_RUMBLE_INTENSITY_LEFT_HINT=Padrão: 8000\nMáximo: 65535.
+XINPUT_RUMBLE_INTENSITY_RIGHT_NAME=Intensidade do Motor Direito:
+XINPUT_RUMBLE_INTENSITY_RIGHT_HINT=Padrão: 4000\nMáximo:65535.
+XINPUT_PREFERRED_NAME=Selecionar Controle:
+XINPUT_PREFERRED_HINT=Seleciona um controle específico (Apenas XInput).\nSe disponível, o próximo controle encontrado será usado.
+
+HARDWARE_SLIDER_NAME=Usar Hardware para Sliders
+HARDWARE_SLIDER_HINT=Ative esta opção caso esteja usando um slider de arcade.\n(configure o slider para se comunicar com a porta COM11)
+
+PREVENT_DATA_DELETION_NAME=Impedir Apagamento de Arquivos
+PREVENT_DATA_DELETION_HINT=Impede o jogo de apagar arquivos.
+COMMAND_LINE_NAME=Terminal:
+COMMAND_LINE_HINT=Permite enviar argumentos de terminal para a inicialização do jogo quando usando o lançador (launcher).\nDesativar o lançador (launcher) irá fazer com que essa linha seja ignorada.
+USE_DIVAHOOK_BAT_NAME=Usar divahook.bat
+USE_DIVAHOOK_BAT_HINT=Inicia o "divahook.bat" ao invés do "diva.exe".
+DARK_LAUNCHER_NAME=Tema Escuro
+DARK_LAUNCHER_HINT=Ativa o tema escuro do PD Loader.
+LAUNCHER_LANGUAGE_NAME=Idioma do Lançador:
+LAUNCHER_LANGUAGE_HINT=Seleciona o idioma do PD Loader.
+NO_GPU_DIALOG_NAME=Desativar Avisos de GPU
+NO_GPU_DIALOG_HINT=Desativa os avisos para placas de vídeo não suportadas.
+
+
+# player data
+PLAYER_NAME_NAME=Nome do Jogador:
+PLAYER_NAME_HINT=Nome do jogador mostrado dentro do jogo.
+LEVEL_NAME_NAME=Frase do jogador:
+LEVEL_NAME_HINT=Frase mostrada no level plate dentro do jogo (mantenha essa linha pequena).
+LEVEL_PLATE_ID_NAME=Level Plate:
+LEVEL_PLATE_ID_HINT=Seleciona a imagem de fundo da frase do jogador (level plate).
+LEVEL_PLATE_EFFECT_NAME=Efeitos para o Level Plate:
+LEVEL_PLATE_EFFECT_HINT=Seleciona o efeito que aparecerá na imagem de fundo da frase do jogador (level plate).
+SKIN_EQUIP _NAME=Skin:
+SKIN_EQUIP _HINT=Seleciona a skin da área de jogo.
+BTN_SE_EQUIP_NAME=Som dos Botões:
+BTN_SE_EQUIP_HINT=Seleciona o efeito de som dos botões.\nDeixe em -1 para usar o som padrão de cada estágio.
+SLIDE_SE_EQUIP_NAME=Som dos Slides:
+SLIDE_SE_EQUIP_HINT=Seleciona o efeito de som dos sliders.\nDeixe em -1 para usar o som padrão de cada estágio.
+CHAINSLIDE_SE_EQUIP_NAME=Som dos Slides Longos:
+CHAINSLIDE_SE_EQUIP_HINT=Seleciona o efeito de som dos sliders longos (chain sliders).\nDeixe em -1 para usar o som padrão de cada estágio.
+SLIDERTOUCH_SE_EQUIP_NAME=Som do Slide Touch:
+SLIDERTOUCH_SE_EQUIP_HINT=Seleciona o efeito de som de quando se usa os sliders sem ter uma nota de slide na tela.\nDeixe em -1 para usar o som padrão de cada estágio.
+ACT_TOGGLE_NAME=Sons dos Botões e Sliders
+ACT_TOGGLE_HINT=Ativa ou desativa os sons dos botões e dos sliders.
+BORDER_GREAT_NAME=Margem "Great"
+BORDER_GREAT_HINT=Mostra uma margem na barra de progresso para uma classificação "Great".
+BORDER_EXCELLENT_NAME=Margem "Excellent"
+BORDER_EXCELLENT_HINT=Mostra uma margem na barra de progresso para uma classificação "Excellent".
+BORDER_RIVAL_NAME=Margem "Rival"
+BORDER_RIVAL_HINT=Mostra uma margem na barra de progresso para quando você derrota seu rival.
+USE_CARD_NAME=Usar Cartão
+USE_CARD_HINT=Ativa o "IC card". Isso permite a escolha de módulos (personagens).
+MODULE_CARD_WORKAROUND_NAME=Otimizações do Seletor de Módulos
+MODULE_CARD_WORKAROUND_HINT=Permite selecionar módulos (personagens) sem um cartão e tenta melhorar a performance\ndo menu de seleção de personagens.\n(BETA)
+USE_PV_MODULE_EQUIP_NAME=Módulos Específicos para Músicas
+USE_PV_MODULE_EQUIP_HINT=Permite selecionar módulos para cada música individualmente.
+USE_PV_SKIN_EQUIP_NAME=Skins Específicos para Músicas
+USE_PV_SKIN_EQUIP_HINT=Permite selecionar skins para cada música individualmente.\nValores acessados e armazenados em "skins.ini"
+USE_PV_SFX_EQUIP_NAME=Efeitos de Som Espeíficos para Músicas
+USE_PV_SFX_EQUIP_HINT=Permite selecionar efeitos de som para cada música individualmente.\nValores acessados e armazenados em "sfx.ini"
+GAMEMODE_OPTIONS_NAME=Modificadores
+GAMEMODE_OPTIONS_HINT=Permite usar os modificadores de jogo (hi-speed, hidden, and sudden).
+
+# components
+INPUT_EMULATOR_NAME=Emulador de Entrada
+INPUT_EMULATOR_HINT=Emula comandos através de teclado e mouse.
+TOUCH_SLIDER_EMULATOR_NAME=Emulador de Slider
+TOUCH_SLIDER_EMULATOR_HINT=Emula sliders através de teclado e mouse.
+TOUCH_PANEL_EMULATOR_NAME=Emulador de Painel Sensível a Toque
+TOUCH_PANEL_EMULATOR_HINT=Emula o painel sensível a toque (touch panel) através do mouse.
+PLAYER_DATA_MANAGER_NAME=Gerenciador de Dados do Jogador
+PLAYER_DATA_MANAGER_HINT=Carrega valores definidos pelo jogador para o PlayerData struct.\nNecessário para módulos de modificadores.
+FRAME_RATE_MANAGER_NAME=Limite de Taxa de Quadros
+FRAME_RATE_MANAGER_HINT=Ajusta as animações para a velocidade correta em differentes taxas de quadros.\nApenas necessário quando a taxa de atualização não é 60.
+FAST_LOADER_NAME=Carregador Rápido
+FAST_LOADER_HINT=Pula ou acelera etapas de carregamentos desnecessários.
+FAST_LOADER_SPEED_NAME=Velocidade do Carregador Rápido
+FAST_LOADER_SPEED_HINT=Configure isso para 4 ou menos quando for jogar online.\nPadrão: 39
+CAMERA_CONTROLLER_NAME=Controle de Câmera
+CAMERA_CONTROLLER_HINT=Habilita a câmera livre (ativado com a tecla "F3").\nUse WASD para mover, ESPAÇO/CTRL para cima/baixo, Q/R para rotação, R/F para aplicar zoom.\nSegurar SHIFT/ALT muda a velocidade.
+SCALE_COMPONENT_NAME=Componente de Escala
+SCALE_COMPONENT_HINT=Escala a imagem para preencher corretamente toda a janela/tela.
+DEBUG_COMPONENT_NAME=Componente Depurador
+DEBUG_COMPONENT_HINT=Permite mudar o estado do jogo (teclas "F4~F8"), usando interfaces e testes de desenvolvedor, e aumentar a velocidade de menus e elementos 2D (segurando SHIFT+TAB).
+TARGET_INSPECTOR_NAME=Inspetor de Objetos
+TARGET_INSPECTOR_HINT=Permite transferências de botões para objetos "HOLD".
+SCORE_SAVER_NAME=Gerenciador de Pontuação
+SCORE_SAVER_HINT=Salva as pontuações mais altas em "scores.ini".
+PAUSE_NAME=Pausa
+PAUSE_HINT=Adiciona um menu de pausa.
+
+#plugins
+CONFIG=Configurações
+
+###############################################
+# ui
+
+# dialog
+CONFIRM_SAVE_SETTINGS=Gostaria de salvar suas configurações?
+CONFIRM_DISCORD_OR_GUIDE=Gostaria de ler o guia de usuário para resolução de problemas?
+HOWTO_CLEAN_INSTALL=Como fazer uma instalação limpa
+HOWTO_CLEAN_INSTALL_HINT=Apague:\n- dnsapi.dll ou dinput8.dll\n- patches/\n- plugins/\n\nRestaure:\n- glut32.dll\n\nE então instale o PD Loader baixado do repositório oficial.
+
+# gpu
+GPU_WINE_DISABLE_MOVIES=(lembre-se de desativar os vídeos!)
+GPU_INFO_NAME=Informações da Placa de Vídeo:
+GPU_AMD_NOVIDIA_NAME=Aviso: Suporte para GPUs AMD não é oficial.
+GPU_AMD_NOVIDIA_HINT=GPUs AMD não são suportadas sem mods.\nO AMDPack do PD Loader parece estar instalado, mas tenha em mente que isso pode causar problemas.
+GPU_AMD_NAME=Aviso: Mods necessários para compatibilidade com GPUs AMD!
+GPU_AMD_HINT=GPUs AMD não são suportadas sem mods.\nO AMDPack do PD Loader pode ser usado para fazer a renderização 3D funcionar. Por favor, baixe-o e siga as instruções de instalação incluídas.\n\nSe você tem um laptop com uma GPU NVIDIA e deseja usar ela ao invés da GPU detectada, você pode precisar configurar o "diva.exe" para poder usa-la nas configurações do Windows ou no Painel de Controle da NVIDIA.
+GPU_UNSUPPORTED_NAME=Aviso: GPU NÃO SUPORTADA!
+GPU_UNSUPPORTED_HINT=Sua placa de vídeo não é suportada. Apenas GPUs NVIDIA são recomendadas (porém placas de vídeo AMD podem ser usadas com a adição de mods).\nPor favor use uma placa de vídeo NVIDIA da série GTX 600 ou mais recente.\n\nSe você tem um laptop com uma GPU NVIDIA e deseja usar ela ao invés da GPU detectada, você pode precisar configurar o "diva.exe" para poder usa-la nas configurações do Windows ou no Painel de Controle da NVIDIA.\n\nJogadores com outras GPUs podem conseguir rodar o jogo com a adição de mods ou plugins, mas os elementos 3D provavelmente não irão funcionar.
+GPU_GA_NAME=Aviso: Arquitetura Ampere detectada! Problemas desconhecidos.\n(Clique aqui para mais informações)
+GPU_GA_HINT=A arquitetura Ampere não foi testada ainda. Na geração passada, Arquitetura Turing (GTX 16xx/RTX 20xx), alguns shaders importantes dos personagens tem problemas, resultando em aparecimento de linhas/ruído.\nPor fazor tenha certeza que o plugin "ShaderPatch" está habilitado e reporte qualquer problema adicional para os desenvolvedores.
+GPU_TU_NAME=Aviso: Arquitetura Turing detectada! Possível aparecimento de ruído.\n(Clique aqui para mais informações)
+GPU_TU_HINT=Em GPUs Turing (GTX 16xx/RTX 20xx), alguns shaders importantes dos personagens tem problemas, resultando em aparecimento de linhas/ruído.\nPor favor tenha certeza que o plugin "ShaderPatch" está habilitado.
+GPU_GM_NEWER_NAME=Aviso: Pode haver um pouco de ruído em certos estágios.\n(Clique aqui para mais informações)
+GPU_GM_NEWER_HINT=Em GPUs Maxwell (~GTX 900) ou mais recentes, alguns shaders de estágio podem criar ruído.\nPor favor tenha certeza que o plugin "ShaderPatch" está habilitado.
+GPU_GK_NAME=Avisos: Nenhum.
+GPU_GK_HINT=Sua GPU não deve ter problemas em nenhum estágio.
+GPU_GF_DRIVER_OLD_NAME=Aviso: Os drivers são muito antigos.
+GPU_GF_DRIVER_OLD_HINT=Sua GPU deve ser capaz de rodar o jogo, mas parece que sua versão do OpenGL é muito antiga.\nUma atualização de drivers deve resolver esse problema.
+GPU_GF_NAME=Avisos: Sem problemas conhecidos.
+GPU_GF_HINT=Sua GPU deve ser capaz de rodar o jogo, mas é mais antiga do que a GPU que esse jogo foi feito para rodar (GTX 650 Ti).\nPode haver problemas com alguns elementos gráficos.\nPor favor reporte qualquer problema para que ele seja analisado e muito possívelmente, resolvido.
+GPU_TOO_NEW_NAME=Aviso: Sua GPU pode ser muito nova.\n(Clique aqui para mais informações)
+GPU_TOO_NEW_HINT=Parece que sua GPU é muito nova/recente. Apenas até a arquitetura Turing (GTX 16xx/RTX 20xx) é atualmente suportada.\nBoas notícias: o jogo deve ser capaz de funcionar, mas patches para os shaders (provavelmente necessários) podem não funcionar ainda.\nVocê provavelmente verá linhas/ruídos em alguns shaders de personagens e de estágios.\nPor favor reporte qualquer problema para que o "ShaderPatch" possa ser atualizado.
+GPU_OLD_NAME=Aviso: Sua GPU é muito antiga! Pode ter problemas na renderização 3D.\n(Clique aqui para mais informações)
+GPU_OLD_HINT=Sua GPU é muito antiga e não suporta as técnicas de renderização usadas pelo jogo.\nVocê pode conseguir jogar, mas os gráficos poderão ter vários problemas.\nPor favor faça um upgrade para uma GPU da série GTX 600 or mais recente.
+GPU_UNKNOWN_NAME=Aviso: Não foi possível detectar a arquitetura de sua GPU.\n(Clique aqui para mais informações)
+GPU_UNKNOWN_HINT=Parece que você tem uma GPU NVIDIA, mas algo deu errado na tentativa de detectar sua arquitetura.\nIsso pode ter sido causado por um bug, mas provavelmente indica algum problema maior.\nPor favor tenha certeza de ter uma GPU da série GTX 600 ou mais recente (A série GTX 400 ou mais recente também deve funcionar).
+GPU_DRIVER_ISSUES_NAME=Os drivers da GPU apresentam problemas conhecidos.
+GPU_DRIVER_ISSUES_HINT=Os drivers da GPU que estão instalados tem problemas que já são conhecidos.\nPor favor instale os drivers mais recentes de sua GPU diretamente do site da fabricante.
+SHOW_GPU_DIALOG_HINT=Você pode desativar essa mensagem na aba "Opções".

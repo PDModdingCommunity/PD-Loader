@@ -67,7 +67,7 @@ int nSkipLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"skip", FALSE, CONF
 int nNoGPUDialog = GetPrivateProfileIntW(LAUNCHER_SECTION, L"no_gpu_dialog", FALSE, CONFIG_FILE);
 int nLanguage = GetPrivateProfileIntW(LAUNCHER_SECTION, L"launcher_language", FALSE, CONFIG_FILE);
 
-std::vector<LPCWSTR> languages = std::vector<LPCWSTR>({ L"Automatic", L"en", L"zh-Hans", L"pt-BR"});
+std::vector<LPCWSTR> languages = std::vector<LPCWSTR>({ L"LANG_AUTO", L"en", L"zh-Hans", L"pt-BR", L"it-IT"});
 
 void SetBackCol(Control^ elem, System::Drawing::Color color, System::Windows::Forms::FlatStyle cbxStyle)
 {
@@ -181,10 +181,10 @@ ConfigOptionBase* internalResolutionArray[] = {
 };
 
 ConfigOptionBase* graphicsArray[] = {
-	new DropdownOption(L"model", L"GPU", CONFIG_FILE, L"MODEL_NAME", L"MODEL_HINT", -1, std::vector<LPCWSTR>({ L"Automatic", L"Kepler", L"Maxwell", L"Turing", L"Ampere" }), -1),
+	new DropdownOption(L"model", L"GPU", CONFIG_FILE, L"MODEL_NAME", L"MODEL_HINT", -1, std::vector<LPCWSTR>({ L"MODEL_AUTOMATIC", L"Kepler", L"Maxwell", L"Turing", L"Ampere" }), -1),
 	new BooleanOption(L"TAA", GRAPHICS_SECTION, CONFIG_FILE, L"TAA_NAME", L"TAA_HINT", true, false),
 	new BooleanOption(L"MLAA", GRAPHICS_SECTION, CONFIG_FILE, L"MLAA_NAME", L"MLAA_HINT", true, false),
-	new DropdownOption(L"MAG", GRAPHICS_SECTION, CONFIG_FILE, L"MAG_NAME", L"MAG_HINT", 0, std::vector<LPCWSTR>({ L"Bilinear", L"Nearest-neighbour", L"Sharpen", L"Cone" })),
+	new DropdownOption(L"MAG", GRAPHICS_SECTION, CONFIG_FILE, L"MAG_NAME", L"MAG_HINT", 0, std::vector<LPCWSTR>({ L"MAG_BILINEAR", L"MAG_NEAREST", L"MAG_SHARPEN", L"MAG_CONE" })),
 	new BooleanOption(L"DOF", GRAPHICS_SECTION, CONFIG_FILE, L"DOF_NAME", L"DOF_HINT", true, false),
 	new BooleanOption(L"reflections", GRAPHICS_SECTION, CONFIG_FILE, L"REFLECTIONS_NAME", L"REFLECTIONS_HINT", true, false),
 	new ResolutionOption(L"reflect_res_width", L"reflect_res_height", GRAPHICS_SECTION, CONFIG_FILE, L"REFLECT_RES_WIDTH_NAME", L"REFLECT_RES_WIDTH_HINT", resolution(512, 256), std::vector<resolution>({resolution(256,256), resolution(512,256), resolution(512,512), resolution(1024,1024), resolution(2048,2048), resolution(4096,4096)}), true, (ResolutionOptionOpts)0),

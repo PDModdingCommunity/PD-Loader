@@ -34,6 +34,8 @@ char config_template[] =
 "Command_Line=\n"
 "# Launches divahook.bat intead of diva.exe.\n"
 "Use_divahook_bat=0\n"
+"# Language -- 0=auto, 1=en, 2=zh-Hans, 3=pt-BR, 4=it-IT\n"
+"Launcher_Language=0\n"
 "\n"
 "[Patches]\n"
 "# Disable movies (enable this if the game hangs when loading certain PVs)\n"

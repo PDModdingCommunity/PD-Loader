@@ -123,20 +123,20 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="button_Launch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>301, 716</value>
+    <value>344, 818</value>
   </data>
   <data name="button_Launch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="button_Launch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>380, 40</value>
+    <value>434, 46</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="button_Launch.TabIndex" type="System.Int32, mscorlib">
     <value>20</value>
   </data>
   <data name="button_Launch.Text" xml:space="preserve">
-    <value>Launch</value>
+    <value>Avvia</value>
   </data>
   <data name="&gt;&gt;button_Launch.Name" xml:space="preserve">
     <value>button_Launch</value>
@@ -157,25 +157,25 @@
     <value>True</value>
   </data>
   <data name="checkBox_nofsopt.Location" type="System.Drawing.Point, System.Drawing">
-    <value>24, 150</value>
+    <value>28, 154</value>
   </data>
   <data name="checkBox_nofsopt.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="checkBox_nofsopt.Size" type="System.Drawing.Size, System.Drawing">
-    <value>321, 29</value>
+    <value>358, 29</value>
   </data>
   <data name="checkBox_nofsopt.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="checkBox_nofsopt.Text" xml:space="preserve">
-    <value>Disable Fullscreen Optimizations</value>
+    <value>Disabilita ottimizazioni schermo intero</value>
   </data>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <data name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>17, 17</value>
-  </metadata>
+  </data>
   <data name="checkBox_nofsopt.ToolTip" xml:space="preserve">
-    <value>Disables Windows 10/11 fullscreen optimizations, which can cause issues with screenshots and/or framerate.</value>
+    <value>Disattiva ottimizzazioni schermo intero, che possono causare problemi con screenshot e/o la frequenza dei fotogrammi</value>
   </data>
   <data name="&gt;&gt;checkBox_nofsopt.Name" xml:space="preserve">
     <value>checkBox_nofsopt</value>
@@ -190,13 +190,13 @@
     <value>0</value>
   </data>
   <data name="panel_ScreenRes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 33</value>
+    <value>10, 38</value>
   </data>
   <data name="panel_ScreenRes.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="panel_ScreenRes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>443, 193</value>
+    <value>506, 198</value>
   </data>
   <data name="panel_ScreenRes.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -214,22 +214,22 @@
     <value>0</value>
   </data>
   <data name="groupBox_ScreenRes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 10</value>
+    <value>10, 12</value>
   </data>
   <data name="groupBox_ScreenRes.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="groupBox_ScreenRes.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="groupBox_ScreenRes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>460, 230</value>
+    <value>526, 240</value>
   </data>
   <data name="groupBox_ScreenRes.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
   </data>
   <data name="groupBox_ScreenRes.Text" xml:space="preserve">
-    <value>Screen Resolution</value>
+    <value>Risoluzione dello schermo</value>
   </data>
   <data name="&gt;&gt;groupBox_ScreenRes.Name" xml:space="preserve">
     <value>groupBox_ScreenRes</value>
@@ -247,13 +247,13 @@
     <value>Stretch</value>
   </data>
   <data name="trackBar_LagCompensation.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 35</value>
+    <value>14, 40</value>
   </data>
   <data name="trackBar_LagCompensation.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 0, 5, 0</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="trackBar_LagCompensation.Size" type="System.Drawing.Size, System.Drawing">
-    <value>438, 80</value>
+    <value>500, 90</value>
   </data>
   <data name="trackBar_LagCompensation.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -271,22 +271,22 @@
     <value>0</value>
   </data>
   <data name="groupBox_Lag.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 568</value>
+    <value>10, 606</value>
   </data>
   <data name="groupBox_Lag.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="groupBox_Lag.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="groupBox_Lag.Size" type="System.Drawing.Size, System.Drawing">
-    <value>460, 83</value>
+    <value>526, 138</value>
   </data>
   <data name="groupBox_Lag.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
   </data>
   <data name="groupBox_Lag.Text" xml:space="preserve">
-    <value>Lag Compensation</value>
+    <value>Compensazione lag</value>
   </data>
   <data name="&gt;&gt;groupBox_Lag.Name" xml:space="preserve">
     <value>groupBox_Lag</value>
@@ -304,13 +304,13 @@
     <value>True</value>
   </data>
   <data name="panel_Details.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 33</value>
+    <value>10, 38</value>
   </data>
   <data name="panel_Details.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="panel_Details.Size" type="System.Drawing.Size, System.Drawing">
-    <value>457, 597</value>
+    <value>522, 682</value>
   </data>
   <data name="panel_Details.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -328,22 +328,22 @@
     <value>0</value>
   </data>
   <data name="groupBox_Details.Location" type="System.Drawing.Point, System.Drawing">
-    <value>480, 10</value>
+    <value>548, 12</value>
   </data>
   <data name="groupBox_Details.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="groupBox_Details.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="groupBox_Details.Size" type="System.Drawing.Size, System.Drawing">
-    <value>476, 640</value>
+    <value>544, 732</value>
   </data>
   <data name="groupBox_Details.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
   </data>
   <data name="groupBox_Details.Text" xml:space="preserve">
-    <value>Details</value>
+    <value>Dettagli</value>
   </data>
   <data name="&gt;&gt;groupBox_Details.Name" xml:space="preserve">
     <value>groupBox_Details</value>
@@ -361,16 +361,16 @@
     <value>True</value>
   </data>
   <data name="labelGPU.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 393</value>
+    <value>10, 426</value>
   </data>
   <data name="labelGPU.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="labelGPU.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>460, 23</value>
+    <value>526, 26</value>
   </data>
   <data name="labelGPU.Size" type="System.Drawing.Size, System.Drawing">
-    <value>460, 25</value>
+    <value>526, 26</value>
   </data>
   <data name="labelGPU.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
@@ -394,13 +394,13 @@
     <value>True</value>
   </data>
   <data name="panel_IntRes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 33</value>
+    <value>10, 38</value>
   </data>
   <data name="panel_IntRes.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="panel_IntRes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>443, 103</value>
+    <value>506, 118</value>
   </data>
   <data name="panel_IntRes.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -418,22 +418,22 @@
     <value>0</value>
   </data>
   <data name="groupBox_InternalRes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 242</value>
+    <value>10, 254</value>
   </data>
   <data name="groupBox_InternalRes.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="groupBox_InternalRes.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="groupBox_InternalRes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>460, 145</value>
+    <value>526, 166</value>
   </data>
   <data name="groupBox_InternalRes.TabIndex" type="System.Int32, mscorlib">
     <value>20</value>
   </data>
   <data name="groupBox_InternalRes.Text" xml:space="preserve">
-    <value>Internal Resolution (Quality)</value>
+    <value>Risoluzione interna (qualità)</value>
   </data>
   <data name="&gt;&gt;groupBox_InternalRes.Name" xml:space="preserve">
     <value>groupBox_InternalRes</value>
@@ -448,22 +448,22 @@
     <value>3</value>
   </data>
   <data name="tabPage_Resolution.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
+    <value>8, 39</value>
   </data>
   <data name="tabPage_Resolution.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="tabPage_Resolution.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="tabPage_Resolution.Size" type="System.Drawing.Size, System.Drawing">
-    <value>972, 670</value>
+    <value>1104, 761</value>
   </data>
   <data name="tabPage_Resolution.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="tabPage_Resolution.Text" xml:space="preserve">
-    <value>Graphics</value>
+    <value>Grafica</value>
   </data>
   <data name="&gt;&gt;tabPage_Resolution.Name" xml:space="preserve">
     <value>tabPage_Resolution</value>
@@ -481,13 +481,13 @@
     <value>True</value>
   </data>
   <data name="panel_Patches2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>483, 0</value>
+    <value>552, 0</value>
   </data>
   <data name="panel_Patches2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="panel_Patches2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>483, 662</value>
+    <value>552, 756</value>
   </data>
   <data name="panel_Patches2.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -511,10 +511,10 @@
     <value>0, 0</value>
   </data>
   <data name="panel_Patches.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="panel_Patches.Size" type="System.Drawing.Size, System.Drawing">
-    <value>483, 662</value>
+    <value>552, 756</value>
   </data>
   <data name="panel_Patches.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -532,19 +532,19 @@
     <value>1</value>
   </data>
   <data name="tabPage_Patches.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
+    <value>8, 39</value>
   </data>
   <data name="tabPage_Patches.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="tabPage_Patches.Size" type="System.Drawing.Size, System.Drawing">
-    <value>972, 670</value>
+    <value>1104, 761</value>
   </data>
   <data name="tabPage_Patches.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="tabPage_Patches.Text" xml:space="preserve">
-    <value>Options</value>
+    <value>Opzioni</value>
   </data>
   <data name="&gt;&gt;tabPage_Patches.Name" xml:space="preserve">
     <value>tabPage_Patches</value>
@@ -565,10 +565,10 @@
     <value>0, 0</value>
   </data>
   <data name="panel_Playerdata.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="panel_Playerdata.Size" type="System.Drawing.Size, System.Drawing">
-    <value>966, 662</value>
+    <value>1104, 756</value>
   </data>
   <data name="panel_Playerdata.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -586,19 +586,19 @@
     <value>0</value>
   </data>
   <data name="tabPage_Playerdata.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
+    <value>8, 39</value>
   </data>
   <data name="tabPage_Playerdata.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="tabPage_Playerdata.Size" type="System.Drawing.Size, System.Drawing">
-    <value>972, 670</value>
+    <value>1104, 761</value>
   </data>
   <data name="tabPage_Playerdata.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="tabPage_Playerdata.Text" xml:space="preserve">
-    <value>Player</value>
+    <value>Giocatore</value>
   </data>
   <data name="&gt;&gt;tabPage_Playerdata.Name" xml:space="preserve">
     <value>tabPage_Playerdata</value>
@@ -616,13 +616,13 @@
     <value>True</value>
   </data>
   <data name="linkLabel_Console.Location" type="System.Drawing.Point, System.Drawing">
-    <value>882, 634</value>
+    <value>1008, 724</value>
   </data>
   <data name="linkLabel_Console.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 0, 5, 0</value>
+    <value>6, 0, 6, 0</value>
   </data>
   <data name="linkLabel_Console.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 25</value>
+    <value>91, 25</value>
   </data>
   <data name="linkLabel_Console.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -652,10 +652,10 @@
     <value>0, 0</value>
   </data>
   <data name="panel_Components.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="panel_Components.Size" type="System.Drawing.Size, System.Drawing">
-    <value>483, 662</value>
+    <value>552, 756</value>
   </data>
   <data name="panel_Components.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -673,22 +673,22 @@
     <value>1</value>
   </data>
   <data name="tabPage_Components.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
+    <value>8, 39</value>
   </data>
   <data name="tabPage_Components.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="tabPage_Components.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="tabPage_Components.Size" type="System.Drawing.Size, System.Drawing">
-    <value>972, 670</value>
+    <value>1104, 761</value>
   </data>
   <data name="tabPage_Components.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="tabPage_Components.Text" xml:space="preserve">
-    <value>Components</value>
+    <value>Componenti</value>
   </data>
   <data name="&gt;&gt;tabPage_Components.Name" xml:space="preserve">
     <value>tabPage_Components</value>
@@ -706,13 +706,13 @@
     <value>True</value>
   </data>
   <data name="panel_Custom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>483, 0</value>
+    <value>552, 0</value>
   </data>
   <data name="panel_Custom.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="panel_Custom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>483, 662</value>
+    <value>552, 756</value>
   </data>
   <data name="panel_Custom.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -736,10 +736,10 @@
     <value>0, 0</value>
   </data>
   <data name="panel_Plugins.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="panel_Plugins.Size" type="System.Drawing.Size, System.Drawing">
-    <value>483, 662</value>
+    <value>552, 756</value>
   </data>
   <data name="panel_Plugins.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -757,22 +757,22 @@
     <value>1</value>
   </data>
   <data name="tabPage_Plugins.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
+    <value>8, 39</value>
   </data>
   <data name="tabPage_Plugins.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="tabPage_Plugins.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="tabPage_Plugins.Size" type="System.Drawing.Size, System.Drawing">
-    <value>972, 670</value>
+    <value>1104, 761</value>
   </data>
   <data name="tabPage_Plugins.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="tabPage_Plugins.Text" xml:space="preserve">
-    <value>Plugins and Patches</value>
+    <value>Plugin e patch</value>
   </data>
   <data name="&gt;&gt;tabPage_Plugins.Name" xml:space="preserve">
     <value>tabPage_Plugins</value>
@@ -790,19 +790,19 @@
     <value>False</value>
   </data>
   <data name="button_ModRename.Location" type="System.Drawing.Point, System.Drawing">
-    <value>488, 625</value>
+    <value>558, 714</value>
   </data>
   <data name="button_ModRename.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_ModRename.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 37</value>
+    <value>130, 42</value>
   </data>
   <data name="button_ModRename.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
   <data name="button_ModRename.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Rinomina</value>
   </data>
   <data name="&gt;&gt;button_ModRename.Name" xml:space="preserve">
     <value>button_ModRename</value>
@@ -817,19 +817,19 @@
     <value>0</value>
   </data>
   <data name="button_ModRescan.Location" type="System.Drawing.Point, System.Drawing">
-    <value>609, 625</value>
+    <value>696, 714</value>
   </data>
   <data name="button_ModRescan.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_ModRescan.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 37</value>
+    <value>130, 42</value>
   </data>
   <data name="button_ModRescan.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
   </data>
   <data name="button_ModRescan.Text" xml:space="preserve">
-    <value>Rescan</value>
+    <value>Riscansiona</value>
   </data>
   <data name="&gt;&gt;button_ModRescan.Name" xml:space="preserve">
     <value>button_ModRescan</value>
@@ -847,19 +847,19 @@
     <value>False</value>
   </data>
   <data name="button_ModFiles.Location" type="System.Drawing.Point, System.Drawing">
-    <value>128, 625</value>
+    <value>146, 714</value>
   </data>
   <data name="button_ModFiles.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_ModFiles.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 37</value>
+    <value>130, 42</value>
   </data>
   <data name="button_ModFiles.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
   <data name="button_ModFiles.Text" xml:space="preserve">
-    <value>Files...</value>
+    <value>File...</value>
   </data>
   <data name="&gt;&gt;button_ModFiles.Name" xml:space="preserve">
     <value>button_ModFiles</value>
@@ -880,19 +880,19 @@
     <value>False</value>
   </data>
   <data name="checkBox_ModPatches.Location" type="System.Drawing.Point, System.Drawing">
-    <value>752, 626</value>
+    <value>860, 716</value>
   </data>
   <data name="checkBox_ModPatches.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="checkBox_ModPatches.Size" type="System.Drawing.Size, System.Drawing">
-    <value>216, 29</value>
+    <value>241, 29</value>
   </data>
   <data name="checkBox_ModPatches.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
   <data name="checkBox_ModPatches.Text" xml:space="preserve">
-    <value>Plugins and Patches</value>
+    <value>Plugin e patch</value>
   </data>
   <data name="&gt;&gt;checkBox_ModPatches.Name" xml:space="preserve">
     <value>checkBox_ModPatches</value>
@@ -910,19 +910,19 @@
     <value>False</value>
   </data>
   <data name="button_ModDelete.Location" type="System.Drawing.Point, System.Drawing">
-    <value>369, 625</value>
+    <value>422, 714</value>
   </data>
   <data name="button_ModDelete.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_ModDelete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 37</value>
+    <value>130, 42</value>
   </data>
   <data name="button_ModDelete.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
   <data name="button_ModDelete.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Cancella</value>
   </data>
   <data name="&gt;&gt;button_ModDelete.Name" xml:space="preserve">
     <value>button_ModDelete</value>
@@ -940,19 +940,19 @@
     <value>False</value>
   </data>
   <data name="button_ModClone.Location" type="System.Drawing.Point, System.Drawing">
-    <value>248, 625</value>
+    <value>284, 714</value>
   </data>
   <data name="button_ModClone.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_ModClone.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 37</value>
+    <value>130, 42</value>
   </data>
   <data name="button_ModClone.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="button_ModClone.Text" xml:space="preserve">
-    <value>New/Clone</value>
+    <value>Nuovo/Clona</value>
   </data>
   <data name="&gt;&gt;button_ModClone.Name" xml:space="preserve">
     <value>button_ModClone</value>
@@ -970,19 +970,19 @@
     <value>False</value>
   </data>
   <data name="button_ModSetActive.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 625</value>
+    <value>10, 714</value>
   </data>
   <data name="button_ModSetActive.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_ModSetActive.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 37</value>
+    <value>130, 42</value>
   </data>
   <data name="button_ModSetActive.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="button_ModSetActive.Text" xml:space="preserve">
-    <value>Set Active</value>
+    <value>Attiva</value>
   </data>
   <data name="&gt;&gt;button_ModSetActive.Name" xml:space="preserve">
     <value>button_ModSetActive</value>
@@ -997,16 +997,16 @@
     <value>6</value>
   </data>
   <data name="listBox_Mods.ItemHeight" type="System.Int32, mscorlib">
-    <value>24</value>
+    <value>25</value>
   </data>
   <data name="listBox_Mods.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 9</value>
+    <value>10, 10</value>
   </data>
   <data name="listBox_Mods.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="listBox_Mods.Size" type="System.Drawing.Size, System.Drawing">
-    <value>952, 556</value>
+    <value>1088, 654</value>
   </data>
   <data name="listBox_Mods.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1024,7 +1024,7 @@
     <value>7</value>
   </data>
   <data name="tabPage_Modpacks.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
+    <value>8, 39</value>
   </data>
   <data name="tabPage_Modpacks.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
@@ -1033,13 +1033,13 @@
     <value>4, 4, 4, 4</value>
   </data>
   <data name="tabPage_Modpacks.Size" type="System.Drawing.Size, System.Drawing">
-    <value>972, 670</value>
+    <value>1104, 761</value>
   </data>
   <data name="tabPage_Modpacks.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
   </data>
   <data name="tabPage_Modpacks.Text" xml:space="preserve">
-    <value>Modpacks</value>
+    <value>Modpack</value>
   </data>
   <data name="&gt;&gt;tabPage_Modpacks.Name" xml:space="preserve">
     <value>tabPage_Modpacks</value>
@@ -1066,23 +1066,19 @@
     <value>Both</value>
   </data>
   <data name="creditsTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>963, 658</value>
+    <value>1100, 752</value>
   </data>
   <data name="creditsTextBox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="creditsTextBox.Text" xml:space="preserve">
-    <value>PD Loader is intended for educational purposes only; not for piracy.
-Users should possess a legally-obtained dump of the game to use this software.
-Please check your local laws/regulataions to verify the legality of tampering
-with and dumping data from protected arcade machine hardware.
-
-Project Contributors:
+    <value>PD Loader è inteso a scopi didattici; non per pirateria.
+Gli utenti devono possedere una copia del gioco ottenuta legalmente per usare questo software. Si prega di controllare le leggi/regolamenti locali per verificare la legalità del manipolare ed estrarre dati da macchine arcade protette.
+Hanno contribuito al progetto:
 akasaka, Brolijah, crash5b, Jay39w, korenkonder, Kyberal, lybxlpsv, nastys,
 Nezarn, samyuu, Skyth, somewhatlurker, Stewie1.0, SwigS-27, zsccat
 
-
-PD Loader and the included plugins are distributed under MIT License:
+PD Loader e i plugin inclusi sono distribuiti secondo le condizioni della licenza MIT:
   
   Copyright (c) Project DIVA Modding 2nd Community
   Copyright (c) samyuu (nop) (original TLAC code)
@@ -1202,7 +1198,7 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>0</value>
   </data>
   <data name="tabPage_Credits.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
+    <value>8, 39</value>
   </data>
   <data name="tabPage_Credits.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
@@ -1211,13 +1207,13 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>4, 4, 4, 4</value>
   </data>
   <data name="tabPage_Credits.Size" type="System.Drawing.Size, System.Drawing">
-    <value>972, 670</value>
+    <value>1104, 761</value>
   </data>
   <data name="tabPage_Credits.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
   <data name="tabPage_Credits.Text" xml:space="preserve">
-    <value>Credits</value>
+    <value>Crediti</value>
   </data>
   <data name="&gt;&gt;tabPage_Credits.Name" xml:space="preserve">
     <value>tabPage_Credits</value>
@@ -1235,19 +1231,19 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>True</value>
   </data>
   <data name="linkLabel_Repo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>296, 520</value>
+    <value>338, 594</value>
   </data>
   <data name="linkLabel_Repo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="linkLabel_Repo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 25</value>
+    <value>179, 25</value>
   </data>
   <data name="linkLabel_Repo.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
   </data>
   <data name="linkLabel_Repo.Text" xml:space="preserve">
-    <value>Official repository</value>
+    <value>Repository ufficiale</value>
   </data>
   <data name="&gt;&gt;linkLabel_Repo.Name" xml:space="preserve">
     <value>linkLabel_Repo</value>
@@ -1265,19 +1261,19 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>True</value>
   </data>
   <data name="linkLabel_Help.Location" type="System.Drawing.Point, System.Drawing">
-    <value>296, 450</value>
+    <value>338, 514</value>
   </data>
   <data name="linkLabel_Help.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="linkLabel_Help.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 25</value>
+    <value>56, 25</value>
   </data>
   <data name="linkLabel_Help.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
   <data name="linkLabel_Help.Text" xml:space="preserve">
-    <value>Help</value>
+    <value>Aiuto</value>
   </data>
   <data name="&gt;&gt;linkLabel_Help.Name" xml:space="preserve">
     <value>linkLabel_Help</value>
@@ -1295,19 +1291,19 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>True</value>
   </data>
   <data name="linkLabel_Official_Discord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>296, 485</value>
+    <value>338, 554</value>
   </data>
   <data name="linkLabel_Official_Discord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="linkLabel_Official_Discord.Size" type="System.Drawing.Size, System.Drawing">
-    <value>142, 25</value>
+    <value>157, 25</value>
   </data>
   <data name="linkLabel_Official_Discord.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
   </data>
   <data name="linkLabel_Official_Discord.Text" xml:space="preserve">
-    <value>Official Discord</value>
+    <value>Server Discord ufficiale</value>
   </data>
   <data name="&gt;&gt;linkLabel_Official_Discord.Name" xml:space="preserve">
     <value>linkLabel_Official_Discord</value>
@@ -1325,19 +1321,19 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>True</value>
   </data>
   <data name="linkLabel_Changelog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>296, 416</value>
+    <value>338, 476</value>
   </data>
   <data name="linkLabel_Changelog.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="linkLabel_Changelog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 25</value>
+    <value>116, 25</value>
   </data>
   <data name="linkLabel_Changelog.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
   <data name="linkLabel_Changelog.Text" xml:space="preserve">
-    <value>Changelog</value>
+    <value>Novità</value>
   </data>
   <data name="&gt;&gt;linkLabel_Changelog.Name" xml:space="preserve">
     <value>linkLabel_Changelog</value>
@@ -1352,19 +1348,19 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>3</value>
   </data>
   <data name="button_Clean_installation.Location" type="System.Drawing.Point, System.Drawing">
-    <value>516, 362</value>
+    <value>590, 414</value>
   </data>
   <data name="button_Clean_installation.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_Clean_installation.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 46</value>
+    <value>184, 52</value>
   </data>
   <data name="button_Clean_installation.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
   <data name="button_Clean_installation.Text" xml:space="preserve">
-    <value>Clean installation</value>
+    <value>Installazione pulita</value>
   </data>
   <data name="&gt;&gt;button_Clean_installation.Name" xml:space="preserve">
     <value>button_Clean_installation</value>
@@ -1379,19 +1375,19 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>4</value>
   </data>
   <data name="button_Instructions.Location" type="System.Drawing.Point, System.Drawing">
-    <value>516, 310</value>
+    <value>590, 354</value>
   </data>
   <data name="button_Instructions.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_Instructions.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 46</value>
+    <value>184, 52</value>
   </data>
   <data name="button_Instructions.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
   <data name="button_Instructions.Text" xml:space="preserve">
-    <value>Instructions</value>
+    <value>Istruzioni</value>
   </data>
   <data name="&gt;&gt;button_Instructions.Name" xml:space="preserve">
     <value>button_Instructions</value>
@@ -1406,19 +1402,19 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>5</value>
   </data>
   <data name="button_Unstable_builds.Location" type="System.Drawing.Point, System.Drawing">
-    <value>296, 362</value>
+    <value>338, 414</value>
   </data>
   <data name="button_Unstable_builds.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_Unstable_builds.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 46</value>
+    <value>184, 52</value>
   </data>
   <data name="button_Unstable_builds.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="button_Unstable_builds.Text" xml:space="preserve">
-    <value>Unstable builds</value>
+    <value>Build instabili</value>
   </data>
   <data name="&gt;&gt;button_Unstable_builds.Name" xml:space="preserve">
     <value>button_Unstable_builds</value>
@@ -1433,19 +1429,19 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>6</value>
   </data>
   <data name="button_Releases_page.Location" type="System.Drawing.Point, System.Drawing">
-    <value>296, 310</value>
+    <value>338, 354</value>
   </data>
   <data name="button_Releases_page.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
   </data>
   <data name="button_Releases_page.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 46</value>
+    <value>184, 52</value>
   </data>
   <data name="button_Releases_page.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="button_Releases_page.Text" xml:space="preserve">
-    <value>Releases page</value>
+    <value>Pagina aggiornamenti</value>
   </data>
   <data name="&gt;&gt;button_Releases_page.Name" xml:space="preserve">
     <value>button_Releases_page</value>
@@ -1463,20 +1459,19 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>True</value>
   </data>
   <data name="label_Update_2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>84, 128</value>
+    <value>96, 146</value>
   </data>
   <data name="label_Update_2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="label_Update_2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>852, 50</value>
+    <value>948, 50</value>
   </data>
   <data name="label_Update_2.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="label_Update_2.Text" xml:space="preserve">
-    <value>It is highly recommended to download updates directly from the official repository.
-If you have downloaded PD Loader from a third-party, it is recommended to do a clean installation.</value>
+    <value>Si consiglia caldamente di scaricare gli aggiornamenti direttamente dal repository ufficiale. Se PD Loader è stato scaricato altrove, si consiglia di fare un'installazione pulita.</value>
   </data>
   <data name="label_Update_2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleCenter</value>
@@ -1500,19 +1495,19 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
     <value>Microsoft Sans Serif, 12pt, style=Bold</value>
   </data>
   <data name="label_Update_1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>19, 52</value>
+    <value>22, 60</value>
   </data>
   <data name="label_Update_1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="label_Update_1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>933, 32</value>
+    <value>1044, 37</value>
   </data>
   <data name="label_Update_1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="label_Update_1.Text" xml:space="preserve">
-    <value>Update PD Loader regularly to get the latest fixes and new features!</value>
+    <value>Aggiorna PD Loader con regolarità per ottenere le ultime funzionalità e correzioni di bug!</value>
   </data>
   <data name="label_Update_1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleCenter</value>
@@ -1530,7 +1525,7 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
     <value>9</value>
   </data>
   <data name="tabPage_Update.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
+    <value>8, 39</value>
   </data>
   <data name="tabPage_Update.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
@@ -1539,13 +1534,13 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
     <value>4, 4, 4, 4</value>
   </data>
   <data name="tabPage_Update.Size" type="System.Drawing.Size, System.Drawing">
-    <value>972, 670</value>
+    <value>1104, 761</value>
   </data>
   <data name="tabPage_Update.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
   <data name="tabPage_Update.Text" xml:space="preserve">
-    <value>UPDATE</value>
+    <value>AGGIORNA</value>
   </data>
   <data name="&gt;&gt;tabPage_Update.Name" xml:space="preserve">
     <value>tabPage_Update</value>
@@ -1563,10 +1558,10 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
     <value>0, 0</value>
   </data>
   <data name="tabControl.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="tabControl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>980, 707</value>
+    <value>1120, 808</value>
   </data>
   <data name="tabControl.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -1609,13 +1604,13 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
 </value>
   </data>
   <data name="button_Discord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>868, 707</value>
+    <value>992, 808</value>
   </data>
   <data name="button_Discord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="button_Discord.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 56</value>
+    <value>64, 64</value>
   </data>
   <data name="button_Discord.TabIndex" type="System.Int32, mscorlib">
     <value>31</value>
@@ -1674,13 +1669,13 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
 </value>
   </data>
   <data name="button_github.Location" type="System.Drawing.Point, System.Drawing">
-    <value>924, 707</value>
+    <value>1056, 808</value>
   </data>
   <data name="button_github.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="button_github.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 56</value>
+    <value>64, 64</value>
   </data>
   <data name="button_github.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
@@ -1701,19 +1696,19 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
     <value>Flat</value>
   </data>
   <data name="button_Apply.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 716</value>
+    <value>8, 818</value>
   </data>
   <data name="button_Apply.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="button_Apply.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 40</value>
+    <value>138, 46</value>
   </data>
   <data name="button_Apply.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
   </data>
   <data name="button_Apply.Text" xml:space="preserve">
-    <value>Apply</value>
+    <value>Applica</value>
   </data>
   <data name="&gt;&gt;button_Apply.Name" xml:space="preserve">
     <value>button_Apply</value>
@@ -2050,13 +2045,13 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
     <value>Flat</value>
   </data>
   <data name="button_Wiki.Location" type="System.Drawing.Point, System.Drawing">
-    <value>812, 707</value>
+    <value>928, 808</value>
   </data>
   <data name="button_Wiki.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="button_Wiki.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 56</value>
+    <value>64, 64</value>
   </data>
   <data name="button_Wiki.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -2073,11 +2068,11 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
   <data name="&gt;&gt;button_Wiki.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <data name="$this.Localizable" type="System.Boolean, mscorlib">
     <value>True</value>
-  </metadata>
+  </data>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>168, 168</value>
+    <value>192, 192</value>
   </data>
   <data name="$this.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2089,7 +2084,7 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
     <value>Stretch</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>980, 765</value>
+    <value>1120, 874</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3223,11 +3218,8 @@ If you have downloaded PD Loader from a third-party, it is recommended to do a c
         +AAAAAAAAAAAAP/+AAf///8AAAAAAAAAAAA=
 </value>
   </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
   <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
+    <value>6, 6, 6, 6</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>

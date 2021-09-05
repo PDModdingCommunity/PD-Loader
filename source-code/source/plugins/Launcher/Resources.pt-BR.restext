@@ -1,6 +1,12 @@
 ###############################################
 # framework
 
+LANG_AUTO=Detectar Automaticamente
+en=Inglês
+zh-Hans=Chinês Simplificado
+pt-BR=Português
+it-IT=Italiano
+
 # display
 DISPLAY_NAME=Modo de Exibição:
 DISPLAY_HINT=Configura o modo de exibição da janela.\n\n\nRápido: Janela sem Bordas "pop-up" (pode causar problemas com capturas de tela se as Otimizações de Tela Cheia do Windows 10/11 estiverem ativadas).\n\nExclusivo: Toma o controle da tela e te permite alterar a resolução de exibição e a taxa de atualização. É mais difícil trocar de programas (minimizar, alt+tab...) nesse modo.\n\nSeguro: Janela sem bordas simples. Tem um pouco mais de latência do que o modo Rápido, mas também pode ter menos problemas.
@@ -22,7 +28,7 @@ MATCH_SCREEN=Usar Resolução da Tela
 # graphics
 MODEL_NAME=Arquitetura da GPU NVIDIA:
 MODEL_HINT=Selecione a arquitetura da sua placa de vídeo NVIDIA para aplicar as correções necessárias.\n\nNota: "Detectar Automaticamente" não funciona em GNU/Linux.\n\nKepler: GT/X600, 700, 800M / Maxwell: GT/X700, 800m, 900 / Turing: RTX2000, GTX1600 / Ampere: RTX3000
-Automatic=Detectar Automaticamente
+MODEL_AUTOMATIC=Detectar Automaticamente
 TAA_NAME=TAA
 TAA_HINT=Anti-Aliasing Temporal
 MLAA_NAME=MLAA
@@ -67,7 +73,7 @@ SECTION_CONTROLLER_OPTIONS=Opções de Controle/Joystick
 SECTION_LAUNCHER=Lançador (Launcher)
 
 BUILTIN_PATCHES_NAME=Habilitar Patches Nativos
-BUILTIN_PATCHES_HINT=Habilita os patches nativos, incluindo as opções abaixo.
+BUILTIN_PATCHES_HINT=Habilita os patches nativos, incluindo as opções nesta aba.
 CUSTOM_PATCHES_NAME=Habilitar Patches Externos
 CUSTOM_PATCHES_HINT=Habilita todos os patches externos.
 BUILTIN_RENDER_NAME=Habilitar o Renderizador Nativo
@@ -83,15 +89,15 @@ STEREO_HINT=Use 2 canais de áudio ao invés de 4 (quando não estiver usando o 
 QUICK_START_NAME=Início Rápido:
 QUICK_START_HINT=Pula um ou mais menus.
 Disabled=Desativado
-Guest=Jogador
-Guest + Normal=Jogador + Modo de Jogo
+Guest=Hóspede
+Guest + Normal=Hóspede + Normal
 NO_SCROLLING_SFX_NAME=Desativar Som de Navegação
 NO_SCROLLING_SFX_HINT=Desativa o som de navegação da lista de músicas.
 
 ENHANCED_STAGE_MANAGER_NAME=Número de Estágios:
 ENHANCED_STAGE_MANAGER_HINT=Configura o número de estágios (Padrão: 0).
-ENHANCED_STAGE_MANAGER_ENCORE_NAME=Encore
-ENHANCED_STAGE_MANAGER_ENCORE_HINT=Habilita estágios "encore".
+ENHANCED_STAGE_MANAGER_ENCORE_NAME=Bis
+ENHANCED_STAGE_MANAGER_ENCORE_HINT=Habilita estágios bis.
 
 FORCE_MOUTH_NAME=Estilo da Boca:
 FORCE_MOUTH_HINT=Muda as animações da boca dos personagens.
@@ -156,13 +162,13 @@ FRM.MOTION.RATE_HINT=Seleciona a taxa dos movimentos para o componente "Limite d
 AUTOPAUSE_NAME=Pausar Automaticamente
 AUTOPAUSE_HINT=Pausar o jogo quando o foco da janela é perdido.
 
-RUMBLE_NAME=Vibração do Controle
+RUMBLE_NAME=Vibração do Controle (XInput)
 RUMBLE_HINT=Liga ou desliga a vibração do controle em sliders (Apenas funciona em XInput).
 XINPUT_RUMBLE_INTENSITY_LEFT_NAME=Intensidade do Motor Esquerdo:
 XINPUT_RUMBLE_INTENSITY_LEFT_HINT=Padrão: 8000\nMáximo: 65535.
 XINPUT_RUMBLE_INTENSITY_RIGHT_NAME=Intensidade do Motor Direito:
 XINPUT_RUMBLE_INTENSITY_RIGHT_HINT=Padrão: 4000\nMáximo:65535.
-XINPUT_PREFERRED_NAME=Selecionar Controle:
+XINPUT_PREFERRED_NAME=Selecionar Controle (XInput):
 XINPUT_PREFERRED_HINT=Seleciona um controle específico (Apenas XInput).\nSe disponível, o próximo controle encontrado será usado.
 
 HARDWARE_SLIDER_NAME=Usar Hardware para Sliders
@@ -266,13 +272,13 @@ HOWTO_CLEAN_INSTALL_HINT=Apague:\n- dnsapi.dll ou dinput8.dll\n- patches/\n- plu
 GPU_WINE_DISABLE_MOVIES=(lembre-se de desativar os vídeos!)
 GPU_INFO_NAME=Informações da Placa de Vídeo:
 GPU_AMD_NOVIDIA_NAME=Aviso: Suporte para GPUs AMD não é oficial.
-GPU_AMD_NOVIDIA_HINT=GPUs AMD não são suportadas sem mods.\nO AMDPack do PD Loader parece estar instalado, mas tenha em mente que isso pode causar problemas.
+GPU_AMD_NOVIDIA_HINT=GPUs AMD não são suportadas sem mods.\nO Novidia parece estar instalado, mas tenha em mente que isso pode causar problemas.
 GPU_AMD_NAME=Aviso: Mods necessários para compatibilidade com GPUs AMD!
-GPU_AMD_HINT=GPUs AMD não são suportadas sem mods.\nO AMDPack do PD Loader pode ser usado para fazer a renderização 3D funcionar. Por favor, baixe-o e siga as instruções de instalação incluídas.\n\nSe você tem um laptop com uma GPU NVIDIA e deseja usar ela ao invés da GPU detectada, você pode precisar configurar o "diva.exe" para poder usa-la nas configurações do Windows ou no Painel de Controle da NVIDIA.
+GPU_AMD_HINT=GPUs AMD não são suportadas sem mods.\nO Novidia pode ser usado para fazer a renderização 3D funcionar. \n\nSe você tem um laptop com uma GPU NVIDIA e deseja usar ela ao invés da GPU detectada, você pode precisar configurar o "diva.exe" para poder usa-la nas configurações do Windows ou no Painel de Controle da NVIDIA.
 GPU_UNSUPPORTED_NAME=Aviso: GPU NÃO SUPORTADA!
 GPU_UNSUPPORTED_HINT=Sua placa de vídeo não é suportada. Apenas GPUs NVIDIA são recomendadas (porém placas de vídeo AMD podem ser usadas com a adição de mods).\nPor favor use uma placa de vídeo NVIDIA da série GTX 600 ou mais recente.\n\nSe você tem um laptop com uma GPU NVIDIA e deseja usar ela ao invés da GPU detectada, você pode precisar configurar o "diva.exe" para poder usa-la nas configurações do Windows ou no Painel de Controle da NVIDIA.\n\nJogadores com outras GPUs podem conseguir rodar o jogo com a adição de mods ou plugins, mas os elementos 3D provavelmente não irão funcionar.
-GPU_GA_NAME=Aviso: Arquitetura Ampere detectada! Problemas desconhecidos.\n(Clique aqui para mais informações)
-GPU_GA_HINT=A arquitetura Ampere não foi testada ainda. Na geração passada, Arquitetura Turing (GTX 16xx/RTX 20xx), alguns shaders importantes dos personagens tem problemas, resultando em aparecimento de linhas/ruído.\nPor fazor tenha certeza que o plugin "ShaderPatch" está habilitado e reporte qualquer problema adicional para os desenvolvedores.
+GPU_GA_NAME=Aviso: Arquitetura Ampere detectada! Possível aparecimento de ruído.\n(Clique aqui para mais informações)
+GPU_GA_HINT=Em GPUs Ampere (GTX RTX 30xx), alguns shaders importantes dos personagens tem problemas, resultando em aparecimento de linhas/ruído.\nPor favor tenha certeza que o plugin "ShaderPatch" está habilitado.
 GPU_TU_NAME=Aviso: Arquitetura Turing detectada! Possível aparecimento de ruído.\n(Clique aqui para mais informações)
 GPU_TU_HINT=Em GPUs Turing (GTX 16xx/RTX 20xx), alguns shaders importantes dos personagens tem problemas, resultando em aparecimento de linhas/ruído.\nPor favor tenha certeza que o plugin "ShaderPatch" está habilitado.
 GPU_GM_NEWER_NAME=Aviso: Pode haver um pouco de ruído em certos estágios.\n(Clique aqui para mais informações)
@@ -284,7 +290,7 @@ GPU_GF_DRIVER_OLD_HINT=Sua GPU deve ser capaz de rodar o jogo, mas parece que su
 GPU_GF_NAME=Avisos: Sem problemas conhecidos.
 GPU_GF_HINT=Sua GPU deve ser capaz de rodar o jogo, mas é mais antiga do que a GPU que esse jogo foi feito para rodar (GTX 650 Ti).\nPode haver problemas com alguns elementos gráficos.\nPor favor reporte qualquer problema para que ele seja analisado e muito possívelmente, resolvido.
 GPU_TOO_NEW_NAME=Aviso: Sua GPU pode ser muito nova.\n(Clique aqui para mais informações)
-GPU_TOO_NEW_HINT=Parece que sua GPU é muito nova/recente. Apenas até a arquitetura Turing (GTX 16xx/RTX 20xx) é atualmente suportada.\nBoas notícias: o jogo deve ser capaz de funcionar, mas patches para os shaders (provavelmente necessários) podem não funcionar ainda.\nVocê provavelmente verá linhas/ruídos em alguns shaders de personagens e de estágios.\nPor favor reporte qualquer problema para que o "ShaderPatch" possa ser atualizado.
+GPU_TOO_NEW_HINT=Parece que sua GPU é muito nova/recente. Apenas até a arquitetura Ampere (RTX 30xx) é atualmente suportada.\nBoas notícias: o jogo deve ser capaz de funcionar, mas patches para os shaders (provavelmente necessários) podem não funcionar ainda.\nVocê provavelmente verá linhas/ruídos em alguns shaders de personagens e de estágios.\nPor favor reporte qualquer problema para que o "ShaderPatch" possa ser atualizado.
 GPU_OLD_NAME=Aviso: Sua GPU é muito antiga! Pode ter problemas na renderização 3D.\n(Clique aqui para mais informações)
 GPU_OLD_HINT=Sua GPU é muito antiga e não suporta as técnicas de renderização usadas pelo jogo.\nVocê pode conseguir jogar, mas os gráficos poderão ter vários problemas.\nPor favor faça um upgrade para uma GPU da série GTX 600 or mais recente.
 GPU_UNKNOWN_NAME=Aviso: Não foi possível detectar a arquitetura de sua GPU.\n(Clique aqui para mais informações)

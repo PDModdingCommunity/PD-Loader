@@ -1,6 +1,12 @@
 ###############################################
 # framework
 
+LANG_AUTO=Automatic
+en=English
+zh-Hans=Simplified Chinese
+pt-BR=Portuguese
+it-IT=Italian
+
 # display
 DISPLAY_NAME=Display:
 DISPLAY_HINT=Sets the window/screen mode.\n\n\nFast: Popup borderless window (can cause issues with screenshots if Windows 10/11 fullscreen optimizations are enabled).\n\nExclusive: Takes control of the screen and allows you to change the resolution and refresh rate. Makes switching between applications harder.\n\nSafe: Simple borderless window. A little bit laggier than Fast, but with less issues.
@@ -18,12 +24,17 @@ MATCH_SCREEN=Match Screen
 # graphics
 MODEL_NAME=NVIDIA GPU:
 MODEL_HINT=Select your NVIDIA GPU's architecture to apply the necessary workarounds.\n\nNOTE: Automatic detection does not currently work on GNU/Linux.
+MODEL_AUTOMATIC=Automatic
 TAA_NAME=TAA
 TAA_HINT=Temporal Anti-Aliasing
 MLAA_NAME=MLAA
 MLAA_HINT=Morphological Anti-Aliasing
 MAG_NAME=Filter:
 MAG_HINT=Image filter.\n\nBilinear: default filter\nNearest-neighbour: sharpest, but blocky\nSharpen: sharp filter\nCone: smooth filter
+MAG_BILINEAR=Bilinear
+MAG_NEAREST=Nearest-neighbour
+MAG_SHARPEN=Sharpen
+MAG_CONE=Cone
 DOF_NAME=Depth of Field
 DOF_HINT=Blurs the background. Disable for better performance.
 REFLECTIONS_NAME=Reflections
@@ -59,7 +70,7 @@ SECTION_CONTROLLER_OPTIONS=Controller Options
 SECTION_LAUNCHER=Launcher
 
 BUILTIN_PATCHES_NAME=Enable Built-In Patches
-BUILTIN_PATCHES_HINT=Enables the built-in patches, including the options below.
+BUILTIN_PATCHES_HINT=Enables the built-in patches, including the options in this tab.
 CUSTOM_PATCHES_NAME=Enable Custom Patches
 CUSTOM_PATCHES_HINT=Enables all custom patches.
 BUILTIN_RENDER_NAME=Enable Built-In Render
@@ -89,10 +100,10 @@ FORCE_EXPRESSIONS_HINT=Change the expressions.
 FORCE_LOOK_NAME=Look Type:
 FORCE_LOOK_HINT=Change the look animations.
 NO_HAND_SCALING_NAME=No Hand Scaling
-NO_HAND_SCALING_HINT=Disable hand scaling.
+NO_HAND_SCALING_HINT=Disable scripted hand scaling.
 DEFAULT_HAND_SIZE_NAME=Default Hand Size:
 DEFAULT_HAND_SIZE_HINT=-1: default\n12200: PDA
-SING_MISSED_NAME=Sing Missed
+SING_MISSED_NAME=Sing Missed Notes
 SING_MISSED_HINT=Sing missed notes.
 
 HIDE_VOLUME_NAME=Hide Volume Buttons
@@ -156,7 +167,7 @@ HARDWARE_SLIDER_HINT=Enable this if using a real arcade slider.\n(set the slider
 PREVENT_DATA_DELETION_NAME=Prevent Data Deletion
 PREVENT_DATA_DELETION_HINT=Prevents the game from deleting files.
 COMMAND_LINE_NAME=Command Line:
-COMMAND_LINE_HINT=Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.
+COMMAND_LINE_HINT=Allows setting command line arguments for the game when using the launcher.\nDisabling the launcher will bypass this.
 USE_DIVAHOOK_BAT_NAME=Use divahook.bat
 USE_DIVAHOOK_BAT_HINT=Launches divahook.bat intead of diva.exe.
 DARK_LAUNCHER_NAME=Dark Launcher
@@ -179,13 +190,13 @@ LEVEL_PLATE_EFFECT_HINT=Sets the effect on the level background image (plate).
 SKIN_EQUIP _NAME=Skin:
 SKIN_EQUIP _HINT=Sets the gameplay UI skin.
 BTN_SE_EQUIP_NAME=Button Sound:
-BTN_SE_EQUIP_HINT=Sets the sound effect for buttons.\n-1 = song default
+BTN_SE_EQUIP_HINT=Sets the sound effect for buttons.\n\n-1 = song default
 SLIDE_SE_EQUIP_NAME=Slide Sound:
-SLIDE_SE_EQUIP_HINT=Sets the sound effect for slides.\n-1 = song default
+SLIDE_SE_EQUIP_HINT=Sets the sound effect for slides.\n\n-1 = song default
 CHAINSLIDE_SE_EQUIP_NAME=Chainslide Sound:
-CHAINSLIDE_SE_EQUIP_HINT=Sets the sound effect for chain slides.\n-1 = song default
+CHAINSLIDE_SE_EQUIP_HINT=Sets the sound effect for chain slides.\n\n-1 = song default
 SLIDERTOUCH_SE_EQUIP_NAME=Slider Touch Sound:
-SLIDERTOUCH_SE_EQUIP_HINT=Sets the sound effect for touching the slider with no note.\n-1 = song default
+SLIDERTOUCH_SE_EQUIP_HINT=Sets the sound effect for touching the slider with no note.\n\n-1 = song default
 ACT_TOGGLE_NAME=Button SE
 ACT_TOGGLE_HINT=Enables button/slider sounds.
 BORDER_GREAT_NAME=Clear Border (Great)
@@ -251,17 +262,17 @@ HOWTO_CLEAN_INSTALL_HINT=Delete:\n- dnsapi.dll or dinput8.dll\n- patches/\n- plu
 GPU_WINE_DISABLE_MOVIES=(remember to disable movies!)
 GPU_INFO_NAME=GPU Info:
 GPU_AMD_NOVIDIA_NAME=Issues: AMD GPU support is unofficial.
-GPU_AMD_NOVIDIA_HINT=AMD GPUs are not supported without mods.\nThe PD Loader AMDPack seems to be installed, but please keep in mind that it may have issues.
+GPU_AMD_NOVIDIA_HINT=AMD GPUs are not supported without mods.\nNovidia seems to be installed, but please keep in mind that it may have issues.
 GPU_AMD_NAME=Issues: Mods needed for AMD compatibility!
-GPU_AMD_HINT=AMD GPUs are not supported without mods.\nThe PD Loader AMDPack can be used to make 3D rendering work. Please download it and follow the included instructions.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.
+GPU_AMD_HINT=AMD GPUs are not supported without mods.\nNovidia can be used to make 3D rendering work.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.
 GPU_UNSUPPORTED_NAME=Issues: UNSUPPORTED GPU!
-GPU_UNSUPPORTED_HINT=Your graphics card is not supported. Only NVIDIA GPUs are recommended. (though AMD ones can be used with mods)\nPlease use a GTX 600 series or later NVIDIA GPU.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.\n\nOwners of other GPUs may be able to run the game using plugins or mods, but 3D graphics will probably not work.
-GPU_GA_NAME=Issues: Ampere GPU detected! Unknown issues.\n(Click for more information)
-GPU_GA_HINT=Ampere GPUs have not been tested yet. On the previous generation Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled and report any further issues to the developers.
-GPU_TU_NAME=Issues: Turing GPU detected! Possible noise.\n(Click for more information)
+GPU_UNSUPPORTED_HINT=Your graphics card is not supported. Only NVIDIA GPUs are recommended (though AMD ones can be used with mods).\nPlease use a GTX 600 series or later NVIDIA GPU.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.\n\nOwners of other GPUs may be able to run the game using plugins or mods, but 3D graphics will probably not work.
+GPU_GA_NAME=Issues: Ampere GPU detected! Possible noise.\n(Click for more information)
+GPU_GA_HINT=On Ampere GPUs (RTX 30xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.
+GPU_TU_NAME=Issues: Ampere GPU detected! Possible noise.\n(Click for more information)
 GPU_TU_HINT=On Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.
 GPU_GM_NEWER_NAME=Issues: May have minor noise on some stages.\n(Click for more information)
-GPU_GM_NEWER_HINT=On Maxwell GPUs (~GTX 900) or newer, some minor stage shaders create noise.\nPlease make sure the ShaderPatch plugin is enabled.
+GPU_GM_NEWER_HINT=On Maxwell GPUs (~GTX 900) and newer, some minor stage shaders create noise.\nPlease make sure the ShaderPatch plugin is enabled.
 GPU_GK_NAME=Issues: None.
 GPU_GK_HINT=Your GPU should have no issues running the game.
 GPU_GF_DRIVER_OLD_NAME=Issues: Driver too old.
@@ -269,11 +280,11 @@ GPU_GF_DRIVER_OLD_HINT=Your GPU should be able to run the game, but it looks lik
 GPU_GF_NAME=Issues: No known issues.
 GPU_GF_HINT=Your GPU should have no issues running the game, but it is older than the GPU the game was originally designed for (GTX 650 Ti).\nThere may be some issues with graphics.\nPlease report any issues so that they can be analysed and potentially fixed.
 GPU_TOO_NEW_NAME=Issues: GPU may be too new.\n(Click for more information)
-GPU_TOO_NEW_HINT=It looks like your GPU may be too new. Only up to Turing (GTX 16xx/RTX 20xx) is currently supported.\nGood news: the game should be capable of running, but shader patches (probably needed) may not support it yet.\nYou will likely see lines/noise on important character shaders and some minor stage shaders.\nPlease report any issues so that ShaderPatch can be updated.
+GPU_TOO_NEW_HINT=It looks like your GPU may be too new. Only up to Ampere (RTX 30xx) is currently supported.\nGood news: the game should be capable of running, but shader patches (probably needed) may not support it yet.\nYou will likely see lines/noise on important character shaders and some minor stage shaders.\nPlease report any issues so that ShaderPatch can be updated.\nYou can also try forcing a specific GPU workaround type.
 GPU_OLD_NAME=Issues: GPU too old! 3D rendering might be broken.\n(Click for more information)
 GPU_OLD_HINT=Your GPU is very old and does not support rendering techniques used by the game.\nYou may be able to play, but graphics will likely have major issues.\nPlease upgrade to a GTX 600 series or later GPU.
 GPU_UNKNOWN_NAME=Issues: Unable to detect GPU architecture.\n(Click for more information)
 GPU_UNKNOWN_HINT=It looks like you have an NVIDIA GPU, but something went wrong while trying to determine your GPU's architecture (type).\nThis may be a caused by a bug, but it probably indicates potential issues.\nPlease make sure you have a GTX 600 series or later GPU. (GTX 400 series or later should also work)
 GPU_DRIVER_ISSUES_NAME=Driver has known issues.
 GPU_DRIVER_ISSUES_HINT=The graphics driver you're using has known issues. Please install the latest driver from your GPU vendor's website.
-SHOW_GPU_DIALOG_HINT=You can disable this message from the options tab.
+SHOW_GPU_DIALOG_HINT=You can disable this message from the Options tab.

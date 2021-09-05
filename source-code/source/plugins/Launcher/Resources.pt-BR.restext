@@ -96,8 +96,8 @@ NO_SCROLLING_SFX_HINT=Desativa o som de navegação da lista de músicas.
 
 ENHANCED_STAGE_MANAGER_NAME=Número de Estágios:
 ENHANCED_STAGE_MANAGER_HINT=Configura o número de estágios (Padrão: 0).
-ENHANCED_STAGE_MANAGER_ENCORE_NAME=Bis (Encore)
-ENHANCED_STAGE_MANAGER_ENCORE_HINT=Habilita estágios bis.
+ENHANCED_STAGE_MANAGER_ENCORE_NAME=Encore (Bis)
+ENHANCED_STAGE_MANAGER_ENCORE_HINT=Habilita estágios Encore.
 
 FORCE_MOUTH_NAME=Estilo da Boca:
 FORCE_MOUTH_HINT=Muda as animações da boca dos personagens.

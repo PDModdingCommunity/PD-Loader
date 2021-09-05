@@ -100,8 +100,8 @@ NO_SCROLLING_SFX_HINT=Disabilita l'effetto sonoro di scorrimento.
 
 ENHANCED_STAGE_MANAGER_NAME=Numero di stage:
 ENHANCED_STAGE_MANAGER_HINT=Imposta il numero di stage (Predefinito: 0).
-ENHANCED_STAGE_MANAGER_ENCORE_NAME=Bis (Encore)
-ENHANCED_STAGE_MANAGER_ENCORE_HINT=Disabilita gli stage bis.
+ENHANCED_STAGE_MANAGER_ENCORE_NAME=Encore (bis)
+ENHANCED_STAGE_MANAGER_ENCORE_HINT=Disabilita gli stage Encore.
 
 FORCE_MOUTH_NAME=Stile labiale:
 FORCE_MOUTH_HINT=Imposta le animazioni della bocca.

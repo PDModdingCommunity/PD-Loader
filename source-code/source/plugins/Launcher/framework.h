@@ -67,7 +67,7 @@ int nSkipLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"skip", FALSE, CONF
 int nNoGPUDialog = GetPrivateProfileIntW(LAUNCHER_SECTION, L"no_gpu_dialog", FALSE, CONFIG_FILE);
 int nLanguage = GetPrivateProfileIntW(LAUNCHER_SECTION, L"launcher_language", FALSE, CONFIG_FILE);
 
-std::vector<LPCWSTR> languages = std::vector<LPCWSTR>({ L"Automatic", L"en", L"zh-Hans" });
+std::vector<LPCWSTR> languages = std::vector<LPCWSTR>({ L"Automatic", L"en", L"zh-Hans", L"pt-BR"});
 
 void SetBackCol(Control^ elem, System::Drawing::Color color, System::Windows::Forms::FlatStyle cbxStyle)
 {

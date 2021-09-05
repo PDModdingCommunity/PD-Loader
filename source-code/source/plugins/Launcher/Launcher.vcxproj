@@ -126,10 +126,14 @@
     <EmbeddedResource Include="SkinnedMessageBox.resx" />
     <EmbeddedResource Include="Resources.restext" />
     <EmbeddedResource Include="Resources.zh-Hans.restext" />
+    <EmbeddedResource Include="Resources.pt-BR.restext" />
     <EmbeddedResource Include="ui.resx">
       <DependentUpon>ui.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ui.zh-Hans.resx">
+      <DependentUpon>ui.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui.pt-BR.resx">
       <DependentUpon>ui.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

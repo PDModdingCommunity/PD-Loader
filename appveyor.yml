@@ -20,6 +20,8 @@ after_build:
 
     md %TMP%\full\plugins\pt-BR\
     
+    md %TMP%\full\plugins\it-IT\
+    
     md %TMP%\full\ram\
 
     md %TMP%\full\ram\databank_template\
@@ -33,6 +35,8 @@ after_build:
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\zh-Hans\*.dll %TMP%\full\plugins\zh-Hans\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\pt-BR\*.dll %TMP%\full\plugins\pt-BR\
+    
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\pt-BR\*.dll %TMP%\full\plugins\it-IT\
     
     copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\full\
 

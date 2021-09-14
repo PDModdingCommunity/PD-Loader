@@ -175,6 +175,12 @@ namespace TLAC::Components
 
 		// repress held down buttons to not block input
 		//inputState->Down.Buttons ^= inputState->Tapped.Buttons;
+
+		if (CoinBinding->AnyTapped())
+			addCoin();
+
+		if (WireframeBinding->AnyTapped())
+			toggleWireframe();
 	}
 
 	HoldState InputEmulator::GetHoldState()
@@ -305,12 +311,6 @@ namespace TLAC::Components
 			buttons |= JVS_L;
 		if (buttonTestFunc(RightBinding))
 			buttons |= JVS_R;
-
-		if (CoinBinding->AnyTapped())
-			addCoin();
-
-		if (WireframeBinding->AnyTapped())
-			toggleWireframe();
 
 		return buttons;
 	}

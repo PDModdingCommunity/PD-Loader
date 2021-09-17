@@ -40,6 +40,8 @@ namespace TLAC::Components
 
 		Input::Binding* CoinBinding;
 
+		Input::Binding* ToonBinding;
+
 		Input::Binding* WireframeBinding;
 
 		InputEmulator();

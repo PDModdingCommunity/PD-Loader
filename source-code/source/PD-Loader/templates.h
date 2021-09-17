@@ -28,14 +28,18 @@ char config_template[] =
 "Skip=0\n"
 "# Disables unsupported GPU warning dialogs.\n"
 "No_GPU_Dialog=0\n"
+#ifndef MINIMALIST
 "# Sets the dark colour scheme in the launcher.\n"
 "Dark_Launcher=0\n"
+#endif
 "# Command line arguments\n"
 "Command_Line=\n"
+#ifndef MINIMALIST
 "# Launches divahook.bat intead of diva.exe.\n"
 "Use_divahook_bat=0\n"
 "# Language -- 0=auto, 1=en, 2=zh-Hans, 3=pt-BR, 4=it-IT\n"
 "Launcher_Language=0\n"
+#endif
 "\n"
 "[Patches]\n"
 "# Disable movies (enable this if the game hangs when loading certain PVs)\n"
@@ -44,15 +48,18 @@ char config_template[] =
 "Cursor=1\n"
 "# Use 2 channels instead of 4 (when not using DivaSound)\n"
 "Stereo=1\n"
+#ifndef MINIMALIST
 "# Skip one or more menus -- 0=disabled, 1=guest, 2=guest+normal\n"
 "Quick_Start=1\n"
 "# Disable the scrolling sound effect\n"
 "No_Scrolling_SFX=0\n"
+#endif
 "# Enhanced Stage Manager (sets a custom number of stages; \"stage_manager\" should be disabled in \"components.ini\")\n"
 "# Number of stages (0 = disabled)\n"
 "Enhanced_Stage_Manager=0\n"
 "# Use encore stages or not\n"
 "Enhanced_Stage_Manager_Encore=1\n"
+#ifndef MINIMALIST
 "# Change the mouth animations -- 0=default, 1=force PDA, 2=force FT\n"
 "Force_Mouth=0\n"
 "# Change the expressions -- 0=default, 1=force PDA, 2=force FT\n"
@@ -63,10 +70,13 @@ char config_template[] =
 "No_Hand_Scaling=0\n"
 "# Default hand size -- -1=default, 12200=PDA\n"
 "Default_Hand_Size=-1\n"
+#endif
 "# Show \"FREE PLAY\" instead of \"CREDIT(S)\" and don't require credits\n"
 "Freeplay=1\n"
+#ifndef MINIMALIST
 "# Sing missed notes\n"
 "Sing_Missed=0\n"
+#endif
 "# Hide the volume and SE control buttons\n"
 "Hide_Volume=0\n"
 "# Remove the photo controls during PV playback\n"
@@ -85,6 +95,7 @@ char config_template[] =
 "PDLoaderText=1\n"
 "# Freeze the timer\n"
 "No_Timer=1\n"
+#ifndef MINIMALIST
 "# Disable the timer sprite\n"
 "No_Timer_Sprite=1\n"
 "# Disable Message Bar\n"
@@ -97,12 +108,15 @@ char config_template[] =
 "Card=0\n"
 "# Disable Extended Data (may break physics in some edits) AKA Skyth's no-opd patch\n"
 "No_Opd=0\n"
+#endif
 "# Scale Debug Windows above HD internal resolution AKA somewhatlurker's dwgui patch\n"
 "Dwgui_Scaling=0\n"
 "# Allow using a real arcade slider attached to COM11 (or PS4 official FT controller)\n"
 "Hardware_Slider=0\n"
+#ifndef MINIMALIST
 "# Prevent data deletion\n"
 "Prevent_Data_Deletion=0\n"
+#endif
 "\n"
 "[Graphics]\n"
 "# Lag Compensation\n"
@@ -118,6 +132,7 @@ char config_template[] =
 "TAA=1\n"
 "# Morphological Anti-Aliasing\n"
 "MLAA=1\n"
+#ifndef MINIMALIST
 "# MAG Filter -- 0=default (bilinear), 1=nearest-neighbour, 2=sharpen, 3=cone (smooth)\n"
 "MAG=0\n"
 "# Depth of Field\n"
@@ -142,6 +157,7 @@ char config_template[] =
 "NPR1=0\n"
 "# Disable all 3D passes. WARNING: The extended data will be deleted unless Prevent Data Deletion is enabled. Don't enable on Intel GPUs, enable no_opd instead.\n"
 "2D=0\n"
+#endif
 "# FrameRateManager motion rate (fps)\n"
 "FRM.Motion.Rate=400\n"
 "\n"
@@ -357,6 +373,8 @@ char keyconfig_template[] =
 "MENU_L = Left, Up, Ds4_L1, XINPUT_LS, Ds4_DPad_Left, Ds4_DPad_Up, XINPUT_LEFT, XINPUT_UP, Q, U, Ds4_L_Stick_Left, XINPUT_LLEFT, Ds4_L_Stick_Up, XINPUT_LUP, Ds4_R_Stick_Left, XINPUT_RLEFT, Ds4_R_Stick_Up, XINPUT_RUP\n"
 "MENU_R = Right, Down, Ds4_R1, XINPUT_RS, Ds4_DPad_Right, Ds4_DPad_Down, XINPUT_RIGHT, XINPUT_DOWN, E, O, Ds4_L_Stick_Right, XINPUT_LRIGHT, Ds4_L_Stick_Down, XINPUT_LDOWN, Ds4_R_Stick_Right, XINPUT_RRIGHT, Ds4_R_Stick_Down, XINPUT_RDOWN\n"
 "MENU_CIRCLE = Spacebar\n"
+"\n"
+"TOON = F9\n"
 "\n"
 "COIN = F10\n"
 "\n"

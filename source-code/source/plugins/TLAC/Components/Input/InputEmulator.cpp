@@ -50,6 +50,8 @@ namespace TLAC::Components
 
 		delete CoinBinding;
 
+		delete ToonBinding;
+
 		delete WireframeBinding;
 	}
 
@@ -87,6 +89,8 @@ namespace TLAC::Components
 
 		CoinBinding = new Binding();
 
+		ToonBinding = new Binding();
+
 		WireframeBinding = new Binding();
 
 		FileSystem::ConfigFile configFile(framework::GetModuleDirectory(), KEY_CONFIG_FILE_NAME);
@@ -106,6 +110,7 @@ namespace TLAC::Components
 		Config::BindConfigKeys(configFile.ConfigMap, "MENU_L", *MenuLBinding, { "Left", "Up" });
 		Config::BindConfigKeys(configFile.ConfigMap, "MENU_R", *MenuRBinding, { "Down", "Right" });
 		Config::BindConfigKeys(configFile.ConfigMap, "MENU_CIRCLE", *MenuCircleBinding, { "D", "L", "Spacebar" });
+		Config::BindConfigKeys(configFile.ConfigMap, "TOON", *ToonBinding, { "F9" });
 		Config::BindConfigKeys(configFile.ConfigMap, "COIN", *CoinBinding, { "F10" });
 		Config::BindConfigKeys(configFile.ConfigMap, "WIREFRAME", *WireframeBinding, { "F12" });
 
@@ -178,6 +183,9 @@ namespace TLAC::Components
 
 		if (CoinBinding->AnyTapped())
 			addCoin();
+
+		if (ToonBinding->AnyTapped())
+			toggleNpr1();
 
 		if (WireframeBinding->AnyTapped())
 			toggleWireframe();
@@ -354,9 +362,6 @@ namespace TLAC::Components
 
 		if (keyboard->IsIntervalTapped(VK_SPACE))
 			inputKey = 0x20;
-
-		if (keyboard->IsIntervalTapped(VK_F9))
-			toggleNpr1();
 
 		if (keyboard->IsDoubleTapped(VK_ESCAPE))
 			*(bool*)SHOULD_EXIT_BOOL_ADDRESS = true;

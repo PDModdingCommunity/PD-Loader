@@ -36,7 +36,9 @@ namespace Launcher {
 	public:
 		ui(void)
 		{
+#ifndef MINIMALIST
 			SetLanguage();
+#endif
 
 			InitializeComponent();
 
@@ -228,7 +230,9 @@ namespace Launcher {
 
 			updateLagCompMsec();
 
+#ifndef MINIMALIST
 			scanModpacks();
+#endif
 
 
 			int window = glutCreateWindow("glut"); // a context must be created to use glGetString
@@ -427,21 +431,26 @@ namespace Launcher {
 
 		void updateStyle()
 		{
+#ifndef MINIMALIST
 			int nDarkLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"dark_launcher", FALSE, CONFIG_FILE);
-			int nAcrylicLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"acrylic_blur", FALSE, CONFIG_FILE);
+			//int nAcrylicLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"acrylic_blur", FALSE, CONFIG_FILE);
+#endif
 
 			//bool useAcrylic = nAcrylicLauncher && setBlur(hWnd, AccentState::ACCENT_ENABLE_ACRYLICBLURBEHIND);
 
 			Color colourBg, colourBg2, colourFg;
 			System::Windows::Forms::FlatStyle cbxStyle;
 
+#ifndef MINIMALIST
 			if (nDarkLauncher)
 			{
+#endif
 				setDarkTheme(hWnd);
 				colourFg = Color::White;
 				colourBg = Color::FromArgb(255, 32, 32, 32); // tabControl
 				colourBg2 = Color::FromArgb(255, 25, 25, 25);
 				cbxStyle = System::Windows::Forms::FlatStyle::Flat;
+#ifndef MINIMALIST
 			}
 			else
 			{
@@ -451,6 +460,9 @@ namespace Launcher {
 				colourBg2 = Color::FromArgb(255, 242, 242, 242);
 				cbxStyle = System::Windows::Forms::FlatStyle::System;
 			}
+#else
+				this->Text += (" - Minimalist Edition");
+#endif
 
 			/*if (useAcrylic)
 			{
@@ -479,8 +491,10 @@ namespace Launcher {
 			this->tabPage_Plugins->ForeColor = colourFg;
 			this->tabPage_Components->BackColor = colourBg;
 			this->tabPage_Components->ForeColor = colourFg;
+#ifndef MINIMALIST
 			this->tabPage_Modpacks->BackColor = colourBg;
 			this->tabPage_Modpacks->ForeColor = colourFg;
+#endif
 			this->creditsTextBox->BackColor = colourBg;
 			this->creditsTextBox->ForeColor = colourFg;
 			this->tabPage_Update->BackColor = colourBg;
@@ -521,9 +535,12 @@ namespace Launcher {
 			SetBackCol(this->panel_Components, colourBg, cbxStyle);
 			SetBackCol(this->panel_Plugins, colourBg, cbxStyle);
 
+#ifndef MINIMALIST
 			tabPage_Modpacks->Enabled = false;
+#endif
 		}
 
+#ifndef MINIMALIST
 		void updateLanguage() {
 			int language = GetPrivateProfileIntW(LAUNCHER_SECTION, L"launcher_language", FALSE, CONFIG_FILE);
 			if (nLanguage == language)
@@ -536,7 +553,9 @@ namespace Launcher {
 			this->InitializeComponent();
 			this->addOptions();
 		}
+#endif
 
+#ifndef MINIMALIST
 		void SetLanguage() {
 			if (nLanguage == 0) {
 				Thread::CurrentThread->CurrentUICulture = gcnew CultureInfo(GetUserDefaultLCID());
@@ -544,6 +563,7 @@ namespace Launcher {
 				Thread::CurrentThread->CurrentUICulture = CultureInfo::CreateSpecificCulture(gcnew String(languages[nLanguage]));
 			}
 		}
+#endif
 	private:
 
 
@@ -595,6 +615,7 @@ private: System::Windows::Forms::LinkLabel^ linkLabel_Official_Discord;
 private: System::Windows::Forms::LinkLabel^ linkLabel_Help;
 private: System::Windows::Forms::LinkLabel^ linkLabel_Repo;
 private: System::Windows::Forms::CheckBox^ checkBox_nofsopt;
+#ifndef MINIMALIST
 private: System::Windows::Forms::TabPage^ tabPage_Modpacks;
 private: System::Windows::Forms::CheckBox^ checkBox_ModPatches;
 private: System::Windows::Forms::Button^ button_ModDelete;
@@ -607,6 +628,7 @@ private: System::Windows::Forms::ListBox^ listBox_Mods;
 private: System::Windows::Forms::Button^ button_ModFiles;
 private: System::Windows::Forms::Button^ button_ModRescan;
 private: System::Windows::Forms::Button^ button_ModRename;
+#endif
 private: System::Windows::Forms::LinkLabel^ linkLabel_Console;
 private: System::Windows::Forms::Panel^ panel_Patches2;
 private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel1;
@@ -673,6 +695,7 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->tabPage_Plugins = (gcnew System::Windows::Forms::TabPage());
 			this->panel_Custom = (gcnew System::Windows::Forms::Panel());
 			this->panel_Plugins = (gcnew System::Windows::Forms::Panel());
+#ifndef MINIMALIST
 			this->tabPage_Modpacks = (gcnew System::Windows::Forms::TabPage());
 			this->button_ModRename = (gcnew System::Windows::Forms::Button());
 			this->button_ModRescan = (gcnew System::Windows::Forms::Button());
@@ -682,6 +705,7 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->button_ModClone = (gcnew System::Windows::Forms::Button());
 			this->button_ModSetActive = (gcnew System::Windows::Forms::Button());
 			this->listBox_Mods = (gcnew System::Windows::Forms::ListBox());
+#endif
 			this->tabPage_Credits = (gcnew System::Windows::Forms::TabPage());
 			this->creditsTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->tabPage_Update = (gcnew System::Windows::Forms::TabPage());
@@ -714,7 +738,9 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->tabPage_Playerdata->SuspendLayout();
 			this->tabPage_Components->SuspendLayout();
 			this->tabPage_Plugins->SuspendLayout();
+#ifndef MINIMALIST
 			this->tabPage_Modpacks->SuspendLayout();
+#endif
 			this->tabPage_Credits->SuspendLayout();
 			this->tabPage_Update->SuspendLayout();
 			this->flowLayoutPanel1->SuspendLayout();
@@ -758,7 +784,9 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->tabControl->Controls->Add(this->tabPage_Playerdata);
 			this->tabControl->Controls->Add(this->tabPage_Components);
 			this->tabControl->Controls->Add(this->tabPage_Plugins);
+#ifndef MINIMALIST
 			this->tabControl->Controls->Add(this->tabPage_Modpacks);
+#endif
 			this->tabControl->Controls->Add(this->tabPage_Credits);
 			this->tabControl->Controls->Add(this->tabPage_Update);
 			resources->ApplyResources(this->tabControl, L"tabControl");
@@ -903,6 +931,7 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			// 
 			resources->ApplyResources(this->panel_Plugins, L"panel_Plugins");
 			this->panel_Plugins->Name = L"panel_Plugins";
+#ifndef MINIMALIST
 			// 
 			// tabPage_Modpacks
 			// 
@@ -975,6 +1004,7 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			resources->ApplyResources(this->listBox_Mods, L"listBox_Mods");
 			this->listBox_Mods->Name = L"listBox_Mods";
 			this->listBox_Mods->SelectedValueChanged += gcnew System::EventHandler(this, &ui::listBox_Mods_SelectedValueChanged);
+#endif
 			// 
 			// tabPage_Credits
 			// 
@@ -1167,8 +1197,10 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->tabPage_Components->ResumeLayout(false);
 			this->tabPage_Components->PerformLayout();
 			this->tabPage_Plugins->ResumeLayout(false);
+#ifndef MINIMALIST
 			this->tabPage_Modpacks->ResumeLayout(false);
 			this->tabPage_Modpacks->PerformLayout();
+#endif
 			this->tabPage_Credits->ResumeLayout(false);
 			this->tabPage_Credits->PerformLayout();
 			this->tabPage_Update->ResumeLayout(false);
@@ -1181,6 +1213,7 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 
 		}
 #pragma endregion
+#ifndef MINIMALIST
 		private: System::Void scanModpacks() {
 			button_ModSetActive->Enabled = false;
 			button_ModClone->Enabled = false;
@@ -1203,6 +1236,7 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 				std::cout << "[Launcher] File system error " << e.what() << " " << e.path1() << " " << e.path2() << " " << e.code() << std::endl;
 			}
 		}
+#endif
 private: System::Void SaveSettings() {
 	if (*ResolutionConfigChanged)
 	{
@@ -1424,7 +1458,9 @@ private: System::Void button_github_Click(System::Object^ sender, System::EventA
 }
 private: System::Void button_Apply_Click(System::Object^ sender, System::EventArgs^ e) {
 	SaveSettings();
+#ifndef MINIMALIST
 	updateLanguage();
+#endif
 	updateStyle();
 }
 private: System::Void Ui_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
@@ -1501,6 +1537,7 @@ private: System::Void linkLabel_Console_LinkClicked(System::Object^ sender, Syst
 	ShowWindow(consoleHandle, SW_SHOW);
 	linkLabel_Console->Visible = false;
 }
+#ifndef MINIMALIST
 private: System::Void listBox_Mods_SelectedValueChanged(System::Object^ sender, System::EventArgs^ e) {
 	button_ModSetActive->Enabled = true;
 	button_ModClone->Enabled = true;
@@ -1542,6 +1579,7 @@ private: System::Void tabPage_Modpacks_Enter(System::Object^ sender, System::Eve
 	listBox_Mods->SelectedIndex = listBox_Mods->FindString(gcnew String(mpstr));
 	free(mpstr);
 }
+#endif
 private: System::Void label_Update_1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 };

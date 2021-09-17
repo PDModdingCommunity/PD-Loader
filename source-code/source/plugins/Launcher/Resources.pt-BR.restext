@@ -1,7 +1,7 @@
 ###############################################
 # framework
 
-LANG_AUTO=Detectar Automaticamente
+LANG_AUTO=Auto
 en=Inglês
 zh-Hans=Chinês Simplificado
 pt-BR=Português
@@ -22,13 +22,13 @@ R.ENABLE_NAME=Habilitar
 R.ENABLE_HINT=Habilita ou desabilita a opção de Resolução Interna.
 R.RESOLUTION_NAME=Resolução:
 R.RESOLUTION_HINT=Configura a resolução interna (ao invés de 1280x720).
-MATCH_WINDOW=Usar Resolução da Janela
-MATCH_SCREEN=Usar Resolução da Tela
+MATCH_WINDOW=Da Janela
+MATCH_SCREEN=Da Tela
 
 # graphics
 MODEL_NAME=Arquitetura da GPU NVIDIA:
 MODEL_HINT=Selecione a arquitetura da sua placa de vídeo NVIDIA para aplicar as correções necessárias.\n\nNota: "Detectar Automaticamente" não funciona em GNU/Linux.\n\nKepler: GT/X600, 700, 800M / Maxwell: GT/X700, 800m, 900 / Turing: RTX2000, GTX1600 / Ampere: RTX3000
-MODEL_AUTOMATIC=Detectar Automaticamente
+MODEL_AUTOMATIC=Auto
 TAA_NAME=TAA
 TAA_HINT=Anti-Aliasing Temporal
 MLAA_NAME=MLAA
@@ -107,7 +107,7 @@ FORCE_LOOK_NAME=Estilo dos Olhos:
 FORCE_LOOK_HINT=Muda as animações dos olhos dos personagens.
 NO_HAND_SCALING_NAME=Sem Escala das Mãos
 NO_HAND_SCALING_HINT=Desativa a escala de tamanho das mãos dos personagens.
-DEFAULT_HAND_SIZE_NAME=Tamanho das Mãos Padrão:
+DEFAULT_HAND_SIZE_NAME=Tamanho das Mãos Padrão
 DEFAULT_HAND_SIZE_HINT=Padrão: -1\nPDA: 12200
 SING_MISSED_NAME=Cantar Notas Perdidas
 SING_MISSED_HINT=Os vocais não vão parar ao perder notas.
@@ -154,9 +154,9 @@ FREEPLAY_HINT=Mostra "FREE PLAY" ao invés de "CREDIT(S)" e faz com que o jogo n
 
 FPS.LIMIT.LIGHTMODE_NAME=Usar o Limitador Leve
 FPS.LIMIT.LIGHTMODE_HINT=Faz com que o limitador de taxa de quadros use menos CPU.\nPode deixar a performance inconsistente.
-FPS.LIMIT_NAME=Limite de Taxa de Quadros:
+FPS.LIMIT_NAME=Limite de Taxa de Quadros
 FPS.LIMIT_HINT=Te permite selecionar um limite para a taxa de quadros. Coloque em -1 para desligar o limitador.
-FRM.MOTION.RATE_NAME=Taxa de Movimento do LTQ:
+FRM.MOTION.RATE_NAME=Taxa de Movimento do LTQ
 FRM.MOTION.RATE_HINT=Seleciona a taxa dos movimentos para o componente "Limite de Taxa de Quadros".\nValores maiores os deixarão mais suaves, mas usam mais CPU e podem causar problemas (Padrão: 400).
 
 AUTOPAUSE_NAME=Pausar Automaticamente
@@ -164,11 +164,11 @@ AUTOPAUSE_HINT=Pausar o jogo quando o foco da janela é perdido.
 
 RUMBLE_NAME=Vibração do Controle (XInput)
 RUMBLE_HINT=Liga ou desliga a vibração do controle em sliders (Apenas funciona em XInput).
-XINPUT_RUMBLE_INTENSITY_LEFT_NAME=Intensidade do Motor Esquerdo:
+XINPUT_RUMBLE_INTENSITY_LEFT_NAME=Força do Motor Esquerdo:
 XINPUT_RUMBLE_INTENSITY_LEFT_HINT=Padrão: 8000\nMáximo: 65535.
-XINPUT_RUMBLE_INTENSITY_RIGHT_NAME=Intensidade do Motor Direito:
+XINPUT_RUMBLE_INTENSITY_RIGHT_NAME=Força do Motor Direito:
 XINPUT_RUMBLE_INTENSITY_RIGHT_HINT=Padrão: 4000\nMáximo:65535.
-XINPUT_PREFERRED_NAME=Selecionar Controle (XInput):
+XINPUT_PREFERRED_NAME=Controle XInput Preferido:
 XINPUT_PREFERRED_HINT=Seleciona um controle específico (Apenas XInput).\nSe disponível, o próximo controle encontrado será usado.
 
 HARDWARE_SLIDER_NAME=Usar Hardware para Sliders
@@ -178,8 +178,8 @@ PREVENT_DATA_DELETION_NAME=Impedir Apagamento de Arquivos
 PREVENT_DATA_DELETION_HINT=Impede o jogo de apagar arquivos.
 COMMAND_LINE_NAME=Terminal:
 COMMAND_LINE_HINT=Permite enviar argumentos de terminal para a inicialização do jogo quando usando o lançador (launcher).\nDesativar o lançador (launcher) irá fazer com que essa linha seja ignorada.
-USE_DIVAHOOK_BAT_NAME=Usar divahook.bat
-USE_DIVAHOOK_BAT_HINT=Inicia o "divahook.bat" ao invés do "diva.exe".
+USE_DIVAHOOK_BAT_NAME=Usar divahook.bat/start.bat
+USE_DIVAHOOK_BAT_HINT=Inicia o "divahook.bat" ou o "start.bat" ao invés do "diva.exe".
 DARK_LAUNCHER_NAME=Tema Escuro
 DARK_LAUNCHER_HINT=Ativa o tema escuro do PD Loader.
 LAUNCHER_LANGUAGE_NAME=Idioma do Lançador:
@@ -187,6 +187,8 @@ LAUNCHER_LANGUAGE_HINT=Seleciona o idioma do PD Loader.
 NO_GPU_DIALOG_NAME=Desativar Avisos de GPU
 NO_GPU_DIALOG_HINT=Desativa os avisos para placas de vídeo não suportadas.
 
+QUICK_START_DIVAHOOK_SAME_TIME=Você não pode habilitar "Quick Start" e "Use divahook.bat/start.bat" ao mesmo tempo.
+NO_DIVAHOOK_BAT=divahook.bat/start.bat não encontrado.\nO jogo vai começar normalmente/offline.\n\nAviso: Desligue "Usar divahook.bat/start.bat" para evitar esta mensagem.
 
 # player data
 PLAYER_NAME_NAME=Nome do Jogador:
@@ -241,7 +243,7 @@ FRAME_RATE_MANAGER_NAME=Limite de Taxa de Quadros
 FRAME_RATE_MANAGER_HINT=Ajusta as animações para a velocidade correta em differentes taxas de quadros.\nApenas necessário quando a taxa de atualização não é 60.
 FAST_LOADER_NAME=Carregador Rápido
 FAST_LOADER_HINT=Pula ou acelera etapas de carregamentos desnecessários.
-FAST_LOADER_SPEED_NAME=Velocidade do Carregador Rápido
+FAST_LOADER_SPEED_NAME=Velocidade do Carregador:
 FAST_LOADER_SPEED_HINT=Configure isso para 4 ou menos quando for jogar online.\nPadrão: 39
 CAMERA_CONTROLLER_NAME=Controle de Câmera
 CAMERA_CONTROLLER_HINT=Habilita a câmera livre (ativado com a tecla "F3").\nUse WASD para mover, ESPAÇO/CTRL para cima/baixo, Q/R para rotação, R/F para aplicar zoom.\nSegurar SHIFT/ALT muda a velocidade.

@@ -158,7 +158,7 @@ XINPUT_RUMBLE_INTENSITY_LEFT_NAME=Left Motor Intensity
 XINPUT_RUMBLE_INTENSITY_LEFT_HINT=Default: 8000.
 XINPUT_RUMBLE_INTENSITY_RIGHT_NAME=Right Motor Intensity
 XINPUT_RUMBLE_INTENSITY_RIGHT_HINT=Default: 4000.
-XINPUT_PREFERRED_NAME=XInput Controller Num:
+XINPUT_PREFERRED_NAME=Pref. XInput Controller:
 XINPUT_PREFERRED_HINT=Sets the preferred XInput controller.\nIf unavailable, the next connected controller is used.
 
 HARDWARE_SLIDER_NAME=Use Hardware Slider
@@ -168,8 +168,8 @@ PREVENT_DATA_DELETION_NAME=Prevent Data Deletion
 PREVENT_DATA_DELETION_HINT=Prevents the game from deleting files.
 COMMAND_LINE_NAME=Command Line:
 COMMAND_LINE_HINT=Allows setting command line arguments for the game when using the launcher.\nDisabling the launcher will bypass this.
-USE_DIVAHOOK_BAT_NAME=Use divahook.bat
-USE_DIVAHOOK_BAT_HINT=Launches divahook.bat intead of diva.exe.
+USE_DIVAHOOK_BAT_NAME=Use divahook.bat/start.bat
+USE_DIVAHOOK_BAT_HINT=Launches divahook.bat or start.bat intead of diva.exe.
 DARK_LAUNCHER_NAME=Dark Launcher
 DARK_LAUNCHER_HINT=Sets the dark colour scheme in the launcher.
 LAUNCHER_LANGUAGE_NAME=Launcher Language:
@@ -177,6 +177,8 @@ LAUNCHER_LANGUAGE_HINT=Sets the Language of the launcher.
 NO_GPU_DIALOG_NAME=Disable GPU Warning
 NO_GPU_DIALOG_HINT=Disables the warning dialog for unsupported GPUs.
 
+QUICK_START_DIVAHOOK_SAME_TIME="Quick Start" and "Use divahook.bat/start.bat" cannot be enabled at the same time.
+NO_DIVAHOOK_BAT=divahook.bat/start.bat not found.\nThe game will start normally/offline.\n\nNOTE: Disable "Use divahook.bat/start.bat" to avoid this warning.
 
 # player data
 PLAYER_NAME_NAME=Player Name:
@@ -231,7 +233,7 @@ FRAME_RATE_MANAGER_NAME=Frame Rate Manager
 FRAME_RATE_MANAGER_HINT=Adjusts animations to the correct speed at different frame rates.\nOnly needed when FPS isn't locked at 60.
 FAST_LOADER_NAME=Fast Loader
 FAST_LOADER_HINT=Skip or speed up unnecessary loading steps.
-FAST_LOADER_SPEED_NAME=Fast Loader Speed
+FAST_LOADER_SPEED_NAME=Fast Loader Speed:
 FAST_LOADER_SPEED_HINT=Set this to 4 or less when playing online.\nDefault: 39
 CAMERA_CONTROLLER_NAME=Camera Controller
 CAMERA_CONTROLLER_HINT=Enables freecam (toggled using F3).\nWASD to move, SPACE/CTRL for up/down, Q/R to rotate, R/F for zoom.\nHolding SHIFT/ALT changes control speed.

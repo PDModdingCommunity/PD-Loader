@@ -422,7 +422,7 @@ namespace Launcher {
 			if (this->groupBox_Lag->Tag == nullptr) {
 				this->groupBox_Lag->Tag = this->groupBox_Lag->Text;
 			}
-			this->groupBox_Lag->Text = this->groupBox_Lag->Tag + "(" + this->trackBar_LagCompensation->Value + " msec)";
+			this->groupBox_Lag->Text = this->groupBox_Lag->Tag + " (" + this->trackBar_LagCompensation->Value + " msec)";
 		}
 
 		void updateStyle()
@@ -609,6 +609,8 @@ private: System::Windows::Forms::Button^ button_ModRescan;
 private: System::Windows::Forms::Button^ button_ModRename;
 private: System::Windows::Forms::LinkLabel^ linkLabel_Console;
 private: System::Windows::Forms::Panel^ panel_Patches2;
+private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel1;
+private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 
 
 
@@ -698,6 +700,8 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->button_Apply = (gcnew System::Windows::Forms::Button());
 			this->button_Wiki = (gcnew System::Windows::Forms::Button());
+			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->flowLayoutPanel2 = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->groupBox_ScreenRes->SuspendLayout();
 			this->panel_ScreenRes->SuspendLayout();
 			this->tabControl->SuspendLayout();
@@ -713,25 +717,42 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			this->tabPage_Modpacks->SuspendLayout();
 			this->tabPage_Credits->SuspendLayout();
 			this->tabPage_Update->SuspendLayout();
+			this->flowLayoutPanel1->SuspendLayout();
+			this->flowLayoutPanel2->SuspendLayout();
 			this->SuspendLayout();
+			// 
+			// button_Launch
+			// 
 			this->button_Launch->BackColor = System::Drawing::Color::White;
 			this->button_Launch->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			resources->ApplyResources(this->button_Launch, L"button_Launch");
 			this->button_Launch->Name = L"button_Launch";
 			this->button_Launch->UseVisualStyleBackColor = false;
 			this->button_Launch->Click += gcnew System::EventHandler(this, &ui::Button_Launch_Click);
+			// 
+			// groupBox_ScreenRes
+			// 
 			this->groupBox_ScreenRes->Controls->Add(this->panel_ScreenRes);
 			this->groupBox_ScreenRes->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			resources->ApplyResources(this->groupBox_ScreenRes, L"groupBox_ScreenRes");
 			this->groupBox_ScreenRes->Name = L"groupBox_ScreenRes";
 			this->groupBox_ScreenRes->TabStop = false;
+			// 
+			// panel_ScreenRes
+			// 
 			resources->ApplyResources(this->panel_ScreenRes, L"panel_ScreenRes");
 			this->panel_ScreenRes->Controls->Add(this->checkBox_nofsopt);
 			this->panel_ScreenRes->Name = L"panel_ScreenRes";
+			// 
+			// checkBox_nofsopt
+			// 
 			resources->ApplyResources(this->checkBox_nofsopt, L"checkBox_nofsopt");
 			this->checkBox_nofsopt->Name = L"checkBox_nofsopt";
 			this->toolTip1->SetToolTip(this->checkBox_nofsopt, resources->GetString(L"checkBox_nofsopt.ToolTip"));
 			this->checkBox_nofsopt->UseVisualStyleBackColor = true;
+			// 
+			// tabControl
+			// 
 			this->tabControl->Controls->Add(this->tabPage_Resolution);
 			this->tabControl->Controls->Add(this->tabPage_Patches);
 			this->tabControl->Controls->Add(this->tabPage_Playerdata);
@@ -743,6 +764,9 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			resources->ApplyResources(this->tabControl, L"tabControl");
 			this->tabControl->Name = L"tabControl";
 			this->tabControl->SelectedIndex = 0;
+			// 
+			// tabPage_Resolution
+			// 
 			this->tabPage_Resolution->BackColor = System::Drawing::Color::White;
 			resources->ApplyResources(this->tabPage_Resolution, L"tabPage_Resolution");
 			this->tabPage_Resolution->Controls->Add(this->groupBox_Lag);
@@ -753,35 +777,59 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			this->tabPage_Resolution->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->tabPage_Resolution->Name = L"tabPage_Resolution";
-			this->groupBox_Lag->Controls->Add(this->trackBar_LagCompensation);
+			// 
+			// groupBox_Lag
+			// 
+			this->groupBox_Lag->Controls->Add(this->flowLayoutPanel2);
 			this->groupBox_Lag->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			resources->ApplyResources(this->groupBox_Lag, L"groupBox_Lag");
 			this->groupBox_Lag->Name = L"groupBox_Lag";
 			this->groupBox_Lag->TabStop = false;
+			// 
+			// trackBar_LagCompensation
+			// 
 			this->trackBar_LagCompensation->LargeChange = 1;
 			resources->ApplyResources(this->trackBar_LagCompensation, L"trackBar_LagCompensation");
 			this->trackBar_LagCompensation->Maximum = 500;
 			this->trackBar_LagCompensation->Name = L"trackBar_LagCompensation";
 			this->trackBar_LagCompensation->TickStyle = System::Windows::Forms::TickStyle::None;
 			this->trackBar_LagCompensation->ValueChanged += gcnew System::EventHandler(this, &ui::trackBar_LagCompensation_ValueChanged);
+			// 
+			// groupBox_Details
+			// 
 			this->groupBox_Details->Controls->Add(this->panel_Details);
 			this->groupBox_Details->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			resources->ApplyResources(this->groupBox_Details, L"groupBox_Details");
 			this->groupBox_Details->Name = L"groupBox_Details";
 			this->groupBox_Details->TabStop = false;
+			// 
+			// panel_Details
+			// 
 			resources->ApplyResources(this->panel_Details, L"panel_Details");
 			this->panel_Details->Name = L"panel_Details";
+			// 
+			// labelGPU
+			// 
 			resources->ApplyResources(this->labelGPU, L"labelGPU");
 			this->labelGPU->BackColor = System::Drawing::Color::Transparent;
 			this->labelGPU->ForeColor = System::Drawing::Color::Black;
 			this->labelGPU->Name = L"labelGPU";
+			// 
+			// groupBox_InternalRes
+			// 
 			this->groupBox_InternalRes->Controls->Add(this->panel_IntRes);
 			this->groupBox_InternalRes->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			resources->ApplyResources(this->groupBox_InternalRes, L"groupBox_InternalRes");
 			this->groupBox_InternalRes->Name = L"groupBox_InternalRes";
 			this->groupBox_InternalRes->TabStop = false;
+			// 
+			// panel_IntRes
+			// 
 			resources->ApplyResources(this->panel_IntRes, L"panel_IntRes");
 			this->panel_IntRes->Name = L"panel_IntRes";
+			// 
+			// tabPage_Patches
+			// 
 			this->tabPage_Patches->BackColor = System::Drawing::Color::White;
 			this->tabPage_Patches->Controls->Add(this->panel_Patches2);
 			this->tabPage_Patches->Controls->Add(this->panel_Patches);
@@ -789,18 +837,33 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			resources->ApplyResources(this->tabPage_Patches, L"tabPage_Patches");
 			this->tabPage_Patches->Name = L"tabPage_Patches";
+			// 
+			// panel_Patches2
+			// 
 			resources->ApplyResources(this->panel_Patches2, L"panel_Patches2");
 			this->panel_Patches2->Name = L"panel_Patches2";
+			// 
+			// panel_Patches
+			// 
 			resources->ApplyResources(this->panel_Patches, L"panel_Patches");
 			this->panel_Patches->Name = L"panel_Patches";
+			// 
+			// tabPage_Playerdata
+			// 
 			this->tabPage_Playerdata->BackColor = System::Drawing::Color::White;
 			this->tabPage_Playerdata->Controls->Add(this->panel_Playerdata);
 			this->tabPage_Playerdata->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			resources->ApplyResources(this->tabPage_Playerdata, L"tabPage_Playerdata");
 			this->tabPage_Playerdata->Name = L"tabPage_Playerdata";
+			// 
+			// panel_Playerdata
+			// 
 			resources->ApplyResources(this->panel_Playerdata, L"panel_Playerdata");
 			this->panel_Playerdata->Name = L"panel_Playerdata";
+			// 
+			// tabPage_Components
+			// 
 			this->tabPage_Components->BackColor = System::Drawing::Color::White;
 			this->tabPage_Components->Controls->Add(this->linkLabel_Console);
 			this->tabPage_Components->Controls->Add(this->panel_Components);
@@ -808,12 +871,21 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			resources->ApplyResources(this->tabPage_Components, L"tabPage_Components");
 			this->tabPage_Components->Name = L"tabPage_Components";
+			// 
+			// linkLabel_Console
+			// 
 			resources->ApplyResources(this->linkLabel_Console, L"linkLabel_Console");
 			this->linkLabel_Console->Name = L"linkLabel_Console";
 			this->linkLabel_Console->TabStop = true;
 			this->linkLabel_Console->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &ui::linkLabel_Console_LinkClicked);
+			// 
+			// panel_Components
+			// 
 			resources->ApplyResources(this->panel_Components, L"panel_Components");
 			this->panel_Components->Name = L"panel_Components";
+			// 
+			// tabPage_Plugins
+			// 
 			this->tabPage_Plugins->BackColor = System::Drawing::Color::White;
 			this->tabPage_Plugins->Controls->Add(this->panel_Custom);
 			this->tabPage_Plugins->Controls->Add(this->panel_Plugins);
@@ -821,10 +893,19 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			resources->ApplyResources(this->tabPage_Plugins, L"tabPage_Plugins");
 			this->tabPage_Plugins->Name = L"tabPage_Plugins";
+			// 
+			// panel_Custom
+			// 
 			resources->ApplyResources(this->panel_Custom, L"panel_Custom");
 			this->panel_Custom->Name = L"panel_Custom";
+			// 
+			// panel_Plugins
+			// 
 			resources->ApplyResources(this->panel_Plugins, L"panel_Plugins");
 			this->panel_Plugins->Name = L"panel_Plugins";
+			// 
+			// tabPage_Modpacks
+			// 
 			this->tabPage_Modpacks->Controls->Add(this->button_ModRename);
 			this->tabPage_Modpacks->Controls->Add(this->button_ModRescan);
 			this->tabPage_Modpacks->Controls->Add(this->button_ModFiles);
@@ -837,49 +918,83 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			this->tabPage_Modpacks->Name = L"tabPage_Modpacks";
 			this->tabPage_Modpacks->UseVisualStyleBackColor = true;
 			this->tabPage_Modpacks->Enter += gcnew System::EventHandler(this, &ui::tabPage_Modpacks_Enter);
+			// 
+			// button_ModRename
+			// 
 			resources->ApplyResources(this->button_ModRename, L"button_ModRename");
 			this->button_ModRename->Name = L"button_ModRename";
 			this->button_ModRename->UseVisualStyleBackColor = true;
 			this->button_ModRename->Click += gcnew System::EventHandler(this, &ui::button_ModRename_Click);
+			// 
+			// button_ModRescan
+			// 
 			resources->ApplyResources(this->button_ModRescan, L"button_ModRescan");
 			this->button_ModRescan->Name = L"button_ModRescan";
 			this->button_ModRescan->UseVisualStyleBackColor = true;
 			this->button_ModRescan->Click += gcnew System::EventHandler(this, &ui::button_ModRescan_Click);
+			// 
+			// button_ModFiles
+			// 
 			resources->ApplyResources(this->button_ModFiles, L"button_ModFiles");
 			this->button_ModFiles->Name = L"button_ModFiles";
 			this->button_ModFiles->UseVisualStyleBackColor = true;
 			this->button_ModFiles->Click += gcnew System::EventHandler(this, &ui::button_ModFiles_Click);
+			// 
+			// checkBox_ModPatches
+			// 
 			resources->ApplyResources(this->checkBox_ModPatches, L"checkBox_ModPatches");
 			this->checkBox_ModPatches->Checked = true;
 			this->checkBox_ModPatches->CheckState = System::Windows::Forms::CheckState::Checked;
 			this->checkBox_ModPatches->Name = L"checkBox_ModPatches";
 			this->checkBox_ModPatches->UseVisualStyleBackColor = true;
+			// 
+			// button_ModDelete
+			// 
 			resources->ApplyResources(this->button_ModDelete, L"button_ModDelete");
 			this->button_ModDelete->Name = L"button_ModDelete";
 			this->button_ModDelete->UseVisualStyleBackColor = true;
 			this->button_ModDelete->Click += gcnew System::EventHandler(this, &ui::button_ModDelete_Click);
+			// 
+			// button_ModClone
+			// 
 			resources->ApplyResources(this->button_ModClone, L"button_ModClone");
 			this->button_ModClone->Name = L"button_ModClone";
 			this->button_ModClone->UseVisualStyleBackColor = true;
 			this->button_ModClone->Click += gcnew System::EventHandler(this, &ui::button_ModClone_Click);
+			// 
+			// button_ModSetActive
+			// 
 			resources->ApplyResources(this->button_ModSetActive, L"button_ModSetActive");
 			this->button_ModSetActive->Name = L"button_ModSetActive";
 			this->button_ModSetActive->UseVisualStyleBackColor = true;
 			this->button_ModSetActive->Click += gcnew System::EventHandler(this, &ui::button_ModSetActive_Click);
+			// 
+			// listBox_Mods
+			// 
 			this->listBox_Mods->FormattingEnabled = true;
 			resources->ApplyResources(this->listBox_Mods, L"listBox_Mods");
 			this->listBox_Mods->Name = L"listBox_Mods";
 			this->listBox_Mods->SelectedValueChanged += gcnew System::EventHandler(this, &ui::listBox_Mods_SelectedValueChanged);
+			// 
+			// tabPage_Credits
+			// 
 			this->tabPage_Credits->Controls->Add(this->creditsTextBox);
 			resources->ApplyResources(this->tabPage_Credits, L"tabPage_Credits");
 			this->tabPage_Credits->Name = L"tabPage_Credits";
 			this->tabPage_Credits->UseVisualStyleBackColor = true;
+			// 
+			// creditsTextBox
+			// 
 			this->creditsTextBox->BackColor = System::Drawing::Color::White;
 			this->creditsTextBox->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			resources->ApplyResources(this->creditsTextBox, L"creditsTextBox");
 			this->creditsTextBox->Name = L"creditsTextBox";
 			this->creditsTextBox->ReadOnly = true;
+			// 
+			// tabPage_Update
+			// 
+			this->tabPage_Update->Controls->Add(this->flowLayoutPanel1);
 			this->tabPage_Update->Controls->Add(this->linkLabel_Repo);
 			this->tabPage_Update->Controls->Add(this->linkLabel_Help);
 			this->tabPage_Update->Controls->Add(this->linkLabel_Official_Discord);
@@ -888,47 +1003,79 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			this->tabPage_Update->Controls->Add(this->button_Instructions);
 			this->tabPage_Update->Controls->Add(this->button_Unstable_builds);
 			this->tabPage_Update->Controls->Add(this->button_Releases_page);
-			this->tabPage_Update->Controls->Add(this->label_Update_2);
-			this->tabPage_Update->Controls->Add(this->label_Update_1);
 			resources->ApplyResources(this->tabPage_Update, L"tabPage_Update");
 			this->tabPage_Update->Name = L"tabPage_Update";
 			this->tabPage_Update->UseVisualStyleBackColor = true;
+			// 
+			// linkLabel_Repo
+			// 
 			resources->ApplyResources(this->linkLabel_Repo, L"linkLabel_Repo");
 			this->linkLabel_Repo->Name = L"linkLabel_Repo";
 			this->linkLabel_Repo->TabStop = true;
 			this->linkLabel_Repo->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &ui::linkLabel_Repo_LinkClicked);
+			// 
+			// linkLabel_Help
+			// 
 			resources->ApplyResources(this->linkLabel_Help, L"linkLabel_Help");
 			this->linkLabel_Help->Name = L"linkLabel_Help";
 			this->linkLabel_Help->TabStop = true;
 			this->linkLabel_Help->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &ui::linkLabel_Help_LinkClicked);
+			// 
+			// linkLabel_Official_Discord
+			// 
 			resources->ApplyResources(this->linkLabel_Official_Discord, L"linkLabel_Official_Discord");
 			this->linkLabel_Official_Discord->Name = L"linkLabel_Official_Discord";
 			this->linkLabel_Official_Discord->TabStop = true;
 			this->linkLabel_Official_Discord->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &ui::linkLabel_Official_Discord_LinkClicked);
+			// 
+			// linkLabel_Changelog
+			// 
 			resources->ApplyResources(this->linkLabel_Changelog, L"linkLabel_Changelog");
 			this->linkLabel_Changelog->Name = L"linkLabel_Changelog";
 			this->linkLabel_Changelog->TabStop = true;
 			this->linkLabel_Changelog->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &ui::linkLabel_Changelog_LinkClicked);
+			// 
+			// button_Clean_installation
+			// 
 			resources->ApplyResources(this->button_Clean_installation, L"button_Clean_installation");
 			this->button_Clean_installation->Name = L"button_Clean_installation";
 			this->button_Clean_installation->UseVisualStyleBackColor = true;
 			this->button_Clean_installation->Click += gcnew System::EventHandler(this, &ui::button_Clean_installation_Click);
+			// 
+			// button_Instructions
+			// 
 			resources->ApplyResources(this->button_Instructions, L"button_Instructions");
 			this->button_Instructions->Name = L"button_Instructions";
 			this->button_Instructions->UseVisualStyleBackColor = true;
 			this->button_Instructions->Click += gcnew System::EventHandler(this, &ui::button_Instructions_Click);
+			// 
+			// button_Unstable_builds
+			// 
 			resources->ApplyResources(this->button_Unstable_builds, L"button_Unstable_builds");
 			this->button_Unstable_builds->Name = L"button_Unstable_builds";
 			this->button_Unstable_builds->UseVisualStyleBackColor = true;
 			this->button_Unstable_builds->Click += gcnew System::EventHandler(this, &ui::button_Unstable_builds_Click);
+			// 
+			// button_Releases_page
+			// 
 			resources->ApplyResources(this->button_Releases_page, L"button_Releases_page");
 			this->button_Releases_page->Name = L"button_Releases_page";
 			this->button_Releases_page->UseVisualStyleBackColor = true;
 			this->button_Releases_page->Click += gcnew System::EventHandler(this, &ui::button_Releases_page_Click);
+			// 
+			// label_Update_2
+			// 
 			resources->ApplyResources(this->label_Update_2, L"label_Update_2");
 			this->label_Update_2->Name = L"label_Update_2";
+			// 
+			// label_Update_1
+			// 
 			resources->ApplyResources(this->label_Update_1, L"label_Update_1");
 			this->label_Update_1->Name = L"label_Update_1";
+			this->label_Update_1->Click += gcnew System::EventHandler(this, &ui::label_Update_1_Click);
+			// 
+			// button_Discord
+			// 
 			this->button_Discord->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(242)), static_cast<System::Int32>(static_cast<System::Byte>(242)),
 				static_cast<System::Int32>(static_cast<System::Byte>(242)));
 			this->button_Discord->Cursor = System::Windows::Forms::Cursors::Hand;
@@ -937,6 +1084,9 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			this->button_Discord->Name = L"button_Discord";
 			this->button_Discord->UseVisualStyleBackColor = false;
 			this->button_Discord->Click += gcnew System::EventHandler(this, &ui::button_Discord_Click);
+			// 
+			// button_github
+			// 
 			this->button_github->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(242)), static_cast<System::Int32>(static_cast<System::Byte>(242)),
 				static_cast<System::Int32>(static_cast<System::Byte>(242)));
 			this->button_github->Cursor = System::Windows::Forms::Cursors::Hand;
@@ -945,12 +1095,18 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			this->button_github->Name = L"button_github";
 			this->button_github->UseVisualStyleBackColor = false;
 			this->button_github->Click += gcnew System::EventHandler(this, &ui::button_github_Click);
+			// 
+			// button_Apply
+			// 
 			this->button_Apply->BackColor = System::Drawing::Color::White;
 			this->button_Apply->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			resources->ApplyResources(this->button_Apply, L"button_Apply");
 			this->button_Apply->Name = L"button_Apply";
 			this->button_Apply->UseVisualStyleBackColor = false;
 			this->button_Apply->Click += gcnew System::EventHandler(this, &ui::button_Apply_Click);
+			// 
+			// button_Wiki
+			// 
 			this->button_Wiki->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(242)), static_cast<System::Int32>(static_cast<System::Byte>(242)),
 				static_cast<System::Int32>(static_cast<System::Byte>(242)));
 			resources->ApplyResources(this->button_Wiki, L"button_Wiki");
@@ -959,6 +1115,22 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			this->button_Wiki->Name = L"button_Wiki";
 			this->button_Wiki->UseVisualStyleBackColor = false;
 			this->button_Wiki->Click += gcnew System::EventHandler(this, &ui::button_Wiki_Click);
+			// 
+			// flowLayoutPanel1
+			// 
+			this->flowLayoutPanel1->Controls->Add(this->label_Update_1);
+			this->flowLayoutPanel1->Controls->Add(this->label_Update_2);
+			resources->ApplyResources(this->flowLayoutPanel1, L"flowLayoutPanel1");
+			this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
+			// 
+			// flowLayoutPanel2
+			// 
+			this->flowLayoutPanel2->Controls->Add(this->trackBar_LagCompensation);
+			resources->ApplyResources(this->flowLayoutPanel2, L"flowLayoutPanel2");
+			this->flowLayoutPanel2->Name = L"flowLayoutPanel2";
+			// 
+			// ui
+			// 
 			this->AcceptButton = this->button_Launch;
 			resources->ApplyResources(this, L"$this");
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Dpi;
@@ -987,7 +1159,6 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			this->tabPage_Resolution->ResumeLayout(false);
 			this->tabPage_Resolution->PerformLayout();
 			this->groupBox_Lag->ResumeLayout(false);
-			this->groupBox_Lag->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar_LagCompensation))->EndInit();
 			this->groupBox_Details->ResumeLayout(false);
 			this->groupBox_InternalRes->ResumeLayout(false);
@@ -1002,6 +1173,10 @@ private: System::Windows::Forms::Panel^ panel_Patches2;
 			this->tabPage_Credits->PerformLayout();
 			this->tabPage_Update->ResumeLayout(false);
 			this->tabPage_Update->PerformLayout();
+			this->flowLayoutPanel1->ResumeLayout(false);
+			this->flowLayoutPanel1->PerformLayout();
+			this->flowLayoutPanel2->ResumeLayout(false);
+			this->flowLayoutPanel2->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
@@ -1124,11 +1299,36 @@ private: System::Void Button_Launch_Click(System::Object^ sender, System::EventA
 
 	if(GetPrivateProfileIntW(LAUNCHER_SECTION, L"use_divahook_bat", FALSE, CONFIG_FILE))
 	{
+		if (GetPrivateProfileIntW(L"patches", L"quick_start", 1, CONFIG_FILE) > 0)
+		{
+			SkinnedMessageBox::Show(this, i18n::GetStringFallback("QUICK_START_DIVAHOOK_SAME_TIME"), "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
+		}
+
 		DIVA_EXECUTABLE = NULL;
-		wstring DIVA_EXECUTABLE_LAUNCH_STRING = L"cmd.exe /C \"";
-		DIVA_EXECUTABLE_LAUNCH_STRING.append(DIVA_DIRPATH);
-		DIVA_EXECUTABLE_LAUNCH_STRING.append(L"\\divahook.bat\"");
-		DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING.c_str());
+		wstring DIVA_EXECUTABLE_LAUNCH_STRING_cmd = L"cmd.exe /C \"";
+		const wstring DIVA_EXECUTABLE_LAUNCH_STRING_path = DIVA_DIRPATH;
+
+		wstring DIVAHOOK_BAT_PATH = DIVA_EXECUTABLE_LAUNCH_STRING_path;
+		DIVAHOOK_BAT_PATH.append(L"\\divahook.bat");
+		if (std::filesystem::exists(DIVAHOOK_BAT_PATH))
+		{
+			DIVA_EXECUTABLE_LAUNCH_STRING_cmd.append(DIVAHOOK_BAT_PATH);
+			DIVA_EXECUTABLE_LAUNCH_STRING_cmd.append(L"\"");
+			DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING_cmd.c_str());
+		}
+		else
+		{
+			wstring START_BAT_PATH = DIVA_EXECUTABLE_LAUNCH_STRING_path;
+			START_BAT_PATH.append(L"\\start.bat");
+			if (std::filesystem::exists(START_BAT_PATH))
+			{
+				DIVA_EXECUTABLE_LAUNCH_STRING_cmd.append(START_BAT_PATH);
+				DIVA_EXECUTABLE_LAUNCH_STRING_cmd.append(L"\"");
+				DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING_cmd.c_str());
+			}
+			else if(SkinnedMessageBox::Show(this, i18n::GetStringFallback("NO_DIVAHOOK_BAT"), "PD Launcher", MessageBoxButtons::OKCancel, MessageBoxIcon::Warning) != System::Windows::Forms::DialogResult::OK) return;
+		}
 	}
 	else
 	{
@@ -1341,6 +1541,8 @@ private: System::Void tabPage_Modpacks_Enter(System::Object^ sender, System::Eve
 	GetPrivateProfileStringW(L"Mods", L"Modpack", L"", mpstr, 256, CONFIG_FILE);
 	listBox_Mods->SelectedIndex = listBox_Mods->FindString(gcnew String(mpstr));
 	free(mpstr);
+}
+private: System::Void label_Update_1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

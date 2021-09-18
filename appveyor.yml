@@ -8,60 +8,34 @@ build:
   project: source-code/PD-Loader.sln
   verbosity: minimal
 after_build:
-- cmd: >-
-    md %TMP%\full\
+- ps: |
+    mkdir "$env:TMP/full/patches"
+    mkdir "$env:TMP/full/plugins"
+    mkdir "$env:TMP/full/plugins/Novidia Shaders"
+    mkdir "$env:TMP/full/ram/databank_template"
 
-    md %TMP%\full\patches\
+    cp "$env:APPVEYOR_BUILD_FOLDER/source-code/x64/$env:CONFIGURATION/dnsapi.dll" "$env:TMP/full"
+    cp "$env:APPVEYOR_BUILD_FOLDER/source-code/x64/$env:CONFIGURATION/*.dva" "$env:TMP/full/plugins"
 
-    md %TMP%\full\plugins\
+    if ( "$env:CONFIGURATION" -imatch "Release" )
+    {
+      mkdir "$env:TMP/full/plugins/zh-Hans"
+      mkdir "$env:TMP/full/plugins/pt-BR"
+      mkdir "$env:TMP/full/plugins/it-IT"
+      cp "$env:APPVEYOR_BUILD_FOLDER/source-code/data/patches/custom_freeplay_text_example.p" "$env:TMP/full/patches"
+      cp "$env:APPVEYOR_BUILD_FOLDER/source-code/x64/$env:CONFIGURATION/zh-Hans/*.dll" "$env:TMP/full/plugins/zh-Hans"
+      cp "$env:APPVEYOR_BUILD_FOLDER/source-code/x64/$env:CONFIGURATION/pt-BR/*.dll" "$env:TMP/full/plugins/pt-BR"
+      cp "$env:APPVEYOR_BUILD_FOLDER/source-code/x64/$env:CONFIGURATION/it-IT/*.dll" "$env:TMP/full/plugins/it-IT"
+    }
 
-    md "%TMP%\full\plugins\Novidia Shaders"
-    
-    if "%CONFIGURATION%" == "Release" (
-    md %TMP%\full\plugins\zh-Hans\
+    cp "$env:APPVEYOR_BUILD_FOLDER/source-code/data/README - PD Loader.url" "$env:TMP/full"
+    cp "$env:APPVEYOR_BUILD_FOLDER/source-code/data/*.sfv" "$env:TMP/full"
+    cp "$env:APPVEYOR_BUILD_FOLDER/source-code/data/plugins/*.*" "$env:TMP/full/plugins"
+    cp "$env:APPVEYOR_BUILD_FOLDER/source-code/data/plugins/Novidia Shaders/*.*" "$env:TMP/full/plugins/Novidia Shaders"
+    cp "$env:APPVEYOR_BUILD_FOLDER/source-code/data/ram/databank_template/*.dat" "$env:TMP/full/ram/databank_template"
 
-    md %TMP%\full\plugins\pt-BR\
-    
-    md %TMP%\full\plugins\it-IT\
-    )
-    
-    md %TMP%\full\ram\
+    cd "$env:TMP/full"
 
-    md %TMP%\full\ram\databank_template\
-
-
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\dnsapi.dll %TMP%\full\
-    
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\*.dva %TMP%\full\plugins\
-    
-    if "%CONFIGURATION%" == "Release" (
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\patches\custom_freeplay_text_example.p %TMP%\full\patches\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\zh-Hans\*.dll %TMP%\full\plugins\zh-Hans\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\pt-BR\*.dll %TMP%\full\plugins\pt-BR\
-    
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\x64\%CONFIGURATION%\pt-BR\*.dll %TMP%\full\plugins\it-IT\
-    )
-    
-    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\README - PD Loader.url" %TMP%\full\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_base_game.sfv %TMP%\full\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\verify_mount_data.sfv %TMP%\full\
-
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\*.* %TMP%\full\plugins\
-    
-    copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\Novidia Shaders\*.*" "%TMP%\full\plugins\Novidia Shaders\"
-    
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\ram\databank_template\*.dat %TMP%\full\ram\databank_template\
-
-    
-
-    cd %TMP%\full\
-
-    7z a %APPVEYOR_BUILD_FOLDER%\PD-Loader-%CONFIGURATION%-AppVeyor.zip *
-
+    7z a "$env:APPVEYOR_BUILD_FOLDER/PD-Loader-$env:CONFIGURATION-AppVeyor-$env:APPVEYOR_REPO_COMMIT.zip" *
 artifacts:
 - path: PD-Loader-*.zip

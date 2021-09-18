@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <string>
+#include <vector>
 
 void InjectCode(void* address, const std::vector<uint8_t> data)
 {
@@ -23,5 +24,5 @@ std::wstring DirPath() {
 	return exepath.substr(0, pos);
 }
 
-std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\CustoMixer.ini";
+std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\EnhancedStageManager.ini";
 LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();

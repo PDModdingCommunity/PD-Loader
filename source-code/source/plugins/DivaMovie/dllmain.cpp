@@ -204,7 +204,7 @@ extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
 {
-	return L"DivaMovie Plugin by Skyth\n\nDivaMovie enables movies on systems that does not support DXVA hardware decoding.";
+	return L"DivaMovie Plugin by Skyth\n\nDivaMovie enables movies on systems that do not support DXVA hardware decoding.";
 }
 
 extern "C" __declspec(dllexport) PluginConfig::PluginConfigArray GetPluginOptions(void)

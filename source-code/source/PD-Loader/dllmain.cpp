@@ -222,7 +222,7 @@ void FindFiles(WIN32_FIND_DATAW* fd)
 			{
 				if (fd->cFileName[0] == '.' && fd->cFileName[1] == '_') continue; // exclude macOS metadata
 
-				if (!_wcsicmp(fd->cFileName, L"Patches.dva") || !_wcsicmp(fd->cFileName, L"Render.dva"))
+				if (!_wcsicmp(fd->cFileName, L"Patches.dva") || !_wcsicmp(fd->cFileName, L"Render.dva") || !_wcsicmp(fd->cFileName, L"DivaWig.dva"))
 				{
 					DeleteFileW(fd->cFileName);
 					continue;

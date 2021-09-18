@@ -54,23 +54,6 @@ char config_template[] =
 "# Disable the scrolling sound effect\n"
 "No_Scrolling_SFX=0\n"
 #endif
-"# Enhanced Stage Manager (sets a custom number of stages; \"stage_manager\" should be disabled in \"components.ini\")\n"
-"# Number of stages (0 = disabled)\n"
-"Enhanced_Stage_Manager=0\n"
-"# Use encore stages or not\n"
-"Enhanced_Stage_Manager_Encore=1\n"
-#ifndef MINIMALIST
-"# Change the mouth animations -- 0=default, 1=force PDA, 2=force FT\n"
-"Force_Mouth=0\n"
-"# Change the expressions -- 0=default, 1=force PDA, 2=force FT\n"
-"Force_Expressions=0\n"
-"# Change the look animations -- 0=default, 1=force PDA, 2=force FT\n"
-"Force_Look=0\n"
-"# Disable hand scaling\n"
-"No_Hand_Scaling=0\n"
-"# Default hand size -- -1=default, 12200=PDA\n"
-"Default_Hand_Size=-1\n"
-#endif
 "# Show \"FREE PLAY\" instead of \"CREDIT(S)\" and don't require credits\n"
 "Freeplay=1\n"
 #ifndef MINIMALIST

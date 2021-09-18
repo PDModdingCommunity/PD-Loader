@@ -251,11 +251,9 @@ ConfigOptionBase* optionsArray[] = {
 
 ConfigOptionBase* options2Array[] = {
 	new OptionMetaSectionLabel(L"SECTION_PV_SELECTOR"),
-#ifndef MINIMALIST
-	new DropdownOption(L"quick_start", PATCHES_SECTION, CONFIG_FILE, L"QUICK_START_NAME", L"QUICK_START_HINT", 1, std::vector<LPCWSTR>({ L"Disabled", L"Guest", L"Guest + Normal" })),
-#endif
 	new BooleanOption(L"freeplay", PATCHES_SECTION, CONFIG_FILE, L"FREEPLAY_NAME", L"FREEPLAY_HINT", true, false),
 #ifndef MINIMALIST
+	new DropdownOption(L"quick_start", PATCHES_SECTION, CONFIG_FILE, L"QUICK_START_NAME", L"QUICK_START_HINT", 1, std::vector<LPCWSTR>({ L"Disabled", L"Guest", L"Guest + Normal" })),
 	new BooleanOption(L"no_scrolling_sfx", PATCHES_SECTION, CONFIG_FILE, L"NO_SCROLLING_SFX_NAME", L"NO_SCROLLING_SFX_HINT", false, false),
 	new BooleanOption(L"unlock_pseudo", PATCHES_SECTION, CONFIG_FILE, L"UNLOCK_PSEUDO_NAME", L"UNLOCK_PSEUDO_HINT", false, false),
 #endif
@@ -263,11 +261,6 @@ ConfigOptionBase* options2Array[] = {
 	new OptionMetaSpacer(8),
 
 	new OptionMetaSectionLabel(L"SECTION_ESM"),
-	new NumericOption(L"Enhanced_Stage_Manager", PATCHES_SECTION, CONFIG_FILE, L"ENHANCED_STAGE_MANAGER_NAME", L"ENHANCED_STAGE_MANAGER_HINT", 0, 0, INT_MAX),
-	new BooleanOption(L"Enhanced_Stage_Manager_Encore", PATCHES_SECTION, CONFIG_FILE, L"ENHANCED_STAGE_MANAGER_ENCORE_NAME", L"ENHANCED_STAGE_MANAGER_ENCORE_HINT", true, false),
-#ifndef MINIMALIST
-	new BooleanOption(L"sing_missed", PATCHES_SECTION, CONFIG_FILE, L"SING_MISSED_NAME", L"SING_MISSED_HINT", false, false),
-#endif
 	new BooleanOption(L"autopause", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"AUTOPAUSE_NAME", L"AUTOPAUSE_HINT", true, true),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
@@ -290,19 +283,6 @@ ConfigOptionBase* options2Array[] = {
 	new BooleanOption(L"card", PATCHES_SECTION, CONFIG_FILE, L"CARD_NAME", L"CARD_HINT", false, false),
 #endif
 	new BooleanOption(L"dwgui_scaling", PATCHES_SECTION, CONFIG_FILE, L"DWGUI_SCALING_NAME", L"DWGUI_SCALING_HINT", false, false),
-#ifndef MINIMALIST
-	new OptionMetaSeparator(),
-	new OptionMetaSpacer(8),
-
-	new OptionMetaSectionLabel(L"SECTION_PV_PATCHES"),
-	new DropdownOption(L"force_mouth", PATCHES_SECTION, CONFIG_FILE, L"FORCE_MOUTH_NAME", L"FORCE_MOUTH_HINT", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
-	new DropdownOption(L"force_expressions", PATCHES_SECTION, CONFIG_FILE, L"FORCE_EXPRESSIONS_NAME", L"FORCE_EXPRESSIONS_HINT", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
-	new DropdownOption(L"force_look", PATCHES_SECTION, CONFIG_FILE, L"FORCE_LOOK_NAME", L"FORCE_LOOK_HINT", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
-	new BooleanOption(L"no_hand_scaling", PATCHES_SECTION, CONFIG_FILE, L"NO_HAND_SCALING_NAME", L"NO_HAND_SCALING_HINT", false, false),
-	new NumericOption(L"default_hand_size", PATCHES_SECTION, CONFIG_FILE, L"DEFAULT_HAND_SIZE_NAME", L"DEFAULT_HAND_SIZE_HINT", -1, -1, INT_MAX),
-	new OptionMetaSeparator(),
-	new OptionMetaSpacer(8),
-#endif
 };
 
 ConfigOptionBase* playerdataArray[] = {

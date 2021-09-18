@@ -45,6 +45,9 @@
     <ClInclude Include="Render\render.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Patches\PatchApplier710EX.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

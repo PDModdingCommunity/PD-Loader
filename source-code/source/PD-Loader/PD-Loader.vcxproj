@@ -163,6 +163,7 @@
     <ClInclude Include="ModuleList.h" />
     <ClInclude Include="Patches\PatchApplier.h" />
     <ClInclude Include="Patches\PatchApplier710.h" />
+    <ClInclude Include="Patches\PatchApplier710EX.h" />
     <ClInclude Include="Patches\patches-framework.h" />
     <ClInclude Include="Patches\patches.h" />
     <ClInclude Include="Render\render-framework.h" />

@@ -98,21 +98,6 @@ Guest + Normal=Ospite + Normale
 NO_SCROLLING_SFX_NAME=Disabilita suono di scorrimento
 NO_SCROLLING_SFX_HINT=Disabilita l'effetto sonoro di scorrimento.
 
-ENHANCED_STAGE_MANAGER_NAME=Numero di stage:
-ENHANCED_STAGE_MANAGER_HINT=Imposta il numero di stage (Predefinito: 0).
-ENHANCED_STAGE_MANAGER_ENCORE_NAME=Encore (bis)
-ENHANCED_STAGE_MANAGER_ENCORE_HINT=Disabilita gli stage Encore.
-
-FORCE_MOUTH_NAME=Stile labiale:
-FORCE_MOUTH_HINT=Imposta le animazioni della bocca.
-FORCE_EXPRESSIONS_NAME=Stile espressioni:
-FORCE_EXPRESSIONS_HINT=Imposta le espressioni facciali.
-FORCE_LOOK_NAME=Stile sguardo:
-FORCE_LOOK_HINT=Imposta lo sguardo.
-NO_HAND_SCALING_NAME=Non ridimensionare le mani
-NO_HAND_SCALING_HINT=Disabilita la scalatura dinamica delle mani.
-DEFAULT_HAND_SIZE_NAME=Dimensione mani predefinita
-DEFAULT_HAND_SIZE_HINT=Predefinita: -1\nPDA: 12200
 SING_MISSED_NAME=Canta note mancate
 SING_MISSED_HINT=Canta le note mancate.
 

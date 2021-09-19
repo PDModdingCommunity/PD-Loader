@@ -105,7 +105,7 @@ auto nNoTimer = GetPrivateProfileIntW(L"patches", L"no_timer", TRUE, CONFIG_FILE
 auto nHardwareSlider = GetPrivateProfileIntW(L"patches", L"hardware_slider", FALSE, CONFIG_FILE);
 auto nDwguiScaling = GetPrivateProfileIntW(L"patches", L"dwgui_scaling", FALSE, CONFIG_FILE);
 
-#ifndef MINIMALIST
+// Non-essential
 auto nNoTimerSprite = GetPrivateProfileIntW(L"patches", L"no_timer_sprite", TRUE, CONFIG_FILE);
 auto nUnlockPseudo = GetPrivateProfileIntW(L"patches", L"unlock_pseudo", FALSE, CONFIG_FILE);
 auto nCard = GetPrivateProfileIntW(L"patches", L"card", TRUE, CONFIG_FILE);
@@ -129,4 +129,3 @@ auto nRefractResHeight = GetPrivateProfileIntW(L"graphics", L"refract_res_height
 auto nNoMessageBar = GetPrivateProfileIntW(L"patches", L"no_message_bar", FALSE, CONFIG_FILE);
 auto nNoStageText = GetPrivateProfileIntW(L"patches", L"no_stage_text", FALSE, CONFIG_FILE);
 auto nNoOpd = GetPrivateProfileIntW(L"patches", L"no_opd", FALSE, CONFIG_FILE);
-#endif

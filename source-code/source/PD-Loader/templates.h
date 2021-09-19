@@ -28,18 +28,14 @@ char config_template[] =
 "Skip=0\n"
 "# Disables unsupported GPU warning dialogs.\n"
 "No_GPU_Dialog=0\n"
-#ifndef MINIMALIST
 "# Sets the dark colour scheme in the launcher.\n"
 "Dark_Launcher=0\n"
-#endif
 "# Command line arguments\n"
 "Command_Line=\n"
-#ifndef MINIMALIST
 "# Launches divahook.bat intead of diva.exe.\n"
 "Use_divahook_bat=0\n"
 "# Language -- 0=auto, 1=en, 2=zh-Hans, 3=pt-BR, 4=it-IT\n"
 "Launcher_Language=0\n"
-#endif
 "\n"
 "[Patches]\n"
 "# Disable movies (enable this if the game hangs when loading certain PVs)\n"
@@ -48,18 +44,14 @@ char config_template[] =
 "Cursor=1\n"
 "# Use 2 channels instead of 4 (when not using DivaSound)\n"
 "Stereo=1\n"
-#ifndef MINIMALIST
 "# Skip one or more menus -- 0=disabled, 1=guest, 2=guest+normal\n"
 "Quick_Start=1\n"
 "# Disable the scrolling sound effect\n"
 "No_Scrolling_SFX=0\n"
-#endif
 "# Show \"FREE PLAY\" instead of \"CREDIT(S)\" and don't require credits\n"
 "Freeplay=1\n"
-#ifndef MINIMALIST
 "# Sing missed notes\n"
 "Sing_Missed=0\n"
-#endif
 "# Hide the volume and SE control buttons\n"
 "Hide_Volume=0\n"
 "# Remove the photo controls during PV playback\n"
@@ -78,7 +70,6 @@ char config_template[] =
 "PDLoaderText=1\n"
 "# Freeze the timer\n"
 "No_Timer=1\n"
-#ifndef MINIMALIST
 "# Disable the timer sprite\n"
 "No_Timer_Sprite=1\n"
 "# Disable Message Bar\n"
@@ -91,15 +82,12 @@ char config_template[] =
 "Card=0\n"
 "# Disable Extended Data (may break physics in some edits) AKA Skyth's no-opd patch\n"
 "No_Opd=0\n"
-#endif
 "# Scale Debug Windows above HD internal resolution AKA somewhatlurker's dwgui patch\n"
 "Dwgui_Scaling=0\n"
 "# Allow using a real arcade slider attached to COM11 (or PS4 official FT controller)\n"
 "Hardware_Slider=0\n"
-#ifndef MINIMALIST
 "# Prevent data deletion\n"
 "Prevent_Data_Deletion=0\n"
-#endif
 "\n"
 "[Graphics]\n"
 "# Lag Compensation\n"
@@ -115,7 +103,6 @@ char config_template[] =
 "TAA=1\n"
 "# Morphological Anti-Aliasing\n"
 "MLAA=1\n"
-#ifndef MINIMALIST
 "# MAG Filter -- 0=default (bilinear), 1=nearest-neighbour, 2=sharpen, 3=cone (smooth)\n"
 "MAG=0\n"
 "# Depth of Field\n"
@@ -140,7 +127,6 @@ char config_template[] =
 "NPR1=0\n"
 "# Disable all 3D passes. WARNING: The extended data will be deleted unless Prevent Data Deletion is enabled. Don't enable on Intel GPUs, enable no_opd instead.\n"
 "2D=0\n"
-#endif
 "# FrameRateManager motion rate (fps)\n"
 "FRM.Motion.Rate=400\n"
 "\n"

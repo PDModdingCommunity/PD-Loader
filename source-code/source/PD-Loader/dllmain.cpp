@@ -781,11 +781,9 @@ void Init()
 		WritePrivateProfileStringW(L"global", L"pc", this_pcname, CONFIG_FILE);
 		WritePrivateProfileStringW(L"plugins", L"Launcher.dva", L"1", CONFIG_FILE);
 		WritePrivateProfileStringW(L"plugins", L"TLAC.dva", L"1", CONFIG_FILE);
-#ifndef MINIMALIST
 		WritePrivateProfileStringW(L"plugins", L"DivaSound.dva", L"1", CONFIG_FILE);
 		WritePrivateProfileStringW(L"plugins", L"Novidia.dva", L"1", CONFIG_FILE);
 		WritePrivateProfileStringW(L"plugins", L"ShaderPatch.dva", L"1", CONFIG_FILE);
-#endif
 	}
 	const auto COMPONENTS = L"plugins\\components.ini";
 	if (!PathFileExistsW(COMPONENTS)) writeTemplate(components_template, COMPONENTS);

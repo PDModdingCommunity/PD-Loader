@@ -1,5 +1,4 @@
 #pragma once
-#ifndef MINIMALIST
 void ApplyExPatches() {
     //// Graphics
 
@@ -304,7 +303,7 @@ void ApplyExPatches() {
 
     
     // modpack redirection
-    /*{
+    {
     wchar_t* mpstr = NULL;
     mpstr = (wchar_t*)malloc(256);
     memset(mpstr, 0, 256);
@@ -332,10 +331,5 @@ void ApplyExPatches() {
     InjectCode((void*)0x000000014066CE9C, { (unsigned char)modpack_mdata.size() });
     InjectCode((void*)0x000000014066CEAE, { (unsigned char)modpack_mdata.size() });
     }
-    }*/
+    }
 }
-#else
-void ApplyExPatches() {
-	return;
-};
-#endif

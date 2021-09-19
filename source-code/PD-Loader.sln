@@ -15,11 +15,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DivaSound", "source\plugins
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DivaMovie", "source\plugins\DivaMovie\DivaMovie.vcxproj", "{1994C586-F73B-4EF2-BA3E-2A0FC3034B1A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DivaWig", "source\plugins\DivaWig\DivaWig.vcxproj", "{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShaderPatch", "source\plugins\ShaderPatch\ShaderPatch.vcxproj", "{C07E495E-A16F-48FA-80E4-0296B5234F0B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EnhancedStageManager", "source\plugins\EnhancedStageManager\EnhancedStageManager.vcxproj", "{3C8071F4-22C8-DA6E-A075-C5EC646DAB7E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CustoMixer", "source\plugins\DivaWig\DivaWig.vcxproj", "{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CustoMixer", "source\plugins\CustoMixer\CustoMixer.vcxproj", "{84DBD504-6220-1BCE-A7E4-6799DAF7C5BF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DSCRemote", "source\plugins\DSCRemote\DSCRemote.vcxproj", "{8544C599-F73B-4EF2-BA3E-2A0FC3034B1A}"
 EndProject
@@ -55,6 +57,10 @@ Global
 		{1994C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x64.Build.0 = Debug|x64
 		{1994C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.ActiveCfg = Release|x64
 		{1994C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.Build.0 = Release|x64
+		{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x64.ActiveCfg = Debug|x64
+		{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x64.Build.0 = Debug|x64
+		{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.ActiveCfg = Release|x64
+		{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.Build.0 = Release|x64
 		{C07E495E-A16F-48FA-80E4-0296B5234F0B}.Debug|x64.ActiveCfg = Debug|x64
 		{C07E495E-A16F-48FA-80E4-0296B5234F0B}.Debug|x64.Build.0 = Debug|x64
 		{C07E495E-A16F-48FA-80E4-0296B5234F0B}.Release|x64.ActiveCfg = Release|x64
@@ -63,10 +69,10 @@ Global
 		{3C8071F4-22C8-DA6E-A075-C5EC646DAB7E}.Debug|x64.Build.0 = Debug|x64
 		{3C8071F4-22C8-DA6E-A075-C5EC646DAB7E}.Release|x64.ActiveCfg = Release|x64
 		{3C8071F4-22C8-DA6E-A075-C5EC646DAB7E}.Release|x64.Build.0 = Release|x64
-		{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x64.ActiveCfg = Debug|x64
-		{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x64.Build.0 = Debug|x64
-		{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.ActiveCfg = Release|x64
-		{2394C586-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.Build.0 = Release|x64
+		{84DBD504-6220-1BCE-A7E4-6799DAF7C5BF}.Debug|x64.ActiveCfg = Debug|x64
+		{84DBD504-6220-1BCE-A7E4-6799DAF7C5BF}.Debug|x64.Build.0 = Debug|x64
+		{84DBD504-6220-1BCE-A7E4-6799DAF7C5BF}.Release|x64.ActiveCfg = Release|x64
+		{84DBD504-6220-1BCE-A7E4-6799DAF7C5BF}.Release|x64.Build.0 = Release|x64
 		{8544C599-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x64.ActiveCfg = Debug|x64
 		{8544C599-F73B-4EF2-BA3E-2A0FC3034B1A}.Debug|x64.Build.0 = Debug|x64
 		{8544C599-F73B-4EF2-BA3E-2A0FC3034B1A}.Release|x64.ActiveCfg = Release|x64

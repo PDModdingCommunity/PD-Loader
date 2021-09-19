@@ -535,7 +535,7 @@ namespace Launcher {
 			SetBackCol(this->panel_Components, colourBg, cbxStyle);
 			SetBackCol(this->panel_Plugins, colourBg, cbxStyle);
 
-#ifndef MINIMALIST
+#ifdef MINIMALIST
 			tabPage_Modpacks->Enabled = false;
 #endif
 		}
@@ -615,7 +615,7 @@ private: System::Windows::Forms::LinkLabel^ linkLabel_Official_Discord;
 private: System::Windows::Forms::LinkLabel^ linkLabel_Help;
 private: System::Windows::Forms::LinkLabel^ linkLabel_Repo;
 private: System::Windows::Forms::CheckBox^ checkBox_nofsopt;
-#ifndef MINIMALIST
+
 private: System::Windows::Forms::TabPage^ tabPage_Modpacks;
 private: System::Windows::Forms::CheckBox^ checkBox_ModPatches;
 private: System::Windows::Forms::Button^ button_ModDelete;
@@ -628,7 +628,7 @@ private: System::Windows::Forms::ListBox^ listBox_Mods;
 private: System::Windows::Forms::Button^ button_ModFiles;
 private: System::Windows::Forms::Button^ button_ModRescan;
 private: System::Windows::Forms::Button^ button_ModRename;
-#endif
+
 private: System::Windows::Forms::LinkLabel^ linkLabel_Console;
 private: System::Windows::Forms::Panel^ panel_Patches2;
 private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel1;
@@ -678,6 +678,7 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->tabControl = (gcnew System::Windows::Forms::TabControl());
 			this->tabPage_Resolution = (gcnew System::Windows::Forms::TabPage());
 			this->groupBox_Lag = (gcnew System::Windows::Forms::GroupBox());
+			this->flowLayoutPanel2 = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->trackBar_LagCompensation = (gcnew System::Windows::Forms::TrackBar());
 			this->groupBox_Details = (gcnew System::Windows::Forms::GroupBox());
 			this->panel_Details = (gcnew System::Windows::Forms::Panel());
@@ -695,7 +696,6 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->tabPage_Plugins = (gcnew System::Windows::Forms::TabPage());
 			this->panel_Custom = (gcnew System::Windows::Forms::Panel());
 			this->panel_Plugins = (gcnew System::Windows::Forms::Panel());
-#ifndef MINIMALIST
 			this->tabPage_Modpacks = (gcnew System::Windows::Forms::TabPage());
 			this->button_ModRename = (gcnew System::Windows::Forms::Button());
 			this->button_ModRescan = (gcnew System::Windows::Forms::Button());
@@ -705,10 +705,12 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->button_ModClone = (gcnew System::Windows::Forms::Button());
 			this->button_ModSetActive = (gcnew System::Windows::Forms::Button());
 			this->listBox_Mods = (gcnew System::Windows::Forms::ListBox());
-#endif
 			this->tabPage_Credits = (gcnew System::Windows::Forms::TabPage());
 			this->creditsTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->tabPage_Update = (gcnew System::Windows::Forms::TabPage());
+			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->label_Update_1 = (gcnew System::Windows::Forms::Label());
+			this->label_Update_2 = (gcnew System::Windows::Forms::Label());
 			this->linkLabel_Repo = (gcnew System::Windows::Forms::LinkLabel());
 			this->linkLabel_Help = (gcnew System::Windows::Forms::LinkLabel());
 			this->linkLabel_Official_Discord = (gcnew System::Windows::Forms::LinkLabel());
@@ -717,20 +719,17 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->button_Instructions = (gcnew System::Windows::Forms::Button());
 			this->button_Unstable_builds = (gcnew System::Windows::Forms::Button());
 			this->button_Releases_page = (gcnew System::Windows::Forms::Button());
-			this->label_Update_2 = (gcnew System::Windows::Forms::Label());
-			this->label_Update_1 = (gcnew System::Windows::Forms::Label());
 			this->button_Discord = (gcnew System::Windows::Forms::Button());
 			this->button_github = (gcnew System::Windows::Forms::Button());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->button_Apply = (gcnew System::Windows::Forms::Button());
 			this->button_Wiki = (gcnew System::Windows::Forms::Button());
-			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
-			this->flowLayoutPanel2 = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->groupBox_ScreenRes->SuspendLayout();
 			this->panel_ScreenRes->SuspendLayout();
 			this->tabControl->SuspendLayout();
 			this->tabPage_Resolution->SuspendLayout();
 			this->groupBox_Lag->SuspendLayout();
+			this->flowLayoutPanel2->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar_LagCompensation))->BeginInit();
 			this->groupBox_Details->SuspendLayout();
 			this->groupBox_InternalRes->SuspendLayout();
@@ -738,13 +737,10 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->tabPage_Playerdata->SuspendLayout();
 			this->tabPage_Components->SuspendLayout();
 			this->tabPage_Plugins->SuspendLayout();
-#ifndef MINIMALIST
 			this->tabPage_Modpacks->SuspendLayout();
-#endif
 			this->tabPage_Credits->SuspendLayout();
 			this->tabPage_Update->SuspendLayout();
 			this->flowLayoutPanel1->SuspendLayout();
-			this->flowLayoutPanel2->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// button_Launch
@@ -784,9 +780,7 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->tabControl->Controls->Add(this->tabPage_Playerdata);
 			this->tabControl->Controls->Add(this->tabPage_Components);
 			this->tabControl->Controls->Add(this->tabPage_Plugins);
-#ifndef MINIMALIST
 			this->tabControl->Controls->Add(this->tabPage_Modpacks);
-#endif
 			this->tabControl->Controls->Add(this->tabPage_Credits);
 			this->tabControl->Controls->Add(this->tabPage_Update);
 			resources->ApplyResources(this->tabControl, L"tabControl");
@@ -813,6 +807,12 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			resources->ApplyResources(this->groupBox_Lag, L"groupBox_Lag");
 			this->groupBox_Lag->Name = L"groupBox_Lag";
 			this->groupBox_Lag->TabStop = false;
+			// 
+			// flowLayoutPanel2
+			// 
+			this->flowLayoutPanel2->Controls->Add(this->trackBar_LagCompensation);
+			resources->ApplyResources(this->flowLayoutPanel2, L"flowLayoutPanel2");
+			this->flowLayoutPanel2->Name = L"flowLayoutPanel2";
 			// 
 			// trackBar_LagCompensation
 			// 
@@ -931,7 +931,6 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			// 
 			resources->ApplyResources(this->panel_Plugins, L"panel_Plugins");
 			this->panel_Plugins->Name = L"panel_Plugins";
-#ifndef MINIMALIST
 			// 
 			// tabPage_Modpacks
 			// 
@@ -1004,7 +1003,6 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			resources->ApplyResources(this->listBox_Mods, L"listBox_Mods");
 			this->listBox_Mods->Name = L"listBox_Mods";
 			this->listBox_Mods->SelectedValueChanged += gcnew System::EventHandler(this, &ui::listBox_Mods_SelectedValueChanged);
-#endif
 			// 
 			// tabPage_Credits
 			// 
@@ -1036,6 +1034,24 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			resources->ApplyResources(this->tabPage_Update, L"tabPage_Update");
 			this->tabPage_Update->Name = L"tabPage_Update";
 			this->tabPage_Update->UseVisualStyleBackColor = true;
+			// 
+			// flowLayoutPanel1
+			// 
+			this->flowLayoutPanel1->Controls->Add(this->label_Update_1);
+			this->flowLayoutPanel1->Controls->Add(this->label_Update_2);
+			resources->ApplyResources(this->flowLayoutPanel1, L"flowLayoutPanel1");
+			this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
+			// 
+			// label_Update_1
+			// 
+			resources->ApplyResources(this->label_Update_1, L"label_Update_1");
+			this->label_Update_1->Name = L"label_Update_1";
+			this->label_Update_1->Click += gcnew System::EventHandler(this, &ui::label_Update_1_Click);
+			// 
+			// label_Update_2
+			// 
+			resources->ApplyResources(this->label_Update_2, L"label_Update_2");
+			this->label_Update_2->Name = L"label_Update_2";
 			// 
 			// linkLabel_Repo
 			// 
@@ -1093,17 +1109,6 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->button_Releases_page->UseVisualStyleBackColor = true;
 			this->button_Releases_page->Click += gcnew System::EventHandler(this, &ui::button_Releases_page_Click);
 			// 
-			// label_Update_2
-			// 
-			resources->ApplyResources(this->label_Update_2, L"label_Update_2");
-			this->label_Update_2->Name = L"label_Update_2";
-			// 
-			// label_Update_1
-			// 
-			resources->ApplyResources(this->label_Update_1, L"label_Update_1");
-			this->label_Update_1->Name = L"label_Update_1";
-			this->label_Update_1->Click += gcnew System::EventHandler(this, &ui::label_Update_1_Click);
-			// 
 			// button_Discord
 			// 
 			this->button_Discord->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(242)), static_cast<System::Int32>(static_cast<System::Byte>(242)),
@@ -1146,19 +1151,6 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->button_Wiki->UseVisualStyleBackColor = false;
 			this->button_Wiki->Click += gcnew System::EventHandler(this, &ui::button_Wiki_Click);
 			// 
-			// flowLayoutPanel1
-			// 
-			this->flowLayoutPanel1->Controls->Add(this->label_Update_1);
-			this->flowLayoutPanel1->Controls->Add(this->label_Update_2);
-			resources->ApplyResources(this->flowLayoutPanel1, L"flowLayoutPanel1");
-			this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
-			// 
-			// flowLayoutPanel2
-			// 
-			this->flowLayoutPanel2->Controls->Add(this->trackBar_LagCompensation);
-			resources->ApplyResources(this->flowLayoutPanel2, L"flowLayoutPanel2");
-			this->flowLayoutPanel2->Name = L"flowLayoutPanel2";
-			// 
 			// ui
 			// 
 			this->AcceptButton = this->button_Launch;
@@ -1189,6 +1181,8 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->tabPage_Resolution->ResumeLayout(false);
 			this->tabPage_Resolution->PerformLayout();
 			this->groupBox_Lag->ResumeLayout(false);
+			this->flowLayoutPanel2->ResumeLayout(false);
+			this->flowLayoutPanel2->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar_LagCompensation))->EndInit();
 			this->groupBox_Details->ResumeLayout(false);
 			this->groupBox_InternalRes->ResumeLayout(false);
@@ -1197,23 +1191,18 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 			this->tabPage_Components->ResumeLayout(false);
 			this->tabPage_Components->PerformLayout();
 			this->tabPage_Plugins->ResumeLayout(false);
-#ifndef MINIMALIST
 			this->tabPage_Modpacks->ResumeLayout(false);
 			this->tabPage_Modpacks->PerformLayout();
-#endif
 			this->tabPage_Credits->ResumeLayout(false);
 			this->tabPage_Credits->PerformLayout();
 			this->tabPage_Update->ResumeLayout(false);
 			this->tabPage_Update->PerformLayout();
 			this->flowLayoutPanel1->ResumeLayout(false);
 			this->flowLayoutPanel1->PerformLayout();
-			this->flowLayoutPanel2->ResumeLayout(false);
-			this->flowLayoutPanel2->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
-#ifndef MINIMALIST
 		private: System::Void scanModpacks() {
 			button_ModSetActive->Enabled = false;
 			button_ModClone->Enabled = false;
@@ -1236,7 +1225,6 @@ private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 				std::cout << "[Launcher] File system error " << e.what() << " " << e.path1() << " " << e.path2() << " " << e.code() << std::endl;
 			}
 		}
-#endif
 private: System::Void SaveSettings() {
 	if (*ResolutionConfigChanged)
 	{
@@ -1458,9 +1446,7 @@ private: System::Void button_github_Click(System::Object^ sender, System::EventA
 }
 private: System::Void button_Apply_Click(System::Object^ sender, System::EventArgs^ e) {
 	SaveSettings();
-#ifndef MINIMALIST
 	updateLanguage();
-#endif
 	updateStyle();
 }
 private: System::Void Ui_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
@@ -1537,7 +1523,6 @@ private: System::Void linkLabel_Console_LinkClicked(System::Object^ sender, Syst
 	ShowWindow(consoleHandle, SW_SHOW);
 	linkLabel_Console->Visible = false;
 }
-#ifndef MINIMALIST
 private: System::Void listBox_Mods_SelectedValueChanged(System::Object^ sender, System::EventArgs^ e) {
 	button_ModSetActive->Enabled = true;
 	button_ModClone->Enabled = true;
@@ -1579,7 +1564,6 @@ private: System::Void tabPage_Modpacks_Enter(System::Object^ sender, System::Eve
 	listBox_Mods->SelectedIndex = listBox_Mods->FindString(gcnew String(mpstr));
 	free(mpstr);
 }
-#endif
 private: System::Void label_Update_1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 };

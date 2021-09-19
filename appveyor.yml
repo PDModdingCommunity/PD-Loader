@@ -39,7 +39,9 @@ after_build:
     
     rm "$env:TMP/full/plugins/Launcher.dva"
     rm "$env:TMP/full/plugins/CustoMixer.dva"
+    rm "$env:TMP/full/plugins/DivaWig.dva"
     rm "$env:TMP/full/plugins/DSCRemote.dva"
+    rm "$env:TMP/full/plugins/modpacks" -r -fo
     7z a "$env:APPVEYOR_BUILD_FOLDER/PD-Loader-$env:CONFIGURATION-HardMode-AppVeyor-$env:APPVEYOR_REPO_COMMIT.zip" *
 artifacts:
 - path: PD-Loader-*.zip

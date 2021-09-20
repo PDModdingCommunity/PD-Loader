@@ -39,6 +39,7 @@ namespace TLAC::Components
 		Input::Binding* MenuCircleBinding;
 
 		Input::Binding* CoinBinding;
+		Input::Binding* ToonBinding;
 
 		InputEmulator();
 		~InputEmulator();

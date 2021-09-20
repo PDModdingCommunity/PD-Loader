@@ -46,6 +46,16 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 }
 
 void ApplyPatches() {
+	if (game_version == 710)
+	{
+		const char* exe_ver_string = (const char*)0x140A92CB8;
+		if (strcmp(exe_ver_string, "7.10.00") != 0)
+		{
+			MessageBoxW(nullptr, L"Game version not 7.10. Please verify your files.", L"Patches", MB_ICONERROR);
+			exit(1);
+		}
+	}
+
 	std::string version_string = std::to_string(game_version);
 	version_string.insert(version_string.begin()+1, '.');
 	std::cout << "[Patches] Game version " + version_string << std::endl;

@@ -7,33 +7,36 @@
 #include <tchar.h>
 #include <thread>
 
-#define HEAD_ACCESSORY 0
-#define HAIR 1
-#define UNKNOWN_1 2
-#define UNKNOWN_2 3
-#define FACE_ACCESSORY 4
-#define UNKNOWN_3 5
-#define FACE_TEXTURES 6
-#define UNKNOWN_4 7
-#define CHEST_ACCESSORY 8
-#define UNKNOWN_5 9
-#define BODY 10
-#define UNKNOWN_6 11
-#define UNKNOWN_7 12
-#define UNKNOWN_8 13
-#define HANDS 14,
-#define UNKNOWN_9 15
-#define BACK_ACCESSORY 16
-#define UNKNOWN_10 17
-#define UNKNOWN_11 18
-#define UNKNOWN_12 19
-#define UNKNOWN_13 20
-#define UNKNOWN_14 21
-#define UNKNOWN_15 22
-#define UNKNOWN_16 23
-#define HEAD 24
-#define ALL -1
-#define NONE -2
+static const enum module_part
+{
+	HEAD_ACCESSORY,
+	HAIR,
+	UNKNOWN_1,
+	UNKNOWN_2,
+	FACE_ACCESSORY,
+	UNKNOWN_3,
+	FACE_TEXTURES,
+	UNKNOWN_4,
+	CHEST_ACCESSORY,
+	UNKNOWN_5,
+	BODY,
+	UNKNOWN_6,
+	UNKNOWN_7,
+	UNKNOWN_8,
+	HANDS,
+	UNKNOWN_9,
+	BACK_ACCESSORY,
+	UNKNOWN_10,
+	UNKNOWN_11,
+	UNKNOWN_12,
+	UNKNOWN_13,
+	UNKNOWN_14,
+	UNKNOWN_15,
+	UNKNOWN_16,
+	HEAD,
+	ALL = -1,
+	NONE = -2
+};
 
 using namespace std;
 

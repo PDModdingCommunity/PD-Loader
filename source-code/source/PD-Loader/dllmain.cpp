@@ -184,7 +184,7 @@ void LoadDVA(std::wstring &path, LPCWSTR dir, LPCWSTR fileName)
 					msg.append(L"\n\nIs the Microsoft Visual C++ Redistributable for Visual Studio 2019 (x64) installed?");
 					break;
 				case 998:
-					msg.append(L"\n\nAre all dependencies installed?\nIf the problem persists, please disable this plugin.");
+					msg.append(L"\n\nPossible causes:\n- a dependency is not installed; or\n- GPU detection failed (select the GPU Type manually/force Novidia in its Config).");
 					break;
 				default:
 					msg.append(L"\n\nAre all dependencies installed?");

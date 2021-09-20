@@ -25,7 +25,7 @@ OpenGL_Patch_A=0
 OpenGL_Patch_B=0
 # Command line arguments
 Command_Line=
-# Launches divahook.bat intead of diva.exe.
+# Launches divahook.bat/start.bat intead of diva.exe.
 Use_divahook_bat=0
 
 [Patches]
@@ -54,8 +54,8 @@ Force_Expressions=0
 Force_Look=0
 #Disable hand scaling
 No_Hand_Scaling=0
-#Default hand size -- -1=default, 12200=PDA
-Default_Hand_Size=-1
+#Default hand size -- 0-10000=default, 12200=PDA
+Default_Hand_Size=0
 #Sing missed notes
 Sing_Missed=0
 #Hide the volume and SE control buttons
@@ -111,6 +111,8 @@ MAG=0
 DOF=1
 # Reflections
 Reflections=1
+# Gamma -- 0 or 100=default, 125=console-like
+Gamma=100
 # Shadows
 Shadows=1
 # Transparent Meshes

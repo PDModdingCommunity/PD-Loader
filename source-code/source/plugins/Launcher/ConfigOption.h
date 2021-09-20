@@ -285,6 +285,43 @@ public:
 	}
 };
 
+class OptionMetaSectionLabel : public ConfigOptionBase
+{
+public:
+	OptionMetaSectionLabel(LPCWSTR friendlyName)
+	{
+		_friendlyName = friendlyName;
+	}
+
+	virtual int AddToPanel(Panel^ panel, unsigned int left, unsigned int top, ToolTip^ tooltip)
+	{
+		Label^ lab = gcnew Label();
+
+		lab->Text = gcnew String(_friendlyName);
+		lab->Left = left + 2;
+		lab->Top = top;
+		lab->Font = gcnew System::Drawing::Font(lab->Font->Name, 12.0f, System::Drawing::FontStyle::Bold);
+		lab->AutoSize = true;
+
+		Form^ RootForm = panel->FindForm();
+		float ScaleWidth = 1.0f;
+		float ScaleHeight = 1.0f;
+		if (RootForm)
+		{
+			Drawing::SizeF CurrentScaleSize = RootForm->CurrentAutoScaleDimensions;
+			ScaleWidth = CurrentScaleSize.Width / BaseScaleSize;
+			ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
+		}
+		lab->Scale(ScaleWidth, ScaleHeight);
+
+		panel->Controls->Add(lab);
+		mainControlHandle = lab->Handle;
+
+		int ControlHeight = lab->Font->Height / ScaleHeight;
+		return ControlHeight + ControlSpacing;
+	}
+};
+
 class OptionMetaSpacer : public ConfigOptionBase
 {
 public:

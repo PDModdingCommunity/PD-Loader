@@ -14,7 +14,7 @@ namespace TLAC::FileSystem
 		std::unordered_map<std::string, std::string> ConfigMap;
 
 		bool TryGetValue(const std::string &key, std::string **value);
-		int GetIntegerValue(const std::string& key);
+		int GetIntegerValue(const std::string& key, int defaultval = 0);
 		bool GetBooleanValue(const std::string& key);
 		float GetFloatValue(const std::string& key);
 		std::string GetStringValue(const std::string& key);

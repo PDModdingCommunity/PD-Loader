@@ -129,6 +129,15 @@ class PatchApplier710 : public PatchApplier {
 			printf("[Patches] MLAA disabled\n");
 		}
 
+		// gamma
+		if (nGamma != 100 && nGamma != 0)
+		{
+			float gamma_float = (float)nGamma / 100.0f;
+			InjectCode((void*)(0x1404a863b), { *((uint8_t*)(&gamma_float)), *((uint8_t*)(&gamma_float) + 1), *((uint8_t*)(&gamma_float) + 2), *((uint8_t*)(&gamma_float) + 3) });
+
+			printf("[Patches] Gamma: %f\n", gamma_float);
+		}
+
 		// Replace the hardcoded videos with MP4s, if they exist
 		if (nMP4Movies)
 		{
@@ -347,6 +356,7 @@ class PatchApplier710 : public PatchApplier {
 			InjectCode((void*)0x000000014061579B, { 0x90, 0x90, 0x90, 0x8B, 0x42, 0xE0, 0x90, 0x90, 0x90 });
 		}
 		// Quick start
+		if (!nUseDivahookBat)
 		{
 			if (nQuickStart == 1) // skip the card/guest screen
 			{
@@ -369,7 +379,7 @@ class PatchApplier710 : public PatchApplier {
 			InjectCode((void*)0x0000000140120709, { 0xE9, 0x82, 0x0A, 0x00 });
 		}
 		// Default hand size
-		if (nDefaultHandSize != -1 && nDefaultHandSize != 0)
+		if (nDefaultHandSize >= 10000)
 		{
 			printf("[Patches] Changing default hand size...\n");
 			const float num = (float)nDefaultHandSize / 10000.0;
@@ -680,13 +690,13 @@ class PatchApplier710 : public PatchApplier {
 		}
 
 		// lag compensation
-		if (nLagCompensation>0 && nLagCompensation<=50)
+		if (nLagCompensation > 0 && nLagCompensation <= 500)
 		{
 			InjectCode((void*)(0x14011e44e), { 0xf3, 0x0f, 0x10, 0x05, 0x8a, 0xcf, 0x9c, 0x00 });	// hijack xmm0
 			InjectCode((void*)(0x14011e46b), { 0xf3, 0x0f, 0x11, 0x44, 0x24, 0x20 });	// get value from xmm0 instead of xmm1
-			float startPos = (float)nLagCompensation / 100.0;
-			InjectCode((void*)(0x140aeB3e0), { *((uint8_t*)(&startPos)), *((uint8_t*)(&startPos)+1), *((uint8_t*)(&startPos) + 2), *((uint8_t*)(&startPos) + 3) });
-		
+			float startPos = (float)nLagCompensation / 1000.0f;
+			InjectCode((void*)(0x140aeB3e0), { *((uint8_t*)(&startPos)), *((uint8_t*)(&startPos) + 1), *((uint8_t*)(&startPos) + 2), *((uint8_t*)(&startPos) + 3) });
+
 			printf("[Patches] Lag Compensation: %f\n", startPos);
 		}
 	}

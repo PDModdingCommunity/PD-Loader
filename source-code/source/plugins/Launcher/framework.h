@@ -167,6 +167,7 @@ ConfigOptionBase* graphicsArray[] = {
 	new BooleanOption(L"reflections", GRAPHICS_SECTION, CONFIG_FILE, L"Reflections", L"Enable or disable reflections.", true, false),
 	new ResolutionOption(L"reflect_res_width", L"reflect_res_height", GRAPHICS_SECTION, CONFIG_FILE, L"Reflection Res:", L"Sets the reflection buffer resolution (instead of 512x256).", resolution(512, 256), std::vector<resolution>({resolution(256,256), resolution(512,256), resolution(512,512), resolution(1024,1024), resolution(2048,2048), resolution(4096,4096)}), true, (ResolutionOptionOpts)0),
 	new ResolutionOption(L"refract_res_width", L"refract_res_height", GRAPHICS_SECTION, CONFIG_FILE, L"Refraction Res:", L"Sets the refraction buffer resolution (instead of 512x256).", resolution(512, 256), std::vector<resolution>({resolution(256,256), resolution(512,256), resolution(512,512), resolution(1024,1024), resolution(2048,2048), resolution(4096,4096)}), true, (ResolutionOptionOpts)0),
+	new NumericOption(L"gamma", GRAPHICS_SECTION, CONFIG_FILE, L"Gamma:", L"Increase to darken shadows.\nSet to 125 for a console-like experience.\n\nDefault: 0 or 100", 100, 0, 200),
 	new BooleanOption(L"shadows", GRAPHICS_SECTION, CONFIG_FILE, L"Shadows", L"Enable or disable shadows.", true, false),
 	new BooleanOption(L"punchthrough", GRAPHICS_SECTION, CONFIG_FILE, L"Transparent Meshes", L"Show transparent meshes.", true, false),
 	new BooleanOption(L"glare", GRAPHICS_SECTION, CONFIG_FILE, L"Glare", L"Enable or disable glare.", true, false),
@@ -177,6 +178,7 @@ ConfigOptionBase* graphicsArray[] = {
 };
 
 ConfigOptionBase* optionsArray[] = {
+	new OptionMetaSectionLabel(L"Compatibility"),
 	new BooleanOption(L"no_movies", PATCHES_SECTION, CONFIG_FILE, L"Disable Movies", L"Disable movies (enable this if the game hangs when loading certain PVs).", false, false),
 	new BooleanOption(L"mp4_movies", PATCHES_SECTION, CONFIG_FILE, L"Custom MP4 Adv Movies", L"Enable MP4 (instead of WMV) advertise/attract movies.", false, false),
 	new BooleanOption(L"cursor", PATCHES_SECTION, CONFIG_FILE, L"Cursor", L"Enable or disable the mouse cursor.", true, false),
@@ -184,25 +186,41 @@ ConfigOptionBase* optionsArray[] = {
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
+	new OptionMetaSectionLabel(L"Controller Options"),
+	new BooleanOption(L"rumble", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Rumble", L"Enables rumble during chainslides.", true, true),
+	new NumericOption(L"xinput_rumble_intensity_left", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"Left motor:", L"Left rumble motor intensity (XInput).\n\nDefault: 8000", 8000, 0, USHRT_MAX),
+	new NumericOption(L"xinput_rumble_intensity_right", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"Right motor:", L"Right rumble motor intensity (XInput).\n\nDefault: 4000", 4000, 0, USHRT_MAX),
+	new NumericOption(L"xinput_preferred", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Controller Num:", L"Sets the preferred XInput controller.\nIf unavailable, the next connected controller is used.", 0, 0, 3),
+	new BooleanOption(L"hardware_slider", PATCHES_SECTION, CONFIG_FILE, L"Use Hardware Slider", L"Enable this if using a real arcade slider.\n(set the slider to port COM11)", false, false),
+	new OptionMetaSeparator(),
+	new OptionMetaSpacer(8),
+
+	new OptionMetaSectionLabel(L"PV Selector"),
 	new DropdownOption(L"quick_start", PATCHES_SECTION, CONFIG_FILE, L"Quick Start:", L"Skip one or more menus.", 1, std::vector<LPCWSTR>({ L"Disabled", L"Guest", L"Guest + Normal" })),
 	new BooleanOption(L"no_scrolling_sfx", PATCHES_SECTION, CONFIG_FILE, L"Disable Scrolling SFX", L"Disable the scrolling sound effect.", false, false),
+	new BooleanOption(L"unlock_pseudo", PATCHES_SECTION, CONFIG_FILE, L"Unlock PSEUDO modules (incomplete)", L"Lets you play any PV with any performer.\n(incomplete, recommended modules will default to Miku)", false, false),
+	new BooleanOption(L"card", PATCHES_SECTION, CONFIG_FILE, L"Unlock card menu (incomplete)", L"Enables the card menu.\n(incomplete, it doesn't bypass the card prompt)", false, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
+	new OptionMetaSectionLabel(L"Stages/Songs"),
 	new NumericOption(L"Enhanced_Stage_Manager", PATCHES_SECTION, CONFIG_FILE, L"Number of Stages:", L"Set the number of stages (0 = default).", 0, 0, INT_MAX),
 	new BooleanOption(L"Enhanced_Stage_Manager_Encore", PATCHES_SECTION, CONFIG_FILE, L"Encore", L"Enable encore stages.", true, false),
+	new BooleanOption(L"sing_missed", PATCHES_SECTION, CONFIG_FILE, L"Sing Missed", L"Sing missed notes.", false, false),
+	new BooleanOption(L"autopause", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"Pause Automatically", L"Pause when focus is lost.", true, true),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
+	new OptionMetaSectionLabel(L"PV Customization"),
 	new DropdownOption(L"force_mouth", PATCHES_SECTION, CONFIG_FILE, L"Mouth Type:", L"Change the mouth animations.", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
 	new DropdownOption(L"force_expressions", PATCHES_SECTION, CONFIG_FILE, L"Expression Type:", L"Change the expressions.", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
 	new DropdownOption(L"force_look", PATCHES_SECTION, CONFIG_FILE, L"Look Type:", L"Change the look animations.", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
 	new BooleanOption(L"no_hand_scaling", PATCHES_SECTION, CONFIG_FILE, L"No Hand Scaling", L"Disable hand scaling.", false, false),
-	new NumericOption(L"default_hand_size", PATCHES_SECTION, CONFIG_FILE, L"Default Hand Size:", L"-1: default\n12200: PDA", -1, -1, INT_MAX),
-	new BooleanOption(L"sing_missed", PATCHES_SECTION, CONFIG_FILE, L"Sing Missed", L"Sing missed notes.", false, false),
+	new NumericOption(L"default_hand_size", PATCHES_SECTION, CONFIG_FILE, L"Default Hand Size:", L"0-10000: default\n12200: PDA", 0, 0, INT_MAX),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
+	new OptionMetaSectionLabel(L"UI Elements"),
 	new BooleanOption(L"hide_volume", PATCHES_SECTION, CONFIG_FILE, L"Hide Volume Buttons", L"Hide the volume and SE control buttons.", false, false),
 	new BooleanOption(L"no_pv_ui", PATCHES_SECTION, CONFIG_FILE, L"Disable PV UI", L"Remove the photo controls during PV playback.", false, false),
 	new BooleanOption(L"hide_pv_watermark", PATCHES_SECTION, CONFIG_FILE, L"Hide PV Watermark", L"Hide the watermark that's usually shown in PV viewing mode.", false, false),
@@ -217,46 +235,32 @@ ConfigOptionBase* optionsArray[] = {
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"unlock_pseudo", PATCHES_SECTION, CONFIG_FILE, L"Unlock PSEUDO modules (incomplete)", L"Lets you play any PV with any performer.\n(incomplete, recommended modules will default to Miku)", false, false),
-	new BooleanOption(L"card", PATCHES_SECTION, CONFIG_FILE, L"Unlock card menu (incomplete)", L"Enables the card menu.\n(incomplete, it doesn't bypass the card prompt)", false, false),
-	new OptionMetaSeparator(),
-	new OptionMetaSpacer(8),
-
+	new OptionMetaSectionLabel(L"Framerate"),
 	new BooleanOption(L"FPS.Limit.LightMode", GRAPHICS_SECTION, CONFIG_FILE, L"Use Lightweight Limiter", L"Makes the FPS limiter use less CPU.\nMay have less consistent performance.", true, false),
 	new NumericOption(L"FPS.Limit", GRAPHICS_SECTION, CONFIG_FILE, L"FPS Limit:", L"Allows you to set a frame rate cap. Set to -1 to unlock the frame rate.", 60, -1, INT_MAX),
 	new NumericOption(L"frm.motion.rate", GRAPHICS_SECTION, CONFIG_FILE, L"FRM Motion Rate:", L"Sets the motion rate (fps) for the Frame Rate Manager component.\nLarger values should be smoother, but more CPU intensive and possibly buggier.", 300, 1, INT_MAX),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
-	new BooleanOption(L"autopause", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"Pause Automatically", L"Pause when focus is lost.", true, true),
-	new OptionMetaSeparator(),
-	new OptionMetaSpacer(8),
-
-	new BooleanOption(L"rumble", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Rumble", L"Enables rumble during chainslides.", true, true),
-	new NumericOption(L"xinput_preferred", KEYCONFIG_SECTION, KEYCONFIG_FILE, L"XInput Controller Num:", L"Sets the preferred XInput controller.\nIf unavailable, the next connected controller is used.", 0, 0, 3),
-	new OptionMetaSeparator(),
-	new OptionMetaSpacer(8),
-
-	new BooleanOption(L"hardware_slider", PATCHES_SECTION, CONFIG_FILE, L"Use Hardware Slider", L"Enable this if using a real arcade slider.\n(set the slider to port COM11)", false, false),
-	new OptionMetaSeparator(),
-	new OptionMetaSpacer(8),
-
+	new OptionMetaSectionLabel(L"Advanced Compatibility"),
 	new BooleanOption(L"opengl_patch_a", LAUNCHER_SECTION, CONFIG_FILE, L"OpenGL Patch A", L"Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.", false, false),
 	new BooleanOption(L"opengl_patch_b", LAUNCHER_SECTION, CONFIG_FILE, L"OpenGL Patch B", L"Ignores some OpenGL-related errors. Don't use both patches at the same time unless you're know what you're doing.", false, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
+	new OptionMetaSectionLabel(L"Loader"),
 	new BooleanOption(L"custom_patches", PATCHES_SECTION, CONFIG_FILE, L"Enable Custom Patches", L"Enables all custom patches.", true, false),
-	//new BooleanOption(L"ignore_exe_checksum", PATCHES_SECTION, CONFIG_FILE, L"Ignore exe checksum", L"Use at your own risk.", false, false),
 	new BooleanOption(L"prevent_data_deletion", PATCHES_SECTION, CONFIG_FILE, L"Prevent Data Deletion", L"Prevents the game from deleting files.", false, false),
-	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"Command Line:", L"Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.", L"", false),
-	new BooleanOption(L"use_divahook_bat", LAUNCHER_SECTION, CONFIG_FILE, L"Use divahook.bat", L"Launches divahook.bat intead of diva.exe.", false, false),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 
+	new OptionMetaSectionLabel(L"Launcher"),
 	new BooleanOption(L"dark_launcher", LAUNCHER_SECTION, CONFIG_FILE, L"Dark Launcher", L"Sets the dark colour scheme in the launcher.", false, false),
 	new BooleanOption(L"acrylic_blur", LAUNCHER_SECTION, CONFIG_FILE, L"Acrylic Blur", L"Enables acrylic blur in the launcher on Windows 10 20H2 or later.", false, false),
 	new BooleanOption(L"no_gpu_dialog", LAUNCHER_SECTION, CONFIG_FILE, L"Disable GPU Warning", L"Disables the warning dialog for unsupported GPUs.", false, false),
+	//new BooleanOption(L"ignore_exe_checksum", PATCHES_SECTION, CONFIG_FILE, L"Ignore exe checksum", L"Use at your own risk.", false, false),
+	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"Command Line:", L"Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.", L"", false),
+	new BooleanOption(L"use_divahook_bat", LAUNCHER_SECTION, CONFIG_FILE, L"Use divahook.bat/start.bat", L"Launches divahook.bat/start.bat intead of diva.exe.", false, false),
 };
 
 ConfigOptionBase* playerdataArray[] = {

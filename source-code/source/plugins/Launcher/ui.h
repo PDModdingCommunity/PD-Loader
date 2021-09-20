@@ -10,6 +10,7 @@
 #include "GPUModel.h"
 #include "WineVer.h"
 #include "composition.h"
+#include <filesystem>
 
 namespace Launcher {
 
@@ -198,10 +199,25 @@ namespace Launcher {
 			vendor = vendor->Replace(" Corporation", ""); // this is useless..  remove it to help ensure the GPU type line fits
 			String^ renderer = gcnew String((char*)glGetString(GL_RENDERER));
 			String^ version = gcnew String((char*)glGetString(GL_VERSION));
+			version = version->Replace(" Profile Context", ""); // we don't need this, either
 
 			String^ gpuModel = gcnew String(GPUModel::getGpuName().c_str());
 
 			String^ wineVersion = gcnew String(WineVer::getWineVer().c_str());
+
+			int driver_version_major = 1;
+			int driver_version_minor = 0;
+			auto version_split = version->Split(' ');
+			if (version_split->Length > 1) // make sure we don't use the OpenGL version instead of the driver version
+			{
+				String^ driver_version = gcnew String(version_split[version_split->Length - 1]);
+				auto driver_version_split_major_minor = driver_version->Split('.');
+				if (driver_version_split_major_minor->Length >= 2)
+				{
+					driver_version_major = int::Parse(driver_version_split_major_minor[0]);
+					driver_version_minor = int::Parse(driver_version_split_major_minor[1]);
+				}
+			}
 
 			glutDestroyWindow(window); // destroy the window so it doesn't remain on screen
 			if (glutMainLoopEventDynamic != NULL) glutMainLoopEventDynamic(); // freeglut needs this
@@ -227,9 +243,19 @@ namespace Launcher {
 
 				if (hasNovidia)
 				{
-					this->labelGPU->Text += "Issues: AMD GPU support is unofficial.";
-					GPUIssueText = "AMD GPUs are not supported without mods.\nThe PD Loader AMDPack seems to be installed, but please keep in mind that it may have issues.";
-					this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+					if (wineVersion == "" && (driver_version_major < 21 || (driver_version_major == 21 && driver_version_minor < 6)))
+					{
+						this->labelGPU->Text += L"Driver has known issues.";
+						GPUIssueText = L"The graphics driver you're using has known issues. Please install the latest driver from your GPU vendor's website.";
+						this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+						showGpuDialog = true;
+					}
+					else
+					{
+						this->labelGPU->Text += "Issues: AMD GPU support is unofficial.";
+						GPUIssueText = "AMD GPUs are not supported without mods.\nThe PD Loader AMDPack seems to be installed, but please keep in mind that it may have issues.";
+						this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+					}
 				}
 				else
 				{
@@ -239,71 +265,81 @@ namespace Launcher {
 					showGpuDialog = true;
 				}
 			}
-			else if (!vendor->Contains("NVIDIA"))
+			else if (vendor->Contains("NVIDIA"))
 			{
-				this->labelGPU->Text += "Issues: UNSUPPORTED GPU!";
-				GPUIssueText = "Your graphics card is not supported. Only NVIDIA GPUs are recommended. (though AMD ones can be used with mods)\nPlease use a GTX 600 series or later NVIDIA GPU.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.\n\nOwners of other GPUs may be able to run the game using plugins or mods, but 3D graphics will probably not work.";
-				this->labelGPU->LinkColor = System::Drawing::Color::Red;
-				showGpuDialog = true;
-			}
-			else if (gpuModel->StartsWith("GA")) // unconfirmed??
-			{
-				this->labelGPU->Text += "Issues: Ampere GPU detected! Unknown issues.\n(Click for more information)";
-				GPUIssueText = "Ampere GPUs have not been tested yet. On the previous generation Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled and report any further issues to the developers.";
-				this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
-			}
-			else if (gpuModel->StartsWith("TU"))
-			{
-				this->labelGPU->Text += "Issues: Turing GPU detected! Possible noise.\n(Click for more information)";
-				GPUIssueText = "On Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
-				this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
-			}
-			else if (gpuModel->StartsWith("GM") || gpuModel->StartsWith("GP") || gpuModel->StartsWith("GV"))
-			{
-				this->labelGPU->Text += "Issues: May have minor noise on some stages.\n(Click for more information)";
-				GPUIssueText = "On Maxwell GPUs (~GTX 900) or newer, some minor stage shaders create noise.\nPlease make sure the ShaderPatch plugin is enabled.";
-				this->labelGPU->LinkColor = System::Drawing::Color::Teal;
-			}
-			else if (gpuModel->StartsWith("GK"))
-			{
-				this->labelGPU->Text += "Issues: None.";
-				GPUIssueText = "Your GPU should have no issues running the game.";
-				this->labelGPU->LinkColor = System::Drawing::Color::LightBlue;
-			}
-			else if (gpuModel->StartsWith("GF"))
-			{
-				if (version[0] < '4')
+				if (wineVersion == "" && (driver_version_major > 446 && driver_version_major < 460))
 				{
-					this->labelGPU->Text += "Issues: Driver too old.";
-					GPUIssueText = "Your GPU should be able to run the game, but it looks like your OpenGL version is too old.\nA driver update should fix this.";
+					this->labelGPU->Text += L"Driver has known issues.";
+					GPUIssueText = L"The graphics driver you're using has known issues. Please install the latest driver from your GPU vendor's website.";
 					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
 					showGpuDialog = true;
 				}
-				else
+				else if (gpuModel->StartsWith("GA")) // unconfirmed??
 				{
-					this->labelGPU->Text += "Issues: No known issues.";
-					GPUIssueText = "Your GPU should have no issues running the game, but it is older than the GPU the game was originally designed for (GTX 650 Ti).\nThere may be some issues with graphics.\nPlease report any issues so that they can be analysed and potentially fixed.";
+					this->labelGPU->Text += L"Issues: Ampere GPU detected! Possible noise.\n(Click for more information)";
+					GPUIssueText = L"On Ampere GPUs (RTX 30xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
+					this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+				}
+				else if (gpuModel->StartsWith("TU") || gpuModel->StartsWith("GV")) // let's assume Volta is like Turing for now
+				{
+					this->labelGPU->Text += L"Issues: Ampere GPU detected! Possible noise.\n(Click for more information)";
+					GPUIssueText = L"On Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
+					this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+				}
+				else if (gpuModel->StartsWith("GM") || gpuModel->StartsWith("GP"))
+				{
+					this->labelGPU->Text += L"Issues: May have minor noise on some stages.\n(Click for more information)";
+					GPUIssueText = L"On Maxwell GPUs (~GTX 900) and newer, some minor stage shaders create noise.\nPlease make sure the ShaderPatch plugin is enabled.";
 					this->labelGPU->LinkColor = System::Drawing::Color::Teal;
 				}
-			}
-			else if (version[0] >= '4' && gpuModel->Length > 0 && !gpuModel->StartsWith("Unk") && !gpuModel->StartsWith("Oth"))
-			{
-				this->labelGPU->Text += "Issues: GPU may be too new.\n(Click for more information)";
-				GPUIssueText = "It looks like your GPU may be too new. Only up to Turing (GTX 16xx/RTX 20xx) is currently supported.\nGood news: the game should be capable of running, but shader patches (probably needed) may not support it yet.\nYou will likely see lines/noise on important character shaders and some minor stage shaders.\nPlease report any issues so that ShaderPatch can be updated.";
-				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
-			}
-			else if (gpuModel->StartsWith("G") || gpuModel->StartsWith("NV") || gpuModel->StartsWith("NB") || gpuModel->StartsWith("N10") || gpuModel->StartsWith("MCP"))
-			{
-				this->labelGPU->Text += "Issues: GPU too old! 3D rendering might be broken.\n(Click for more information)";
-				GPUIssueText = "Your GPU is very old and does not support rendering techniques used by the game.\nYou may be able to play, but graphics will likely have major issues.\nPlease upgrade to a GTX 600 series or later GPU.";
-				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
-				showGpuDialog = true;
+				else if (gpuModel->StartsWith("GK"))
+				{
+					this->labelGPU->Text += L"Issues: None.";
+					GPUIssueText = L"Your GPU should have no issues running the game.";
+					this->labelGPU->LinkColor = System::Drawing::Color::LightBlue;
+				}
+				else if (gpuModel->StartsWith("GF"))
+				{
+					if (version[0] < '4')
+					{
+						this->labelGPU->Text += L"Issues: Driver too old.";
+						GPUIssueText = L"Your GPU should be able to run the game, but it looks like your OpenGL version is too old.\nA driver update should fix this.";
+						this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+						showGpuDialog = true;
+					}
+					else
+					{
+						this->labelGPU->Text += L"Issues: No known issues.";
+						GPUIssueText = L"Your GPU should have no issues running the game, but it is older than the GPU the game was originally designed for (GTX 650 Ti).\nThere may be some issues with graphics.\nPlease report any issues so that they can be analysed and potentially fixed.";
+						this->labelGPU->LinkColor = System::Drawing::Color::Teal;
+					}
+				}
+				else if (gpuModel->StartsWith("G") || gpuModel->StartsWith("NV") || gpuModel->StartsWith("NB") || gpuModel->StartsWith("N10") || gpuModel->StartsWith("MCP"))
+				{
+					this->labelGPU->Text += L"Issues: GPU too old! 3D rendering might be broken.\n(Click for more information)";
+					GPUIssueText = L"Your GPU is very old and does not support rendering techniques used by the game.\nYou may be able to play, but graphics will likely have major issues.\nPlease upgrade to a GTX 600 series or later GPU.";
+					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+					showGpuDialog = true;
+				}
+				else if (version[0] >= '4' && gpuModel->Length > 0 && !gpuModel->StartsWith("Unk") && !gpuModel->StartsWith("Oth"))
+				{
+					this->labelGPU->Text += L"Issues: GPU may be too new.\n(Click for more information)";
+					GPUIssueText = L"It looks like your GPU may be too new. Only up to Ampere (RTX 30xx) is currently supported.\nGood news: the game should be capable of running, but shader patches (probably needed) may not support it yet.\nYou will likely see lines/noise on important character shaders and some minor stage shaders.\nPlease report any issues so that ShaderPatch can be updated.\nYou can also try forcing a specific GPU workaround type.";
+					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+				}
+				else
+				{
+					this->labelGPU->Text += L"Issues: Unable to detect GPU architecture.\n(Click for more information)";
+					GPUIssueText = L"It looks like you have an NVIDIA GPU, but something went wrong while trying to determine your GPU's architecture (type).\nThis may be a caused by a bug, but it probably indicates potential issues.\nPlease make sure you have a GTX 600 series or later GPU. (GTX 400 series or later should also work)";
+					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+					showGpuDialog = true;
+				}
 			}
 			else //if (gpuModel->Length == 0 || gpuModel->StartsWith("Unk") || gpuModel->StartsWith("Oth"))
 			{
-				this->labelGPU->Text += "Issues: Unable to detect GPU architecture.\n(Click for more information)";
-				GPUIssueText = "It looks like you have an NVIDIA GPU, but something went wrong while trying to determine your GPU's architecture (type).\nThis may be a caused by a bug, but it probably indicates potential issues.\nPlease make sure you have a GTX 600 series or later GPU. (GTX 400 series or later should also work)";
-				this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+				this->labelGPU->Text += L"Issues: UNSUPPORTED GPU!";
+				GPUIssueText = L"Your graphics card is not supported. Only NVIDIA GPUs are recommended (though AMD ones can be used with mods).\nPlease use a GTX 600 series or later NVIDIA GPU.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.\n\nOwners of other GPUs may be able to run the game using plugins or mods, but 3D graphics will probably not work.";
+				this->labelGPU->LinkColor = System::Drawing::Color::Red;
 				showGpuDialog = true;
 			}
 			int linkEnd = this->labelGPU->Text->Length - linkStart;
@@ -344,7 +380,7 @@ namespace Launcher {
 
 		void updateLagCompMsec()
 		{
-			this->groupBox_Lag->Text = "Lag Compensation (" + this->trackBar_LagCompensation->Value * 10 + " msec)";
+			this->groupBox_Lag->Text = "Lag Compensation (" + this->trackBar_LagCompensation->Value + " msec)";
 		}
 
 		void updateStyle()
@@ -532,29 +568,45 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabPage_Plugins->SuspendLayout();
 			this->tabPage_Credits->SuspendLayout();
 			this->SuspendLayout();
+			// 
+			// button_Launch
+			// 
 			this->button_Launch->BackColor = System::Drawing::Color::White;
 			this->button_Launch->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Launch->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Launch->Location = System::Drawing::Point(172, 389);
+			this->button_Launch->Location = System::Drawing::Point(344, 778);
+			this->button_Launch->Margin = System::Windows::Forms::Padding(6);
 			this->button_Launch->Name = L"button_Launch";
-			this->button_Launch->Size = System::Drawing::Size(217, 23);
+			this->button_Launch->Size = System::Drawing::Size(434, 46);
 			this->button_Launch->TabIndex = 20;
 			this->button_Launch->Text = L"Launch";
 			this->button_Launch->UseVisualStyleBackColor = false;
 			this->button_Launch->Click += gcnew System::EventHandler(this, &ui::Button_Launch_Click);
+			// 
+			// groupBox_ScreenRes
+			// 
 			this->groupBox_ScreenRes->Controls->Add(this->panel_ScreenRes);
 			this->groupBox_ScreenRes->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->groupBox_ScreenRes->Location = System::Drawing::Point(5, 6);
+			this->groupBox_ScreenRes->Location = System::Drawing::Point(10, 12);
+			this->groupBox_ScreenRes->Margin = System::Windows::Forms::Padding(6);
 			this->groupBox_ScreenRes->Name = L"groupBox_ScreenRes";
-			this->groupBox_ScreenRes->Size = System::Drawing::Size(263, 113);
+			this->groupBox_ScreenRes->Padding = System::Windows::Forms::Padding(6);
+			this->groupBox_ScreenRes->Size = System::Drawing::Size(526, 226);
 			this->groupBox_ScreenRes->TabIndex = 10;
 			this->groupBox_ScreenRes->TabStop = false;
 			this->groupBox_ScreenRes->Text = L"Screen Resolution";
+			// 
+			// panel_ScreenRes
+			// 
 			this->panel_ScreenRes->AutoScroll = true;
-			this->panel_ScreenRes->Location = System::Drawing::Point(5, 19);
+			this->panel_ScreenRes->Location = System::Drawing::Point(10, 38);
+			this->panel_ScreenRes->Margin = System::Windows::Forms::Padding(6);
 			this->panel_ScreenRes->Name = L"panel_ScreenRes";
-			this->panel_ScreenRes->Size = System::Drawing::Size(253, 89);
+			this->panel_ScreenRes->Size = System::Drawing::Size(506, 178);
 			this->panel_ScreenRes->TabIndex = 0;
+			// 
+			// tabControl
+			// 
 			this->tabControl->Controls->Add(this->tabPage_Resolution);
 			this->tabControl->Controls->Add(this->tabPage_Patches);
 			this->tabControl->Controls->Add(this->tabPage_Playerdata);
@@ -562,10 +614,14 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabControl->Controls->Add(this->tabPage_Plugins);
 			this->tabControl->Controls->Add(this->tabPage_Credits);
 			this->tabControl->Location = System::Drawing::Point(0, 0);
+			this->tabControl->Margin = System::Windows::Forms::Padding(6);
 			this->tabControl->Name = L"tabControl";
 			this->tabControl->SelectedIndex = 0;
-			this->tabControl->Size = System::Drawing::Size(560, 384);
+			this->tabControl->Size = System::Drawing::Size(1120, 768);
 			this->tabControl->TabIndex = 10;
+			// 
+			// tabPage_Resolution
+			// 
 			this->tabPage_Resolution->BackColor = System::Drawing::Color::White;
 			this->tabPage_Resolution->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			this->tabPage_Resolution->Controls->Add(this->groupBox_Lag);
@@ -575,181 +631,270 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->tabPage_Resolution->Controls->Add(this->groupBox_ScreenRes);
 			this->tabPage_Resolution->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Resolution->Location = System::Drawing::Point(4, 22);
+			this->tabPage_Resolution->Location = System::Drawing::Point(8, 39);
+			this->tabPage_Resolution->Margin = System::Windows::Forms::Padding(6);
 			this->tabPage_Resolution->Name = L"tabPage_Resolution";
-			this->tabPage_Resolution->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage_Resolution->Size = System::Drawing::Size(552, 358);
+			this->tabPage_Resolution->Padding = System::Windows::Forms::Padding(6);
+			this->tabPage_Resolution->Size = System::Drawing::Size(1104, 721);
 			this->tabPage_Resolution->TabIndex = 0;
 			this->tabPage_Resolution->Text = L"Graphics";
+			// 
+			// groupBox_Lag
+			// 
 			this->groupBox_Lag->Controls->Add(this->trackBar_LagCompensation);
 			this->groupBox_Lag->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->groupBox_Lag->Location = System::Drawing::Point(5, 282);
+			this->groupBox_Lag->Location = System::Drawing::Point(10, 564);
+			this->groupBox_Lag->Margin = System::Windows::Forms::Padding(6);
 			this->groupBox_Lag->Name = L"groupBox_Lag";
-			this->groupBox_Lag->Size = System::Drawing::Size(263, 70);
+			this->groupBox_Lag->Padding = System::Windows::Forms::Padding(6);
+			this->groupBox_Lag->Size = System::Drawing::Size(526, 140);
 			this->groupBox_Lag->TabIndex = 21;
 			this->groupBox_Lag->TabStop = false;
 			this->groupBox_Lag->Text = L"Lag Compensation";
-			this->trackBar_LagCompensation->Location = System::Drawing::Point(7, 20);
-			this->trackBar_LagCompensation->Maximum = 50;
+			// 
+			// trackBar_LagCompensation
+			// 
+			this->trackBar_LagCompensation->LargeChange = 1;
+			this->trackBar_LagCompensation->Location = System::Drawing::Point(14, 40);
+			this->trackBar_LagCompensation->Margin = System::Windows::Forms::Padding(6);
+			this->trackBar_LagCompensation->Maximum = 500;
 			this->trackBar_LagCompensation->Name = L"trackBar_LagCompensation";
-			this->trackBar_LagCompensation->Size = System::Drawing::Size(250, 45);
+			this->trackBar_LagCompensation->Size = System::Drawing::Size(500, 90);
 			this->trackBar_LagCompensation->TabIndex = 0;
 			this->trackBar_LagCompensation->ValueChanged += gcnew System::EventHandler(this, &ui::trackBar_LagCompensation_ValueChanged);
+			// 
+			// groupBox_Details
+			// 
 			this->groupBox_Details->Controls->Add(this->panel_Details);
 			this->groupBox_Details->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->groupBox_Details->Location = System::Drawing::Point(274, 6);
+			this->groupBox_Details->Location = System::Drawing::Point(548, 12);
+			this->groupBox_Details->Margin = System::Windows::Forms::Padding(6);
 			this->groupBox_Details->Name = L"groupBox_Details";
-			this->groupBox_Details->Size = System::Drawing::Size(272, 346);
+			this->groupBox_Details->Padding = System::Windows::Forms::Padding(6);
+			this->groupBox_Details->Size = System::Drawing::Size(544, 692);
 			this->groupBox_Details->TabIndex = 11;
 			this->groupBox_Details->TabStop = false;
 			this->groupBox_Details->Text = L"Details";
+			// 
+			// panel_Details
+			// 
 			this->panel_Details->AutoScroll = true;
-			this->panel_Details->Location = System::Drawing::Point(5, 19);
+			this->panel_Details->Location = System::Drawing::Point(10, 38);
+			this->panel_Details->Margin = System::Windows::Forms::Padding(6);
 			this->panel_Details->Name = L"panel_Details";
-			this->panel_Details->Size = System::Drawing::Size(261, 321);
+			this->panel_Details->Size = System::Drawing::Size(522, 642);
 			this->panel_Details->TabIndex = 0;
+			// 
+			// labelGPU
+			// 
 			this->labelGPU->AutoSize = true;
 			this->labelGPU->BackColor = System::Drawing::Color::Transparent;
 			this->labelGPU->ForeColor = System::Drawing::Color::Black;
-			this->labelGPU->Location = System::Drawing::Point(5, 209);
-			this->labelGPU->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			this->labelGPU->MinimumSize = System::Drawing::Size(263, 13);
+			this->labelGPU->Location = System::Drawing::Point(10, 418);
+			this->labelGPU->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->labelGPU->MinimumSize = System::Drawing::Size(526, 26);
 			this->labelGPU->Name = L"labelGPU";
-			this->labelGPU->Size = System::Drawing::Size(263, 13);
+			this->labelGPU->Size = System::Drawing::Size(526, 26);
 			this->labelGPU->TabIndex = 21;
 			this->labelGPU->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+			// 
+			// groupBox_InternalRes
+			// 
 			this->groupBox_InternalRes->Controls->Add(this->panel_IntRes);
 			this->groupBox_InternalRes->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->groupBox_InternalRes->Location = System::Drawing::Point(5, 124);
+			this->groupBox_InternalRes->Location = System::Drawing::Point(10, 248);
+			this->groupBox_InternalRes->Margin = System::Windows::Forms::Padding(6);
 			this->groupBox_InternalRes->Name = L"groupBox_InternalRes";
-			this->groupBox_InternalRes->Size = System::Drawing::Size(263, 83);
+			this->groupBox_InternalRes->Padding = System::Windows::Forms::Padding(6);
+			this->groupBox_InternalRes->Size = System::Drawing::Size(526, 166);
 			this->groupBox_InternalRes->TabIndex = 20;
 			this->groupBox_InternalRes->TabStop = false;
 			this->groupBox_InternalRes->Text = L"Internal Resolution (Quality)";
+			// 
+			// panel_IntRes
+			// 
 			this->panel_IntRes->AutoScroll = true;
-			this->panel_IntRes->Location = System::Drawing::Point(5, 19);
+			this->panel_IntRes->Location = System::Drawing::Point(10, 38);
+			this->panel_IntRes->Margin = System::Windows::Forms::Padding(6);
 			this->panel_IntRes->Name = L"panel_IntRes";
-			this->panel_IntRes->Size = System::Drawing::Size(253, 59);
+			this->panel_IntRes->Size = System::Drawing::Size(506, 118);
 			this->panel_IntRes->TabIndex = 1;
+			// 
+			// tabPage_Patches
+			// 
 			this->tabPage_Patches->BackColor = System::Drawing::Color::White;
 			this->tabPage_Patches->Controls->Add(this->panel_Patches);
 			this->tabPage_Patches->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Patches->Location = System::Drawing::Point(4, 22);
+			this->tabPage_Patches->Location = System::Drawing::Point(8, 39);
+			this->tabPage_Patches->Margin = System::Windows::Forms::Padding(6);
 			this->tabPage_Patches->Name = L"tabPage_Patches";
-			this->tabPage_Patches->Size = System::Drawing::Size(552, 358);
+			this->tabPage_Patches->Size = System::Drawing::Size(1104, 721);
 			this->tabPage_Patches->TabIndex = 1;
 			this->tabPage_Patches->Text = L"Options";
+			// 
+			// panel_Patches
+			// 
 			this->panel_Patches->AutoScroll = true;
 			this->panel_Patches->Location = System::Drawing::Point(0, 0);
+			this->panel_Patches->Margin = System::Windows::Forms::Padding(6);
 			this->panel_Patches->Name = L"panel_Patches";
-			this->panel_Patches->Size = System::Drawing::Size(552, 358);
+			this->panel_Patches->Size = System::Drawing::Size(1104, 716);
 			this->panel_Patches->TabIndex = 9;
+			// 
+			// tabPage_Playerdata
+			// 
 			this->tabPage_Playerdata->BackColor = System::Drawing::Color::White;
 			this->tabPage_Playerdata->Controls->Add(this->panel_Playerdata);
 			this->tabPage_Playerdata->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Playerdata->Location = System::Drawing::Point(4, 22);
+			this->tabPage_Playerdata->Location = System::Drawing::Point(8, 39);
+			this->tabPage_Playerdata->Margin = System::Windows::Forms::Padding(6);
 			this->tabPage_Playerdata->Name = L"tabPage_Playerdata";
-			this->tabPage_Playerdata->Size = System::Drawing::Size(552, 358);
+			this->tabPage_Playerdata->Size = System::Drawing::Size(1104, 721);
 			this->tabPage_Playerdata->TabIndex = 3;
 			this->tabPage_Playerdata->Text = L"Player";
+			// 
+			// panel_Playerdata
+			// 
 			this->panel_Playerdata->AutoScroll = true;
 			this->panel_Playerdata->Location = System::Drawing::Point(0, 0);
+			this->panel_Playerdata->Margin = System::Windows::Forms::Padding(6);
 			this->panel_Playerdata->Name = L"panel_Playerdata";
-			this->panel_Playerdata->Size = System::Drawing::Size(552, 358);
+			this->panel_Playerdata->Size = System::Drawing::Size(1104, 716);
 			this->panel_Playerdata->TabIndex = 1;
+			// 
+			// tabPage_Components
+			// 
 			this->tabPage_Components->BackColor = System::Drawing::Color::White;
 			this->tabPage_Components->Controls->Add(this->panel_Components);
 			this->tabPage_Components->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Components->Location = System::Drawing::Point(4, 22);
+			this->tabPage_Components->Location = System::Drawing::Point(8, 39);
+			this->tabPage_Components->Margin = System::Windows::Forms::Padding(6);
 			this->tabPage_Components->Name = L"tabPage_Components";
-			this->tabPage_Components->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage_Components->Size = System::Drawing::Size(552, 358);
+			this->tabPage_Components->Padding = System::Windows::Forms::Padding(6);
+			this->tabPage_Components->Size = System::Drawing::Size(1104, 721);
 			this->tabPage_Components->TabIndex = 2;
 			this->tabPage_Components->Text = L"Components";
+			// 
+			// panel_Components
+			// 
 			this->panel_Components->AutoScroll = true;
 			this->panel_Components->Location = System::Drawing::Point(0, 0);
+			this->panel_Components->Margin = System::Windows::Forms::Padding(6);
 			this->panel_Components->Name = L"panel_Components";
-			this->panel_Components->Size = System::Drawing::Size(552, 358);
+			this->panel_Components->Size = System::Drawing::Size(1104, 716);
 			this->panel_Components->TabIndex = 0;
+			// 
+			// tabPage_Plugins
+			// 
 			this->tabPage_Plugins->BackColor = System::Drawing::Color::White;
 			this->tabPage_Plugins->Controls->Add(this->panel_Custom);
 			this->tabPage_Plugins->Controls->Add(this->panel_Plugins);
 			this->tabPage_Plugins->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->tabPage_Plugins->Location = System::Drawing::Point(4, 22);
+			this->tabPage_Plugins->Location = System::Drawing::Point(8, 39);
+			this->tabPage_Plugins->Margin = System::Windows::Forms::Padding(6);
 			this->tabPage_Plugins->Name = L"tabPage_Plugins";
-			this->tabPage_Plugins->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage_Plugins->Size = System::Drawing::Size(552, 358);
+			this->tabPage_Plugins->Padding = System::Windows::Forms::Padding(6);
+			this->tabPage_Plugins->Size = System::Drawing::Size(1104, 721);
 			this->tabPage_Plugins->TabIndex = 3;
 			this->tabPage_Plugins->Text = L"Plugins and Patches";
+			// 
+			// panel_Custom
+			// 
 			this->panel_Custom->AutoScroll = true;
-			this->panel_Custom->Location = System::Drawing::Point(276, 0);
+			this->panel_Custom->Location = System::Drawing::Point(552, 0);
+			this->panel_Custom->Margin = System::Windows::Forms::Padding(6);
 			this->panel_Custom->Name = L"panel_Custom";
-			this->panel_Custom->Size = System::Drawing::Size(276, 358);
+			this->panel_Custom->Size = System::Drawing::Size(552, 716);
 			this->panel_Custom->TabIndex = 3;
+			// 
+			// panel_Plugins
+			// 
 			this->panel_Plugins->AutoScroll = true;
 			this->panel_Plugins->Location = System::Drawing::Point(0, 0);
+			this->panel_Plugins->Margin = System::Windows::Forms::Padding(6);
 			this->panel_Plugins->Name = L"panel_Plugins";
-			this->panel_Plugins->Size = System::Drawing::Size(276, 358);
+			this->panel_Plugins->Size = System::Drawing::Size(552, 716);
 			this->panel_Plugins->TabIndex = 0;
+			// 
+			// tabPage_Credits
+			// 
 			this->tabPage_Credits->Controls->Add(this->creditsTextBox);
-			this->tabPage_Credits->Location = System::Drawing::Point(4, 22);
-			this->tabPage_Credits->Margin = System::Windows::Forms::Padding(2);
+			this->tabPage_Credits->Location = System::Drawing::Point(8, 39);
+			this->tabPage_Credits->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage_Credits->Name = L"tabPage_Credits";
-			this->tabPage_Credits->Padding = System::Windows::Forms::Padding(2);
-			this->tabPage_Credits->Size = System::Drawing::Size(552, 358);
+			this->tabPage_Credits->Padding = System::Windows::Forms::Padding(4);
+			this->tabPage_Credits->Size = System::Drawing::Size(1104, 721);
 			this->tabPage_Credits->TabIndex = 5;
 			this->tabPage_Credits->Text = L"Credits";
 			this->tabPage_Credits->UseVisualStyleBackColor = true;
+			// 
+			// creditsTextBox
+			// 
 			this->creditsTextBox->BackColor = System::Drawing::Color::White;
 			this->creditsTextBox->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->creditsTextBox->Location = System::Drawing::Point(0, 0);
-			this->creditsTextBox->Margin = System::Windows::Forms::Padding(2);
+			this->creditsTextBox->Margin = System::Windows::Forms::Padding(4);
 			this->creditsTextBox->Multiline = true;
 			this->creditsTextBox->Name = L"creditsTextBox";
 			this->creditsTextBox->ReadOnly = true;
 			this->creditsTextBox->ScrollBars = System::Windows::Forms::ScrollBars::Both;
-			this->creditsTextBox->Size = System::Drawing::Size(552, 358);
+			this->creditsTextBox->Size = System::Drawing::Size(1100, 712);
 			this->creditsTextBox->TabIndex = 0;
 			this->creditsTextBox->Text = resources->GetString(L"creditsTextBox.Text");
+			// 
+			// button_Discord
+			// 
 			this->button_Discord->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(242)), static_cast<System::Int32>(static_cast<System::Byte>(242)),
 				static_cast<System::Int32>(static_cast<System::Byte>(242)));
 			this->button_Discord->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->button_Discord->FlatAppearance->BorderSize = 0;
 			this->button_Discord->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_Discord->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_Discord.Image")));
-			this->button_Discord->Location = System::Drawing::Point(496, 384);
+			this->button_Discord->Location = System::Drawing::Point(992, 768);
+			this->button_Discord->Margin = System::Windows::Forms::Padding(6);
 			this->button_Discord->Name = L"button_Discord";
-			this->button_Discord->Size = System::Drawing::Size(32, 32);
+			this->button_Discord->Size = System::Drawing::Size(64, 64);
 			this->button_Discord->TabIndex = 31;
 			this->button_Discord->UseVisualStyleBackColor = false;
 			this->button_Discord->Click += gcnew System::EventHandler(this, &ui::button_Discord_Click);
+			// 
+			// button_github
+			// 
 			this->button_github->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(242)), static_cast<System::Int32>(static_cast<System::Byte>(242)),
 				static_cast<System::Int32>(static_cast<System::Byte>(242)));
 			this->button_github->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->button_github->FlatAppearance->BorderSize = 0;
 			this->button_github->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button_github->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_github.Image")));
-			this->button_github->Location = System::Drawing::Point(528, 384);
+			this->button_github->Location = System::Drawing::Point(1056, 768);
+			this->button_github->Margin = System::Windows::Forms::Padding(6);
 			this->button_github->Name = L"button_github";
-			this->button_github->Size = System::Drawing::Size(32, 32);
+			this->button_github->Size = System::Drawing::Size(64, 64);
 			this->button_github->TabIndex = 32;
 			this->button_github->UseVisualStyleBackColor = false;
 			this->button_github->Click += gcnew System::EventHandler(this, &ui::button_github_Click);
+			// 
+			// button_Apply
+			// 
 			this->button_Apply->BackColor = System::Drawing::Color::White;
 			this->button_Apply->FlatAppearance->BorderColor = System::Drawing::SystemColors::Control;
 			this->button_Apply->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Apply->Location = System::Drawing::Point(4, 389);
+			this->button_Apply->Location = System::Drawing::Point(8, 778);
+			this->button_Apply->Margin = System::Windows::Forms::Padding(6);
 			this->button_Apply->Name = L"button_Apply";
-			this->button_Apply->Size = System::Drawing::Size(69, 23);
+			this->button_Apply->Size = System::Drawing::Size(138, 46);
 			this->button_Apply->TabIndex = 33;
 			this->button_Apply->Text = L"Apply";
 			this->button_Apply->UseVisualStyleBackColor = false;
 			this->button_Apply->Click += gcnew System::EventHandler(this, &ui::button_Apply_Click);
+			// 
+			// button_Wiki
+			// 
 			this->button_Wiki->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(242)), static_cast<System::Int32>(static_cast<System::Byte>(242)),
 				static_cast<System::Int32>(static_cast<System::Byte>(242)));
 			this->button_Wiki->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button_Wiki.BackgroundImage")));
@@ -757,20 +902,24 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->button_Wiki->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->button_Wiki->FlatAppearance->BorderSize = 0;
 			this->button_Wiki->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button_Wiki->Location = System::Drawing::Point(464, 384);
+			this->button_Wiki->Location = System::Drawing::Point(928, 768);
+			this->button_Wiki->Margin = System::Windows::Forms::Padding(6);
 			this->button_Wiki->Name = L"button_Wiki";
-			this->button_Wiki->Size = System::Drawing::Size(32, 32);
+			this->button_Wiki->Size = System::Drawing::Size(64, 64);
 			this->button_Wiki->TabIndex = 34;
 			this->button_Wiki->UseVisualStyleBackColor = false;
 			this->button_Wiki->Click += gcnew System::EventHandler(this, &ui::button_Wiki_Click);
+			// 
+			// ui
+			// 
 			this->AcceptButton = this->button_Launch;
-			this->AutoScaleDimensions = System::Drawing::SizeF(96, 96);
+			this->AutoScaleDimensions = System::Drawing::SizeF(192, 192);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Dpi;
 			this->AutoSize = true;
 			this->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 			this->BackColor = System::Drawing::Color::Magenta;
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			this->ClientSize = System::Drawing::Size(560, 417);
+			this->ClientSize = System::Drawing::Size(1120, 834);
 			this->Controls->Add(this->button_Wiki);
 			this->Controls->Add(this->button_Apply);
 			this->Controls->Add(this->tabControl);
@@ -784,10 +933,11 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->HelpButton = true;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->KeyPreview = true;
+			this->Margin = System::Windows::Forms::Padding(6);
 			this->MaximizeBox = false;
 			this->Name = L"ui";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"PD Launcher (2.5.3)";
+			this->Text = L"PD Launcher (2.6)";
 			this->TransparencyKey = System::Drawing::Color::Magenta;
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &ui::Ui_FormClosing);
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &ui::Ui_FormClosed);
@@ -896,13 +1046,38 @@ private: System::Void Button_Launch_Click(System::Object^ sender, System::EventA
 
 	SaveSettings();
 
-	if(GetPrivateProfileIntW(LAUNCHER_SECTION, L"use_divahook_bat", FALSE, CONFIG_FILE))
+	if (GetPrivateProfileIntW(LAUNCHER_SECTION, L"use_divahook_bat", FALSE, CONFIG_FILE))
 	{
+		if (GetPrivateProfileIntW(L"patches", L"quick_start", 1, CONFIG_FILE) > 0)
+		{
+			SkinnedMessageBox::Show(this, L"\"Quick Start\" and \"Use divahook.bat / start.bat\" cannot be enabled at the same time.", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
+		}
+
 		DIVA_EXECUTABLE = NULL;
-		wstring DIVA_EXECUTABLE_LAUNCH_STRING = L"cmd.exe /C \"";
-		DIVA_EXECUTABLE_LAUNCH_STRING.append(DIVA_DIRPATH);
-		DIVA_EXECUTABLE_LAUNCH_STRING.append(L"\\divahook.bat\"");
-		DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING.c_str());
+		wstring DIVA_EXECUTABLE_LAUNCH_STRING_cmd = L"cmd.exe /C \"";
+		const wstring DIVA_EXECUTABLE_LAUNCH_STRING_path = DIVA_DIRPATH;
+
+		wstring DIVAHOOK_BAT_PATH = DIVA_EXECUTABLE_LAUNCH_STRING_path;
+		DIVAHOOK_BAT_PATH.append(L"\\divahook.bat");
+		if (std::filesystem::exists(DIVAHOOK_BAT_PATH))
+		{
+			DIVA_EXECUTABLE_LAUNCH_STRING_cmd.append(DIVAHOOK_BAT_PATH);
+			DIVA_EXECUTABLE_LAUNCH_STRING_cmd.append(L"\"");
+			DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING_cmd.c_str());
+		}
+		else
+		{
+			wstring START_BAT_PATH = DIVA_EXECUTABLE_LAUNCH_STRING_path;
+			START_BAT_PATH.append(L"\\start.bat");
+			if (std::filesystem::exists(START_BAT_PATH))
+			{
+				DIVA_EXECUTABLE_LAUNCH_STRING_cmd.append(START_BAT_PATH);
+				DIVA_EXECUTABLE_LAUNCH_STRING_cmd.append(L"\"");
+				DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING_cmd.c_str());
+			}
+			else if (SkinnedMessageBox::Show(this, L"divahook.bat/start.bat not found.\nThe game will start normally/offline.\n\nNOTE: Disable \"Use divahook.bat / start.bat\" to avoid this warning.", "PD Launcher", MessageBoxButtons::OKCancel, MessageBoxIcon::Warning) != System::Windows::Forms::DialogResult::OK) return;
+		}
 	}
 	else
 	{

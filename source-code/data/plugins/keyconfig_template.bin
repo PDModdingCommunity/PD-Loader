@@ -24,7 +24,9 @@ VID = 046D
 PID = C216
 
 # Rumble (Xinput)
-rumble =true
+rumble = true
+xinput_rumble_intensity_left = 8000
+xinput_rumble_intensity_right = 4000
 
 # Pause when focus is lost
 autopause =true
@@ -59,6 +61,7 @@ MENU_L = Left, Up, Ds4_L1, XINPUT_LS, Ds4_DPad_Left, Ds4_DPad_Up, XINPUT_LEFT, X
 MENU_R = Right, Down, Ds4_R1, XINPUT_RS, Ds4_DPad_Right, Ds4_DPad_Down, XINPUT_RIGHT, XINPUT_DOWN, E, O, Ds4_L_Stick_Right, XINPUT_LRIGHT, Ds4_L_Stick_Down, XINPUT_LDOWN, Ds4_R_Stick_Right, XINPUT_RRIGHT, Ds4_R_Stick_Down, XINPUT_RDOWN
 MENU_CIRCLE = Spacebar
 
+TOON = F9
 COIN = F10
 
 # Touch Slider:

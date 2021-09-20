@@ -23,12 +23,12 @@ namespace TLAC::FileSystem
 		return found;
 	}
 
-	int ConfigFile::GetIntegerValue(const std::string& key)
+	int ConfigFile::GetIntegerValue(const std::string& key, int defaultval)
 	{
 		auto pair = ConfigMap.find(key);
 		bool found = pair != ConfigMap.end();
 
-		return found ? atoi(pair->second.c_str()) : 0;
+		return found ? atoi(pair->second.c_str()) : defaultval;
 	}
 
 	bool ConfigFile::GetBooleanValue(const std::string& key)

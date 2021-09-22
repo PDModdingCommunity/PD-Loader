@@ -7,7 +7,7 @@
 Enable=1
 
 [GPU]
-# Force GPU model -- -1=auto, 0=Kepler, 1=Maxwell, 2=Turing, 3=Ampere
+# Force GPU model -- -1=auto, 0=Kepler, 1=Maxwell/Pascal, 2=Turing, 3=Ampere
 Model=-1
 
 [Launcher]
@@ -55,7 +55,7 @@ Force_Look=0
 #Disable hand scaling
 No_Hand_Scaling=0
 #Default hand size -- 0-10000=default, 12200=PDA
-Default_Hand_Size=0
+Default_Hand_Size_uint=0
 #Sing missed notes
 Sing_Missed=0
 #Hide the volume and SE control buttons

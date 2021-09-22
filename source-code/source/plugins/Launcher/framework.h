@@ -95,6 +95,11 @@ std::vector<resolution> getScreenResolutionsVec(std::vector<DEVMODEW> &screenMod
 		}
 	}
 
+	const resolution defaultres(1280, 720);
+	if (std::find(outVec.begin(), outVec.end(), defaultres) == outVec.end()) {
+		outVec.push_back(defaultres);
+	}
+
 	std::sort(outVec.begin(), outVec.end());
 
 	return outVec;
@@ -139,19 +144,21 @@ static std::vector<int> getScreenRatesVec(std::vector<DEVMODEW> &screenModes) {
 
 std::vector<DEVMODEW> screenModes = getScreenModes();
 
+const std::vector<resolution> internalResOptions = { resolution(320,240), resolution(426,240), resolution(640,480), resolution(854,480), resolution(960,540), resolution(1280,720),  resolution(1366,768), resolution(1600,900), resolution(1920,1080), resolution(2560,1440), resolution(3200,1800), resolution(3840,2160), resolution(5120,2880), resolution(7680,4320) };
 
 DropdownOption* DisplayModeDropdown = new DropdownOption(L"display", RESOLUTION_SECTION, CONFIG_FILE, L"Display:", L"Sets the window/screen mode.", 1, std::vector<LPCWSTR>({ L"Windowed", L"Fast", L"Exclusive", L"Safe" }));
-ResolutionOption* DisplayResolutionOption = new ResolutionOption(L"width", L"height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the display resolution.", resolution(-1, -1), getScreenResolutionsVec(screenModes), true, RESOPT_INCLUDE_MATCH_SCREEN);
+ResolutionOption* DisplayResolutionOption = new ResolutionOption(L"width", L"height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the display resolution.", resolution(-1, -1), getScreenResolutionsVec(screenModes), false, RESOPT_INCLUDE_MATCH_SCREEN);
+DropdownNumberOption* RefreshRateOption = new DropdownNumberOption(L"refreshrate", RESOLUTION_SECTION, CONFIG_FILE, L"Refresh Rate:", L"Sets the display refresh rate.", 60, getScreenRatesVec(screenModes), true);
 
 ConfigOptionBase* screenResolutionArray[] = {
 	DisplayModeDropdown,
 	DisplayResolutionOption,
 	//new DropdownNumberOption(L"bitdepth", RESOLUTION_SECTION, CONFIG_FILE, L"Bit Depth:", L"Sets the display bit depth.", 32, getScreenDepthsVec(screenModes), true),
-	new DropdownNumberOption(L"refreshrate", RESOLUTION_SECTION, CONFIG_FILE, L"Refresh Rate:", L"Sets the display refresh rate.", 60, getScreenRatesVec(screenModes), true),
+	RefreshRateOption,
 };
 
 BooleanOption* InternalResolutionCheckbox = new BooleanOption(L"r.enable", RESOLUTION_SECTION, CONFIG_FILE, L"Enable", L"Enable or disable custom internal resolution.", false, false);
-ResolutionOption* InternalResolutionOption = new ResolutionOption(L"r.width", L"r.height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the internal resolution (instead of 1280x720).", resolution(1920, 1080), std::vector<resolution>({ resolution(1,1), resolution(320,240), resolution(426,240), resolution(640,480), resolution(854,480), resolution(960,540), resolution(1280,720),  resolution(1366,768), resolution(1600,900), resolution(1920,1080), resolution(2560,1440), resolution(3200,1800), resolution(3840,2160), resolution(5120,2880), resolution(7680,4320) }), true, RESOPT_INCLUDE_MATCH_WINDOW);
+ResolutionOption* InternalResolutionOption = new ResolutionOption(L"r.width", L"r.height", RESOLUTION_SECTION, CONFIG_FILE, L"Resolution:", L"Sets the internal resolution (instead of 1280x720).", resolution(1920, 1080), internalResOptions, true, RESOPT_INCLUDE_MATCH_WINDOW);
 
 ConfigOptionBase* internalResolutionArray[] = {
 	InternalResolutionCheckbox,
@@ -159,7 +166,7 @@ ConfigOptionBase* internalResolutionArray[] = {
 };
 
 ConfigOptionBase* graphicsArray[] = {
-	new DropdownOption(L"model", L"GPU", CONFIG_FILE, L"NVIDIA GPU:", L"Select your NVIDIA GPU's architecture to apply the necessary workarounds.\n\nNOTE: Automatic detection does not currently work on GNU/Linux.", -1, std::vector<LPCWSTR>({ L"Automatic", L"Kepler", L"Maxwell", L"Turing", L"Ampere" }), -1),
+	new DropdownOption(L"model", L"GPU", CONFIG_FILE, L"NVIDIA GPU:", L"Select your NVIDIA GPU's architecture to apply the necessary workarounds.\n\nNOTE: Automatic detection does not currently work on GNU/Linux.", -1, std::vector<LPCWSTR>({ L"Automatic", L"Kepler", L"Maxwell/Pascal", L"Turing", L"Ampere" }), -1),
 	new BooleanOption(L"TAA", GRAPHICS_SECTION, CONFIG_FILE, L"TAA", L"Temporal Anti-Aliasing", true, false),
 	new BooleanOption(L"MLAA", GRAPHICS_SECTION, CONFIG_FILE, L"MLAA", L"Morphological Anti-Aliasing", true, false),
 	new DropdownOption(L"MAG", GRAPHICS_SECTION, CONFIG_FILE, L"Filter:", L"Image filter.\n\nBilinear: default filter\nNearest-neighbour: sharpest, but blocky\nSharpen: sharp filter\nCone: smooth filter", 0, std::vector<LPCWSTR>({ L"Bilinear", L"Nearest-neighbour", L"Sharpen", L"Cone" })),
@@ -216,7 +223,7 @@ ConfigOptionBase* optionsArray[] = {
 	new DropdownOption(L"force_expressions", PATCHES_SECTION, CONFIG_FILE, L"Expression Type:", L"Change the expressions.", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
 	new DropdownOption(L"force_look", PATCHES_SECTION, CONFIG_FILE, L"Look Type:", L"Change the look animations.", 0, std::vector<LPCWSTR>({ L"Default", L"Force PDA", L"Force FT" })),
 	new BooleanOption(L"no_hand_scaling", PATCHES_SECTION, CONFIG_FILE, L"No Hand Scaling", L"Disable hand scaling.", false, false),
-	new NumericOption(L"default_hand_size", PATCHES_SECTION, CONFIG_FILE, L"Default Hand Size:", L"0-10000: default\n12200: PDA", 0, 0, INT_MAX),
+	new NumericOption(L"default_hand_size_uint", PATCHES_SECTION, CONFIG_FILE, L"Default Hand Size:", L"0-10000: default\n12200: PDA", 0, 0, INT_MAX),
 	new OptionMetaSeparator(),
 	new OptionMetaSpacer(8),
 

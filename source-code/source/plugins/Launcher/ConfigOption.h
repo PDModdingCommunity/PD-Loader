@@ -886,8 +886,9 @@ public:
 
 enum ResolutionOptionOpts
 {
-	RESOPT_INCLUDE_MATCH_WINDOW = 1,
-	RESOPT_INCLUDE_MATCH_SCREEN = 2
+	RESOPT_NONE,
+	RESOPT_INCLUDE_MATCH_WINDOW,
+	RESOPT_INCLUDE_MATCH_SCREEN
 };
 
 class ResolutionOption : public ConfigOptionBase

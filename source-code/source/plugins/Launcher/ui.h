@@ -267,7 +267,7 @@ namespace Launcher {
 			}
 			else if (vendor->Contains("NVIDIA"))
 			{
-				if (wineVersion == "" && (driver_version_major > 446 && driver_version_major < 460))
+				if (wineVersion == "" && (driver_version_major < 391 || (driver_version_major > 446 && driver_version_major < 460)))
 				{
 					this->labelGPU->Text += L"Driver has known issues.";
 					GPUIssueText = L"The graphics driver you're using has known issues. Please install the latest driver from your GPU vendor's website.";
@@ -647,7 +647,7 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->groupBox_Lag->Margin = System::Windows::Forms::Padding(6);
 			this->groupBox_Lag->Name = L"groupBox_Lag";
 			this->groupBox_Lag->Padding = System::Windows::Forms::Padding(6);
-			this->groupBox_Lag->Size = System::Drawing::Size(526, 140);
+			this->groupBox_Lag->Size = System::Drawing::Size(526, 146);
 			this->groupBox_Lag->TabIndex = 21;
 			this->groupBox_Lag->TabStop = false;
 			this->groupBox_Lag->Text = L"Lag Compensation";
@@ -659,8 +659,9 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->trackBar_LagCompensation->Margin = System::Windows::Forms::Padding(6);
 			this->trackBar_LagCompensation->Maximum = 500;
 			this->trackBar_LagCompensation->Name = L"trackBar_LagCompensation";
-			this->trackBar_LagCompensation->Size = System::Drawing::Size(500, 90);
+			this->trackBar_LagCompensation->Size = System::Drawing::Size(500, 93);
 			this->trackBar_LagCompensation->TabIndex = 0;
+			this->trackBar_LagCompensation->TickStyle = System::Windows::Forms::TickStyle::None;
 			this->trackBar_LagCompensation->ValueChanged += gcnew System::EventHandler(this, &ui::trackBar_LagCompensation_ValueChanged);
 			// 
 			// groupBox_Details
@@ -671,7 +672,7 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->groupBox_Details->Margin = System::Windows::Forms::Padding(6);
 			this->groupBox_Details->Name = L"groupBox_Details";
 			this->groupBox_Details->Padding = System::Windows::Forms::Padding(6);
-			this->groupBox_Details->Size = System::Drawing::Size(544, 692);
+			this->groupBox_Details->Size = System::Drawing::Size(544, 698);
 			this->groupBox_Details->TabIndex = 11;
 			this->groupBox_Details->TabStop = false;
 			this->groupBox_Details->Text = L"Details";
@@ -679,10 +680,10 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			// panel_Details
 			// 
 			this->panel_Details->AutoScroll = true;
-			this->panel_Details->Location = System::Drawing::Point(10, 38);
+			this->panel_Details->Location = System::Drawing::Point(10, 23);
 			this->panel_Details->Margin = System::Windows::Forms::Padding(6);
 			this->panel_Details->Name = L"panel_Details";
-			this->panel_Details->Size = System::Drawing::Size(522, 642);
+			this->panel_Details->Size = System::Drawing::Size(522, 667);
 			this->panel_Details->TabIndex = 0;
 			// 
 			// labelGPU
@@ -937,7 +938,7 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->MaximizeBox = false;
 			this->Name = L"ui";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"PD Launcher (2.6)";
+			this->Text = L"PD Launcher (2.6a)";
 			this->TransparencyKey = System::Drawing::Color::Magenta;
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &ui::Ui_FormClosing);
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &ui::Ui_FormClosed);
@@ -1117,7 +1118,7 @@ private: System::Void DisplayTypeChangedHandler(System::Object^ sender, System::
 	{
 		for (ConfigOptionBase* option : screenResolutionArray)
 		{
-			if (option != DisplayModeDropdown && option != DisplayResolutionOption)
+			if (option == RefreshRateOption)
 			{
 				((Control^)Control::FromHandle(option->mainControlHandle))->Enabled = true;
 			}
@@ -1127,7 +1128,7 @@ private: System::Void DisplayTypeChangedHandler(System::Object^ sender, System::
 	{
 		for (ConfigOptionBase* option : screenResolutionArray)
 		{
-			if (option != DisplayModeDropdown && option != DisplayResolutionOption)
+			if (option == RefreshRateOption)
 			{
 				((Control^)Control::FromHandle(option->mainControlHandle))->Enabled = false;
 			}

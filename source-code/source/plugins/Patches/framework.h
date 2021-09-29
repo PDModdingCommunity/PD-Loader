@@ -109,6 +109,7 @@ auto nStereo = GetPrivateProfileIntW(L"patches", L"stereo", TRUE, CONFIG_FILE);
 auto nCustomPatches = GetPrivateProfileIntW(L"patches", L"custom_patches", TRUE, CONFIG_FILE);
 auto nQuickStart = GetPrivateProfileIntW(L"patches", L"quick_start", 1, CONFIG_FILE);
 auto nNoScrollingSfx = GetPrivateProfileIntW(L"patches", L"no_scrolling_sfx", FALSE, CONFIG_FILE);
+auto nEnablePvCustomization = GetPrivateProfileIntW(L"patches", L"enable_pv_customization", FALSE, CONFIG_FILE);
 auto nNoHandScaling = GetPrivateProfileIntW(L"patches", L"no_hand_scaling", FALSE, CONFIG_FILE);
 auto nDefaultHandSize = GetPrivateProfileIntW(L"patches", L"default_hand_size_uint", 0, CONFIG_FILE);
 auto nSingMissed = GetPrivateProfileIntW(L"patches", L"sing_missed", FALSE, CONFIG_FILE);

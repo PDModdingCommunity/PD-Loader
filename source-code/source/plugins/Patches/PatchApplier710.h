@@ -166,7 +166,8 @@ class PatchApplier710 : public PatchApplier {
 
 			if (nPDLoaderText && !nHideFreeplay)
 			{
-				InjectCode((void*)0x00000001409F61F0, { 0x50, 0x44, 0x20, 0x4C, 0x6F, 0x61, 0x64, 0x65, 0x72, 0x20, 0x00 });
+				InjectCode((void*)0x00000001409F61F0, { 0x50, 0x44, 0x20, 0x4C, 0x6F, 0x61, 0x64, 0x65, 0x72, 0x20, 0x00, 0x20,
+					'2', '.', '6', '.', '2'});
 				printf("[Patches] Show PD Loader text\n");
 			}
 		}
@@ -373,31 +374,121 @@ class PatchApplier710 : public PatchApplier {
 		{
 			InjectCode((void*)0x00000001405C84B3, { 0x90, 0x90, 0x90, 0x90, 0x90 });
 		}
-		// Disable hand scaling
-		if (nNoHandScaling)
+		if (nEnablePvCustomization)
 		{
-			InjectCode((void*)0x0000000140120709, { 0xE9, 0x82, 0x0A, 0x00 });
-		}
-		// Default hand size
-		if (nDefaultHandSize >= 10000)
-		{
-			printf("[Patches] Changing default hand size...\n");
-			const float num = (float)nDefaultHandSize / 10000.0;
-			DWORD oldProtect;
-			float* addr1 = (float*)(0x140506B59);
-			float* addr2 = (float*)(0x140506B60);
-			/*float* addr3 = (float*)(0x140506B67);
-			float* addr4 = (float*)(0x140506B71);*/
-			VirtualProtect(addr1, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-			VirtualProtect(addr2, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-			/*VirtualProtect(addr3, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-			VirtualProtect(addr4, 4, PAGE_EXECUTE_READWRITE, &oldProtect);*/
-			*addr1 = *addr2 /*= *addr3 = *addr4*/ = num;
-			VirtualProtect(addr1, 4, oldProtect, nullptr);
-			VirtualProtect(addr2, 4, oldProtect, nullptr);
-			/*VirtualProtect(addr3, 4, oldProtect, nullptr);
-			VirtualProtect(addr4, 4, oldProtect, nullptr);*/
-			printf("[Patches] New default hand size: %f\n", num);
+			// Disable hand scaling
+			if (nNoHandScaling)
+			{
+				InjectCode((void*)0x0000000140120709, { 0xE9, 0x82, 0x0A, 0x00 });
+			}
+			// Default hand size
+			if (nDefaultHandSize >= 10000 && nDefaultHandSize <= 1000000)
+			{
+				printf("[Patches] Changing default hand size...\n");
+				const float num = (float)nDefaultHandSize / 10000.0;
+				DWORD oldProtect;
+				float* addr1 = (float*)(0x140506B59);
+				float* addr2 = (float*)(0x140506B60);
+				/*float* addr3 = (float*)(0x140506B67);
+				float* addr4 = (float*)(0x140506B71);*/
+				VirtualProtect(addr1, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+				VirtualProtect(addr2, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+				/*VirtualProtect(addr3, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+				VirtualProtect(addr4, 4, PAGE_EXECUTE_READWRITE, &oldProtect);*/
+				*addr1 = *addr2 /*= *addr3 = *addr4*/ = num;
+				VirtualProtect(addr1, 4, oldProtect, nullptr);
+				VirtualProtect(addr2, 4, oldProtect, nullptr);
+				/*VirtualProtect(addr3, 4, oldProtect, nullptr);
+				VirtualProtect(addr4, 4, oldProtect, nullptr);*/
+				printf("[Patches] New default hand size: %f\n", num);
+			}
+			// Force mouth animations
+			{
+				if (nForceMouth == 1) // PDA
+				{
+					printf("[Patches] Forcing PDA mouth...\n");
+					int* mouth_table = (int*)(0x1409A1DC0);
+					DWORD oldProtect;
+					VirtualProtect(mouth_table, 44, PAGE_EXECUTE_READWRITE, &oldProtect);
+					for (int i = 0; i < 11; i++)
+					{
+						mouth_table[i]++;
+					}
+					VirtualProtect(mouth_table, 44, oldProtect, nullptr);
+					printf("[Patches] PDA mouth forced\n");
+				}
+				else if (nForceMouth == 2) // FT
+				{
+					printf("[Patches] Forcing FT mouth...\n");
+					int* mouth_table_oldid = (int*)(0x1409A1E1C);
+					DWORD oldProtect;
+					VirtualProtect(mouth_table_oldid, 44, PAGE_EXECUTE_READWRITE, &oldProtect);
+					for (int i = 0; i < 11; i++)
+					{
+						mouth_table_oldid[i]--;
+					}
+					VirtualProtect(mouth_table_oldid, 44, oldProtect, nullptr);
+					printf("[Patches] FT mouth forced\n");
+				}
+			}
+			// Force expressions
+			{
+				if (nForceExpressions == 1) // PDA
+				{
+					printf("[Patches] Forcing PDA expressions...\n");
+					int* exp_table = (int*)(0x140A21900);
+					DWORD oldProtect;
+					VirtualProtect(exp_table, 104, PAGE_EXECUTE_READWRITE, &oldProtect);
+					for (int i = 0; i < 26; i++)
+					{
+						exp_table[i] += 2;
+					}
+					VirtualProtect(exp_table, 104, oldProtect, nullptr);
+					printf("[Patches] PDA expressions forced\n");
+				}
+				else if (nForceExpressions == 2) // FT
+				{
+					printf("[Patches] Forcing FT expressions...\n");
+					int* exp_table_oldid = (int*)(0x140A219D0);
+					DWORD oldProtect;
+					VirtualProtect(exp_table_oldid, 104, PAGE_EXECUTE_READWRITE, &oldProtect);
+					for (int i = 0; i < 26; i++)
+					{
+						exp_table_oldid[i] -= 2;
+					}
+					VirtualProtect(exp_table_oldid, 104, oldProtect, nullptr);
+					printf("[Patches] FT expressions forced\n");
+				}
+			}
+			// Force look animations
+			{
+				if (nForceLook == 1) // PDA
+				{
+					printf("[Patches] Forcing PDA look...\n");
+					int* look_table = (int*)(0x1409A1D70);
+					DWORD oldProtect;
+					VirtualProtect(look_table, 36, PAGE_EXECUTE_READWRITE, &oldProtect);
+					for (int i = 0; i < 9; i++)
+					{
+						look_table[i]++;
+					}
+					VirtualProtect(look_table, 36, oldProtect, nullptr);
+					printf("[Patches] PDA look forced\n");
+				}
+				else if (nForceLook == 2) // FT
+				{
+					printf("[Patches] Forcing FT look...\n");
+					int* look_table_oldid = (int*)(0x1409A1D9C);
+					DWORD oldProtect;
+					VirtualProtect(look_table_oldid, 36, PAGE_EXECUTE_READWRITE, &oldProtect);
+					for (int i = 0; i < 9; i++)
+					{
+						look_table_oldid[i]--;
+					}
+					VirtualProtect(look_table_oldid, 36, oldProtect, nullptr);
+					printf("[Patches] FT look forced\n");
+				}
+			}
 		}
 		// Sing missed notes
 		if (nSingMissed)
@@ -405,93 +496,6 @@ class PatchApplier710 : public PatchApplier {
 			InjectCode((void*)0x140109044, { 0xEB });
 			// Breaks border:
 			// InjectCode((void*)0x140109096, { 0xEB });
-		}
-		// Force mouth animations
-		{
-			if (nForceMouth == 1) // PDA
-			{
-				printf("[Patches] Forcing PDA mouth...\n");
-				int* mouth_table = (int*)(0x1409A1DC0);
-				DWORD oldProtect;
-				VirtualProtect(mouth_table, 44, PAGE_EXECUTE_READWRITE, &oldProtect);
-				for (int i = 0; i < 11; i++)
-				{
-					mouth_table[i]++;
-				}
-				VirtualProtect(mouth_table, 44, oldProtect, nullptr);
-				printf("[Patches] PDA mouth forced\n");
-			}
-			else if (nForceMouth == 2) // FT
-			{
-				printf("[Patches] Forcing FT mouth...\n");
-				int* mouth_table_oldid = (int*)(0x1409A1E1C);
-				DWORD oldProtect;
-				VirtualProtect(mouth_table_oldid, 44, PAGE_EXECUTE_READWRITE, &oldProtect);
-				for (int i = 0; i < 11; i++)
-				{
-					mouth_table_oldid[i]--;
-				}
-				VirtualProtect(mouth_table_oldid, 44, oldProtect, nullptr);
-				printf("[Patches] FT mouth forced\n");
-			}
-		}
-		// Force expressions
-		{
-			if (nForceExpressions == 1) // PDA
-			{
-				printf("[Patches] Forcing PDA expressions...\n");
-				int* exp_table = (int*)(0x140A21900);
-				DWORD oldProtect;
-				VirtualProtect(exp_table, 104, PAGE_EXECUTE_READWRITE, &oldProtect);
-				for (int i = 0; i < 26; i++)
-				{
-					exp_table[i] += 2;
-				}
-				VirtualProtect(exp_table, 104, oldProtect, nullptr);
-				printf("[Patches] PDA expressions forced\n");
-			}
-			else if (nForceExpressions == 2) // FT
-			{
-				printf("[Patches] Forcing FT expressions...\n");
-				int* exp_table_oldid = (int*)(0x140A219D0);
-				DWORD oldProtect;
-				VirtualProtect(exp_table_oldid, 104, PAGE_EXECUTE_READWRITE, &oldProtect);
-				for (int i = 0; i < 26; i++)
-				{
-					exp_table_oldid[i] -= 2;
-				}
-				VirtualProtect(exp_table_oldid, 104, oldProtect, nullptr);
-				printf("[Patches] FT expressions forced\n");
-			}
-		}
-		// Force look animations
-		{
-			if (nForceLook == 1) // PDA
-			{
-				printf("[Patches] Forcing PDA look...\n");
-				int* look_table = (int*)(0x1409A1D70);
-				DWORD oldProtect;
-				VirtualProtect(look_table, 36, PAGE_EXECUTE_READWRITE, &oldProtect);
-				for (int i = 0; i < 9; i++)
-				{
-					look_table[i]++;
-				}
-				VirtualProtect(look_table, 36, oldProtect, nullptr);
-				printf("[Patches] PDA look forced\n");
-			}
-			else if (nForceLook == 2) // FT
-			{
-				printf("[Patches] Forcing FT look...\n");
-				int* look_table_oldid = (int*)(0x1409A1D9C);
-				DWORD oldProtect;
-				VirtualProtect(look_table_oldid, 36, PAGE_EXECUTE_READWRITE, &oldProtect);
-				for (int i = 0; i < 9; i++)
-				{
-					look_table_oldid[i]--;
-				}
-				VirtualProtect(look_table_oldid, 36, oldProtect, nullptr);
-				printf("[Patches] FT look forced\n");
-			}
 		}
 		// NPR1
 		{
@@ -645,48 +649,53 @@ class PatchApplier710 : public PatchApplier {
 		}
 
 		// patch refract and reflect buffer sizes
-		// no need to really check anything before injecting, because reinjecting defaults is fine
-		InjectCode((void*)(0x140a24424), std::vector<uint8_t>((uint8_t*)&nRefractResWidth, (uint8_t*)((int64_t)&nRefractResWidth + 4)));
-		InjectCode((void*)(0x140a24428), std::vector<uint8_t>((uint8_t*)&nRefractResHeight, (uint8_t*)((int64_t)&nRefractResHeight + 4)));
-		InjectCode((void*)(0x140a2443c), std::vector<uint8_t>((uint8_t*)&nReflectResWidth, (uint8_t*)((int64_t)&nReflectResWidth + 4)));
-		InjectCode((void*)(0x140a24440), std::vector<uint8_t>((uint8_t*)&nReflectResHeight, (uint8_t*)((int64_t)&nReflectResHeight + 4)));
-		// for large reflect resolutions, adjust blur effect amount to not lose the effect
-		// scaling is based on a 1024 width instead of the original 512px
-		// because we don't wanna make it too blurry when just being used to smooth jaggies
-		if (nReflectResWidth >= 2048)
+		if (nRefractResWidth > 0 && nRefractResHeight > 0)
 		{
-			int blurAmount = nReflectResWidth / 1024;
+			InjectCode((void*)(0x140a24424), std::vector<uint8_t>((uint8_t*)&nRefractResWidth, (uint8_t*)((int64_t)&nRefractResWidth + 4)));
+			InjectCode((void*)(0x140a24428), std::vector<uint8_t>((uint8_t*)&nRefractResHeight, (uint8_t*)((int64_t)&nRefractResHeight + 4)));
+		}
+		if (nReflectResWidth > 0 && nReflectResHeight > 0)
+		{
+			InjectCode((void*)(0x140a2443c), std::vector<uint8_t>((uint8_t*)&nReflectResWidth, (uint8_t*)((int64_t)&nReflectResWidth + 4)));
+			InjectCode((void*)(0x140a24440), std::vector<uint8_t>((uint8_t*)&nReflectResHeight, (uint8_t*)((int64_t)&nReflectResHeight + 4)));
+			// for large reflect resolutions, adjust blur effect amount to not lose the effect
+			// scaling is based on a 1024 width instead of the original 512px
+			// because we don't wanna make it too blurry when just being used to smooth jaggies
+			if (nReflectResWidth >= 2048)
+			{
+				int blurAmount = nReflectResWidth / 1024;
 
-			// multiply blur setting
-			// ECX has blur amount, EDX has blur type
-			InjectCode((void*)(0x140503000), { 0x89, 0x15, 0x3a, 0xa3, 0xca, 0x00 });  // MOV  dword ptr [0x1411ad340], EDX
-			InjectCode((void*)(0x140503006), { 0xb8 });                                // MOV  EAX, blurAmount
-			InjectCode((void*)(0x140503007), std::vector<uint8_t>((uint8_t*)&blurAmount, (uint8_t*)((int64_t)&blurAmount + 4)));
-			InjectCode((void*)(0x14050300b), { 0xf7, 0xe1 });                          // MUL  (EDX:EAX,)ECX
-			InjectCode((void*)(0x14050300d), { 0xeb, 0x09 });                          // JMP  0x140503018
-			InjectCode((void*)(0x140503018), { 0x89, 0x05, 0x1e, 0xa3, 0xca, 0x00 });  // MOV  dword ptr [0x1411ad33c], EAX
-			InjectCode((void*)(0x14050301e), { 0xc3 });                                // RET
+				// multiply blur setting
+				// ECX has blur amount, EDX has blur type
+				InjectCode((void*)(0x140503000), { 0x89, 0x15, 0x3a, 0xa3, 0xca, 0x00 });  // MOV  dword ptr [0x1411ad340], EDX
+				InjectCode((void*)(0x140503006), { 0xb8 });                                // MOV  EAX, blurAmount
+				InjectCode((void*)(0x140503007), std::vector<uint8_t>((uint8_t*)&blurAmount, (uint8_t*)((int64_t)&blurAmount + 4)));
+				InjectCode((void*)(0x14050300b), { 0xf7, 0xe1 });                          // MUL  (EDX:EAX,)ECX
+				InjectCode((void*)(0x14050300d), { 0xeb, 0x09 });                          // JMP  0x140503018
+				InjectCode((void*)(0x140503018), { 0x89, 0x05, 0x1e, 0xa3, 0xca, 0x00 });  // MOV  dword ptr [0x1411ad33c], EAX
+				InjectCode((void*)(0x14050301e), { 0xc3 });                                // RET
 
-			// divide dwgui blur amount getting
-			// RDX gets type, RCX gets amount
-			InjectCode((void*)(0x140502910), { 0x48, 0x85, 0xd2 });                    // TEST  RDX, RDX
-			InjectCode((void*)(0x140502913), { 0x74, 0x08 });                          // JZ  0x14050291d
-			InjectCode((void*)(0x140502915), { 0x8b, 0x05, 0x25, 0xaa, 0xca, 0x00 });  // MOV  EAX, dword ptr [0x1411ad340]
-			InjectCode((void*)(0x14050291b), { 0x89, 0x02 });                          // MOV  dword ptr [RDX], EAX
+				// divide dwgui blur amount getting
+				// RDX gets type, RCX gets amount
+				InjectCode((void*)(0x140502910), { 0x48, 0x85, 0xd2 });                    // TEST  RDX, RDX
+				InjectCode((void*)(0x140502913), { 0x74, 0x08 });                          // JZ  0x14050291d
+				InjectCode((void*)(0x140502915), { 0x8b, 0x05, 0x25, 0xaa, 0xca, 0x00 });  // MOV  EAX, dword ptr [0x1411ad340]
+				InjectCode((void*)(0x14050291b), { 0x89, 0x02 });                          // MOV  dword ptr [RDX], EAX
 
-			InjectCode((void*)(0x14050291d), { 0x48, 0x85, 0xc9 });                    // TEST  RCX, RCX
-			InjectCode((void*)(0x140502920), { 0x74, 0x2d });                          // JZ  0x14050294f
-			InjectCode((void*)(0x140502922), { 0x8b, 0x05, 0x14, 0xaa, 0xca, 0x00 });  // MOV  EAX, dword ptr [0x1411ad33c]
+				InjectCode((void*)(0x14050291d), { 0x48, 0x85, 0xc9 });                    // TEST  RCX, RCX
+				InjectCode((void*)(0x140502920), { 0x74, 0x2d });                          // JZ  0x14050294f
+				InjectCode((void*)(0x140502922), { 0x8b, 0x05, 0x14, 0xaa, 0xca, 0x00 });  // MOV  EAX, dword ptr [0x1411ad33c]
 
-			InjectCode((void*)(0x140502928), { 0xeb, 0x0d });                          // JMP  0x140502937
-			InjectCode((void*)(0x140502937), { 0x49, 0xc7, 0xc0 });                    // MOV  R8, blurAmount
-			InjectCode((void*)(0x14050293a), std::vector<uint8_t>((uint8_t*)&blurAmount, (uint8_t*)((int64_t)&blurAmount + 4)));
-			InjectCode((void*)(0x14050293e), { 0xeb, 0x08 });                          // JMP  0x140502948
-			InjectCode((void*)(0x140502948), { 0x31, 0xd2 });                          // XOR  EDX,EDX
-			InjectCode((void*)(0x14050294a), { 0x49, 0xf7, 0xf0 });                    // DIV  (EDX:EAX,)R8
+				InjectCode((void*)(0x140502928), { 0xeb, 0x0d });                          // JMP  0x140502937
+				InjectCode((void*)(0x140502937), { 0x49, 0xc7, 0xc0 });                    // MOV  R8, blurAmount
+				InjectCode((void*)(0x14050293a), std::vector<uint8_t>((uint8_t*)&blurAmount, (uint8_t*)((int64_t)&blurAmount + 4)));
+				InjectCode((void*)(0x14050293e), { 0xeb, 0x08 });                          // JMP  0x140502948
+				InjectCode((void*)(0x140502948), { 0x31, 0xd2 });                          // XOR  EDX,EDX
+				InjectCode((void*)(0x14050294a), { 0x49, 0xf7, 0xf0 });                    // DIV  (EDX:EAX,)R8
 
-			InjectCode((void*)(0x14050294d), { 0x89, 0x01 });                          // MOV  dword ptr [RCX], EAX
-			InjectCode((void*)(0x14050294f), { 0xc3 });                                // RET
+				InjectCode((void*)(0x14050294d), { 0x89, 0x01 });                          // MOV  dword ptr [RCX], EAX
+				InjectCode((void*)(0x14050294f), { 0xc3 });                                // RET
+			}
 		}
 
 		// lag compensation

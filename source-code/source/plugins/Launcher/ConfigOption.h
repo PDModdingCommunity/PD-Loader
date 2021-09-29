@@ -33,6 +33,7 @@ Panel^ MakePanel(int width, int height, std::vector<ConfigOptionBase*> &cfg, Too
 
 #define RESOPT_MATCH_WINDOW_TEXT "Match Window"
 #define RESOPT_MATCH_SCREEN_TEXT "Match Screen"
+#define RESOPT_DEFAULT_TEXT "Default"
 
 ref class ComboboxValidation
 {
@@ -81,7 +82,7 @@ public:
 	{
 		System::String^ text = cb->Text;
 
-		if (text == RESOPT_MATCH_WINDOW_TEXT || text == RESOPT_MATCH_SCREEN_TEXT)
+		if (text == RESOPT_MATCH_WINDOW_TEXT || text == RESOPT_MATCH_SCREEN_TEXT || text == RESOPT_DEFAULT_TEXT)
 			return;
 
 		cli::array<Char>^ digitsarray = gcnew cli::array<Char>{ L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7', L'8', L'9' };
@@ -888,7 +889,8 @@ enum ResolutionOptionOpts
 {
 	RESOPT_NONE,
 	RESOPT_INCLUDE_MATCH_WINDOW,
-	RESOPT_INCLUDE_MATCH_SCREEN
+	RESOPT_INCLUDE_MATCH_SCREEN,
+	RESOPT_INCLUDE_DEFAULT
 };
 
 class ResolutionOption : public ConfigOptionBase
@@ -932,6 +934,8 @@ public:
 			combobox->Items->Add(RESOPT_MATCH_WINDOW_TEXT);
 		else if (_opts & RESOPT_INCLUDE_MATCH_SCREEN)
 			combobox->Items->Add(RESOPT_MATCH_SCREEN_TEXT);
+		else if (_opts & RESOPT_INCLUDE_DEFAULT)
+			combobox->Items->Add(RESOPT_DEFAULT_TEXT);
 
 		for (resolution& choice : _valueResolutions) {
 			tempSysStr = Convert::ToInt32(choice.width).ToString() + L"x" + Convert::ToInt32(choice.height).ToString();
@@ -954,6 +958,8 @@ public:
 				combobox->Text = RESOPT_MATCH_WINDOW_TEXT;
 			else if (_opts & RESOPT_INCLUDE_MATCH_SCREEN)
 				combobox->Text = RESOPT_MATCH_SCREEN_TEXT;
+			else if (_opts & RESOPT_INCLUDE_DEFAULT)
+				combobox->Text = RESOPT_DEFAULT_TEXT;
 		}
 		else {
 			tempSysStr = Convert::ToInt32(width).ToString() + L"x" + Convert::ToInt32(height).ToString();
@@ -1014,7 +1020,7 @@ public:
 		tempSysStr = ((ComboBox^)ComboBox::FromHandle(mainControlHandle))->Text;
 
 		// Match window/screen -> -1x-1
-		if (tempSysStr == RESOPT_MATCH_WINDOW_TEXT || tempSysStr == RESOPT_MATCH_SCREEN_TEXT)
+		if (tempSysStr == RESOPT_MATCH_WINDOW_TEXT || tempSysStr == RESOPT_MATCH_SCREEN_TEXT || tempSysStr == RESOPT_DEFAULT_TEXT)
 			tempSysStr = "-1x-1";
 
 		resolutionArray = tempSysStr->Split('x');

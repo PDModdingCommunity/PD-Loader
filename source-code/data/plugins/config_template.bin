@@ -46,6 +46,8 @@ No_Scrolling_SFX=0
 Enhanced_Stage_Manager=0
 #Use encore stages or not
 Enhanced_Stage_Manager_Encore=1
+#Enable PV Customization below
+Enable_PV_Customization=0
 #Change the mouth animations -- 0=default, 1=force PDA, 2=force FT
 Force_Mouth=0
 #Change the expressions -- 0=default, 1=force PDA, 2=force FT
@@ -54,7 +56,7 @@ Force_Expressions=0
 Force_Look=0
 #Disable hand scaling
 No_Hand_Scaling=0
-#Default hand size -- 0-10000=default, 12200=PDA
+#Default hand size -- 0-10000=default, 12200=PDA, 1000000=maximum
 Default_Hand_Size_uint=0
 #Sing missed notes
 Sing_Missed=0

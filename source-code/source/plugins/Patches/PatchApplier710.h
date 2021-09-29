@@ -649,12 +649,12 @@ class PatchApplier710 : public PatchApplier {
 		}
 
 		// patch refract and reflect buffer sizes
-		if (nRefractResWidth > 0 && nRefractResHeight > 0)
+		if ((int)nRefractResWidth != -1 && (int)nRefractResHeight != -1)
 		{
 			InjectCode((void*)(0x140a24424), std::vector<uint8_t>((uint8_t*)&nRefractResWidth, (uint8_t*)((int64_t)&nRefractResWidth + 4)));
 			InjectCode((void*)(0x140a24428), std::vector<uint8_t>((uint8_t*)&nRefractResHeight, (uint8_t*)((int64_t)&nRefractResHeight + 4)));
 		}
-		if (nReflectResWidth > 0 && nReflectResHeight > 0)
+		if (nReflectResWidth > -1 && nReflectResHeight > -1)
 		{
 			InjectCode((void*)(0x140a2443c), std::vector<uint8_t>((uint8_t*)&nReflectResWidth, (uint8_t*)((int64_t)&nReflectResWidth + 4)));
 			InjectCode((void*)(0x140a24440), std::vector<uint8_t>((uint8_t*)&nReflectResHeight, (uint8_t*)((int64_t)&nReflectResHeight + 4)));

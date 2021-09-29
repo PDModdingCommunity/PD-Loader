@@ -890,7 +890,7 @@ enum ResolutionOptionOpts
 	RESOPT_NONE,
 	RESOPT_INCLUDE_MATCH_WINDOW,
 	RESOPT_INCLUDE_MATCH_SCREEN,
-	RESOPT_INCLUDE_DEFAULT
+	RESOPT_INCLUDE_DEFAULT = 4
 };
 
 class ResolutionOption : public ConfigOptionBase

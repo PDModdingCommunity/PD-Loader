@@ -167,7 +167,7 @@ class PatchApplier710 : public PatchApplier {
 			if (nPDLoaderText && !nHideFreeplay)
 			{
 				InjectCode((void*)0x00000001409F61F0, { 0x50, 0x44, 0x20, 0x4C, 0x6F, 0x61, 0x64, 0x65, 0x72, 0x20, 0x00, 0x20,
-					'2', '.', '6', '.', '2'});
+					'2', '.', '6', '.', '3'});
 				printf("[Patches] Show PD Loader text\n");
 			}
 		}
@@ -649,7 +649,7 @@ class PatchApplier710 : public PatchApplier {
 		}
 
 		// patch refract and reflect buffer sizes
-		if ((int)nRefractResWidth != -1 && (int)nRefractResHeight != -1)
+		if (nRefractResWidth > -1 && nRefractResHeight > -1)
 		{
 			InjectCode((void*)(0x140a24424), std::vector<uint8_t>((uint8_t*)&nRefractResWidth, (uint8_t*)((int64_t)&nRefractResWidth + 4)));
 			InjectCode((void*)(0x140a24428), std::vector<uint8_t>((uint8_t*)&nRefractResHeight, (uint8_t*)((int64_t)&nRefractResHeight + 4)));

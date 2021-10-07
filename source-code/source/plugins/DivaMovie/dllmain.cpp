@@ -146,6 +146,12 @@ VTABLE_HOOK(HRESULT, IMFTransform, ProcessMessage, MFT_MESSAGE_TYPE eMessage, UL
 			if (SUCCEEDED(result))
 				INSTALL_VTABLE_HOOK(This, ProcessOutput, 25);
 		}
+		else
+		{
+			static bool warn = false;
+			if(!warn) MessageBoxW(0, L"Your system supports DXVA hardware decoding.\nIt is highly recommended to disable DivaMovie (in Plugins and Patches).", L"DivaMovie", MB_ICONWARNING);
+			warn = true;
+		}
 		return result;
 	}
 	

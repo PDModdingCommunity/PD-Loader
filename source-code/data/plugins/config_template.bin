@@ -153,7 +153,6 @@ r.Width=1920
 r.Height=1080
 
 [plugins]
-DivaMovie.dva=0
 DivaWig.dva=0
 DSCRemote.dva=0
 custom_freeplay_text_example.p=0

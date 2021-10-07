@@ -224,7 +224,7 @@ namespace Launcher {
 
 			if (wineVersion != "")
 			{
-				this->labelGPU->Text = "Wine " + wineVersion + " (at least 4.12.1 is required)\n";
+				this->labelGPU->Text = "Wine " + wineVersion + " (remember to disable movies!)\n";
 			}
 			else this->labelGPU->Text = "GPU Info:\n";
 			this->labelGPU->Text += vendor + " " + renderer + "\n";

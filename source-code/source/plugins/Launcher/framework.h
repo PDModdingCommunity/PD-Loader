@@ -289,11 +289,11 @@ ConfigOptionBase* playerdataArray[] = {
 	new BooleanOption(L"border_excellent", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Clear Border (Excellent)", L"Shows the clear border for an excellent rating on the progress bar.", true, true),
 	new BooleanOption(L"border_rival", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Clear Border (Rival)", L"Shows the clear border for beating your rival on the progress bar.", false, true),
 
-	new BooleanOption(L"use_card", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Use Card", L"Enables IC card. This allows module selection.", false, true),
-	new BooleanOption(L"module_card_workaround", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Module Selection Workaround", L"Allows module selection without card and tries to improve menu performance.\n(BETA)", true, true),
-	new BooleanOption(L"use_pv_module_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Song Specific Modules", L"Allows song-specific module selection.", false, true),
-	new BooleanOption(L"use_pv_skin_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Song Specific Skins", L"Allows song-specific skin settings.\nValues stored in skins.ini", false, true),
-	new BooleanOption(L"use_pv_sfx_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Song Specific Sound Effects", L"Allows song-specific sound effect settings.\nValues stored in sfx.ini", false, true),
+	new BooleanOption(L"use_card", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Use Card", L"Enables IC card. This allows module selection.", true, true),
+	new BooleanOption(L"module_card_workaround", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Fast Module Selection (buggy)", L"Allows module selection without card and tries to improve menu performance.\nKnown to cause issues, especially with song-specific modules.", false, true),
+	new BooleanOption(L"use_pv_module_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Song Specific Modules", L"Allows song-specific module selection.", true, true),
+	new BooleanOption(L"use_pv_skin_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Song Specific Skins", L"Allows song-specific skin settings.\nValues stored in skins.ini", true, true),
+	new BooleanOption(L"use_pv_sfx_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Song Specific Sound Effects", L"Allows song-specific sound effect settings.\nValues stored in sfx.ini", true, true),
 
 	new BooleanOption(L"gamemode_options", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"Game Modifiers", L"Allows use of game mode modifiers (hi-speed, hidden, and sudden).", true, true),
 };

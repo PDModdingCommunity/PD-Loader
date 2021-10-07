@@ -167,7 +167,7 @@ class PatchApplier710 : public PatchApplier {
 			if (nPDLoaderText && !nHideFreeplay)
 			{
 				InjectCode((void*)0x00000001409F61F0, { 0x50, 0x44, 0x20, 0x4C, 0x6F, 0x61, 0x64, 0x65, 0x72,
-					0x20, 0x32, 0x2E, 0x36, 0x2E, 0x34,
+					0x20, 0x32, 0x2E, 0x36, 0x2E, 0x35,
 					0x00});
 				printf("[Patches] Show PD Loader text\n");
 			}
@@ -650,12 +650,14 @@ class PatchApplier710 : public PatchApplier {
 		}
 
 		// patch refract and reflect buffer sizes
-		if (nRefractResWidth != 512 && nRefractResHeight != 256)
+		if (nRefractResWidth != 512 || nRefractResHeight != 256)
 		{
 			InjectCode((void*)(0x140a24424), std::vector<uint8_t>((uint8_t*)&nRefractResWidth, (uint8_t*)((int64_t)&nRefractResWidth + 4)));
 			InjectCode((void*)(0x140a24428), std::vector<uint8_t>((uint8_t*)&nRefractResHeight, (uint8_t*)((int64_t)&nRefractResHeight + 4)));
+
+			printf("[Patches] Refraction resolution patched.\n");
 		}
-		if (nReflectResWidth != 512 && nReflectResHeight != 256)
+		if (nReflectResWidth != 512 || nReflectResHeight != 256)
 		{
 			InjectCode((void*)(0x140a2443c), std::vector<uint8_t>((uint8_t*)&nReflectResWidth, (uint8_t*)((int64_t)&nReflectResWidth + 4)));
 			InjectCode((void*)(0x140a24440), std::vector<uint8_t>((uint8_t*)&nReflectResHeight, (uint8_t*)((int64_t)&nReflectResHeight + 4)));
@@ -697,6 +699,8 @@ class PatchApplier710 : public PatchApplier {
 				InjectCode((void*)(0x14050294d), { 0x89, 0x01 });                          // MOV  dword ptr [RCX], EAX
 				InjectCode((void*)(0x14050294f), { 0xc3 });                                // RET
 			}
+
+			printf("[Patches] Reflection resolution patched.\n");
 		}
 
 		// lag compensation

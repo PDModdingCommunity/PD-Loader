@@ -215,6 +215,8 @@ void FindFiles(WIN32_FIND_DATAW* fd)
 		do {
 			if (!(fd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
+				if (fd->cFileName[0] == '.' && fd->cFileName[1] == '_') continue; // exclude macOS metadata
+
 				auto pos = wcslen(fd->cFileName);
 
 				if (fd->cFileName[pos - 4] == '.' &&
@@ -771,7 +773,7 @@ void Init()
 		(PathFileExistsW(SHADERPATCH_TEMPLATE) && !PathFileExistsW(SHADERPATCH)) ||
 		(PathFileExistsW(SHADERPATCHCONFIG_TEMPLATE) && !PathFileExistsW(SHADERPATCHCONFIG))
 		)
-		MessageBoxW(0, L"Could not install configuration files. Is the game in a read-only folder?", L"PD Loader", MB_ICONWARNING);
+		MessageBoxW(0, L"Could not install configuration files. Possible causes:\n\n- PD Loader was not installed correctly\n- The game is on a read-only drive\n- No privileges to write in the folder", L"PD Loader", MB_ICONWARNING);
 
 	CreateDirectoryW(L"plugins\\pv_equip", NULL);
 	const auto eq_modules = L"plugins\\pv_equip\\modules.ini";

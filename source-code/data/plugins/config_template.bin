@@ -38,7 +38,7 @@ Cursor=1
 #Use 2 channels instead of 4 (when not using DivaSound)
 Stereo=1
 #Skip one or more menus -- 0=disabled, 1=guest, 2=guest+normal
-Quick_Start=1
+Quick_Start=0
 #Disable the scrolling sound effect
 No_Scrolling_SFX=0
 #Enhanced Stage Manager (sets a custom number of stages; "stage_manager" should be disabled in "components.ini")
@@ -153,6 +153,7 @@ r.Width=1920
 r.Height=1080
 
 [plugins]
+DivaMovie.dva=0
 DivaWig.dva=0
 DSCRemote.dva=0
 custom_freeplay_text_example.p=0

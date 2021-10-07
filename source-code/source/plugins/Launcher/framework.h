@@ -411,6 +411,8 @@ std::vector<PluginInfo> LoadPlugins()
 		do {
 			if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
+				if (ffd.cFileName[0] == '.' && ffd.cFileName[1] == '_') continue; // exclude macOS metadata
+
 				auto pos = wcslen(ffd.cFileName);
 
 				if (ffd.cFileName[pos - 4] == '.' &&
@@ -487,11 +489,13 @@ std::vector<PluginInfo> LoadCustom()
 	HANDLE hFind;
 	WIN32_FIND_DATAW ffd;
 
-	hFind = FindFirstFileW((PATCHES_DIR + L"\\*.p?").c_str(), &ffd);
+	hFind = FindFirstFileW((PATCHES_DIR + L"\\*.p*").c_str(), &ffd);
 	if (hFind != INVALID_HANDLE_VALUE) {
 		do {
 			if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
+				if (ffd.cFileName[0] == '.' && ffd.cFileName[1] == '_') continue; // exclude macOS metadata
+
 				auto pos = wcslen(ffd.cFileName);
 
 				if ((ffd.cFileName[pos - 2] == '.' && (ffd.cFileName[pos - 1] == 'p' || ffd.cFileName[pos - 1] == 'P')) ||

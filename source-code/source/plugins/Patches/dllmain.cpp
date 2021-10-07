@@ -80,6 +80,8 @@ void ApplyPatches() {
 		try {
 			for (std::filesystem::path p : std::filesystem::directory_iterator("../patches"))
 			{
+				if (std::filesystem::path(p).filename().string()._Starts_with("._")) continue; // exclude macOS metadata
+
 				std::string extension = std::filesystem::path(p).extension().string();
 				if ((extension == ".p" || extension == ".P" || extension == ".p2" || extension == ".P2") &&
 					GetPrivateProfileIntW(L"plugins", std::filesystem::path(p).filename().c_str(), TRUE, CONFIG_FILE))
@@ -87,6 +89,7 @@ void ApplyPatches() {
 					std::cout << "[Patches] Reading custom patch file: " << std::filesystem::path(p).filename().string() << std::endl;
 					ApplyCustomPatches(std::filesystem::path(p).wstring());
 				}
+				else std::cout << "[Patches] Skipping disabled patch file: " << std::filesystem::path(p).filename().string() << std::endl;
 			}
 		}
 		catch (const std::filesystem::filesystem_error &e) {

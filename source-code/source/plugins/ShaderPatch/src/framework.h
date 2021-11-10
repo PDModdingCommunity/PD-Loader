@@ -124,6 +124,6 @@ std::wstring DirPath() {
 std::wstring DATA_FILE_STRING = DirPath() + L"\\plugins\\ShaderPatch.ini";
 LPCWSTR DATA_FILE = DATA_FILE_STRING.c_str();
 
-std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\ShaderPatchConfig.ini";
+std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins_config\\ShaderPatchConfig.ini";
 LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
 

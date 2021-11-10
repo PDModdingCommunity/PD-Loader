@@ -157,30 +157,6 @@ podem causar problemas com capturas de tela e/ou taxa de quadros.</value>
   <data name="tabPage_Plugins.Text" xml:space="preserve">
     <value>Plugins e Patches</value>
   </data>
-  <data name="button_ModRename.Text" xml:space="preserve">
-    <value>Renomear</value>
-  </data>
-  <data name="button_ModRescan.Text" xml:space="preserve">
-    <value>Re-escanear</value>
-  </data>
-  <data name="button_ModFiles.Text" xml:space="preserve">
-    <value>Arquivos...</value>
-  </data>
-  <data name="checkBox_ModPatches.Text" xml:space="preserve">
-    <value>Plugins e Patches</value>
-  </data>
-  <data name="button_ModDelete.Text" xml:space="preserve">
-    <value>Apagar</value>
-  </data>
-  <data name="button_ModClone.Text" xml:space="preserve">
-    <value>Novo/Clonar</value>
-  </data>
-  <data name="button_ModSetActive.Text" xml:space="preserve">
-    <value>Ativar</value>
-  </data>
-  <data name="tabPage_Modpacks.Text" xml:space="preserve">
-    <value>Modpacks</value>
-  </data>
   <data name="creditsTextBox.Text" xml:space="preserve">
     <value>PD Loader is intended for educational purposes only; not for piracy.
 Users should possess a legally-obtained dump of the game to use this software.
@@ -192,7 +168,7 @@ Project Contributors:
 Nezarn, samyuu, Skyth, somewhatlurker, Stewie1.0, SwigS-27, zsccat
 
 Brazilian Portuguese Translation (Tradução para o Português Brasileiro): _ScarletNeko
-(revised by nastys)
+(revised by nastys and ManMan)
 
 PD Loader and the included plugins are distributed under MIT License:
   

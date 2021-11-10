@@ -179,15 +179,6 @@ class PatchApplier710 : public PatchApplier {
 
 			InjectCode((void*)0x00000001403BABEA, { 0x75 });
 			printf("[Patches] Show FREE PLAY instead of CREDIT(S)\n");
-
-			if (nPDLoaderText && !nHideFreeplay)
-			{
-				InjectCode((void*)0x00000001409F61F0, { 0x50, 0x44, 0x20 });
-				InjectCode((void*)0x00000001409F61F3, { 0x4C, 0x6F, 0x61 });
-				InjectCode((void*)0x00000001409F61F6, { 0x64, 0x65, 0x72 });
-				InjectCode((void*)0x00000001409F61F9, { 0x20, 0x00 });
-				printf("[Patches] Show PD Loader text\n");
-			}
 		}
 
 

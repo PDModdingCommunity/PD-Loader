@@ -19,7 +19,7 @@ using namespace TLAC::Utilities;
 
 namespace TLAC::Components
 {
-	const std::string KEY_CONFIG_FILE_NAME = "keyconfig.ini";
+	const std::string KEY_CONFIG_FILE_NAME = "..\\plugins_config\\keyconfig.ini";
 
 	TouchSliderEmulator* TouchSliderEmulator::LatestInstance;
 

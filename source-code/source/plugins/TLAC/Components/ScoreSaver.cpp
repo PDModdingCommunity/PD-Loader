@@ -18,15 +18,15 @@ namespace TLAC::Components
 	WCHAR ScoreSaver::sfx_configPath[256];
 	ScoreSaver::ScoreSaver()
 	{
-		std::string utf8path = TLAC::framework::GetModuleDirectory() + "/scores.ini";
+		std::string utf8path = TLAC::framework::GetModuleDirectory() + "../plugins_config/scores.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, configPath, 256);
-		utf8path = TLAC::framework::GetModuleDirectory() + "/rivalscores.ini";
+		utf8path = TLAC::framework::GetModuleDirectory() + "../plugins_config/rivalscores.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, rival_configPath, 256);
-		utf8path = TLAC::framework::GetModuleDirectory() + "/pv_equip/modules.ini";
+		utf8path = TLAC::framework::GetModuleDirectory() + "../plugins_config/pv_equip/modules.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, modules_configPath, 256);
-		utf8path = TLAC::framework::GetModuleDirectory() + "/pv_equip/skins.ini";
+		utf8path = TLAC::framework::GetModuleDirectory() + "../plugins_config/pv_equip/skins.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, skins_configPath, 256);
-		utf8path = TLAC::framework::GetModuleDirectory() + "/pv_equip/sfx.ini";
+		utf8path = TLAC::framework::GetModuleDirectory() + "../plugins_config/pv_equip/sfx.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, sfx_configPath, 256);
 
 	}

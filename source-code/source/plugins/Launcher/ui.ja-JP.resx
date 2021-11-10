@@ -118,57 +118,80 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="button_Launch.Text" xml:space="preserve">
-    <value>Avvia</value>
+    <value>開始</value>
   </data>
   <data name="checkBox_nofsopt.Text" xml:space="preserve">
-    <value>Disabilita ottimizazioni schermo intero</value>
+    <value>フルスクリーンの最適化を無効にする</value>
   </data>
   <data name="checkBox_nofsopt.ToolTip" xml:space="preserve">
-    <value>Disattiva ottimizzazioni schermo intero, che possono causare problemi con screenshot e/o la frequenza dei fotogrammi</value>
+    <value>Windows 10/11のフルスクリーン最適化を無効にします。
+は、スクリーンショットやフレームレートの問題を引き起こす可能性があります</value>
   </data>
   <data name="groupBox_ScreenRes.Text" xml:space="preserve">
-    <value>Risoluzione dello schermo</value>
+    <value>画面解像度</value>
   </data>
   <data name="groupBox_Lag.Text" xml:space="preserve">
-    <value>Compensazione lag</value>
+    <value>レイテンシー補正</value>
   </data>
   <data name="groupBox_Details.Text" xml:space="preserve">
-    <value>Dettagli</value>
+    <value>グラフィックス</value>
   </data>
   <data name="groupBox_InternalRes.Text" xml:space="preserve">
-    <value>Risoluzione interna (qualità)</value>
+    <value>内部解像度（品質）</value>
   </data>
   <data name="tabPage_Resolution.Text" xml:space="preserve">
-    <value>Grafica</value>
+    <value>画像</value>
   </data>
   <data name="tabPage_Patches.Text" xml:space="preserve">
-    <value>Opzioni</value>
+    <value>設定</value>
   </data>
   <data name="tabPage_Playerdata.Text" xml:space="preserve">
-    <value>Giocatore</value>
+    <value>プレーヤー</value>
   </data>
   <data name="linkLabel_Console.Text" xml:space="preserve">
-    <value>Console</value>
+    <value>ターミナル</value>
   </data>
   <data name="tabPage_Components.Text" xml:space="preserve">
-    <value>Componenti</value>
+    <value>コンポーネンテズ</value>
   </data>
   <data name="tabPage_Plugins.Text" xml:space="preserve">
-    <value>Plugin e patch</value>
+    <value>プラグインとパッチ</value>
+  </data>
+  <data name="button_ModRename.Text" xml:space="preserve">
+    <value>名前の変更</value>
+  </data>
+  <data name="button_ModRescan.Text" xml:space="preserve">
+    <value>再スキャン</value>
+  </data>
+  <data name="button_ModFiles.Text" xml:space="preserve">
+    <value>ファイル...</value>
+  </data>
+  <data name="checkBox_ModPatches.Text" xml:space="preserve">
+    <value>プラグインとパッチ</value>
+  </data>
+  <data name="button_ModDelete.Text" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="button_ModClone.Text" xml:space="preserve">
+    <value>新規/クローン</value>
+  </data>
+  <data name="button_ModSetActive.Text" xml:space="preserve">
+    <value>起動</value>
+  </data>
+  <data name="tabPage_Modpacks.Text" xml:space="preserve">
+    <value>Modpacks</value>
   </data>
   <data name="creditsTextBox.Text" xml:space="preserve">
-    <value>PD Loader è inteso a scopi didattici; non per pirateria.
-Gli utenti devono possedere una copia del gioco ottenuta legalmente per usare questo software. Si prega di controllare le leggi/regolamenti locali per verificare la legalità del manipolare ed estrarre dati da macchine arcade protette.
-Hanno contribuito al progetto:
+    <value>PD Loaderは教育目的のみであり、海賊行為を目的としたものではありません。
+本ソフトウェアを使用するには、合法的に入手したゲームのダンプを所有している必要があります。
+業務用ゲーム機のデータを改ざんしたり、ダンプしたりすることの合法性については
+データを改ざんしたり、保護されたアーケードマシンのハードウェアからデータをダンプすることの合法性を確認してください。
+
+プロジェクト貢献者:
 ***REMOVED***, Brolijah, crash5b, ona, korenkonder, Kyberal, lybxlpsv, nastys,
 Nezarn, samyuu, Skyth, somewhatlurker, Stewie1.0, SwigS-27, zsccat
 
-PD Loader e i plugin inclusi sono distribuiti secondo le condizioni della licenza MIT:
-
-Project Contributors:
-***REMOVED***, Brolijah, crash5b, ona, korenkonder, Kyberal, lybxlpsv, nastys,
-Nezarn, samyuu, Skyth, somewhatlurker, Stewie1.0, SwigS-27, zsccat
-
+Japanese Translation (日本語訳) by ManMan
 
 PD Loader and the included plugins are distributed under MIT License:
   
@@ -278,44 +301,44 @@ non-commercial use only)
 AMD compatibilty pack dependencies have additional licenses, detailed in the AMD</value>
   </data>
   <data name="tabPage_Credits.Text" xml:space="preserve">
-    <value>Crediti</value>
+    <value>クレディット</value>
   </data>
   <data name="linkLabel_Repo.Text" xml:space="preserve">
-    <value>Repository ufficiale</value>
+    <value>公式リポジトリ</value>
   </data>
   <data name="linkLabel_Help.Text" xml:space="preserve">
-    <value>Aiuto</value>
+    <value>ヘルプ</value>
   </data>
   <data name="linkLabel_Official_Discord.Text" xml:space="preserve">
-    <value>Server Discord ufficiale</value>
+    <value>公式Discordサーバー</value>
   </data>
   <data name="linkLabel_Changelog.Text" xml:space="preserve">
-    <value>Novità</value>
+    <value>変更履歴</value>
   </data>
   <data name="button_Clean_installation.Text" xml:space="preserve">
-    <value>Installazione pulita</value>
+    <value>新規インストール</value>
   </data>
   <data name="button_Instructions.Text" xml:space="preserve">
-    <value>Istruzioni</value>
+    <value>説明書</value>
   </data>
   <data name="button_Unstable_builds.Text" xml:space="preserve">
-    <value>Build instabili</value>
+    <value>不安定なバージョン</value>
   </data>
   <data name="button_Releases_page.Text" xml:space="preserve">
-    <value>Pagina rilasci</value>
+    <value>アップデートページ</value>
   </data>
   <data name="label_Update_2.Text" xml:space="preserve">
-    <value>Si consiglia caldamente di scaricare gli aggiornamenti direttamente dal repository ufficiale.
-Se PD Loader è stato scaricato altrove, si consiglia di fare un'installazione pulita.</value>
+    <value>アップデートは公式リポジトリから直接ダウンロードすることを強くお勧めします。
+他の場所からPD Loaderをダウンロードした場合は、クリーンインストールをお勧めします</value>
   </data>
   <data name="label_Update_1.Text" xml:space="preserve">
-    <value>Aggiorna PD Loader con regolarità per ottenere le ultime funzionalità
-e correzioni di bug!</value>
+    <value>PD Loaderを定期的にアップデートする
+をクリックすると、最新の修正や新機能が表示されます</value>
   </data>
   <data name="tabPage_Update.Text" xml:space="preserve">
-    <value>AGGIORNA</value>
+    <value>アップデイト</value>
   </data>
   <data name="button_Apply.Text" xml:space="preserve">
-    <value>Applica</value>
+    <value>適用</value>
   </data>
 </root>

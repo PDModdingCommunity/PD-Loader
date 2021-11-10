@@ -67,7 +67,7 @@ void InjectLong(void* address, const long data)
 	VirtualProtect(address, byteCount, oldProtect, nullptr);
 }
 
-const LPCWSTR CONFIG_FILE = L"plugins\\config.ini";
+const LPCWSTR CONFIG_FILE = L"plugins_config\\config.ini";
 const LPCWSTR CONFIG_FILE_NAME = L".\\config.ini";
 
 

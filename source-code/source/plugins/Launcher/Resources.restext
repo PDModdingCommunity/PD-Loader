@@ -6,6 +6,7 @@ en=English
 zh-Hans=Simplified Chinese
 pt-BR=Portuguese
 it-IT=Italian
+ja-JP=Japanese
 
 # display
 DISPLAY_NAME=Display:
@@ -107,6 +108,8 @@ HIDE_FREEPLAY_NAME=Hide "FREE PLAY"/"CREDIT(S)"
 HIDE_FREEPLAY_HINT=Hide the "FREE PLAY"/"CREDIT(S)" text.
 PDLOADERTEXT_NAME=PD Loader FREE PLAY
 PDLOADERTEXT_HINT=Show "PD Loader" instead of "FREE PLAY".
+ALLOWCUSTOMFREEPLAY_NAME=Allow Custom Text
+ALLOWCUSTOMFREEPLAY_HINT=Allow plugins and patches to change "FREE PLAY"/"CREDIT(S)".
 NO_TIMER_NAME=Freeze Timer
 NO_TIMER_HINT=Disable the timer.
 NO_TIMER_SPRITE_NAME=Disable Timer Sprite
@@ -229,7 +232,7 @@ DEBUG_COMPONENT_HINT=Allows for changing game state (F4-F8 keys), using dev GUI 
 TARGET_INSPECTOR_NAME=Target Inspector
 TARGET_INSPECTOR_HINT=Enables hold transfers.
 SCORE_SAVER_NAME=Score Saver
-SCORE_SAVER_HINT=Saves high scores to plugins/scores.ini.
+SCORE_SAVER_HINT=Saves high scores to plugins_config/scores.ini.
 PAUSE_NAME=Pause
 PAUSE_HINT=Adds a pause menu.
 
@@ -243,7 +246,7 @@ CONFIG=Config
 CONFIRM_SAVE_SETTINGS=Do you want to save your settings?
 CONFIRM_DISCORD_OR_GUIDE=Would you like to read the user guide for troubleshooting?
 HOWTO_CLEAN_INSTALL=How to do a clean installation
-HOWTO_CLEAN_INSTALL_HINT=Delete:\n- dnsapi.dll or dinput8.dll\n- patches/\n- plugins/\n\nRestore:\n- glut32.dll\n\nThen install PD Loader from the official repository.
+HOWTO_CLEAN_INSTALL_HINT=Delete:\n- dnsapi.dll or dinput8.dll\n- patches/\n- plugins/\n- plugins_config/\n\nRestore:\n- glut32.dll\n\nThen install PD Loader from the official repository.
 
 # gpu
 GPU_WINE_DISABLE_MOVIES=(remember to disable movies!)

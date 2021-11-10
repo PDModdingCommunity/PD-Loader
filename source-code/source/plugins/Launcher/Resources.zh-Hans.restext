@@ -6,6 +6,7 @@ en=英语
 zh-Hans=简体中文
 pt-BR=葡萄牙语
 it-IT=意大利语
+ja-JP=日语
 
 # display
 DISPLAY_NAME=显示模式:
@@ -238,7 +239,7 @@ CONFIG=设定
 CONFIRM_SAVE_SETTINGS=是否保存设置？
 CONFIRM_DISCORD_OR_GUIDE=您是否想阅读用户指南，以排除故障？
 HOWTO_CLEAN_INSTALL=如何清洁安装
-HOWTO_CLEAN_INSTALL_HINT=删除:\n- dnsapi.dll 或 dinput8.dll\n- patches/\n- plugins/\n\n恢复:\n- glut32.dll\n\n然后从官方仓库下载安装 PD Loader。
+HOWTO_CLEAN_INSTALL_HINT=删除:\n- dnsapi.dll 或 dinput8.dll\n- patches/\n- plugins/\n- plugins_config/\n\n恢复:\n- glut32.dll\n\n然后从官方仓库下载安装 PD Loader。
 
 #gpu
 GPU_INFO_NAME=显卡信息：

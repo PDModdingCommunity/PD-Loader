@@ -118,13 +118,11 @@
     <ClInclude Include="Patches\patches.h" />
     <ClInclude Include="Render\render-framework.h" />
     <ClInclude Include="Render\render.h" />
-    <ClInclude Include="templates.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Patches\patches.cpp" />
     <ClCompile Include="Render\render.cpp" />
-    <ClCompile Include="templates.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="x64.def" />

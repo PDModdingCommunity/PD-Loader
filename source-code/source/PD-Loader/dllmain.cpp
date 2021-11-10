@@ -2,7 +2,6 @@
 #include "exception.hpp"
 #include "Patches\patches.h"
 #include "Render\render.h"
-#include "templates.h"
 #include <VersionHelpers.h>
 #include <Shlwapi.h>
 #pragma comment(lib, "Shlwapi.lib")
@@ -17,6 +16,7 @@ HMODULE hm;
 std::vector<std::wstring> iniPaths;
 
 unsigned short game_version = 710;
+bool allowcustomfreeplay = false;
 
 bool iequals(std::wstring_view s1, std::wstring_view s2)
 {
@@ -274,7 +274,15 @@ void LoadPlugins()
 			}
 		}
 		ApplyPatches();
+		if (allowcustomfreeplay) ApplyVerText();
 		if (SetCurrentDirectoryW(szSelfPath.c_str())) ApplyAllCustomPatches();
+		if (!allowcustomfreeplay)
+		{
+			// we want to prevent both patches and plugins from changing it, not just patches
+			InjectCode((void*)0x1409F61F0, { 0x46, 0x52, 0x45, 0x45, 0x20, 0x50, 0x4C, 0x41, 0x59, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+											 0x43, 0x52, 0x45, 0x44, 0x49, 0x54, 0x28, 0x53, 0x29, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+			ApplyVerText();
+		}
 		ApplyRender(hm);
 	}
 
@@ -754,72 +762,84 @@ void Init()
 	modulePath.resize(modulePath.find_last_of(L"/\\") + 1);
 	iniPaths.emplace_back(modulePath + moduleName + L".ini");
 
-	const auto CONFIG_FILE = L"plugins\\config.ini";
+	const auto CONFIG_FILE = L"plugins_config\\config.ini";
 	iniPaths.emplace_back(modulePath + CONFIG_FILE);
 
+	// move old configuration files
+	// should probably be handled by the yet-to-be unified config manager
+	MoveFileW(L"plugins\\config.ini", CONFIG_FILE);
+	MoveFileW(L"plugins\\components.ini", L"plugins_config\\components.ini");
+	MoveFileW(L"plugins\\keyconfig.ini", L"plugins_config\\keyconfig.ini");
+	MoveFileW(L"plugins\\playerdata.ini", L"plugins_config\\playerdata.ini");
+	MoveFileW(L"plugins\\CustoMixer.ini", L"plugins_config\\CustoMixer.ini");
+	MoveFileW(L"plugins\\DivaWig.ini", L"plugins_config\\DivaWig.ini");
+	MoveFileW(L"plugins\\DSCRemote.ini", L"plugins_config\\DSCRemote.ini");
+	MoveFileW(L"plugins\\DivaMovie.ini", L"plugins_config\\DivaMovie.ini");
+	MoveFileW(L"plugins\\EnhancedStageManager.ini", L"plugins_config\\EnhancedStageManager.ini");
+	MoveFileW(L"plugins\\DivaSound.ini", L"plugins_config\\DivaSound.ini");
+	MoveFileW(L"plugins\\Novidia.ini", L"plugins_config\\Novidia.ini");
+	MoveFileW(L"plugins\\ShaderPatchConfig.ini", L"plugins_config\\ShaderPatchConfig.ini");
+	MoveFileW(L"plugins\\pv_equip\\", L"plugins_config\\pv_equip\\");
 
-	// initialize configuration files.
+	DeleteFileW(L"plugins\\config_template.bin");
+	DeleteFileW(L"plugins\\components_template.bin");
+	DeleteFileW(L"plugins\\DivaSound_template.bin");
+	DeleteFileW(L"plugins\\keyconfig_template.bin");
+	DeleteFileW(L"plugins\\playerdata_template.bin");
+	DeleteFileW(L"plugins\\ShaderPatchConfig_template.bin");
+
+	// initialize configuration files
 	WCHAR config_pcname[MAX_COMPUTERNAME_LENGTH + 1];
 	GetPrivateProfileStringW(L"global", L"pc", L"", config_pcname, MAX_COMPUTERNAME_LENGTH + 1, CONFIG_FILE);
 	WCHAR this_pcname[MAX_COMPUTERNAME_LENGTH + 1];
 	DWORD count = MAX_COMPUTERNAME_LENGTH + 1;
-	if(GetComputerNameW(this_pcname, &count) && PathFileExistsW(CONFIG_FILE) && wcscmp(config_pcname, this_pcname)!=0)
-	{
-		auto cfgsel = MessageBoxW(nullptr, L"Incompatible configuration found. This can happen if you are upgrading.\n\nIf you are not upgrading, then this version of PD Loader was likely hacked or used on another computer.\nIt is recommended to download the latest version from the official repository and do a clean installation (delete plugins/, patches/, dnsapi.dll and/or dinput8.dll, and restore glut32.dll).\n\nRestore the default settings?", L"PD Loader", MB_YESNOCANCEL | MB_ICONWARNING);
-		if (cfgsel == IDYES) if(!DeleteFileW(CONFIG_FILE))
-		{
-			MessageBoxW(nullptr, L"Cannot delete config.ini.\n\nThe file might be read-only or in use (is the game still running?).", L"PD Loader", MB_OK | MB_ICONERROR);
-			exit(1);
-		}
-		else if(cfgsel != IDNO) exit(1);
-	}
-
 
 	if (!PathFileExistsW(CONFIG_FILE))
 	{
-		writeTemplate(config_template, CONFIG_FILE);
-		WritePrivateProfileStringW(L"global", L"pc", this_pcname, CONFIG_FILE);
-		WritePrivateProfileStringW(L"plugins", L"Launcher.dva", L"1", CONFIG_FILE);
-		WritePrivateProfileStringW(L"plugins", L"TLAC.dva", L"1", CONFIG_FILE);
-		WritePrivateProfileStringW(L"plugins", L"DivaSound.dva", L"1", CONFIG_FILE);
-		WritePrivateProfileStringW(L"plugins", L"Novidia.dva", L"1", CONFIG_FILE);
-		WritePrivateProfileStringW(L"plugins", L"ShaderPatch.dva", L"1", CONFIG_FILE);
+		if (!(
+			CreateDirectoryW(L"plugins_config", NULL) &&
+			WritePrivateProfileStringW(L"global", L"pc", this_pcname, CONFIG_FILE) &&
+			WritePrivateProfileStringW(L"patches", L"allow_custom_freeplay", L"0", CONFIG_FILE) &&
+			WritePrivateProfileStringW(L"plugins", L"Launcher.dva", L"1", CONFIG_FILE) &&
+			WritePrivateProfileStringW(L"plugins", L"TLAC.dva", L"1", CONFIG_FILE) &&
+			WritePrivateProfileStringW(L"plugins", L"DivaSound.dva", L"1", CONFIG_FILE) &&
+			WritePrivateProfileStringW(L"plugins", L"Novidia.dva", L"1", CONFIG_FILE) &&
+			WritePrivateProfileStringW(L"plugins", L"ShaderPatch.dva", L"1", CONFIG_FILE)
+			))
+		{
+			MessageBoxW(0, L"Could not install configuration files. Is the game in a read-only folder?", L"PD Loader", MB_ICONERROR);
+			exit(1);
+		}
 	}
-	const auto COMPONENTS = L"plugins\\components.ini";
-	if (!PathFileExistsW(COMPONENTS)) writeTemplate(components_template, COMPONENTS);
-	const auto KEYCONFIG = L"plugins\\keyconfig.ini";
-	if (!PathFileExistsW(KEYCONFIG)) writeTemplate(keyconfig_template, KEYCONFIG);
-	const auto PLAYERDATA = L"plugins\\playerdata.ini";
-	if (!PathFileExistsW(PLAYERDATA)) writeTemplate(playerdata_template, PLAYERDATA);
-	const auto DIVASOUND = L"plugins\\DivaSound.ini";
-	if (!PathFileExistsW(DIVASOUND)) writeTemplate(divasound_template, DIVASOUND);
-	const auto SHADERPATCHCONFIG = L"plugins\\ShaderPatchConfig.ini";
-	if (!PathFileExistsW(SHADERPATCHCONFIG)) writeTemplate(shaderpatchconfig_template, SHADERPATCHCONFIG);
+	else if(GetComputerNameW(this_pcname, &count) && wcscmp(config_pcname, this_pcname)!=0)
+	{
+		if (!(
+		WritePrivateProfileStringW(L"global", L"pc", this_pcname, CONFIG_FILE) &&
+		WritePrivateProfileStringW(L"patches", L"allow_custom_freeplay", L"0", CONFIG_FILE)
+			))
+		{
+			MessageBoxW(0, L"Could not update configuration files. Is the game in a read-only folder?", L"PD Loader", MB_ICONERROR);
+			exit(1);
+		}
+	}
+	else allowcustomfreeplay = GetPrivateProfileIntW(L"patches", L"allow_custom_freeplay", FALSE, CONFIG_FILE) == 1;
 
-	if (!PathFileExistsW(CONFIG_FILE) ||
-	    !PathFileExistsW(COMPONENTS) ||
-	    !PathFileExistsW(KEYCONFIG) ||
-	    !PathFileExistsW(PLAYERDATA) ||
-	    !PathFileExistsW(DIVASOUND) ||
-	    !PathFileExistsW(SHADERPATCHCONFIG))
-		MessageBoxW(0, L"Could not install configuration files. Is the game in a read-only folder?", L"PD Loader", MB_ICONWARNING);
-
-	CreateDirectoryW(L"plugins\\pv_equip", NULL);
-	const auto eq_modules = L"plugins\\pv_equip\\modules.ini";
+	CreateDirectoryW(L"plugins_config\\pv_equip", NULL);
+	const auto eq_modules = L"plugins_config\\pv_equip\\modules.ini";
 	if (!PathFileExistsW(eq_modules))
 	{
 		std::ofstream stream(eq_modules);
 		stream << "[modules]\n# Manual editing is NOT recommended as the game will save here during gameplay";
 		stream.close();
 	}
-	const auto eq_sfx = L"plugins\\pv_equip\\sfx.ini";
+	const auto eq_sfx = L"plugins_config\\pv_equip\\sfx.ini";
 	if (!PathFileExistsW(eq_sfx))
 	{
 		std::ofstream stream(eq_sfx);
 		stream << "[SFX]\n# INI Format = ' pv.xxx.btn = sfx id (ex. 5) '\n# pv.001.btn=2 for example\n# pv.xxx.btn, pv.xxx.chain, pv.xxx.slide & pv.xxx.touch can all be assigned using the format";
 		stream.close();
 	}
-	const auto eq_skins = L"plugins\\pv_equip\\skins.ini";
+	const auto eq_skins = L"plugins_config\\pv_equip\\skins.ini";
 	if (!PathFileExistsW(eq_skins))
 	{
 		std::ofstream stream(eq_skins);

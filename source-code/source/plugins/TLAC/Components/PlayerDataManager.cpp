@@ -8,7 +8,7 @@
 #include <windows.h>
 #include "GameState.h"
 
-const std::string PLAYER_DATA_FILE_NAME = "playerdata.ini";
+const std::string PLAYER_DATA_FILE_NAME = "..\\plugins_config\\playerdata.ini";
 static WCHAR configPath[256];
 int* headitemequip = (int*)0x0000000141804CDC;
 int customheaditemequip;
@@ -237,7 +237,7 @@ namespace TLAC::Components
 		config.TryGetValue("level_name", &customPlayerData->LevelName);
 
 		// ScoreSaver copies & declaring non-playerdata values
-		std::string utf8path = TLAC::framework::GetModuleDirectory() + "/playerdata.ini";
+		std::string utf8path = TLAC::framework::GetModuleDirectory() + "\\..\\plugins_config\\playerdata.ini";
 		MultiByteToWideChar(CP_UTF8, 0, utf8path.c_str(), -1, configPath, 256);
 
 		customPlayerData->LevelNum = config.GetIntegerValue("level");

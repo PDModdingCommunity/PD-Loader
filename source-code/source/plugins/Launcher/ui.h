@@ -156,7 +156,7 @@ namespace Launcher {
 				ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
 			}
 			keycfg_button->Scale(ScaleWidth, ScaleHeight);
-			keycfg_button->Text = gcnew String("Keyboard/Controller Configuration");
+			keycfg_button->Text = gcnew String(i18n::GetStringFallback("Keyboard/Controller Configuration"));
 			keycfg_button->Click += gcnew EventHandler(this, &ui::keycfg_button_Click);
 			panel_Patches->Controls->Add(keycfg_button);
 
@@ -1033,7 +1033,7 @@ private: System::Void SaveSettings() {
 	}
 }
 private: System::Void Button_Help_Click(System::Object^ sender, System::EventArgs^ e) {
-	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki");
+	System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader/wiki");
 }
 private: System::Void Button_Launch_Click(System::Object^ sender, System::EventArgs^ e) {
 	
@@ -1155,7 +1155,7 @@ private: System::Void button_Discord_Click(System::Object^ sender, System::Event
 	switch (SkinnedMessageBox::Show(this, i18n::GetStringFallback("CONFIRM_DISCORD_OR_GUIDE"), "PD Launcher", MessageBoxButtons::YesNoCancel, MessageBoxIcon::Information))
 	{
 	case System::Windows::Forms::DialogResult::Yes:
-		System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki");
+		System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader/wiki");
 		break;
 
 	case System::Windows::Forms::DialogResult::No:
@@ -1164,7 +1164,7 @@ private: System::Void button_Discord_Click(System::Object^ sender, System::Event
 	}
 }
 private: System::Void button_github_Click(System::Object^ sender, System::EventArgs^ e) {
-	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader");
+	System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader");
 }
 private: System::Void button_Apply_Click(System::Object^ sender, System::EventArgs^ e) {
 	SaveSettings();
@@ -1205,15 +1205,15 @@ private: System::Void trackBar_LagCompensation_ValueChanged(System::Object^ send
 private: System::Void tabPage_Resolution_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void button_Wiki_Click(System::Object^ sender, System::EventArgs^ e) {
-	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki");
+	System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader/wiki");
 }
 private: System::Void trackBar_LagCompensation_Scroll(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void button_Releases_page_Click(System::Object^ sender, System::EventArgs^ e) {
-	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/releases");
+	System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader/releases");
 }
 private: System::Void button_Instructions_Click(System::Object^ sender, System::EventArgs^ e) {
-	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki/2%29+Installation");
+	System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader/wiki/2%29+Installation");
 }
 private: System::Void button_Unstable_builds_Click(System::Object^ sender, System::EventArgs^ e) {
 	System::Diagnostics::Process::Start("https://ci.appveyor.com/project/nastys/pd-loader/build/artifacts");
@@ -1222,23 +1222,23 @@ private: System::Void button_Clean_installation_Click(System::Object^ sender, Sy
 	SkinnedMessageBox::Show(this, i18n::GetStringFallback("HOWTO_CLEAN_INSTALL_HINT"), i18n::GetStringFallback("HOWTO_CLEAN_INSTALL"), MessageBoxButtons::OK, MessageBoxIcon::Information);
 }
 private: System::Void linkLabel_Changelog_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
-	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki/Changelog");
+	System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader/wiki/Changelog");
 }
 private: System::Void linkLabel_Official_Discord_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
 	System::Diagnostics::Process::Start("https://discord.gg/cvBVGDZ");
 }
 private: System::Void linkLabel_Help_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
-	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki");
+	System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader/wiki");
 }
 private: System::Void linkLabel_Repo_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
-	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader");
+	System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader");
 }
 private: System::Void checkBox_nofsopt_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 	*ResolutionConfigChanged = true;
 }
 private: System::Void keycfg_button_Click(System::Object^ sender, System::EventArgs^ e)
 {
-    System::Diagnostics::Process::Start("\"" + System::Environment::GetEnvironmentVariable("WINDIR") + "\\write.exe\"", "plugins\\keyconfig.ini");
+    System::Diagnostics::Process::Start("\"" + System::Environment::GetEnvironmentVariable("WINDIR") + "\\write.exe\"", "plugins_config\\keyconfig.ini");
 }
 private: System::Void linkLabel_Console_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
 	HWND consoleHandle = GetConsoleWindow();

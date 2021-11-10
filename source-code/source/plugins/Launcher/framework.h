@@ -40,18 +40,19 @@ wstring DIVA_EXECUTABLE_LAUNCH_STRING = DIVA_EXECUTABLE_STRING + L" --launch";
 LPWSTR DIVA_EXECUTABLE_LAUNCH = const_cast<WCHAR*>(DIVA_EXECUTABLE_LAUNCH_STRING.c_str());
 
 wstring PLUGINS_DIR = DirPath() + L"\\plugins";
+wstring PLUGINS_CONFIG_DIR = DirPath() + L"\\plugins_config";
 wstring PATCHES_DIR = DirPath() + L"\\patches";
 
-wstring CONFIG_FILE_STRING = PLUGINS_DIR + L"\\config.ini";
+wstring CONFIG_FILE_STRING = PLUGINS_CONFIG_DIR + L"\\config.ini";
 LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
 
-wstring COMPONENTS_FILE_STRING = PLUGINS_DIR + L"\\components.ini";
+wstring COMPONENTS_FILE_STRING = PLUGINS_CONFIG_DIR + L"\\components.ini";
 LPCWSTR COMPONENTS_FILE = COMPONENTS_FILE_STRING.c_str();
 
-wstring PLAYERDATA_FILE_STRING = PLUGINS_DIR + L"\\playerdata.ini";
+wstring PLAYERDATA_FILE_STRING = PLUGINS_CONFIG_DIR + L"\\playerdata.ini";
 LPCWSTR PLAYERDATA_FILE = PLAYERDATA_FILE_STRING.c_str();
 
-wstring KEYCONFIG_FILE_STRING = PLUGINS_DIR + L"\\keyconfig.ini";
+wstring KEYCONFIG_FILE_STRING = PLUGINS_CONFIG_DIR + L"\\keyconfig.ini";
 LPCWSTR KEYCONFIG_FILE = KEYCONFIG_FILE_STRING.c_str();
 
 LPCWSTR GLOBAL_SECTION = L"global";
@@ -67,7 +68,7 @@ int nSkipLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"skip", FALSE, CONF
 int nNoGPUDialog = GetPrivateProfileIntW(LAUNCHER_SECTION, L"no_gpu_dialog", FALSE, CONFIG_FILE);
 int nLanguage = GetPrivateProfileIntW(LAUNCHER_SECTION, L"launcher_language", FALSE, CONFIG_FILE);
 
-std::vector<LPCWSTR> languages = std::vector<LPCWSTR>({ L"LANG_AUTO", L"en", L"zh-Hans", L"pt-BR", L"it-IT"});
+std::vector<LPCWSTR> languages = std::vector<LPCWSTR>({ L"LANG_AUTO", L"en", L"zh-Hans", L"pt-BR", L"it-IT", L"ja-JP"});
 
 void SetBackCol(Control^ elem, System::Drawing::Color color, System::Windows::Forms::FlatStyle cbxStyle)
 {
@@ -263,6 +264,7 @@ ConfigOptionBase* options2Array[] = {
 	new BooleanOption(L"no_error", PATCHES_SECTION, CONFIG_FILE, L"NO_ERROR_NAME", L"NO_ERROR_HINT", true, false),
 	new BooleanOption(L"hide_freeplay", PATCHES_SECTION, CONFIG_FILE, L"HIDE_FREEPLAY_NAME", L"HIDE_FREEPLAY_HINT", false, false),
 	new BooleanOption(L"pdloadertext", PATCHES_SECTION, CONFIG_FILE, L"PDLOADERTEXT_NAME", L"PDLOADERTEXT_HINT", true, false),
+	new BooleanOption(L"allow_custom_freeplay", PATCHES_SECTION, CONFIG_FILE, L"ALLOWCUSTOMFREEPLAY_NAME", L"ALLOWCUSTOMFREEPLAY_HINT", false, false),
 	new BooleanOption(L"no_timer", PATCHES_SECTION, CONFIG_FILE, L"NO_TIMER_NAME", L"NO_TIMER_HINT", true, false),
 	new BooleanOption(L"no_timer_sprite", PATCHES_SECTION, CONFIG_FILE, L"NO_TIMER_SPRITE_NAME", L"NO_TIMER_SPRITE_HINT", true, false),
 	new BooleanOption(L"no_message_bar", PATCHES_SECTION, CONFIG_FILE, L"NO_MESSAGE_BAR_NAME", L"NO_MESSAGE_BAR_HINT", false, false),
@@ -277,7 +279,7 @@ ConfigOptionBase* playerdataArray[] = {
 
 	new NumericOption(L"level_plate_id", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"LEVEL_PLATE_ID_NAME", L"LEVEL_PLATE_ID_HINT", 0, 0, INT_MAX),
 	new NumericOption(L"level_plate_effect", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"LEVEL_PLATE_EFFECT_NAME", L"LEVEL_PLATE_EFFECT_HINT", -1, -1, 2),
-	new NumericOption(L"skin_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"SKIN_EQUIP_NAME", L"SKIN_EQUIP_HINT", 0, 0, INT_MAX),
+	new NumericOption(L"skin_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"SKIN_EQUIP_NAME", L"SKIN_EQUIP_HINT", 0, 0, INT_MAX),
 
 	new NumericOption(L"btn_se_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"BTN_SE_EQUIP_NAME", L"BTN_SE_EQUIP_HINT", -1, -1, INT_MAX),
 	new NumericOption(L"slide_se_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"SLIDE_SE_EQUIP_NAME", L"SLIDE_SE_EQUIP_HINT", -1, -1, INT_MAX),
@@ -291,9 +293,9 @@ ConfigOptionBase* playerdataArray[] = {
 
 	new BooleanOption(L"use_card", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"USE_CARD_NAME", L"USE_CARD_HINT", false, true),
 	new BooleanOption(L"module_card_workaround", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"MODULE_CARD_WORKAROUND_NAME", L"MODULE_CARD_WORKAROUND_HINT", true, true),
-	new BooleanOption(L"use_pv_module_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"USE_PV_MODULE_EQUIP_NAME", L"USE_PV_MODULE_EQUIP_HINT", false, true),
-	new BooleanOption(L"use_pv_skin_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"USE_PV_SKIN_EQUIP_NAME", L"USE_PV_SKIN_EQUIP_HINT", false, true),
-	new BooleanOption(L"use_pv_sfx_equip ", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"USE_PV_SFX_EQUIP_NAME", L"USE_PV_SFX_EQUIP_HINT", false, true),
+	new BooleanOption(L"use_pv_module_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"USE_PV_MODULE_EQUIP_NAME", L"USE_PV_MODULE_EQUIP_HINT", false, true),
+	new BooleanOption(L"use_pv_skin_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"USE_PV_SKIN_EQUIP_NAME", L"USE_PV_SKIN_EQUIP_HINT", false, true),
+	new BooleanOption(L"use_pv_sfx_equip", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"USE_PV_SFX_EQUIP_NAME", L"USE_PV_SFX_EQUIP_HINT", false, true),
 
 	new BooleanOption(L"gamemode_options", PLAYERDATA_SECTION, PLAYERDATA_FILE, L"GAMEMODE_OPTIONS_NAME", L"GAMEMODE_OPTIONS_HINT", true, true),
 };
@@ -320,7 +322,7 @@ ConfigOptionBase* componentsArray[] = {
 
 	new BooleanOption(L"target_inspector", COMPONENTS_SECTION, COMPONENTS_FILE, L"TARGET_INSPECTOR_NAME", L"TARGET_INSPECTOR_HINT", false, true),
 
-	new BooleanOption(L"score_saver", COMPONENTS_SECTION, COMPONENTS_FILE, L"SCORE_SAVER_NAME", L"SCORE_SAVER_HINT", false, true),
+	new BooleanOption(L"score_saver", COMPONENTS_SECTION, COMPONENTS_FILE, L"SCORE_SAVER_NAME", L"SCORE_SAVER_HINT", true, true),
 
 	new BooleanOption(L"pause", COMPONENTS_SECTION, COMPONENTS_FILE, L"PAUSE_NAME", L"PAUSE_HINT", false, true),
 };

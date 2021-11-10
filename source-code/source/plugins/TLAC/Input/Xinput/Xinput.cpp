@@ -12,7 +12,7 @@ namespace TLAC::Input
 
 	Xinput::Xinput()
 	{
-		TLAC::FileSystem::ConfigFile config(TLAC::framework::GetModuleDirectory(), "keyconfig.ini");
+		TLAC::FileSystem::ConfigFile config(TLAC::framework::GetModuleDirectory(), "..\\plugins_config\\keyconfig.ini");
 		config.OpenRead();
 		xinput_num = config.GetIntegerValue("xinput_preferred");
 		rumble = config.GetBooleanValue("rumble");

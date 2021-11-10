@@ -118,57 +118,80 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="button_Launch.Text" xml:space="preserve">
-    <value>Iniciar</value>
+    <value>開始</value>
   </data>
   <data name="checkBox_nofsopt.Text" xml:space="preserve">
-    <value>Desativar Otimizações de Tela Cheia</value>
+    <value>フルスクリーンの最適化を無効にする</value>
   </data>
   <data name="checkBox_nofsopt.ToolTip" xml:space="preserve">
-    <value>Desabilita as Otimizações de Tela Cheia do Windows 10/11, já que estas 
-podem causar problemas com capturas de tela e/ou taxa de quadros.</value>
+    <value>Windows 10/11のフルスクリーン最適化を無効にします。
+は、スクリーンショットやフレームレートの問題を引き起こす可能性があります</value>
   </data>
   <data name="groupBox_ScreenRes.Text" xml:space="preserve">
-    <value>Resolução da Tela</value>
+    <value>画面解像度</value>
   </data>
   <data name="groupBox_Lag.Text" xml:space="preserve">
-    <value>Compensação de Latência de Áudio</value>
+    <value>レイテンシー補正</value>
   </data>
   <data name="groupBox_Details.Text" xml:space="preserve">
-    <value>Gráficos</value>
+    <value>グラフィックス</value>
   </data>
   <data name="groupBox_InternalRes.Text" xml:space="preserve">
-    <value>Resolução Interna (Qualidade)</value>
+    <value>内部解像度（品質）</value>
   </data>
   <data name="tabPage_Resolution.Text" xml:space="preserve">
-    <value>Imagem</value>
+    <value>画像</value>
   </data>
   <data name="tabPage_Patches.Text" xml:space="preserve">
-    <value>Opções</value>
+    <value>設定</value>
   </data>
   <data name="tabPage_Playerdata.Text" xml:space="preserve">
-    <value>Jogador</value>
+    <value>プレーヤー</value>
   </data>
   <data name="linkLabel_Console.Text" xml:space="preserve">
-    <value>Terminal</value>
+    <value>ターミナル</value>
   </data>
   <data name="tabPage_Components.Text" xml:space="preserve">
-    <value>Componentes</value>
+    <value>コンポーネンテズ</value>
   </data>
   <data name="tabPage_Plugins.Text" xml:space="preserve">
-    <value>Plugins e Patches</value>
+    <value>プラグインとパッチ</value>
+  </data>
+  <data name="button_ModRename.Text" xml:space="preserve">
+    <value>名前の変更</value>
+  </data>
+  <data name="button_ModRescan.Text" xml:space="preserve">
+    <value>再スキャン</value>
+  </data>
+  <data name="button_ModFiles.Text" xml:space="preserve">
+    <value>ファイル...</value>
+  </data>
+  <data name="checkBox_ModPatches.Text" xml:space="preserve">
+    <value>プラグインとパッチ</value>
+  </data>
+  <data name="button_ModDelete.Text" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="button_ModClone.Text" xml:space="preserve">
+    <value>新規/クローン</value>
+  </data>
+  <data name="button_ModSetActive.Text" xml:space="preserve">
+    <value>起動</value>
+  </data>
+  <data name="tabPage_Modpacks.Text" xml:space="preserve">
+    <value>Modpacks</value>
   </data>
   <data name="creditsTextBox.Text" xml:space="preserve">
-    <value>PD Loader is intended for educational purposes only; not for piracy.
-Users should possess a legally-obtained dump of the game to use this software.
-Please check your local laws/regulataions to verify the legality of tampering
-with and dumping data from protected arcade machine hardware.
+    <value>PD Loaderは教育目的のみであり、海賊行為を目的としたものではありません。
+本ソフトウェアを使用するには、合法的に入手したゲームのダンプを所有している必要があります。
+業務用ゲーム機のデータを改ざんしたり、ダンプしたりすることの合法性については
+データを改ざんしたり、保護されたアーケードマシンのハードウェアからデータをダンプすることの合法性を確認してください。
 
-Project Contributors:
+プロジェクト貢献者:
 akasaka, Brolijah, crash5b, Jay39w, korenkonder, Kyberal, lybxlpsv, nastys,
 Nezarn, samyuu, Skyth, somewhatlurker, Stewie1.0, SwigS-27, zsccat
 
-Brazilian Portuguese Translation (Tradução para o Português Brasileiro): _ScarletNeko
-(revised by nastys and ManMan)
+Japanese Translation (日本語訳) by ManMan
 
 PD Loader and the included plugins are distributed under MIT License:
   
@@ -278,44 +301,44 @@ non-commercial use only)
 AMD compatibilty pack dependencies have additional licenses, detailed in the AMD</value>
   </data>
   <data name="tabPage_Credits.Text" xml:space="preserve">
-    <value>Créditos</value>
+    <value>クレディット</value>
   </data>
   <data name="linkLabel_Repo.Text" xml:space="preserve">
-    <value>Repositório Oficial</value>
+    <value>公式リポジトリ</value>
   </data>
   <data name="linkLabel_Help.Text" xml:space="preserve">
-    <value>Ajuda</value>
+    <value>ヘルプ</value>
   </data>
   <data name="linkLabel_Official_Discord.Text" xml:space="preserve">
-    <value>Servidor do Discord Oficial</value>
+    <value>公式Discordサーバー</value>
   </data>
   <data name="linkLabel_Changelog.Text" xml:space="preserve">
-    <value>Histórico de Mudanças</value>
+    <value>変更履歴</value>
   </data>
   <data name="button_Clean_installation.Text" xml:space="preserve">
-    <value>Instalação Limpa</value>
+    <value>新規インストール</value>
   </data>
   <data name="button_Instructions.Text" xml:space="preserve">
-    <value>Instruções</value>
+    <value>説明書</value>
   </data>
   <data name="button_Unstable_builds.Text" xml:space="preserve">
-    <value>Versões Instáveis</value>
+    <value>不安定なバージョン</value>
   </data>
   <data name="button_Releases_page.Text" xml:space="preserve">
-    <value>Página de Atualizações</value>
+    <value>アップデートページ</value>
   </data>
   <data name="label_Update_2.Text" xml:space="preserve">
-    <value>É altamente recomendado baixar as atualizações diretamente do repositório oficial.
-Se você baixou o PD Loader de algum outro lugar, é recomendado fazer uma instalação limpa.</value>
+    <value>アップデートは公式リポジトリから直接ダウンロードすることを強くお勧めします。
+他の場所からPD Loaderをダウンロードした場合は、クリーンインストールをお勧めします</value>
   </data>
   <data name="label_Update_1.Text" xml:space="preserve">
-    <value>Atualize o PD Loader regularmente
-para obter as últimas correções e novas funções!</value>
+    <value>PD Loaderを定期的にアップデートする
+をクリックすると、最新の修正や新機能が表示されます</value>
   </data>
   <data name="tabPage_Update.Text" xml:space="preserve">
-    <value>ATUALIZAR</value>
+    <value>アップデイト</value>
   </data>
   <data name="button_Apply.Text" xml:space="preserve">
-    <value>Aplicar</value>
+    <value>適用</value>
   </data>
 </root>

@@ -10,6 +10,7 @@ after_build:
 - ps: |
     mkdir "$env:TMP/full/patches"
     mkdir "$env:TMP/full/plugins"
+    mkdir "$env:TMP/full/plugins_config"
     mkdir "$env:TMP/full/plugins/Novidia Shaders"
     mkdir "$env:TMP/full/ram/databank_template"
 
@@ -21,15 +22,18 @@ after_build:
       mkdir "$env:TMP/full/plugins/zh-Hans"
       mkdir "$env:TMP/full/plugins/pt-BR"
       mkdir "$env:TMP/full/plugins/it-IT"
+      mkdir "$env:TMP/full/plugins/jp-JA"
       cp "$env:APPVEYOR_BUILD_FOLDER/source-code/data/patches/custom_freeplay_text_example.p" "$env:TMP/full/patches"
       cp "$env:APPVEYOR_BUILD_FOLDER/source-code/x64/$env:CONFIGURATION/zh-Hans/*.dll" "$env:TMP/full/plugins/zh-Hans"
       cp "$env:APPVEYOR_BUILD_FOLDER/source-code/x64/$env:CONFIGURATION/pt-BR/*.dll" "$env:TMP/full/plugins/pt-BR"
       cp "$env:APPVEYOR_BUILD_FOLDER/source-code/x64/$env:CONFIGURATION/it-IT/*.dll" "$env:TMP/full/plugins/it-IT"
+      cp "$env:APPVEYOR_BUILD_FOLDER/source-code/x64/$env:CONFIGURATION/jp-JA/*.dll" "$env:TMP/full/plugins/jp-JA"
     }
 
     cp "$env:APPVEYOR_BUILD_FOLDER/source-code/data/README - PD Loader.url" "$env:TMP/full"
     cp "$env:APPVEYOR_BUILD_FOLDER/source-code/data/*.sfv" "$env:TMP/full"
     cp "$env:APPVEYOR_BUILD_FOLDER/source-code/data/plugins/*.*" "$env:TMP/full/plugins"
+    cp "$env:APPVEYOR_BUILD_FOLDER/source-code/data/plugins_config/*.*" "$env:TMP/full/plugins_config"
     cp "$env:APPVEYOR_BUILD_FOLDER/source-code/data/plugins/Novidia Shaders/*.*" "$env:TMP/full/plugins/Novidia Shaders"
     cp "$env:APPVEYOR_BUILD_FOLDER/source-code/data/ram/databank_template/*.dat" "$env:TMP/full/ram/databank_template"
 

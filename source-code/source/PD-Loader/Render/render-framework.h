@@ -29,7 +29,7 @@ wstring DirPath() {
 	return wstring(buffer).substr(0, pos);
 }
 
-wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\config.ini";
+wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins_config\\config.ini";
 LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
 
 int nDisplay = GetPrivateProfileIntW(L"resolution", L"display", 0, CONFIG_FILE);

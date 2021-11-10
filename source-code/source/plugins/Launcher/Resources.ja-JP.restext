@@ -1,0 +1,290 @@
+###############################################
+# framework
+
+LANG_AUTO=自動
+en=英語
+zh-Hans=中国語（簡体字）
+pt-BR=ポルトガル語
+it-IT=イタリア語
+ja-JP=日本語
+
+# display
+DISPLAY_NAME=ディスプレイ:
+DISPLAY_HINT=画面のモードを設定する。\n\n\nFast: ポップアップボーダーレスのウィンドウ (Windows 10/11のフルスクリーン最適機能が有効になっている場合、スクリーンショットに問題が生じる可能性があります)\n\nExclusive: 画面を制御して、解像度やリフレッシュレートを変更することができます。アプリケーションの切り替えが難しくなります\n\nSafe: ボーダーレスのシンプルなウィンドウです。「速い」に比べると少しラグがありますが、問題が少ない
+RESOLUTION_NAME=画面解像度:
+RESOLUTION_HINT=ディスプレイの解像度を設定する
+REFRESHRATE_NAME=リフレッシュレート:
+REFRESHRATE_HINT=ディスプレイのリフレッシュレートの設定
+R.ENABLE_NAME=イネーブル
+R.ENABLE_HINT=カスタム内部解像度を有効または無効にする
+R.RESOLUTION_NAME=解像度:
+R.RESOLUTION_HINT=内部の解像度を設定する（1280x720代わりに）
+MATCH_WINDOW=ウィンドウをマッチ
+MATCH_SCREEN=画面をマッチ
+
+# graphics
+MODEL_NAME=NVIDIA GPU:
+MODEL_HINT=お使いのNVIDIA GPUのアーキテクチャを選択して、必要な回避策を適用して。\n\n注：自動検出は現在GNU/Linuxでは動作しません
+MODEL_AUTOMATIC=自動
+TAA_NAME=TAA
+TAA_HINT=Temporal Anti-Aliasing
+MLAA_NAME=MLAA
+MLAA_HINT=Morphological Anti-Aliasing
+MAG_NAME=フィルター:
+MAG_HINT=イメージフィルターです。\n\nBilinear: デフォルトフィルタ\nNearest-neighbor: 最もシャープだが、ブロッキー\nSharpen: シャープフィルター\nCone: スムーズフィルター
+MAG_BILINEAR=バイリニア (Bilinear)
+MAG_NEAREST=ニアレストネイバー (Nearest-neighbor)
+MAG_SHARPEN=シャープ (Sharpen)
+MAG_CONE=コーン (Cone)
+DOF_NAME=Depth of Field
+DOF_HINT=背景をぼかする。パフォーマンスを向上させるためには無効にして
+REFLECTIONS_NAME=反射
+REFLECTIONS_HINT=反射を有効にするか無効にする
+REFLECT_RES_WIDTH_NAME=反射の解像度:
+REFLECT_RES_WIDTH_HINT=リフレクションバッファの解像度を設定する（512x256代わりに）
+REFRACT_RES_WIDTH_NAME=屈折の解像度:
+REFRACT_RES_WIDTH_HINT=屈折バッファの解像度を設定する（512x256代わりに）
+GAMMA_NAME=Gamma:
+GAMMA_HINT=影を濃くしたい場合は、この値を大きくする。\n125に設定すると、コンソールのようなゲーム体験ができます。\n\nデフォルト値: 100
+SHADOWS_NAME=影
+SHADOWS_HINT=影の有効、無効にする
+PUNCHTHROUGH_NAME=透過メッシュ
+PUNCHTHROUGH_HINT=透過メッシュを表示する
+GLARE_NAME=グレア (Glare)
+GLARE_HINT=グレアを有効または無効にする
+SHADER_NAME=シェーダー (Shader)
+SHADER_HINT=高品質なシェーダーを有効または無効にする
+NPR1_NAME=Toon (F9):
+NPR1_HINT=NPR1シェーダー\n\nF9を押してオン/オフを切り替え
+2D_NAME=3Dレンダリングを無効にする
+2D_HINT=全ての3Dパスを無効にする。\n\n警告：「データ消去を防止」が有効になっていないと、Extended Dataが削除されます。インテル製GPUの場合はこのオプション有効にせず、代わりに「Extended Dataを無効」を有効にしてください
+
+# options
+Keyboard/Controller Configuration=キーボードとコントローラーの設定
+Default=デフォルト
+Force on=強制的に「有効」にする
+Force off=強制的に「無効」にする
+SECTION_LOADER=ローダー
+SECTION_COMPATIBILITY=互換性
+SECTION_PV_SELECTOR=PVセレクター
+SECTION_ESM=ステージ （曲)
+SECTION_UI_ELM=UI要素
+SECTION_PV_PATCHES=PVパッチ
+SECTION_FRAMERATE=Framerate
+SECTION_CONTROLLER_OPTIONS=コントローラーの設定
+SECTION_LAUNCHER=Launcher
+
+BUILTIN_PATCHES_NAME=内蔵パッチを有効にする
+BUILTIN_PATCHES_HINT=このタブのオプションを含む、内蔵パッチを有効にします
+CUSTOM_PATCHES_NAME=カスタムパッチを有効にする
+CUSTOM_PATCHES_HINT=すべてのカスタムパッチを有効にします
+BUILTIN_RENDER_NAME=内蔵のレンダーパッチを有効にする
+BUILTIN_RENDER_HINT=これにより、内蔵のレンダリングパッチが有効になります
+
+NO_MOVIES_NAME=動画を無効にする
+NO_MOVIES_HINT=ムービーを無効にする　（特定のPVをロードする際にゲームがフリーズする場合は、このオプションを有効にしてください）
+CURSOR_NAME=カーソル
+CURSOR_HINT=マウスカーソルの有効、無効を行います
+STEREO_NAME=Stereo
+STEREO_HINT=オーディオチャンネル数を4から2に変更　（Diva Soundを使用しない場合)
+
+QUICK_START_NAME=Quick Start:
+Disabled=無効
+Guest=ゲスト
+Guest + Normal=ゲスト＋ノーマル
+QUICK_START_HINT=一つまたは複数のメニューをスキップします
+NO_SCROLLING_SFX_NAME=スクロールSFXを無効にする
+NO_SCROLLING_SFX_HINT=「スクロール」の効果音を無効にします
+
+SING_MISSED_NAME=ミスした音を歌う
+SING_MISSED_HINT=ミスした音を歌う
+
+HIDE_VOLUME_NAME=ボリュームボタンを隠す
+HIDE_VOLUME_HINT=ボリュームとSEボタンを隠す
+NO_PV_UI_NAME=PV UIを無効にする
+NO_PV_UI_HINT=PV再生時のフォトコントロールを解除します
+HIDE_PV_WATERMARK_NAME=PVウォーターマークを隠す
+HIDE_PV_WATERMARK_HINT=PV再生モードで通常表示されるウォーターマークを隠すことができます
+STATUS_ICONS_NAME=右上のネットワークアイコン：
+STATUS_ICONS_HINT=カードリーダーとネットワークのステータスアイコンの状態を設定します
+Hidden=隠し
+Error=エラー
+Partial OK=部分的にOK
+NO_LYRICS_NAME=歌詞を無効にする
+NO_LYRICS_HINT=歌詞の表示を無効にします
+NO_ERROR_NAME=エラーバナーを無効にする
+NO_ERROR_HINT=アトラクット画面のエラーバナーを無効にします
+ALLOWCUSTOMFREEPLAY_NAME=カスタムテキストを有効にする
+ALLOWCUSTOMFREEPLAY_HINT=プラグインやパッチで「FREE PLAY」や「CREDIT(S)」を変更することができます
+HIDE_FREEPLAY_NAME=「FREE PLAY」/「CREDIT(S)」を隠す
+HIDE_FREEPLAY_HINT=「FREE PLAY」/「CREDIT(S)」テキストを隠す
+PDLOADERTEXT_NAME=PD Loader FREE PLAY
+PDLOADERTEXT_HINT=「FREE PLAY」の代わりに「PD Loader」と表示する
+NO_TIMER_NAME=タイマーを一時停止する
+NO_TIMER_HINT=タイマーを無効にします
+NO_TIMER_SPRITE_NAME=タイマースプライトを無効にする
+NO_TIMER_SPRITE_HINT=タイマースプライトを無効にします
+NO_MESSAGE_BAR_NAME=メッセージバーを隠す
+NO_MESSAGE_BAR_HINT=上部のメッセージバーを隠す
+NO_STAGE_TEXT_NAME=ステージテキストを無効にする
+NO_STAGE_TEXT_HINT=Stage 1/2/Finalを無効にする
+
+UNLOCK_PSEUDO_NAME=「PSEUDO」モジュールをアンロックする（未完了）
+UNLOCK_PSEUDO_HINT=どのようなPVでも、どのようなパフォーマーででも演奏できるようになります。\n(不完全なので、おすすめのモジュールはミクになります)
+CARD_NAME=アンロックカードメニュー （未完了）
+CARD_HINT=カードメニューを有効にします。\n(不完全なので、カードプロンプトを回避することはできません)
+NO_OPD_NAME=Extended Dataを無効
+NO_OPD_HINT=別名Skythの 「No Osage Play Data」 パッチ。\n\nスペースを節約するために、エディットで定義済みのフィジックスを無効にします。\n一部のエディットのフィジクスが乱れる場合があります
+DWGUI_SCALING_NAME=デバッグウィンドウを拡大
+DWGUI_SCALING_HINT=別名somewhatlurkerの　「dwgui」　パッチ。\n\nHDの内部解像度以上にデバッグウィンドウを大きくする
+FREEPLAY_NAME=FREE PLAY
+FREEPLAY_HINT=「CREDIT(S)」の代わりに「FREE PLAY」と表示され、クレジットを要求しなくなります
+
+FPS.LIMIT.LIGHTMODE_NAME=軽量のリミッターを使用
+FPS.LIMIT.LIGHTMODE_HINT=FPSリミッターのCPU使用量を少なくします。\nパフォーマンスが安定しない場合があります
+FPS.LIMIT_NAME=FPSの制限：
+FPS.LIMIT_HINT=フレームレートの制限を設定できます。1に設定すると、フレームレートの制限が解除されます
+FRM.MOTION.RATE_NAME=FRM モーションのレート:
+FRM.MOTION.RATE_HINT=フレーム・レート・マニジャーのコンポーネントのモーションレート（FPS）を設定します。\nより大きな値を設定すると、よりスムーズになりますが、CPUからより多くのエネルギーを必要とするため、不安定になる可能性があります
+
+AUTOPAUSE_NAME=自動的に一時停止する
+AUTOPAUSE_HINT=ゲームのウィンドウのフォーカスが失われたときに一時停止します
+
+RUMBLE_NAME=XInputのランブル
+RUMBLE_HINT=チェンスライド時のランブルを有効にします
+XINPUT_RUMBLE_INTENSITY_LEFT_NAME=左モーターの強さ
+XINPUT_RUMBLE_INTENSITY_LEFT_HINT=デフォルト: 8000
+XINPUT_RUMBLE_INTENSITY_RIGHT_NAME=右モーターの強さ
+XINPUT_RUMBLE_INTENSITY_RIGHT_HINT=デフォルト: 4000
+XINPUT_PREFERRED_NAME=優先的なXInputコントローラ:
+XINPUT_PREFERRED_HINT=優先的なXInputのコントローラを設定します。\n利用できない場合は、次に接続されたコントローラが使用されます
+
+HARDWARE_SLIDER_NAME=ハードウェアスライドを使う
+HARDWARE_SLIDER_HINT=リアルのアーケードスライドーを使用する場合は有効にしてください。\n(スライドをCOM11ポートに設定した場合)
+
+PREVENT_DATA_DELETION_NAME=データ消去を防止
+PREVENT_DATA_DELETION_HINT=ゲームのファイルを削除することを防ぎます
+COMMAND_LINE_NAME=コマンド・ライン:
+COMMAND_LINE_HINT=ランチャーを使用する際に、ゲームのコマンド・ライン引数を設定できます。\nランチャーを無効にすると、この問題は回避されます
+USE_DIVAHOOK_BAT_NAME=divahook.bat/start.bat
+USE_DIVAHOOK_BAT_HINT=diva.exeではなく、divahook.batまたはstart.batを起動します
+DARK_LAUNCHER_NAME=ダーク・ランチャー
+DARK_LAUNCHER_HINT=ランチャーのカラースキームを「ダーク」に設定します
+LAUNCHER_LANGUAGE_NAME=言語:
+LAUNCHER_LANGUAGE_HINT=ランチャーの言語を設定します
+NO_GPU_DIALOG_NAME=GPU警告を無効にする
+NO_GPU_DIALOG_HINT=サポートされていないGPUの警告ダイアログを無効にします
+
+QUICK_START_DIVAHOOK_SAME_TIME=「Quick Start」と「divahook.bat/start.batを使う」を同時に有効にすることはできません
+NO_DIVAHOOK_BAT=divahook.bat/start.batが見つかりません。\nゲームは通常/オフラインで開始されます。\n\n注：この警告を避けるために、「divahook.bat/start.batを使う」を無効にしてください
+
+# player data
+PLAYER_NAME_NAME=プレーヤー名:
+PLAYER_NAME_HINT=ゲーム中に表示されるプレイヤー名
+LEVEL_NAME_NAME=レベル名:
+LEVEL_NAME_HINT=ゲーム中に表示されるレベル（プレート）名
+LEVEL_PLATE_ID_NAME=レベルプレート:
+LEVEL_PLATE_ID_HINT=レベルの背景画像（プレート）を設定します
+LEVEL_PLATE_EFFECT_NAME=レベルプレートの効果:
+LEVEL_PLATE_EFFECT_HINT=レベルの背景画像（プレート）に対する効果を設定します
+SKIN_EQUIP_NAME=スキン:
+SKIN_EQUIP_HINT=ゲームプレイのUIスキンを設定します。
+BTN_SE_EQUIP_NAME=ボタンの音:
+BTN_SE_EQUIP_HINT=ボタンの効果音を設定します。\n\n-1 = 曲のデフォルト
+SLIDE_SE_EQUIP_NAME=スライドの音:
+SLIDE_SE_EQUIP_HINT=スライドの効果音を設定します。\n\n-1 = 曲のデフォルト
+CHAINSLIDE_SE_EQUIP_NAME=チェーンスライドの音:
+CHAINSLIDE_SE_EQUIP_HINT=チェーンスライドの効果音を設定します。\n\n-1 = 曲のデフォルト
+SLIDERTOUCH_SE_EQUIP_NAME=スライダー・タッチの音:
+SLIDERTOUCH_SE_EQUIP_HINT=音符がない状態でスライドをタッチしたときの効果音を設定します。\n\n-1 = 曲のデフォルト
+ACT_TOGGLE_NAME=ボタンの効果音
+ACT_TOGGLE_HINT=ボタン/スライドの音を有効にします
+BORDER_GREAT_NAME=Great (クリアボーダー)
+BORDER_GREAT_HINT=プログレスバーに「Great」評価のクリアボーダーを表示します
+BORDER_EXCELLENT_NAME=Excellent (クリアボーダー)
+BORDER_EXCELLENT_HINT=プログレスバーに「Excellent」の評価を示す透明な枠を表示します
+BORDER_RIVAL_NAME=Rival (クリアボーダー)
+BORDER_RIVAL_HINT=プログレスバーでライバルに勝つための明確なボーダーを表示します
+USE_CARD_NAME=カードを使う
+USE_CARD_HINT=ICカードを有効にします。これにより、モジュールの選択が可能になります
+MODULE_CARD_WORKAROUND_NAME=モジュール選択の回避策
+MODULE_CARD_WORKAROUND_HINT=カードなしでのモジュール選択を可能にし、メニューのパフォーマンスを向上させようとしています。\n(BETA)
+USE_PV_MODULE_EQUIP_NAME=曲に特化したモジュール
+USE_PV_MODULE_EQUIP_HINT=曲ごとにモジュールを選択できます
+USE_PV_SKIN_EQUIP_NAME=曲別のスキン
+USE_PV_SKIN_EQUIP_HINT=曲ごとのスキン設定を可能にします。\n値はskins.iniに格納されています
+USE_PV_SFX_EQUIP_NAME=曲別の効果音
+USE_PV_SFX_EQUIP_HINT=曲ごとの効果音を設定できます。\n値はsfx.iniに格納されています
+GAMEMODE_OPTIONS_NAME=リズム・ゲーム・オプション
+GAMEMODE_OPTIONS_HINT=リズム・ゲーム・オプションの使用が可能になります　（hi-speed、 hidden、 とsudden）
+
+# components
+INPUT_EMULATOR_NAME=入力のエミュレータ
+INPUT_EMULATOR_HINT=キーボードやマウスによる入力をエミュレートします
+TOUCH_SLIDER_EMULATOR_NAME=スライドエミュレータ
+TOUCH_SLIDER_EMULATOR_HINT=キーボードやマウスでスライドをエミュレートします
+TOUCH_PANEL_EMULATOR_NAME=タッチパネルのエミュレータ
+TOUCH_PANEL_EMULATOR_HINT=タッチパネルをマウスでエミュレートします
+PLAYER_DATA_MANAGER_NAME=プレーヤー・データ・マネージャー
+PLAYER_DATA_MANAGER_HINT=ユーザーに定義の値をPlayerData構造体にロードします。\nモジュールとリズム・ゲーム・オプションに必要
+FRAME_RATE_MANAGER_NAME=フレーム・レート・マニジャー
+FRAME_RATE_MANAGER_HINT=異なるフレームレートでのアニメーションを正しい速度に調整します。\nFPSが60に固定されていない場合のみ必要
+FAST_LOADER_NAME=速いローダー
+FAST_LOADER_HINT=不要な読み込みステップをスキップまたは高速化します
+FAST_LOADER_SPEED_NAME=速いローダーのスピード:
+FAST_LOADER_SPEED_HINT=オンライン対戦では4以下に設定してください。\nデフォルト: 39
+CAMERA_CONTROLLER_NAME=カメラの制御
+CAMERA_CONTROLLER_HINT=フリーキャムを有効にする　(F3でトグル).\nWASDで移動、SPACE/CTRLで上下、Q/Rでカメラの回転、R/Fでズーム。\nSHIFT/ALTを押しながらだと、移動速度が変わります
+SCALE_COMPONENT_NAME=スケール・コンポーネント
+SCALE_COMPONENT_HINT=グラフィックス出力のフレームバッファを、画面／ウィンドウいっぱいになるようにスケーリングします
+DEBUG_COMPONENT_NAME=ディーバグ・コンポーネント
+DEBUG_COMPONENT_HINT=ゲームの状態を変えることができますになる (F4-F8キー)、 devのGUIとテストを使用し、2Dアニメーション/メニューを高速化(SHIFT+TABを押しながら)
+TARGET_INSPECTOR_NAME=ターゲットインスペクター
+TARGET_INSPECTOR_HINT=HOLD転送を有効にします
+SCORE_SAVER_NAME=スコー・セーバー
+SCORE_SAVER_HINT=ハイスコアをplugins_config/scores.iniに保存します
+PAUSE_NAME=ポーズ
+PAUSE_HINT=ポーズメニューを追加
+
+#plugins
+CONFIG=設定
+
+###############################################
+# ui
+
+# dialog
+CONFIRM_SAVE_SETTINGS=設定を保存しておきますか？
+CONFIRM_DISCORD_OR_GUIDE=トラブルシューティングのためのユーザーガイドを読んでみませんか？
+HOWTO_CLEAN_INSTALL=新規インストールの方法
+HOWTO_CLEAN_INSTALL_HINT=- dnsapi.dllやdinput8.dll\n- patches/\n- plugins/\n- plugins_config/\n\nを削除\n\n- glut32.dll\nを復元\n\nその後、公式リポジトリからPD Loaderをインストールします
+
+# gpu
+GPU_WINE_DISABLE_MOVIES=(動画を無効にすることを忘れずに！)
+GPU_INFO_NAME=GPU情報:
+GPU_AMD_NOVIDIA_NAME=問題点： AMD GPUのサポートは非公式です
+GPU_AMD_NOVIDIA_HINT=AMD製のGPUはモッドなしではサポートされません。\nNovidiaはインストールされているようですが、問題があるかもしれないので注意してください
+GPU_AMD_NAME=問題点： AMDとの互換性を保つためにはモッドが必要です！
+GPU_AMD_HINT=AMD製のGPUはモッドなしではサポートされません。\nNovidiaは、3Dレンダリング機能を持たせることができます。\n\nNVIDIA GPUを搭載したノートパソコンをお持ちで、検出されたGPUの代わりにNVIDIA GPUを使用したい場合は、Windowsの設定またはNVIDIA Control Panelでdiva.exeがそのGPUを使用するように設定する必要があります
+GPU_UNSUPPORTED_NAME=問題点： サポートされていないGPU!
+GPU_UNSUPPORTED_HINT=お使いのグラフィックカードはサポートされていません。NVIDIA社製のGPUのみを推奨します（ただし、モッドではAMD社製のGPUも使用可能です）。\nGPUはGTX600シリーズ以上のNVIDIA社製をご使用ください。\n\nNVIDIA GPUを搭載したノートパソコンをお持ちで、検出されたGPUの代わりにNVIDIA GPUを使用したい場合は、Windowsの設定またはNVIDIA Control Panelでdiva.exeがそのGPUを使用するように設定する必要があります
+GPU_GA_NAME=問題点: AmpereのGPUを検出しました！騒音が入る場合があります\n(クリックすると詳細が表示されます）
+GPU_GA_HINT=AmpereのGPU（RTX 30xx）において、一部の重要なキャラクターシェーダーに問題があり、線や騒音が発生しました。\nShaderPatchプラグインが有効になっていることを確認してください
+GPU_TU_NAME=問題点: AmpereのGPUを検出しました！騒音が入る場合があります\n(クリックすると詳細が表示されます）
+GPU_TU_HINT=TuringのGPUs(GTX 16xx/RTX 20xx)において、一部の重要なキャラクターシェーダーに問題があり、線や騒音が発生しました。\nShaderPatchプラグインが有効になっていることを確認してください
+GPU_GM_NEWER_NAME=問題点: 一部のステージで軽微な騒音が発生する場合があります\n(クリックすると詳細が表示されます）
+GPU_GM_NEWER_HINT=MaxwellのGPU（GTX900前後）以降では、一部のマイナーなステージシェーダーで騒音が発生します。\nShaderPatchプラグインが有効になっていることを確認してください
+GPU_GK_NAME=問題点: なし
+GPU_GK_HINT=お使いのGPUで問題なく動作するはずです
+GPU_GF_DRIVER_OLD_NAME=問題点: ドライバーが古すぎる
+GPU_GF_DRIVER_OLD_HINT=お使いのGPUはゲームを実行できるはずですが、OpenGLのバージョンが古すぎるようです。\nドライバのアップデートで解決するはずです
+GPU_GF_NAME=問題点: 既知の問題はありません
+GPU_GF_HINT=お使いのGPUで問題なく動作するはずですが、このゲームが本来想定していたGPU（GTX 650 Ti）よりも古いものです。\nグラフィックスに問題がある場合があります。\n問題があれば報告していただければ、分析して修正することができます
+GPU_TOO_NEW_NAME=問題点: お使いGPUは新しすぎるかもしれません\n(クリックすると詳細が表示されます）
+GPU_TOO_NEW_HINT=お使いのGPUが新しすぎるのではないかと思われます。現在はAmpere（RTX 30xx）までしか対応していません。\n朗報：ゲームは実行可能なはずですが、シェーダーパッチ（おそらく必要）がまだサポートされていないかもしれません。\n重要なキャラクターシェーダーや、いくつかのマイナーなステージシェーダーに線や騒音が出ることがあります。\nShaderPatchが更新されるように、問題があれば報告してください。\nまた、特定のGPUワークアラウンドタイプを強制的に使用することもできます
+GPU_OLD_NAME=問題点: GPUが古すぎる。3Dレンダリングが機能していない可能性があります\n(クリックすると詳細が表示されます）
+GPU_OLD_HINT=お使いのGPUが非常に古く、ゲームで使用されているレンダリング技術に対応していません。\nプレイはできるかもしれませんが、グラフィックには大きな問題があると思われます。\nGTX 600シリーズ以降のGPUにアップグレードしてください
+GPU_UNKNOWN_NAME=問題点: GPUアーキテクチャを検出ができません。\n(クリックすると詳細が表示されます）
+GPU_UNKNOWN_HINT=あなたはNVIDIA GPUをお持ちのようですが、GPUのアーキテクチャ（種類）を確認する際に何か問題が発生しました。\nバグによるものかもしれませんが、おそらく潜在的な問題を示しているものと思われます。\nGTX 600シリーズ以降のGPUをお持ちの方に限ります。(GTX 400シリーズ以降のGPUでも動作します。）
+GPU_DRIVER_ISSUES_NAME=ドライバには既知の問題があります。
+GPU_DRIVER_ISSUES_HINT=使用しているグラフィックドライバには既知の問題があります。GPUベンダーのWebサイトから最新のドライバをインストールしてください
+SHOW_GPU_DIALOG_HINT=このメッセージは、　「Options」　タブで無効にすることができます

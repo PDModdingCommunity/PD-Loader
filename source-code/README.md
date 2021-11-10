@@ -16,7 +16,7 @@ Code is licensed under the MIT License.
 * Decompress everything into the **root folder** of the game.
 
 * Install the official **"mdata"**.
-**M215** to **M270** are supported, custom ones are also supported.
+**M215** to **M271** are supported, custom ones are also supported.
 
 To install them you have to drop each **"mdata"** update decompressed into the **"mdata\"** folder in the root folder of the game (create it if it doesn't exists).
 
@@ -28,6 +28,7 @@ To install them you have to drop each **"mdata"** update decompressed into the *
   * M250
   * M260
   * M270
+  * M271
 
 Files required to make **"mdata"** available in the game are included (**"ram\databank\PvList*"** files).
 

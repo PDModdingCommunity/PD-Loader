@@ -24,5 +24,5 @@ std::wstring DirPath() {
 	return exepath.substr(0, pos);
 }
 
-std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\EnhancedStageManager.ini";
+std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins_config\\EnhancedStageManager.ini";
 LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();

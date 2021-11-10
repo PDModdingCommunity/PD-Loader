@@ -23,5 +23,5 @@ std::wstring DirPath() {
 	return exepath.substr(0, pos);
 }
 
-std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\CustoMixer.ini";
+std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins_config\\CustoMixer.ini";
 LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();

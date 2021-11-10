@@ -6,6 +6,7 @@ en=Inglese
 zh-Hans=Cinese semplificato
 pt-BR=Portoghese
 it-IT=Italiano
+ja-JP=Giapponese
 
 # display
 DISPLAY_NAME=Visualizza:
@@ -63,6 +64,7 @@ NPR1_HINT=Shader NPR1 (non fotorealistico)\n\nPremere F9 per attivare o disattiv
 2D_HINT=Disabilita tutti i passaggi 3D.\n\nAVVISO: I dati estesi verranno cancellati se "Impedisci cancellazione dati" non è abilitato. Non abilitare con GPU Intel, al suo posto abilitare "Disattiva dati estesi".
 
 # options
+Keyboard/Controller Configuration=Configurazione tastiera/controller
 Default=Predefinito
 Force on=Forza attivazione
 Force off=Forza disattivazione
@@ -121,6 +123,8 @@ HIDE_FREEPLAY_NAME=Nascondi "FREE PLAY"/"CREDIT(S)"
 HIDE_FREEPLAY_HINT=Nasconde la scritta "FREE PLAY"/"CREDIT(S)".
 PDLOADERTEXT_NAME=FREE PLAY di PD Loader
 PDLOADERTEXT_HINT=Mostra "PD Loader" invece di "FREE PLAY".
+ALLOWCUSTOMFREEPLAY_NAME=Abilita scritte personalizzate
+ALLOWCUSTOMFREEPLAY_HINT=Permette ai plugin e alle patch di cambiare "FREE PLAY"/"CREDIT(S)".
 NO_TIMER_NAME=Tempo illimitato
 NO_TIMER_HINT=Ferma il timer.
 NO_TIMER_SPRITE_NAME=Nascondi timer
@@ -188,8 +192,8 @@ LEVEL_PLATE_ID_NAME=Targhetta:
 LEVEL_PLATE_ID_HINT=Imposta l'immagine del livello (targhetta) del giocatore.
 LEVEL_PLATE_EFFECT_NAME=Effetto targhetta:
 LEVEL_PLATE_EFFECT_HINT=Imposta l'effetto sulla targhetta del giocatore.
-SKIN_EQUIP _NAME=Skin:
-SKIN_EQUIP _HINT=Imposta la skin (stile dell'interfaccia) del gioco.
+SKIN_EQUIP_NAME=Skin:
+SKIN_EQUIP_HINT=Imposta la skin (stile dell'interfaccia) del gioco.
 BTN_SE_EQUIP_NAME=Suono pulsanti:
 BTN_SE_EQUIP_HINT=Imposta l'effetto sonoro per i pulsanti.\n\n-1 = predefinito della canzone
 SLIDE_SE_EQUIP_NAME=Suono scorrimento:
@@ -236,14 +240,14 @@ FAST_LOADER_SPEED_NAME=Velocità di avvio
 FAST_LOADER_SPEED_HINT=Usare 4 o inferiore quando si gioca online.\nPredefinita: 39
 CAMERA_CONTROLLER_NAME=Controller telecamera
 CAMERA_CONTROLLER_HINT=Abilita la telecamera libera (premendo F3).\nWASD per spostarsi, Barra spaziatrice/CTRL per salire/scendere, Q/R per ruotare la visuale, R/F per l'ingrandimento.\nTenere premuto SHIFT/ALT per cambiare la velocità.
-SCALE_COMPONENT_NAME=Ingranditore
+SCALE_COMPONENT_NAME=Scalatura
 SCALE_COMPONENT_HINT=Aumenta o riduce le dimensioni del framebuffer di uscita della grafica per riempire lo schermo o la finestra.
 DEBUG_COMPONENT_NAME=Componente di debug
 DEBUG_COMPONENT_HINT=Permette di cambiare lo stato del gioco (tasti F4-F8), usare l'interfaccia e i test per sviluppatori, e velocizzare animazioni e menu 2D (tenendo premuti SHIFT+TAB).
 TARGET_INSPECTOR_NAME=Analizzatore bersagli
 TARGET_INSPECTOR_HINT=Permette di trasferire le note mantenute.
 SCORE_SAVER_NAME=Salvapunti
-SCORE_SAVER_HINT=Salva i record in plugin/scores.ini.
+SCORE_SAVER_HINT=Salva i record in plugins_config/scores.ini.
 PAUSE_NAME=Pausa
 PAUSE_HINT=Aggiunge un menu di pausa.
 
@@ -257,7 +261,7 @@ CONFIG=Configura
 CONFIRM_SAVE_SETTINGS=Salvare le impostazioni?
 CONFIRM_DISCORD_OR_GUIDE=Aprire il manuale per la risoluzione di problemi?
 HOWTO_CLEAN_INSTALL=Come fare un'installazione pulita
-HOWTO_CLEAN_INSTALL_HINT=Cancellare:\n- dnsapi.dll o dinput8.dll\n- patches/\n- plugins/\n\nRipristinare:\n- glut32.dll\n\nDopodiché installare PD Loader dal repository ufficiale.
+HOWTO_CLEAN_INSTALL_HINT=Cancellare:\n- dnsapi.dll o dinput8.dll\n- patches/\n- plugins/\n- plugins_config/\n\nRipristinare:\n- glut32.dll\n\nDopodiché installare PD Loader dal repository ufficiale.
 
 # gpu
 GPU_WINE_DISABLE_MOVIES=(disattivare i video!)

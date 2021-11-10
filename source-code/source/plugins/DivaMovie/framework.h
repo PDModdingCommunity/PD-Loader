@@ -19,8 +19,11 @@ std::wstring DirPath() {
 	return exepath.substr(0, pos);
 }
 
-std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\DivaMovie.ini";
+std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins_config\\DivaMovie.ini";
 LPCWSTR CONFIG_FILE = CONFIG_FILE_STRING.c_str();
+
+std::wstring MASTER_CONFIG_FILE_STRING = DirPath() + L"\\plugins_config\\config.ini";
+LPCWSTR MASTER_CONFIG_FILE = MASTER_CONFIG_FILE_STRING.c_str();
 
 #define PRINT(value, ...) if (debug) printf(value, __VA_ARGS__);
 

@@ -128,6 +128,7 @@
     <EmbeddedResource Include="Resources.zh-Hans.restext" />
     <EmbeddedResource Include="Resources.pt-BR.restext" />
     <EmbeddedResource Include="Resources.it-IT.restext" />
+    <EmbeddedResource Include="Resources.ja-JP.restext" />
     <EmbeddedResource Include="ui.resx">
       <DependentUpon>ui.h</DependentUpon>
       <SubType>Designer</SubType>
@@ -139,6 +140,9 @@
       <DependentUpon>ui.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ui.it-IT.resx">
+      <DependentUpon>ui.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui.ja-JP.resx">
       <DependentUpon>ui.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

@@ -1,3 +1,5 @@
+// Requires Allow_Custom_Freeplay=1
+
 # Enable FREE PLAY
 // Just in case it's disabled...
 @1403BABEA:75 // ...enable it.

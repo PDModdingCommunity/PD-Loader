@@ -16,7 +16,7 @@
 #include "../Pause.h"
 #include "../../Utils.h"
 
-const std::string KEY_CONFIG_FILE_NAME = "keyconfig.ini";
+const std::string KEY_CONFIG_FILE_NAME = "..\\plugins_config\\keyconfig.ini";
 
 using namespace TLAC::Input;
 using namespace TLAC::Input::KeyConfig;

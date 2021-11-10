@@ -99,7 +99,7 @@ namespace TLAC::Components
 		panelState = (TouchPanelState*)TASK_TOUCH_ADDRESS;
 		componentsManager = manager;
 
-		TLAC::FileSystem::ConfigFile config(TLAC::framework::GetModuleDirectory(), "keyconfig.ini");
+		TLAC::FileSystem::ConfigFile config(TLAC::framework::GetModuleDirectory(), "\\..\\plugins_config\\keyconfig.ini");
 		config.OpenRead();
 		autoPause = config.GetBooleanValue("autopause");
 

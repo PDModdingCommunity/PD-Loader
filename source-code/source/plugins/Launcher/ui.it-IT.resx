@@ -156,30 +156,6 @@
   <data name="tabPage_Plugins.Text" xml:space="preserve">
     <value>Plugin e patch</value>
   </data>
-  <data name="button_ModRename.Text" xml:space="preserve">
-    <value>Rinomina</value>
-  </data>
-  <data name="button_ModRescan.Text" xml:space="preserve">
-    <value>Riscansiona</value>
-  </data>
-  <data name="button_ModFiles.Text" xml:space="preserve">
-    <value>File...</value>
-  </data>
-  <data name="checkBox_ModPatches.Text" xml:space="preserve">
-    <value>Plugin e patch</value>
-  </data>
-  <data name="button_ModDelete.Text" xml:space="preserve">
-    <value>Cancella</value>
-  </data>
-  <data name="button_ModClone.Text" xml:space="preserve">
-    <value>Nuovo/Clona</value>
-  </data>
-  <data name="button_ModSetActive.Text" xml:space="preserve">
-    <value>Attiva</value>
-  </data>
-  <data name="tabPage_Modpacks.Text" xml:space="preserve">
-    <value>Modpack</value>
-  </data>
   <data name="creditsTextBox.Text" xml:space="preserve">
     <value>PD Loader è inteso a scopi didattici; non per pirateria.
 Gli utenti devono possedere una copia del gioco ottenuta legalmente per usare questo software. Si prega di controllare le leggi/regolamenti locali per verificare la legalità del manipolare ed estrarre dati da macchine arcade protette.
@@ -326,7 +302,7 @@ AMD compatibilty pack dependencies have additional licenses, detailed in the AMD
     <value>Build instabili</value>
   </data>
   <data name="button_Releases_page.Text" xml:space="preserve">
-    <value>Pagina aggiornamenti</value>
+    <value>Pagina rilasci</value>
   </data>
   <data name="label_Update_2.Text" xml:space="preserve">
     <value>Si consiglia caldamente di scaricare gli aggiornamenti direttamente dal repository ufficiale.

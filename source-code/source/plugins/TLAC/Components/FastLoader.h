@@ -18,7 +18,7 @@ namespace TLAC::Components
 		virtual void UpdateInput() override;
 
 	private:
-		const std::string COMPONENTS_CONFIG_FILE_NAME = "components.ini";
+		const std::string COMPONENTS_CONFIG_FILE_NAME = "..\\plugins_config\\components.ini";
 		int updatesPerFrame = 39;
 		
 		GameState currentGameState;

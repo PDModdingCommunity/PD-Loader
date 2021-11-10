@@ -6,7 +6,7 @@
 
 namespace TLAC::Components
 {
-	const std::string COMPONENTS_CONFIG_FILE_NAME = "components.ini";
+	const std::string COMPONENTS_CONFIG_FILE_NAME = "..\\plugins_config\\components.ini";
 
 	// Incomplete type
 	struct DwGuiDisplay

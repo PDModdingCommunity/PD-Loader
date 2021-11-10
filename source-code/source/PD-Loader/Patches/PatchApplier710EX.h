@@ -300,36 +300,4 @@ void ApplyExPatches() {
             InjectCode((void*)0x0000000140578E9D, { 0xC7, 0x47, 0x68, 0x28, 0x00, 0x00, 0x00 }); // skip back button error
         }
     }
-
-    
-    // modpack redirection
-    {
-    wchar_t* mpstr = NULL;
-    mpstr = (wchar_t*)malloc(256);
-    memset(mpstr, 0, 256);
-    GetPrivateProfileStringW(L"Mods", L"Modpack", L"", mpstr, 256, CONFIG_FILE_NAME);
-    std::string modpack_name(std::filesystem::path(mpstr).string());
-    free(mpstr);
-    std::cout << "[Patches] Modpack name: " << modpack_name << std::endl;
-
-    if (modpack_name != "")
-    {
-    // ram
-    std::string modpack_path = "modpacks\\" + modpack_name;
-    std::cout << "[Patches] New ram path: " << modpack_path << std::endl;
-    char* mpstr_path = (char*)malloc(modpack_path.size());
-    memcpy(mpstr_path, modpack_path.c_str(), modpack_path.size());
-    InjectLong((void*)0x0000000014096C120, (long)mpstr_path);
-
-    // mdata
-    std::string modpack_mdata = "modpacks\\" + modpack_name + "\\mdata";
-    std::cout << "[Patches] New mdata path: " << modpack_mdata << std::endl;
-    char* mpstr_mdata = (char*)malloc(modpack_mdata.size());
-    memcpy(mpstr_mdata, modpack_mdata.c_str(), modpack_mdata.size());
-    InjectCode((void*)0x000000014066CEA0, { 0x48, 0xC7, 0xC2 });
-    InjectInt((void*)0x000000014066CEA3, (int)mpstr_mdata);
-    InjectCode((void*)0x000000014066CE9C, { (unsigned char)modpack_mdata.size() });
-    InjectCode((void*)0x000000014066CEAE, { (unsigned char)modpack_mdata.size() });
-    }
-    }
 }

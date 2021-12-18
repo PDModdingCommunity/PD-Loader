@@ -156,7 +156,7 @@ namespace Launcher {
 				ScaleHeight = CurrentScaleSize.Height / BaseScaleSize;
 			}
 			keycfg_button->Scale(ScaleWidth, ScaleHeight);
-			keycfg_button->Text = gcnew String(i18n::GetStringFallback("Keyboard/Controller Configuration"));
+			keycfg_button->Text = gcnew String(i18n::GetStringFallback("KEYBOARD_CONTROLLER_CONFIGURATION"));
 			keycfg_button->Click += gcnew EventHandler(this, &ui::keycfg_button_Click);
 			panel_Patches->Controls->Add(keycfg_button);
 

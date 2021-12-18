@@ -1,7 +1,7 @@
 ###############################################
 # framework
 
-LANG_AUTO=Automatic
+LANG_AUTO=自动检测
 en=英语
 zh-Hans=简体中文
 pt-BR=葡萄牙语
@@ -28,8 +28,8 @@ R.RESOLUTION_HINT=设置内部渲染分辨率（除 1280x720 外）
 
 # graphics
 MODEL_NAME=NVIDIA GPU 架构:
+MODEL_AUTOMATIC=自动设定
 MODEL_HINT=请选择你的 NVIDIA GPU 架构以便于应用必要的设定\n\n请注意：自动检测 GPU 架构功能无法在 GNU/Linux 上工作\n\n架构类型:\nKepler：GTX10 系\nMaxwell：GTX900 系\nTuring：RTX20/GTX16 系\nAmpere：RTX30 系
-Automatic=自动
 TAA_NAME=TAA
 TAA_HINT=时间抗锯齿
 MLAA_NAME=MLAA
@@ -42,6 +42,8 @@ DOF_NAME=景深
 DOF_HINT=模糊背景，停用后可以在低配机器上获得更好性能
 REFLECTIONS_NAME=反射
 REFLECTIONS_HINT=启用或者停用游戏内中的反射效果.
+GAMMA_NAME=伽马设定:
+GAMMA_HINT=调整此数值以设置阴影部分的亮度\n将其设定为125可获得接近于主机版本游戏的体验\n\n默认值: 100
 REFLECT_RES_WIDTH_NAME=反射分辨率:
 REFLECT_RES_WIDTH_HINT=设置反射缓冲区的分辨率（除 512x256 外）
 REFRACT_RES_WIDTH_NAME=折射分辨率:
@@ -60,6 +62,17 @@ NPR1_HINT=启用 NPR1 着色器\n\n按 F9 以进行切换
 2D_HINT=停用游戏内所有的 3D 渲染\n\n警告：在 “游戏数据保护” 未启用前，停用 3D 渲染将会导致所有扩展数据被删除
 
 # options
+SECTION_LOADER=启动器设定
+SECTION_COMPATIBILITY=兼容性设定
+SECTION_PV_SELECTOR=PV选择界面设定
+SECTION_ESM=游玩设定
+SECTION_UI_ELM=UI元素设定
+SECTION_PV_PATCHES=PV补丁设定
+SECTION_FRAMERATE=帧率设定
+SECTION_CONTROLLER_OPTIONS=控制器设定
+SECTION_LAUNCHER=启动器设定
+KEYBOARD_CONTROLLER_CONFIGURATION=键位设定
+
 Default=默认
 Force on=强制开启
 Force off=强制关闭
@@ -116,6 +129,8 @@ NO_MESSAGE_BAR_NAME=隐藏信息栏
 NO_MESSAGE_BAR_HINT=隐藏游戏窗口顶部的信息栏
 NO_STAGE_TEXT_NAME=隐藏游玩次数
 NO_STAGE_TEXT_HINT=隐藏游戏窗口左下角的1/2/Final文字
+ALLOWCUSTOMFREEPLAY_NAME=允许替换 "FREE PLAY" 文字
+ALLOWCUSTOMFREEPLAY_HINT=允许插件/补丁替换右上角的 "FREE PLAY" 文字
 
 
 UNLOCK_PSEUDO_NAME=解锁 PSEUDO 模块 (未完成)
@@ -142,6 +157,10 @@ AUTOPAUSE_HINT=在窗口为未激活状态时自动暂停游戏
 RUMBLE_NAME=启用 XInput 震动
 RUMBLE_HINT=启用在滑条滑动时的 XInput 震动功能
 XINPUT_PREFERRED_NAME=XInput 控制器设定:
+XINPUT_RUMBLE_INTENSITY_LEFT_NAME=左马达震动强度
+XINPUT_RUMBLE_INTENSITY_LEFT_HINT=默认值: 8000
+XINPUT_RUMBLE_INTENSITY_RIGHT_NAME=右马达震动强度
+XINPUT_RUMBLE_INTENSITY_RIGHT_HINT=默认值: 4000
 XINPUT_PREFERRED_HINT=设置 XInput 控制器偏好\n如果此控制器暂时无法使用，将使用下一个已连接的 XInput 控制器
 
 HARDWARE_SLIDER_NAME=启用硬件手台

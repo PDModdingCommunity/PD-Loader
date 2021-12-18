@@ -70,6 +70,8 @@ SECTION_FRAMERATE=Framerate
 SECTION_CONTROLLER_OPTIONS=Controller Options
 SECTION_LAUNCHER=Launcher
 
+KEYBOARD_CONTROLLER_CONFIGURATION=Keyboard/Controller Configuration
+
 BUILTIN_PATCHES_NAME=Enable Built-In Patches
 BUILTIN_PATCHES_HINT=Enables the built-in patches, including the options in this tab.
 CUSTOM_PATCHES_NAME=Enable Custom Patches

@@ -60,7 +60,7 @@ NPR1_HINT=NPR1シェーダー\n\nF9を押してオン/オフを切り替え
 2D_HINT=全ての3Dパスを無効にする。\n\n警告：「データ消去を防止」が有効になっていないと、Extended Dataが削除されます。インテル製GPUの場合はこのオプション有効にせず、代わりに「Extended Dataを無効」を有効にしてください
 
 # options
-Keyboard/Controller Configuration=キーボードとコントローラーの設定
+KEYBOARD_CONTROLLER_CONFIGURATION=キーボードとコントローラーの設定
 Default=デフォルト
 Force on=強制的に「有効」にする
 Force off=強制的に「無効」にする

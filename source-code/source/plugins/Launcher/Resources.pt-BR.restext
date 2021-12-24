@@ -60,7 +60,7 @@ NPR1_HINT=Shader NPR1\n\nPressione a tecla F9 para habilitar ou desabilitar.
 2D_HINT=Desativa todas as passagens 3D.\n\nAviso: A menos que "Impedir Apagamento de Arquivos" esteja ligado, isso irá apagar os dados extendidos. Não ative em placas gráficas Intel, nesse caso, habilite "Desativar Dados Extendidos".
 
 # options
-Keyboard/Controller Configuration=Configuração de Teclado/Controle
+KEYBOARD_CONTROLLER_CONFIGURATION=Configuração de Teclado/Controle
 Default=Padrão
 Force on=Forçar "Habilitado"
 Force off=Forçar "Desabilitado"

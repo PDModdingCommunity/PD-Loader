@@ -64,7 +64,7 @@ NPR1_HINT=Shader NPR1 (non fotorealistico)\n\nPremere F9 per attivare o disattiv
 2D_HINT=Disabilita tutti i passaggi 3D.\n\nAVVISO: I dati estesi verranno cancellati se "Impedisci cancellazione dati" non è abilitato. Non abilitare con GPU Intel, al suo posto abilitare "Disattiva dati estesi".
 
 # options
-Keyboard/Controller Configuration=Configurazione tastiera/controller
+KEYBOARD_CONTROLLER_CONFIGURATION=Configurazione tastiera/controller
 Default=Predefinito
 Force on=Forza attivazione
 Force off=Forza disattivazione

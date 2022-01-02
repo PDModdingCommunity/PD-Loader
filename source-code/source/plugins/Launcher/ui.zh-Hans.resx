@@ -196,4 +196,118 @@
   <data name="linkLabel_Repo.Text" xml:space="preserve">
     <value>官方代码仓库</value>
   </data>
+  <data name="creditsTextBox.Text" xml:space="preserve">
+    <value>PD Loader仅为学习而非盗版目的而构建
+此软件的使用者应当使用合法的Project DIVA Arcade Future Tone 软件拷贝以运行此软件
+此软件的使用者应当检查当地的法律/法规以确认从被保护的街机上获取/修改数据的合法性
+
+项目贡献者:
+akasaka, Brolijah, crash5b, Jay39w, korenkonder, Kyberal, lybxlpsv, nastys,
+Nezarn, samyuu, Skyth, somewhatlurker, Stewie1.0, SwigS-27, zsccat
+
+
+PD Loader 以及其包含的组件基于MIT协议进行分发
+  版权所有 (c) Project DIVA Modding 2nd Community
+  版权所有 (c) samyuu (nop) (TLAC原作者)
+  版权所有 (c) ThirteenAG (Ultimate ASI Loader原作者)
+  版权所有 (c) Magicial Studio
+  
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+
+大部分插件所使用的Microsoft Detours函数库基于 MIT 协议进行分发:
+  
+  # 版权所有 (c) Microsoft Corporation
+  保留所有权利
+  
+  # MIT License
+  
+  Permission is hereby granted, free of charge, to any person obtaining a copy of
+  this software and associated documentation files (the "Software"), to deal in
+  the Software without restriction, including without limitation the rights to
+  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+  of the Software, and to permit persons to whom the Software is furnished to do
+  so, subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+
+Launcher, Patches, Render and TLAC 插件使用了来自FreeGLUT的项目文件
+  
+  版权所有(c) 1999-2000 Pawel W. Olszta. 保留所有权利
+  Permission is hereby granted, free of charge,  to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction,  including without limitation the rights
+  to use, copy,  modify, merge,  publish, distribute,  sublicense,  and/or sell
+  copies or substantial portions of the Software.
+  
+  The above  copyright notice  and this permission notice  shall be included in
+  all copies or substantial portions of the Software.
+  
+  THE SOFTWARE  IS PROVIDED "AS IS",  WITHOUT WARRANTY OF ANY KIND,  EXPRESS OR
+  IMPLIED,  INCLUDING  BUT  NOT LIMITED  TO THE WARRANTIES  OF MERCHANTABILITY,
+  FITNESS  FOR  A PARTICULAR PURPOSE  AND NONINFRINGEMENT.  IN  NO EVENT  SHALL
+  PAWEL W. OLSZTA BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER LIABILITY, WHETHER
+  IN  AN ACTION  OF CONTRACT,  TORT OR OTHERWISE,  ARISING FROM,  OUT OF  OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  
+  Except as contained in this notice,  the name of Pawel W. Olszta shall not be
+  used  in advertising  or otherwise to promote the sale, use or other dealings
+  in this Software without prior written authorization from Pawel W. Olszta.
+
+
+Launcher所使用的SimpleIni函数库, 基于MIT协议进行分发
+  
+  The MIT License (MIT)
+  
+  版权所有 (c) 2006-2013 Brodie Thiesfield
+  
+  Permission is hereby granted, free of charge, to any person obtaining a copy of
+  this software and associated documentation files (the "Software"), to deal in
+  the Software without restriction, including without limitation the rights to
+  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+  the Software, and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+DivaSound 所使用的miniaudio函数库基于 MIT-0协议进行分发；所使用的BASSASIO 函数库具有非商用免费许可
+
+
+AMD 兼容组件（Novidia组件）所使用的函数库具有附加条款，具体事宜请参考AMD文档</value>
+  </data>
 </root>

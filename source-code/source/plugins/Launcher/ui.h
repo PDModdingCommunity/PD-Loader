@@ -1039,7 +1039,7 @@ private: System::Void SaveSettings() {
 	}
 }
 private: System::Void Button_Help_Click(System::Object^ sender, System::EventArgs^ e) {
-	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki");
+	System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader/wiki");
 }
 private: System::Void Button_Launch_Click(System::Object^ sender, System::EventArgs^ e) {
 	
@@ -1161,7 +1161,7 @@ private: System::Void button_Discord_Click(System::Object^ sender, System::Event
 	switch (SkinnedMessageBox::Show(this, "Would you like to read the user guide for troubleshooting?", "PD Launcher", MessageBoxButtons::YesNoCancel, MessageBoxIcon::Information))
 	{
 	case System::Windows::Forms::DialogResult::Yes:
-		System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki");
+		System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader/wiki");
 		break;
 
 	case System::Windows::Forms::DialogResult::No:
@@ -1170,7 +1170,7 @@ private: System::Void button_Discord_Click(System::Object^ sender, System::Event
 	}
 }
 private: System::Void button_github_Click(System::Object^ sender, System::EventArgs^ e) {
-	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader");
+	System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader");
 }
 private: System::Void button_Apply_Click(System::Object^ sender, System::EventArgs^ e) {
 	SaveSettings();
@@ -1212,7 +1212,7 @@ private: System::Void trackBar_LagCompensation_ValueChanged(System::Object^ send
 private: System::Void tabPage_Resolution_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void button_Wiki_Click(System::Object^ sender, System::EventArgs^ e) {
-	System::Diagnostics::Process::Start("https://notabug.org/PDModdingCommunity/PD-Loader/wiki");
+	System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader/wiki");
 }
 private: System::Void trackBar_LagCompensation_Scroll(System::Object^ sender, System::EventArgs^ e) {
 }

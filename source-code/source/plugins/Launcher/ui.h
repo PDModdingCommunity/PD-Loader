@@ -282,7 +282,7 @@ namespace Launcher {
 				}
 				else if (gpuModel->StartsWith("TU") || gpuModel->StartsWith("GV")) // let's assume Volta is like Turing for now
 				{
-					this->labelGPU->Text += L"Issues: Ampere GPU detected! Possible noise.\n(Click for more information)";
+					this->labelGPU->Text += L"Issues: Turing GPU detected! Possible noise.\n(Click for more information)";
 					GPUIssueText = L"On Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
 					this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
 				}

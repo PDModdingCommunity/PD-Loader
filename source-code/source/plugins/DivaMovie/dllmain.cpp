@@ -152,7 +152,7 @@ VTABLE_HOOK(HRESULT, IMFTransform, ProcessMessage, MFT_MESSAGE_TYPE eMessage, UL
 			static bool warn = false;
 			if (!warn)
 			{
-				MessageBoxW(0, L"Your system supports DXVA hardware decoding.\nDivaMovie will be disabled.\n\nIt is highly recommended to restart the game now.", L"DivaMovie", MB_ICONWARNING);
+				MessageBoxW(0, L"Your system supports DXVA hardware decoding and Force Hybrid Decoding is disabled.\nDivaMovie will be disabled.\n\nIt is HIGHLY recommended to restart the game now.", L"DivaMovie", MB_ICONINFORMATION);
 
 				CSimpleIniW ini_reader;
 				ini_reader.SetUnicode(false);

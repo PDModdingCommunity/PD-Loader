@@ -149,7 +149,7 @@ class PatchApplier600 : public PatchApplier {
 
 			if (nPDLoaderText && !nHideFreeplay)
 			{
-				InjectCode((void*)0x00000001409BC188, { 0x50, 0x44, 0x20, 0x4C, 0x6F, 0x61, 0x64, 0x65, 0x72, 0x20, 0x00 });
+				InjectCode((void*)0x00000001409BC188, { 'U', 'N', 'S', 'U', 'P', 'P', 'O', 'R', 'T', 'E', 'D', '\0' });
 				printf("[Patches] Show PD Loader text\n");
 			}
 		}

@@ -63,6 +63,7 @@ MENU_CIRCLE = Spacebar
 
 TOON = F9
 COIN = F10
+WIREFRAME = Backspace
 
 # Touch Slider:
 LEFT_SIDE_SLIDE_LEFT = Q, Ds4_L_Stick_Left, XINPUT_LLEFT
@@ -94,6 +95,7 @@ RIGHT_SIDE_SLIDE_RIGHT = O, Ds4_R_Stick_Right, XINPUT_RRIGHT
 
 # - Special Keys
 # "Enter", "Tab", "Backspace", "Spacebar", "Insert", "Delete", "Home", "End", "PageUp", "PageDown", "Escape"
+# "Comma", "Period", "Colon", "Slash", "Tilde", "LeftBracket", "Backslash", "RightBracket", "SingleDoubleQuote", "OEM_8"
 
 # --- MOUSE BUTTON NAMES: ---
 # "MouseLeft", "MouseMiddle", "MouseRight", "MouseX1", "MouseX2"

@@ -83,6 +83,7 @@ namespace TLAC::Components
 
 		CoinBinding = new Binding();
 		ToonBinding = new Binding();
+		WireframeBinding = new Binding();
 
 		FileSystem::ConfigFile configFile(framework::GetModuleDirectory(), KEY_CONFIG_FILE_NAME);
 		configFile.OpenRead();
@@ -103,6 +104,7 @@ namespace TLAC::Components
 		Config::BindConfigKeys(configFile.ConfigMap, "MENU_CIRCLE", *MenuCircleBinding, { "D", "L", "Spacebar" });
 		Config::BindConfigKeys(configFile.ConfigMap, "TOON", *ToonBinding, { "F9" });
 		Config::BindConfigKeys(configFile.ConfigMap, "COIN", *CoinBinding, { "F10" });
+		Config::BindConfigKeys(configFile.ConfigMap, "WIREFRAME", *WireframeBinding, { "Backspace" });
 
 		mouseScrollPvSelection = configFile.GetBooleanValue("mouse_scroll_pv_selection");
 	}
@@ -176,6 +178,9 @@ namespace TLAC::Components
 
 		if (ToonBinding->AnyTapped())
 			toggleNpr1();
+
+		if (WireframeBinding->AnyTapped())
+			toggleWireframe();
 	}
 
 	HoldState InputEmulator::GetHoldState()
@@ -465,6 +470,30 @@ namespace TLAC::Components
 			InjectCode((void*)0x0000000140502FC6, { 0xC3, 0xCC, 0xCC, 0xCC, 0xCC });
 
 			printf("[TLAC] NPR1 restored\n");
+		}
+	}
+
+	void InputEmulator::toggleWireframe()
+	{
+		static bool wireframeEnabled = false;
+
+		if (!wireframeEnabled)
+		{
+			// inject samyuu's wireframe code
+			InjectCode((void*)0x00000000140500BE6, { 0xBA, 0x01, 0x1B, 0x00, 0x00,	// mov edx,00001B01
+													 0xB9, 0x08, 0x04, 0x00, 0x00,	// mov ecx,00000408
+													 0xE8, 0xE1, 0x5A, 0x3B, 0x00,	// call 1408B66D6
+			0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+			wireframeEnabled = true;
+			printf("[TLAC] Wireframe enabled\n");
+		}
+		else
+		{
+			InjectCode((void*)0x00000000140500BE6, { 0xB9, 0x1C, 0x00, 0x00, 0x00, 0xE8, 0x30, 0x7C, 0xF3, 0xFF, 0xB9, 0x1B, 0x00, 0x00, 0x00, 0x8B, 0xD8, 0xE8, 0x24, 0x7C, 0xF3, 0xFF, 0xB9, 0x1A, 0x00, 0x00, 0x00 });
+
+			wireframeEnabled = false;
+			printf("[TLAC] Wireframe disabled\n");
 		}
 	}
 }

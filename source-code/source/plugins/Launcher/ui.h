@@ -245,10 +245,19 @@ namespace Launcher {
 				{
 					if (wineVersion == "" && (driver_version_major < 21 || (driver_version_major == 21 && driver_version_minor < 6)))
 					{
-						this->labelGPU->Text += L"Driver has known issues.";
-						GPUIssueText = L"The graphics driver you're using has known issues. Please install the latest driver from your GPU vendor's website.";
+						if (driver_version_minor == 5)
+						{
+							this->labelGPU->Text += L"Driver may have issues.";
+							GPUIssueText = L"The graphics driver you're using should be able to play movies without issues, but may crash while loading a song after playing multiple stages in one session.\nIf possible, please install the latest driver from your GPU vendor's website.\nHowever, note that if your GPU is old, you may not be able to install a more recent driver.";
+						}
+						else
+						{
+							this->labelGPU->Text += L"Driver has known issues.";
+							GPUIssueText = L"The graphics driver you're using has known issues. Movies may not play back correctly.\nPlease install the latest driver from your GPU vendor's website.";
+							showGpuDialog = true;
+						}
+
 						this->labelGPU->LinkColor = System::Drawing::Color::Orange;
-						showGpuDialog = true;
 					}
 					else
 					{

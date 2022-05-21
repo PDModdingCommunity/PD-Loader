@@ -395,9 +395,6 @@ namespace Launcher {
 		void updateStyle()
 		{
 			int nDarkLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"dark_launcher", FALSE, CONFIG_FILE);
-			int nAcrylicLauncher = GetPrivateProfileIntW(LAUNCHER_SECTION, L"acrylic_blur", FALSE, CONFIG_FILE);
-
-			bool useAcrylic = nAcrylicLauncher && setBlur(hWnd, AccentState::ACCENT_ENABLE_ACRYLICBLURBEHIND);
 
 			Color colourBg, colourBg2, colourFg;
 
@@ -416,22 +413,10 @@ namespace Launcher {
 				colourBg2 = Color::FromArgb(242, 242, 242);
 			}
 
-			if (useAcrylic)
-			{
-				this->button_Discord->BackColor = colourBg2;
-				this->button_github->BackColor = colourBg2;
-				this->button_Wiki->BackColor = colourBg2;
 
-				colourBg2 = Color::FromArgb(255, 0, 255);
-			}
-			else
-			{
-				setBlur(hWnd, AccentState::ACCENT_DISABLED);
-
-				this->button_Discord->BackColor = Color::Transparent;
-				this->button_github->BackColor = Color::Transparent;
-				this->button_Wiki->BackColor = Color::Transparent;
-			}
+			this->button_Discord->BackColor = Color::Transparent;
+			this->button_github->BackColor = Color::Transparent;
+			this->button_Wiki->BackColor = Color::Transparent;
 
 			this->tabPage_Resolution->BackColor = colourBg;
 			this->tabPage_Resolution->ForeColor = colourFg;

@@ -47,6 +47,14 @@ void InjectCode(void* address, const std::vector<uint8_t> data)
 	VirtualProtect(address, byteCount, oldProtect, nullptr);
 }
 
+void InjectUint(void* address, const uint32_t data)
+{
+	DWORD oldProtect;
+	VirtualProtect(address, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+	memcpy(address, &data, 4);
+	VirtualProtect(address, 4, oldProtect, nullptr);
+}
+
 // patchMovieExt will modify an extension to mp4 only if the file exists on disk as an mp4
 void patchMovieExt(std::string moviefile, void* address)
 {
@@ -98,8 +106,6 @@ auto nEStageManagerEncore = GetPrivateProfileIntW(L"patches", L"enhanced_stage_m
 auto nUnlockPseudo = GetPrivateProfileIntW(L"patches", L"unlock_pseudo", FALSE, CONFIG_FILE);
 auto nCard = GetPrivateProfileIntW(L"patches", L"card", TRUE, CONFIG_FILE);
 auto nHardwareSlider = GetPrivateProfileIntW(L"patches", L"hardware_slider", FALSE, CONFIG_FILE);
-auto nOGLPatchA = GetPrivateProfileIntW(L"patches", L"opengl_patch_a", FALSE, CONFIG_FILE);
-auto nOGLPatchB = GetPrivateProfileIntW(L"patches", L"opengl_patch_b", FALSE, CONFIG_FILE);
 auto nTAA = GetPrivateProfileIntW(L"graphics", L"taa", TRUE, CONFIG_FILE);
 auto nMLAA = GetPrivateProfileIntW(L"graphics", L"mlaa", TRUE, CONFIG_FILE);
 auto nDoF = GetPrivateProfileIntW(L"graphics", L"dof", TRUE, CONFIG_FILE);
@@ -123,10 +129,11 @@ auto nPunchthrough = GetPrivateProfileIntW(L"graphics", L"punchthrough", TRUE, C
 auto nGlare = GetPrivateProfileIntW(L"graphics", L"glare", TRUE, CONFIG_FILE);
 auto nShader = GetPrivateProfileIntW(L"graphics", L"shader", TRUE, CONFIG_FILE);
 auto n2D = GetPrivateProfileIntW(L"graphics", L"2D", FALSE, CONFIG_FILE);
-auto nNoDelete = GetPrivateProfileIntW(L"patches", L"prevent_data_deletion", FALSE, CONFIG_FILE);
 auto nReflectResWidth = GetPrivateProfileIntW(L"graphics", L"reflect_res_width", 512, CONFIG_FILE);
 auto nReflectResHeight = GetPrivateProfileIntW(L"graphics", L"reflect_res_height", 256, CONFIG_FILE);
 auto nRefractResWidth = GetPrivateProfileIntW(L"graphics", L"refract_res_width", 512, CONFIG_FILE);
 auto nRefractResHeight = GetPrivateProfileIntW(L"graphics", L"refract_res_height", 256, CONFIG_FILE);
+auto nShadowResWidth = GetPrivateProfileIntW(L"graphics", L"shadow_res_width", 2048, CONFIG_FILE);
+auto nShadowResHeight = GetPrivateProfileIntW(L"graphics", L"shadow_res_height", 2048, CONFIG_FILE);
 auto nLagCompensation = GetPrivateProfileIntW(L"graphics", L"lag_compensation", 0, CONFIG_FILE);
 auto nUseDivahookBat = GetPrivateProfileIntW(L"launcher", L"use_divahook_bat", FALSE, CONFIG_FILE);

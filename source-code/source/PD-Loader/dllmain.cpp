@@ -798,7 +798,7 @@ void Init()
 		stream.close();
 	}
 
-	const std::filesystem::path databank_template = L"ram\\databank_template";
+	const std::filesystem::path databank_template = L"ram\\databank_template_v2";
 	const std::filesystem::path databank = L"ram\\databank";
 	if (!std::filesystem::exists(databank)&&std::filesystem::exists(databank_template))
 	{

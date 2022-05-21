@@ -308,16 +308,16 @@ class PatchApplier600 : public PatchApplier {
 			printf("[Patches] Enhanced Stage Manager enabled\n");
 		}
 		// OpenGL Patches
-		if (nOGLPatchA)
-		{
-			// (call cs:glGetError) -> (xor eax, eax); (nop); (nop); (nop); (nop);
-			InjectCode((void*)0x000000014067842D, { 0x31, 0xC0, 0x90, 0x90, 0x90, 0x90 });
-		}
-		if (nOGLPatchB)
-		{
-			// (js loc_14069BC32) -> (nop)...
-			InjectCode((void*)0x0000000140676D04, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
-		}
+		//if (nOGLPatchA)
+		//{
+		//	// (call cs:glGetError) -> (xor eax, eax); (nop); (nop); (nop); (nop);
+		//	InjectCode((void*)0x000000014067842D, { 0x31, 0xC0, 0x90, 0x90, 0x90, 0x90 });
+		//}
+		//if (nOGLPatchB)
+		//{
+		//	// (js loc_14069BC32) -> (nop)...
+		//	InjectCode((void*)0x0000000140676D04, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
+		//}
 		// Unlock PSEUDO modules (which will all default to Miku, unless we also patch them to match the first performer)
 		if (nUnlockPseudo)
 		{

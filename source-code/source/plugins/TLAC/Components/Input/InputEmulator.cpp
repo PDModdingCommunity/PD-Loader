@@ -109,14 +109,14 @@ namespace TLAC::Components
 
 		mouseScrollPvSelection = configFile.GetBooleanValue("mouse_scroll_pv_selection");
 
-    TestBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_L3));
-    ServiceBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_L2));
-    CoinBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_L1));
-    StartBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_FN));
-    SankakuBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_TRIANGLE));
-    ShikakuBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_SQUARE));
-    BatsuBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_CROSS));
-    MaruBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_CIRCLE));
+		TestBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_L3));
+		ServiceBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_L2));
+		CoinBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_L1));
+		StartBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_FN));
+		SankakuBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_TRIANGLE));
+		ShikakuBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_SQUARE));
+		BatsuBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_CROSS));
+		MaruBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_CIRCLE));
 	}
 
 	void InputEmulator::Update()

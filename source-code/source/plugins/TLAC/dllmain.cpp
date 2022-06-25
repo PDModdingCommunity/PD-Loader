@@ -12,6 +12,7 @@
 #include "Input/DirectInput/DirectInput.h"
 #include "Input/DirectInput/Ds4/DualShock4.h"
 #include "Input/DirectInput/GenericUsb/GenericUsbInput.h"
+#include "Input/Divaller/Divaller.h"
 #include "Components/ComponentsManager.h"
 #include <tchar.h>
 #include <GL/freeglut.h>
@@ -81,6 +82,12 @@ namespace TLAC
 				if (Input::GenericUsbInput::TryInitializeInstance())
 					printf("[TLAC] UpdateTick(): GenericUsbInput connected and initialized\n");
 			}
+
+			if (!Input::Divaller::InstanceInitialized())
+			{
+				if (Input::Divaller::TryInitializeInstance())
+					printf("[TLAC] UpdateTick(): Divaller connected and initialized\n");
+			}
 		}
 
 		ComponentsManager.Update();
@@ -112,6 +119,15 @@ namespace TLAC
 				}
 			}
 
+			if (Input::Divaller::GetInstance() != nullptr)
+			{
+				if (!Input::Divaller::GetInstance()->PollInput())
+				{
+					Input::Divaller::DeleteInstance();
+					printf("[TLAC] UpdateTick(): Divaller connection lost\n");
+				}
+			}
+
 			ComponentsManager.UpdateInput();
 		}
 
@@ -138,6 +154,15 @@ namespace TLAC
 				{
 					Input::GenericUsbInput::DeleteInstance();
 					printf("[TLAC] UpdateTick(): GenericUsbInput connection lost\n");
+				}
+			}
+
+			if (Input::Divaller::GetInstance() != nullptr)
+			{
+				if (!Input::Divaller::GetInstance()->PollInput())
+				{
+					Input::Divaller::DeleteInstance();
+					printf("[TLAC] UpdateTick(): Divaller connection lost\n");
 				}
 			}
 		}

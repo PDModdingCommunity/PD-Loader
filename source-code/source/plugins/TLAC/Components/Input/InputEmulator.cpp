@@ -8,6 +8,7 @@
 #include "../../Input/Bindings/XinputBinding.h"
 #include "../../Input/Bindings/MouseBinding.h"
 #include "../../Input/Bindings/Ds4Binding.h"
+#include "../../Input/Bindings/DVLBinding.h"
 #include "../../Input/KeyConfig/Config.h"
 #include "../../Utilities/Operations.h"
 #include "../../Utilities/EnumBitwiseOperations.h"
@@ -107,6 +108,15 @@ namespace TLAC::Components
 		Config::BindConfigKeys(configFile.ConfigMap, "WIREFRAME", *WireframeBinding, { "Backspace" });
 
 		mouseScrollPvSelection = configFile.GetBooleanValue("mouse_scroll_pv_selection");
+
+		TestBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_L3));
+		ServiceBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_L2));
+		CoinBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_L1));
+		StartBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_FN));
+		SankakuBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_TRIANGLE));
+		ShikakuBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_SQUARE));
+		BatsuBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_CROSS));
+		MaruBinding->AddBinding(new DivallerBinding(DivallerButton::DVL_CIRCLE));
 	}
 
 	void InputEmulator::Update()

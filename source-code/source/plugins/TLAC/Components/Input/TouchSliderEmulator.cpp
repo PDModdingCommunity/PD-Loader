@@ -7,6 +7,7 @@
 #include "../../Input/Bindings/KeyboardBinding.h"
 #include "../../Input/KeyConfig/Config.h"
 #include "../../Input/DirectInput/Ds4/DualShock4.h"
+#include "../../Input/Divaller/Divaller.h"
 #include "../../FileSystem/ConfigFile.h"
 #include "../../Utilities/Math.h"
 #include <algorithm>
@@ -100,7 +101,11 @@ namespace TLAC::Components
 		if (!componentsManager->GetUpdateGameInput() || componentsManager->IsDwGuiActive() || (!enableInMenus && !(*(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN)))
 			return;
 
-		if (usePs4OfficialSlider)
+		if (Input::Divaller::GetInstance() != nullptr)
+		{
+			ApplyBitfieldState(Input::Divaller::GetInstance()->GetSlider());
+		}
+		else if (usePs4OfficialSlider)
 		{
 			DualShock4* ds4 = DualShock4::GetInstance();
 			if (ds4 == nullptr)
@@ -140,7 +145,7 @@ namespace TLAC::Components
 
 	void TouchSliderEmulator::OnFocusLost()
 	{
-		if (usePs4OfficialSlider)
+		if (usePs4OfficialSlider || Input::Divaller::GetInstance() != nullptr)
 			sliderState->ResetSensors(TouchSliderState::SENSOR_SET_MODE_RAW);
 		else
 			sliderState->ResetSensors(TouchSliderState::SENSOR_SET_MODE_SECTIONS);

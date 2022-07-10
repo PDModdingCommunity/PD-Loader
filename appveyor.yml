@@ -18,7 +18,7 @@ after_build:
     
     md %TMP%\full\ram\
 
-    md %TMP%\full\ram\databank_template\
+    md %TMP%\full\ram\databank_template_v2\
 
 
 
@@ -42,7 +42,7 @@ after_build:
     
     copy "%APPVEYOR_BUILD_FOLDER%\source-code\data\plugins\Novidia Shaders\*.*" "%TMP%\full\plugins\Novidia Shaders\"
     
-    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\ram\databank_template\*.dat %TMP%\full\ram\databank_template\
+    copy %APPVEYOR_BUILD_FOLDER%\source-code\data\ram\databank_template_v2\*.dat %TMP%\full\ram\databank_template_v2\
 
     copy %APPVEYOR_BUILD_FOLDER%\source-code\data\patches\custom_freeplay_text_example.p %TMP%\full\patches\
 

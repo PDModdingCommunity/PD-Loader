@@ -284,8 +284,8 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		}
 		DetourTransactionCommit();
 
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
+		//DetourTransactionBegin();
+		//DetourUpdateThread(GetCurrentThread());
 		//switch (game_version)
 		//{
 		//case 600:
@@ -294,7 +294,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		//default:
 		//	DetourAttach(&(PVOID&)divaParseParameters_710, hookedParseParameters);
 		//}
-		DetourTransactionCommit();
+		//DetourTransactionCommit();
 
 
 		// set sleep time resolution to 2ms or device minimum (whichever's lower)

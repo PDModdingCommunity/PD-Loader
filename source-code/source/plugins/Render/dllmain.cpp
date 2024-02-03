@@ -286,14 +286,14 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		switch (game_version)
-		{
-		case 600:
-			DetourAttach(&(PVOID&)divaParseParameters_600, hookedParseParameters);
-			break;
-		default:
-			DetourAttach(&(PVOID&)divaParseParameters_710, hookedParseParameters);
-		}
+		//switch (game_version)
+		//{
+		//case 600:
+		//	DetourAttach(&(PVOID&)divaParseParameters_600, hookedParseParameters);
+		//	break;
+		//default:
+		//	DetourAttach(&(PVOID&)divaParseParameters_710, hookedParseParameters);
+		//}
 		DetourTransactionCommit();
 
 

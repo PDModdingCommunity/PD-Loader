@@ -135,8 +135,8 @@ __int64 hookedParseParameters(int a1, __int64* a2)
 		case 600:
 			*resolutionType_600 = 15;
 			break;
-		default:
-			*resolutionType_710 = 15;
+		//default:
+		//	*resolutionType_710 = 15;
 		}
 	// Return to the original function
 	switch (game_version)
@@ -144,8 +144,8 @@ __int64 hookedParseParameters(int a1, __int64* a2)
 	case 600:
 		return divaParseParameters_600(a1, a2);
 		break;
-	default:
-		return divaParseParameters_710(a1, a2);
+	//default:
+	//	return divaParseParameters_710(a1, a2);
 	}
 }
 
@@ -231,6 +231,40 @@ __int64 __fastcall limiterFuncLight(__int64 a1)
 	}
 }
 
+#define WRITE_MEMORY_INT(address, data) \
+{ \
+DWORD oldProtect, bck; \
+VirtualProtect((BYTE*)(address), 4, PAGE_EXECUTE_READWRITE, &oldProtect); \
+*((int*)(address)) = (data); \
+VirtualProtect((BYTE*)(address), 4, oldProtect, &bck); \
+}
+
+void __fastcall hookedInitRender(int ssaa, int hd_res, int ss_alpha_mask, __int8 npr) {
+	if (nIntRes)
+	{
+		const __int64 widthAddress = 0x0000000140EDA8B0 + 0x0C;
+		const __int64 heightAddress = 0x0000000140EDA8B0 + 0x10;
+		const __int64 intWidthAddress = 0x0000000140EDA8D8 + 0x0C;
+		const __int64 intHeightAddress = 0x0000000140EDA8D8 + 0x10;
+
+		int originalWidth = *(int*)widthAddress;
+		int originalHeight = *(int*)heightAddress;
+		int originalIntWidth = *(int*)intWidthAddress;
+		int originalIntHeight = *(int*)intHeightAddress;
+		WRITE_MEMORY_INT(widthAddress, nIntResWidth);
+		WRITE_MEMORY_INT(heightAddress, nIntResHeight);
+		WRITE_MEMORY_INT(intWidthAddress, nIntResWidth);
+		WRITE_MEMORY_INT(intHeightAddress, nIntResHeight);
+		divaInitRender_710(ssaa, hd_res, ss_alpha_mask, npr);
+		WRITE_MEMORY_INT(widthAddress, originalWidth);
+		WRITE_MEMORY_INT(heightAddress, originalHeight);
+		WRITE_MEMORY_INT(intWidthAddress, originalIntWidth);
+		WRITE_MEMORY_INT(intHeightAddress, originalIntHeight);
+	}
+	else
+		divaInitRender_710(ssaa, hd_res, ss_alpha_mask, npr);
+}
+
 __int64 __fastcall hookedEngineUpdate(__int64 a1)
 {
 	if (nFpsLimit < 1)
@@ -284,17 +318,17 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		}
 		DetourTransactionCommit();
 
-		//DetourTransactionBegin();
-		//DetourUpdateThread(GetCurrentThread());
-		//switch (game_version)
-		//{
-		//case 600:
-		//	DetourAttach(&(PVOID&)divaParseParameters_600, hookedParseParameters);
-		//	break;
+		switch (game_version)
+		{
+		case 600:
+			DetourTransactionBegin();
+			DetourUpdateThread(GetCurrentThread());
+			DetourAttach(&(PVOID&)divaParseParameters_600, hookedParseParameters);
+			DetourTransactionCommit();
+			break;
 		//default:
 		//	DetourAttach(&(PVOID&)divaParseParameters_710, hookedParseParameters);
-		//}
-		//DetourTransactionCommit();
+		}
 
 
 		// set sleep time resolution to 2ms or device minimum (whichever's lower)
@@ -340,39 +374,14 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 			switch (game_version)
 			{
 			case 600:
-			{
-				DWORD oldProtect, bck;
-					VirtualProtect((BYTE*)0x0000000140980954, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((int*)0x0000000140980954) = nIntResWidth;
-				VirtualProtect((BYTE*)0x0000000140980954, 6, oldProtect, &bck);
-			}
-			{
-				DWORD oldProtect, bck;
-				VirtualProtect((BYTE*)0x0000000140980958, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-				*((int*)0x0000000140980958) = nIntResHeight;
-				VirtualProtect((BYTE*)0x0000000140980958, 6, oldProtect, &bck);
-			}
-			break;
+				WRITE_MEMORY_INT(0x0000000140980954, nIntResWidth);
+				WRITE_MEMORY_INT(0x0000000140980958, nIntResWidth);
+				break;
 			default:
-				{
-					DWORD oldProtect, bck;
-					VirtualProtect((BYTE*)0x00000001409B8B68, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-					*((int*)0x00000001409B8B68) = nIntResWidth;
-					VirtualProtect((BYTE*)0x00000001409B8B68, 6, oldProtect, &bck);
-				}
-				{
-					DWORD oldProtect, bck;
-					VirtualProtect((BYTE*)0x00000001409B8B6C, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
-					*((int*)0x00000001409B8B6C) = nIntResHeight;
-					VirtualProtect((BYTE*)0x00000001409B8B6C, 6, oldProtect, &bck);
-				}
-
-				//*((int*)0x00000001409B8B6C) = maxHeight;
-				//*((int*)0x00000001409B8B14) = maxWidth;
-				//*((int*)0x00000001409B8B18) = maxHeight;
-
-				//*((int*)0x00000001409B8B1C) = maxWidth; // No parameters width?
-				//*((int*)0x00000001409B8B20) = maxHeight; // No parameters height?
+				DetourTransactionBegin();
+				DetourUpdateThread(GetCurrentThread());
+				DetourAttach(&(PVOID&)divaInitRender_710, hookedInitRender);
+				DetourTransactionCommit();
 			}
 		}
 	}

@@ -663,7 +663,7 @@ private: System::Windows::Forms::Button^ button_Wiki;
 			this->trackBar_LagCompensation->Size = System::Drawing::Size(500, 90);
 			this->trackBar_LagCompensation->TabIndex = 0;
 			this->trackBar_LagCompensation->TickStyle = System::Windows::Forms::TickStyle::None;
-			this->trackBar_LagCompensation->ValueChanged += gcnew System::EventHandler(this, &ui::trackBar_LagCompensation_ValueChanged);
+			this->trackBar_LagCompensation->Scroll += gcnew System::EventHandler(this, &ui::trackBar_LagCompensation_Scroll);
 			// 
 			// groupBox_Details
 			// 
@@ -1205,7 +1205,7 @@ private: String^ GPUIssueText;
 private: System::Void LinkLabelLinkClickedGPUIssueHandler(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
 	SkinnedMessageBox::Show(this, GPUIssueText, "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 }
-private: System::Void trackBar_LagCompensation_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void trackBar_LagCompensation_Scroll(System::Object^ sender, System::EventArgs^ e) {
 	*LagCompensationConfigChanged = true;
 
 	updateLagCompMsec();
@@ -1214,8 +1214,6 @@ private: System::Void tabPage_Resolution_Click(System::Object^ sender, System::E
 }
 private: System::Void button_Wiki_Click(System::Object^ sender, System::EventArgs^ e) {
 	System::Diagnostics::Process::Start("https://github.com/PDModdingCommunity/PD-Loader/wiki");
-}
-private: System::Void trackBar_LagCompensation_Scroll(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

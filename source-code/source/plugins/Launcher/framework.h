@@ -166,7 +166,7 @@ ConfigOptionBase* internalResolutionArray[] = {
 };
 
 ConfigOptionBase* graphicsArray[] = {
-	new DropdownOption(L"model", L"GPU", CONFIG_FILE, L"NVIDIA GPU:", L"Select your NVIDIA GPU's architecture to apply the necessary workarounds.\n\nNOTE: Automatic detection does not currently work on GNU/Linux.", -1, std::vector<LPCWSTR>({ L"Automatic", L"Kepler", L"Maxwell/Pascal", L"Turing", L"Ampere" }), -1),
+	new DropdownOption(L"model", L"GPU", CONFIG_FILE, L"NVIDIA GPU:", L"Select your NVIDIA GPU's architecture to apply the necessary workarounds.\n\nNOTE: Automatic detection does not currently work on GNU/Linux.", -1, std::vector<LPCWSTR>({ L"Automatic", L"Kepler", L"Maxwell/Pascal", L"Turing", L"Ampere", L"Ada Lovelace"}), -1),
 	new BooleanOption(L"TAA", GRAPHICS_SECTION, CONFIG_FILE, L"TAA", L"Temporal Anti-Aliasing", true, false),
 	new BooleanOption(L"MLAA", GRAPHICS_SECTION, CONFIG_FILE, L"MLAA", L"Morphological Anti-Aliasing", true, false),
 	new DropdownOption(L"MAG", GRAPHICS_SECTION, CONFIG_FILE, L"Filter:", L"Image filter.\n\nBilinear: default filter\nNearest-neighbour: sharpest, but blocky\nSharpen: sharp filter\nCone: smooth filter", 0, std::vector<LPCWSTR>({ L"Bilinear", L"Nearest-neighbour", L"Sharpen", L"Cone" })),

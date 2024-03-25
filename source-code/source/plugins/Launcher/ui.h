@@ -232,131 +232,172 @@ namespace Launcher {
 
 			int linkStart = this->labelGPU->Text->Length;
 			bool showGpuDialog = false;
-			if (vendor->Contains("AMD") || vendor->Contains("ATI")) // check OpenGL to get actual GPU being used for vendor check (to get accurate results for iGPU)
+
+			bool hasNovidia = false;
+			bool novidiaEnabled = false;
+
+			bool hasDivaGL = false;
+			bool divaGLEnabled = true;
+
+			for (PluginInfo i : AllPlugins)
 			{
-				bool hasNovidia = false;
-				for (PluginInfo i : AllPlugins)
+				if (i.name == L"Novidia")
 				{
-					if (i.name == L"Novidia")
-						hasNovidia = true;
+					hasNovidia = true;
+					novidiaEnabled = GetIniBool(L"plugins", i.filename.c_str(), 1, CONFIG_FILE);
+				}
+				else if (i.name == L"DivaGL")
+				{
+					hasDivaGL = true;
+					divaGLEnabled = GetIniBool(L"plugins", i.filename.c_str(), 1, CONFIG_FILE);
 				}
 
-				if (hasNovidia)
+				if (hasNovidia && hasDivaGL) break;
+			}
+
+			if (divaGLEnabled)
+			{
+				this->labelGPU->Text += L"Rendering provided by DivaGL.";
+				GPUIssueText = L"Please check DivaGL's requirements to ensure compatibility with your graphics driver.";
+				this->labelGPU->LinkColor = System::Drawing::Color::HotPink;
+			}
+			else
+			{
+				if (vendor->Contains("AMD") || vendor->Contains("ATI")) // check OpenGL to get actual GPU being used for vendor check (to get accurate results for iGPU)
 				{
-					if (wineVersion == "" && (driver_version_major < 21 || (driver_version_major == 21 && driver_version_minor < 6)))
+					if (hasNovidia)
 					{
-						if (driver_version_major == 21 && driver_version_minor == 5)
+						if (novidiaEnabled)
 						{
-							this->labelGPU->Text += L"Driver may have issues.";
-							GPUIssueText = L"The graphics driver you're using should be able to play movies without issues, but may crash while loading a song after playing multiple stages in one session.\nIf possible, please install the latest driver from your GPU vendor's website.\nHowever, note that if your GPU is old, you may not be able to install a more recent driver.";
+							if (wineVersion == "" && (driver_version_major < 21 || (driver_version_major == 21 && driver_version_minor < 6)))
+							{
+								if (driver_version_major == 21 && driver_version_minor == 5)
+								{
+									this->labelGPU->Text += L"Driver may have issues.";
+									GPUIssueText = L"The graphics driver you're using should be able to play movies without issues, but may crash while loading a song after playing multiple stages in one session.\nIf possible, please install the latest driver from your GPU vendor's website.\nHowever, note that if your GPU is old, you may not be able to install a more recent driver.";
+								}
+								else
+								{
+									this->labelGPU->Text += L"Driver has known issues.";
+									GPUIssueText = L"The graphics driver you're using has known issues. Movies may not play back correctly.\nPlease install the latest driver from your GPU vendor's website.";
+									showGpuDialog = true;
+								}
+
+								this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+							}
+							else if (wineVersion == "" && (driver_version_major > 22 || (driver_version_major == 22 && driver_version_minor > 6)))
+							{
+								this->labelGPU->Text += "Issues: Unsupported GPU driver.";
+								GPUIssueText = "The graphics driver you're using is too new for Novidia.\nThe game will not run unless you install driver version 22.6.1 or earlier from AMD's website.";
+								this->labelGPU->LinkColor = System::Drawing::Color::Red;
+								showGpuDialog = true;
+							}
+							else
+							{
+								this->labelGPU->Text += "Issues: AMD GPU support is unofficial.";
+								GPUIssueText = "AMD GPUs are not supported without mods.\nThe PD Loader AMDPack seems to be installed, but please keep in mind that it may have issues.";
+								this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+							}
 						}
 						else
 						{
-							this->labelGPU->Text += L"Driver has known issues.";
-							GPUIssueText = L"The graphics driver you're using has known issues. Movies may not play back correctly.\nPlease install the latest driver from your GPU vendor's website.";
+							this->labelGPU->Text += "Issues: Mods needed for AMD compatibility!";
+							GPUIssueText = "AMD GPUs are not supported without mods.\nNovidia is installed, but disabled; please enable it to use your AMD GPU.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.";
+							this->labelGPU->LinkColor = System::Drawing::Color::Red;
 							showGpuDialog = true;
 						}
-
-						this->labelGPU->LinkColor = System::Drawing::Color::Orange;
 					}
-					else if (wineVersion == "" && (driver_version_major > 22 || (driver_version_major == 22 && driver_version_minor > 6)))
+					else
 					{
-						this->labelGPU->Text += "Issues: Unsupported GPU driver.";
-						GPUIssueText = "The graphics driver you're using is too new for Novidia.\nThe game will not run unless you install driver version 22.6.1 or earlier from AMD's website.";
+						this->labelGPU->Text += "Issues: Mods needed for AMD compatibility!";
+						GPUIssueText = "AMD GPUs are not supported without mods.\nEither DivaGL or Novidia is required. Please download either plugin and check its requirements to ensure compatibility with your graphics driver.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.";
 						this->labelGPU->LinkColor = System::Drawing::Color::Red;
 						showGpuDialog = true;
 					}
-					else
+				}
+				else if (vendor->Contains("NVIDIA"))
+				{
+					if (wineVersion == "" && (driver_version_major < 391 || (driver_version_major > 446 && driver_version_major < 460)))
 					{
-						this->labelGPU->Text += "Issues: AMD GPU support is unofficial.";
-						GPUIssueText = "AMD GPUs are not supported without mods.\nThe PD Loader AMDPack seems to be installed, but please keep in mind that it may have issues.";
-						this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
-					}
-				}
-				else
-				{
-					this->labelGPU->Text += "Issues: Mods needed for AMD compatibility!";
-					GPUIssueText = "AMD GPUs are not supported without mods.\nThe PD Loader AMDPack can be used to make 3D rendering work. Please download it and follow the included instructions.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.";
-					this->labelGPU->LinkColor = System::Drawing::Color::Red;
-					showGpuDialog = true;
-				}
-			}
-			else if (vendor->Contains("NVIDIA"))
-			{
-				if (wineVersion == "" && (driver_version_major < 391 || (driver_version_major > 446 && driver_version_major < 460)))
-				{
-					this->labelGPU->Text += L"Driver has known issues.";
-					GPUIssueText = L"The graphics driver you're using has known issues. Please install the latest driver from your GPU vendor's website.";
-					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
-					showGpuDialog = true;
-				}
-				else if (gpuModel->StartsWith("GA")) // unconfirmed??
-				{
-					this->labelGPU->Text += L"Issues: Ampere GPU detected! Possible noise.\n(Click for more information)";
-					GPUIssueText = L"On Ampere GPUs (RTX 30xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
-					this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
-				}
-				else if (gpuModel->StartsWith("TU") || gpuModel->StartsWith("GV")) // let's assume Volta is like Turing for now
-				{
-					this->labelGPU->Text += L"Issues: Turing GPU detected! Possible noise.\n(Click for more information)";
-					GPUIssueText = L"On Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
-					this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
-				}
-				else if (gpuModel->StartsWith("GM") || gpuModel->StartsWith("GP"))
-				{
-					this->labelGPU->Text += L"Issues: May have minor noise on some stages.\n(Click for more information)";
-					GPUIssueText = L"On Maxwell GPUs (~GTX 900) and newer, some minor stage shaders create noise.\nPlease make sure the ShaderPatch plugin is enabled.";
-					this->labelGPU->LinkColor = System::Drawing::Color::Teal;
-				}
-				else if (gpuModel->StartsWith("GK"))
-				{
-					this->labelGPU->Text += L"Issues: None.";
-					GPUIssueText = L"Your GPU should have no issues running the game.";
-					this->labelGPU->LinkColor = System::Drawing::Color::LightBlue;
-				}
-				else if (gpuModel->StartsWith("GF"))
-				{
-					if (version[0] < '4')
-					{
-						this->labelGPU->Text += L"Issues: Driver too old.";
-						GPUIssueText = L"Your GPU should be able to run the game, but it looks like your OpenGL version is too old.\nA driver update should fix this.";
+						this->labelGPU->Text += L"Driver has known issues.";
+						GPUIssueText = L"The graphics driver you're using has known issues. Please install the latest driver from your GPU vendor's website.";
 						this->labelGPU->LinkColor = System::Drawing::Color::Orange;
 						showGpuDialog = true;
 					}
-					else
+					else if (gpuModel->StartsWith("AD")) // unconfirmed??
 					{
-						this->labelGPU->Text += L"Issues: No known issues.";
-						GPUIssueText = L"Your GPU should have no issues running the game, but it is older than the GPU the game was originally designed for (GTX 650 Ti).\nThere may be some issues with graphics.\nPlease report any issues so that they can be analysed and potentially fixed.";
+						this->labelGPU->Text += L"Issues: Ada Lovelace GPU detected! Possible noise.\n(Click for more information)";
+						GPUIssueText = L"On Ada Lovelace GPUs (RTX 40xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
+						this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+					}
+					else if (gpuModel->StartsWith("GA")) // unconfirmed??
+					{
+						this->labelGPU->Text += L"Issues: Ampere GPU detected! Possible noise.\n(Click for more information)";
+						GPUIssueText = L"On Ampere GPUs (RTX 30xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
+						this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+					}
+					else if (gpuModel->StartsWith("TU") || gpuModel->StartsWith("GV")) // let's assume Volta is like Turing for now
+					{
+						this->labelGPU->Text += L"Issues: Turing GPU detected! Possible noise.\n(Click for more information)";
+						GPUIssueText = L"On Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
+						this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+					}
+					else if (gpuModel->StartsWith("GM") || gpuModel->StartsWith("GP"))
+					{
+						this->labelGPU->Text += L"Issues: May have minor noise on some stages.\n(Click for more information)";
+						GPUIssueText = L"On Maxwell GPUs (~GTX 900) and newer, some minor stage shaders create noise.\nPlease make sure the ShaderPatch plugin is enabled.";
 						this->labelGPU->LinkColor = System::Drawing::Color::Teal;
 					}
+					else if (gpuModel->StartsWith("GK"))
+					{
+						this->labelGPU->Text += L"Issues: None.";
+						GPUIssueText = L"Your GPU should have no issues running the game.";
+						this->labelGPU->LinkColor = System::Drawing::Color::LightBlue;
+					}
+					else if (gpuModel->StartsWith("GF"))
+					{
+						if (version[0] < '4')
+						{
+							this->labelGPU->Text += L"Issues: Driver too old.";
+							GPUIssueText = L"Your GPU should be able to run the game, but it looks like your OpenGL version is too old.\nA driver update should fix this.";
+							this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+							showGpuDialog = true;
+						}
+						else
+						{
+							this->labelGPU->Text += L"Issues: No known issues.";
+							GPUIssueText = L"Your GPU should have no issues running the game, but it is older than the GPU the game was originally designed for (GTX 650 Ti).\nThere may be some issues with graphics.\nPlease report any issues so that they can be analysed and potentially fixed.";
+							this->labelGPU->LinkColor = System::Drawing::Color::Teal;
+						}
+					}
+					else if (gpuModel->StartsWith("G") || gpuModel->StartsWith("NV") || gpuModel->StartsWith("NB") || gpuModel->StartsWith("N10") || gpuModel->StartsWith("MCP"))
+					{
+						this->labelGPU->Text += L"Issues: GPU too old! 3D rendering might be broken.\n(Click for more information)";
+						GPUIssueText = L"Your GPU is very old and does not support rendering techniques used by the game.\nYou may be able to play, but graphics will likely have major issues.\nPlease upgrade to a GTX 600 series or later GPU.";
+						this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+						showGpuDialog = true;
+					}
+					else if (version[0] >= '4' && gpuModel->Length > 0 && !gpuModel->StartsWith("Unk") && !gpuModel->StartsWith("Oth"))
+					{
+						this->labelGPU->Text += L"Issues: GPU may be too new.\n(Click for more information)";
+						GPUIssueText = L"It looks like your GPU may be too new. Only up to Ampere (RTX 30xx) is currently supported.\nGood news: the game should be capable of running, but shader patches (probably needed) may not support it yet.\nYou will likely see lines/noise on important character shaders and some minor stage shaders.\nPlease report any issues so that ShaderPatch can be updated.\nYou can also try forcing a specific GPU workaround type.";
+						this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+					}
+					else
+					{
+						this->labelGPU->Text += L"Issues: Unable to detect GPU architecture.\n(Click for more information)";
+						GPUIssueText = L"It looks like you have an NVIDIA GPU, but something went wrong while trying to determine your GPU's architecture (type).\nThis may be a caused by a bug, but it probably indicates potential issues.\nPlease make sure you have a GTX 600 series or later GPU. (GTX 400 series or later should also work)";
+						this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+						showGpuDialog = true;
+					}
 				}
-				else if (gpuModel->StartsWith("G") || gpuModel->StartsWith("NV") || gpuModel->StartsWith("NB") || gpuModel->StartsWith("N10") || gpuModel->StartsWith("MCP"))
+				else //if (gpuModel->Length == 0 || gpuModel->StartsWith("Unk") || gpuModel->StartsWith("Oth"))
 				{
-					this->labelGPU->Text += L"Issues: GPU too old! 3D rendering might be broken.\n(Click for more information)";
-					GPUIssueText = L"Your GPU is very old and does not support rendering techniques used by the game.\nYou may be able to play, but graphics will likely have major issues.\nPlease upgrade to a GTX 600 series or later GPU.";
-					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
+					this->labelGPU->Text += L"Issues: UNSUPPORTED GPU!";
+					GPUIssueText = L"Your graphics card is not supported. Only NVIDIA GPUs are recommended (though others can be used with mods).\nPlease use a GTX 600 series or later NVIDIA GPU.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.\n\nOwners of other GPUs may be able to run the game using plugins or mods, such as DivaGL, Novidia, or DivaImGui.";
+					this->labelGPU->LinkColor = System::Drawing::Color::Red;
 					showGpuDialog = true;
 				}
-				else if (version[0] >= '4' && gpuModel->Length > 0 && !gpuModel->StartsWith("Unk") && !gpuModel->StartsWith("Oth"))
-				{
-					this->labelGPU->Text += L"Issues: GPU may be too new.\n(Click for more information)";
-					GPUIssueText = L"It looks like your GPU may be too new. Only up to Ampere (RTX 30xx) is currently supported.\nGood news: the game should be capable of running, but shader patches (probably needed) may not support it yet.\nYou will likely see lines/noise on important character shaders and some minor stage shaders.\nPlease report any issues so that ShaderPatch can be updated.\nYou can also try forcing a specific GPU workaround type.";
-					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
-				}
-				else
-				{
-					this->labelGPU->Text += L"Issues: Unable to detect GPU architecture.\n(Click for more information)";
-					GPUIssueText = L"It looks like you have an NVIDIA GPU, but something went wrong while trying to determine your GPU's architecture (type).\nThis may be a caused by a bug, but it probably indicates potential issues.\nPlease make sure you have a GTX 600 series or later GPU. (GTX 400 series or later should also work)";
-					this->labelGPU->LinkColor = System::Drawing::Color::Orange;
-					showGpuDialog = true;
-				}
-			}
-			else //if (gpuModel->Length == 0 || gpuModel->StartsWith("Unk") || gpuModel->StartsWith("Oth"))
-			{
-				this->labelGPU->Text += L"Issues: UNSUPPORTED GPU!";
-				GPUIssueText = L"Your graphics card is not supported. Only NVIDIA GPUs are recommended (though AMD ones can be used with mods).\nPlease use a GTX 600 series or later NVIDIA GPU.\n\nIf you have a laptop with an NVIDIA GPU and wish to use it instead of the detected GPU, you may need to set diva.exe to use it in Windows settings or NVIDIA Control Panel.\n\nOwners of other GPUs may be able to run the game using plugins or mods, but 3D graphics will probably not work.";
-				this->labelGPU->LinkColor = System::Drawing::Color::Red;
-				showGpuDialog = true;
 			}
 			int linkEnd = this->labelGPU->Text->Length - linkStart;
 
@@ -1203,7 +1244,7 @@ private: bool AnyConfigChanged() {
 
 private: String^ GPUIssueText;
 private: System::Void LinkLabelLinkClickedGPUIssueHandler(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
-	SkinnedMessageBox::Show(this, GPUIssueText, "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+	SkinnedMessageBox::Show(this, GPUIssueText, "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Information);
 }
 private: System::Void trackBar_LagCompensation_Scroll(System::Object^ sender, System::EventArgs^ e) {
 	*LagCompensationConfigChanged = true;

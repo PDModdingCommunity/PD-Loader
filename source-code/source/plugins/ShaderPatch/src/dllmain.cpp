@@ -294,6 +294,13 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 {
 	if (ul_reason_for_call == DLL_PROCESS_ATTACH)
 	{
+		if (GetModuleHandleW(L"DivaGL.dva") != NULL)
+		{
+			// detected DivaGL
+			printf("[ShaderPatch] Detected DivaGL! Quitting!\n");
+			return TRUE;
+		}
+
 		// install a thunk to hook
 		InjectCode((void*)0x1405e5991, { 0x48, 0x83, 0xec, 0x28 });       // SUB  RSP, 0x28
 		InjectCode((void*)0x1405e5995, { 0xe8, 0x56, 0xe8, 0xb9, 0xff }); // CALL  0x1401841f0

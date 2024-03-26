@@ -68,7 +68,7 @@ namespace GPUModel
 		//DWORD dwAttrib = GetFileAttributesW(L"amdgfxinfo64.dll");
 		//if (dwAttrib != INVALID_FILE_ATTRIBUTES && !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY))
 		struct stat buffer; // for some reason winapi version wasn't working
-		if (stat("amdgfxinfo64.dll", &buffer) == 0);
+		if (stat("amdgfxinfo64.dll", &buffer) == 0)
 		{
 			non_nv_name = "AMD";
 		}

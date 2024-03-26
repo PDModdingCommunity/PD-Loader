@@ -1,7 +1,12 @@
 #pragma once
 
-#include "glStuff.h"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <psapi.h>
+
 #include <vector>
+
+#include "glStuff.h"
 
 // use this as a hook to perform initialisation
 void(__cdecl* glutSetCursor)(int cursor) = *(void(__cdecl**)(int))0x140966068;
@@ -112,4 +117,38 @@ void InjectCode(void* address, const std::vector<uint8_t> data)
 	VirtualProtect(address, byteCount, PAGE_EXECUTE_READWRITE, &oldProtect);
 	memcpy(address, data.data(), byteCount);
 	VirtualProtect(address, byteCount, oldProtect, nullptr);
+}
+
+
+bool hasConflicts()
+{
+	HMODULE hModules[1024];
+	HANDLE hProcess;
+	DWORD cbNeeded;
+
+	hProcess = GetCurrentProcess();
+
+	if (EnumProcessModules(hProcess, hModules, sizeof(hModules), &cbNeeded)) {
+		for (unsigned int i = 0; i < (cbNeeded / sizeof(HMODULE)); i++) {
+			TCHAR szModName[MAX_PATH];
+
+			if (GetModuleFileNameEx(hProcess, hModules[i], szModName, sizeof(szModName) / sizeof(TCHAR))) {
+				auto pNameFunc = (LPCWSTR(*)())GetProcAddress(hModules[i], "GetPluginName");
+				if (pNameFunc) {
+					LPCWSTR name = pNameFunc();
+					if (lstrcmpW(name, L"DivaGL") == 0)
+					{
+						// detected DivaGL
+						printf("[Novidia] Detected DivaGL! Quitting!\n");
+#ifdef _DEBUG
+						MessageBoxExW(NULL, L"Detected DivaGL! Quitting!\n", L"Novidia", MB_OK, 0);
+#endif
+						return true;
+					}
+				}
+			}
+		}
+	}
+
+	return false;
 }

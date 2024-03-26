@@ -294,10 +294,9 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 {
 	if (ul_reason_for_call == DLL_PROCESS_ATTACH)
 	{
-		if (GetModuleHandleW(L"DivaGL.dva") != NULL)
+		if (hasConflicts())
 		{
-			// detected DivaGL
-			printf("[ShaderPatch] Detected DivaGL! Quitting!\n");
+			// detected an incompatible plugin (i.e. DivaGL)
 			return TRUE;
 		}
 

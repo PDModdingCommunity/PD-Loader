@@ -1192,8 +1192,8 @@ divagl_freeglut:
 	return true;
 
 divagl_novidia:
-	SkinnedMessageBox::Show(this, "Plugins: Novidia and ShaderPatch must be disabled if DivaGL is enabled.", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Error);
-	return true;
+	if (SkinnedMessageBox::Show(this, "Plugins: Novidia and ShaderPatch should be disabled if DivaGL is enabled.\n\nLaunch anyway?", "PD Launcher", MessageBoxButtons::YesNo, MessageBoxIcon::Error) != System::Windows::Forms::DialogResult::Yes)
+		return true;
 
 divagl_divaimguiold:
 	SkinnedMessageBox::Show(this, "Plugins: Your version of DivaImGui is too old for DivaGL; please either update or disable it.", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Error);

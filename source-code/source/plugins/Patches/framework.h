@@ -3,6 +3,14 @@
 #include <string>
 #include <vector>
 
+typedef uint16_t(__fastcall* p_crc16_ccitt)(void* data, int len);
+p_crc16_ccitt o_crc16_ccitt = (p_crc16_ccitt)0x140011A90;
+
+uint16_t crc16_ccitt(std::string& str)
+{
+	return o_crc16_ccitt(str.data(), str.size());
+}
+
 std::string TrimString(const std::string& str, const std::string& whitespace)
 {
 	const size_t strBegin = str.find_first_not_of(whitespace);
@@ -91,6 +99,7 @@ auto nCursor = GetPrivateProfileIntW(L"patches", L"cursor", TRUE, CONFIG_FILE);
 auto nHideFreeplay = GetPrivateProfileIntW(L"patches", L"hide_freeplay", FALSE, CONFIG_FILE);
 auto nFreeplay = GetPrivateProfileIntW(L"patches", L"freeplay", TRUE, CONFIG_FILE);
 auto nPDLoaderText = GetPrivateProfileIntW(L"patches", L"pdloadertext", TRUE, CONFIG_FILE);
+auto nHideStatusIcons = GetPrivateProfileIntW(L"patches", L"hide_status_icons", FALSE, CONFIG_FILE);
 auto nStatusIcons = GetPrivateProfileIntW(L"patches", L"status_icons", 0, CONFIG_FILE);
 auto nHidePVWatermark = GetPrivateProfileIntW(L"patches", L"hide_pv_watermark", FALSE, CONFIG_FILE);
 auto nNoPVUi = GetPrivateProfileIntW(L"patches", L"no_pv_ui", FALSE, CONFIG_FILE);
@@ -101,6 +110,7 @@ auto nMP4Movies = GetPrivateProfileIntW(L"patches", L"mp4_movies", FALSE, CONFIG
 auto nNoError = GetPrivateProfileIntW(L"patches", L"no_error", FALSE, CONFIG_FILE);
 auto nNoTimer = GetPrivateProfileIntW(L"patches", L"no_timer", TRUE, CONFIG_FILE);
 auto nNoTimerSprite = GetPrivateProfileIntW(L"patches", L"no_timer_sprite", TRUE, CONFIG_FILE);
+auto nAutoDatabank = GetPrivateProfileIntW(L"patches", L"auto_databank", TRUE, CONFIG_FILE);
 auto nEStageManager = GetPrivateProfileIntW(L"patches", L"enhanced_stage_manager", 0, CONFIG_FILE);
 auto nEStageManagerEncore = GetPrivateProfileIntW(L"patches", L"enhanced_stage_manager_encore", TRUE, CONFIG_FILE);
 auto nUnlockPseudo = GetPrivateProfileIntW(L"patches", L"unlock_pseudo", FALSE, CONFIG_FILE);

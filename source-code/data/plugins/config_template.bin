@@ -35,6 +35,8 @@ Stereo=1
 Quick_Start=0
 #Disable the scrolling sound effect
 No_Scrolling_SFX=0
+#Automatically generate databank for missing entries and allow multiple PVList files to be used
+Auto_Databank=1
 #Enhanced Stage Manager (sets a custom number of stages; "stage_manager" should be disabled in "components.ini")
 #Number of stages (0 = disabled)
 Enhanced_Stage_Manager=0
@@ -60,6 +62,8 @@ Hide_Volume=0
 No_PV_UI=0
 #Hide the watermark that's usually shown in PV viewing mode
 Hide_PV_Watermark=0
+#Hide the top-right corner status icons
+Hide_Status_Icons=0
 #Set the card reader and network status icons -- 0=default, 1=hidden, 2=error, 3=OK, 4=partial OK
 Status_Icons=0
 #Disable showing lyrics

@@ -100,13 +100,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="databank.cpp" />
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="databank.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="PatchApplier.h" />
     <ClInclude Include="PatchApplier600.h" />
     <ClInclude Include="PatchApplier710.h" />
+    <ClInclude Include="storage.h" />
+    <ClInclude Include="urlutil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

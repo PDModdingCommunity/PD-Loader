@@ -212,6 +212,7 @@ ConfigOptionBase* optionsArray[] = {
 	new OptionMetaSpacer(8),
 
 	new OptionMetaSectionLabel(L"Stages/Songs"),
+	new BooleanOption(L"Auto_Databank", PATCHES_SECTION, CONFIG_FILE, L"Auto Databank", L"Automatically generate databank for missing entries and allow multiple PvList files to be used.", true, false),
 	new NumericOption(L"Enhanced_Stage_Manager", PATCHES_SECTION, CONFIG_FILE, L"Number of Stages:", L"Set the number of stages (0 = default).", 0, 0, INT_MAX),
 	new BooleanOption(L"Enhanced_Stage_Manager_Encore", PATCHES_SECTION, CONFIG_FILE, L"Encore", L"Enable encore stages.", true, false),
 	new BooleanOption(L"sing_missed", PATCHES_SECTION, CONFIG_FILE, L"Sing Missed", L"Sing missed notes.", false, false),
@@ -233,7 +234,8 @@ ConfigOptionBase* optionsArray[] = {
 	new BooleanOption(L"hide_volume", PATCHES_SECTION, CONFIG_FILE, L"Hide Volume Buttons", L"Hide the volume and SE control buttons.", false, false),
 	new BooleanOption(L"no_pv_ui", PATCHES_SECTION, CONFIG_FILE, L"Disable PV UI", L"Remove the photo controls during PV playback.", false, false),
 	new BooleanOption(L"hide_pv_watermark", PATCHES_SECTION, CONFIG_FILE, L"Hide PV Watermark", L"Hide the watermark that's usually shown in PV viewing mode.", false, false),
-	new DropdownOption(L"status_icons", PATCHES_SECTION, CONFIG_FILE, L"Top-Right Network Icons:", L"Set the state of card reader and network status icons.", 3, std::vector<LPCWSTR>({ L"Default", L"Hidden", L"Error", L"OK", L"Partial OK" })),
+	new BooleanOption(L"hide_status_icons", PATCHES_SECTION, CONFIG_FILE, L"Hide Network Icons", L"Hide the top-right corner status icons.", false, false), // technically reduntant, but somehow a lot of users miss the dropdown
+	new DropdownOption(L"status_icons", PATCHES_SECTION, CONFIG_FILE, L"Network Icons Status:", L"Set the state of card reader and network status icons.", 3, std::vector<LPCWSTR>({ L"Default", L"Hidden", L"Error", L"OK", L"Partial OK" })),
 	new BooleanOption(L"no_lyrics", PATCHES_SECTION, CONFIG_FILE, L"Disable Lyrics", L"Disable showing lyrics.", false, false),
 	new BooleanOption(L"no_error", PATCHES_SECTION, CONFIG_FILE, L"Disable Error Banner", L"Disable the error banner on the attract screen.", true, false),
 	new BooleanOption(L"hide_freeplay", PATCHES_SECTION, CONFIG_FILE, L"Hide \"FREE PLAY\"/\"CREDIT(S)\"", L"Hide the \"FREE PLAY\"/\"CREDIT(S)\" text.", false, false),

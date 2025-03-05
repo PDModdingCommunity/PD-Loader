@@ -161,12 +161,18 @@ class PatchApplier600 : public PatchApplier {
 			printf("[Patches] Cursor enabled\n");*/
 		}
 		// Override status icon states to be invalid (hides them)
-		if (nStatusIcons > 0)
+		if (nHideStatusIcons || nStatusIcons > 0)
 		{
 			std::vector<uint8_t> cardIcon = { 0xFD, 0x0A };
 			std::vector<uint8_t> networkIcon = { 0x9E, 0x1E };
 
-			if (nStatusIcons == 2) // 2 for error icons
+			if (nHideStatusIcons || nStatusIcons == 1 || nStatusIcons >= 5) // 1 or invalid for hidden
+			{
+				cardIcon = { 0xFD, 0x0A };
+				networkIcon = { 0x9E, 0x1E };
+				printf("[Patches] Status icons hidden\n");
+			}
+			else if (nStatusIcons == 2) // 2 for error icons
 			{
 				cardIcon = { 0xFA, 0x0A };
 				networkIcon = { 0x9F, 0x1E };
@@ -183,12 +189,6 @@ class PatchApplier600 : public PatchApplier {
 				cardIcon = { 0xFB, 0x0A };
 				networkIcon = { 0xA1, 0x1E };
 				printf("[Patches] Status icons set to partial OK state\n");
-			}
-			else // 1 or invalid for hidden
-			{
-				cardIcon = { 0xFD, 0x0A };
-				networkIcon = { 0x9E, 0x1E };
-				printf("[Patches] Status icons hidden\n");
 			}
 
 			// card icon

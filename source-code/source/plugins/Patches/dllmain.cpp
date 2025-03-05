@@ -7,13 +7,16 @@
 #include <filesystem>
 #include <sstream>
 #include <iomanip>
+#include <regex>
+#include <detours.h>
+
 #include "PluginConfigApi.h"
 #include "PatchApplier.h"
 #include "PatchApplier600.h"
 #include "PatchApplier710.h"
-
-#include <detours.h>
 #include "framework.h"
+#include "storage.h"
+#include "databank.h"
 #pragma comment(lib, "detours.lib")
 
 unsigned short game_version = 710;
@@ -22,7 +25,9 @@ void InjectCode(void* address, const std::vector<uint8_t> data);
 void ApplyPatches();
 void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING);
 
-
+constexpr uint64_t PVLIST_INIT_ADDRESS = 0x000000014001EC80;
+void(__fastcall* divaPvListInitializer)(void* pvListContainer) = (void(__fastcall*)(void* pvListContainer))PVLIST_INIT_ADDRESS;
+void initPvListContainerHook();
 
 HMODULE *hModulePtr;
 
@@ -97,6 +102,11 @@ void ApplyPatches() {
 		}
 
 		std::cout << "[Patches] All custom patches applied\n";
+	}
+
+	if (nAutoDatabank)
+	{
+		initPvListContainerHook();
 	}
 }
 
@@ -244,7 +254,7 @@ void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING)
 			if (echo) std::cout << std::endl;
 			else if (comment_string.length() > 0)
 			{
-				std::cout << "[Patches]";;
+				std::cout << "[Patches]";
 				if (comment_string.at(0) != ' ') std::cout << ' ';
 				std::cout << comment_string << std::endl;
 			}
@@ -253,6 +263,52 @@ void ApplyCustomPatches(std::wstring CPATCH_FILE_STRING)
 
 	fileStream.close();
 }
+
+Databank::PvList lists[5] = {};
+void hookedPvListInitializer(void* pvListContainer)
+{
+	Storage::FileRecord* records = (Storage::FileRecord*)((uint64_t)pvListContainer + 0xA0);
+
+	for (int i = 0; i <= 4; i++)
+	{
+		std::regex pattern("(PvList" + std::to_string(i) +"_SBZV_7.10_.*_.*\\.dat)");
+		try
+		{
+			for (const auto& entry : std::filesystem::directory_iterator("ram/databank/"))
+			{
+				if (entry.is_regular_file() && std::regex_match(entry.path().filename().string(), pattern))
+				{
+					std::string path = entry.path().string();
+					std::cout << "[Patches] Reading databank: " << path << std::endl;
+					lists[i].readFromFile(path);
+				}
+			}
+		}
+		catch (const std::filesystem::filesystem_error& e)
+		{
+			std::cerr << "[Patches] Databank filesystem error: " << e.what() << std::endl;
+		}
+
+		if (i != 4) lists[i].generateMissingEntries();
+		lists[i].finalize();
+
+		Storage::customAddStringContainer(&records[i], lists[i].finalString.c_str());
+	}
+
+	*(uint8_t*)(0x140CDB1D9) = 0x01; // enables databank
+}
+
+void initPvListContainerHook()
+{
+	if (game_version != 710) return;
+
+	DetourTransactionBegin();
+	DetourUpdateThread(GetCurrentThread());
+	DetourAttach(&(PVOID&)divaPvListInitializer, (PVOID)(hookedPvListInitializer));
+	DetourTransactionCommit();
+	std::cout << "[Patch] Auto Databank enabled" << std::endl;
+}
+
 
 
 using namespace PluginConfig;

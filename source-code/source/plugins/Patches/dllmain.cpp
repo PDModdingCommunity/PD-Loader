@@ -290,9 +290,9 @@ void hookedPvListInitializer(void* pvListContainer)
 		}
 
 		if (i != 4) lists[i].generateMissingEntries();
-		lists[i].finalize();
+		std::string finalString = lists[i].finalize();
 
-		Storage::customAddStringContainer(&records[i], lists[i].finalString.c_str());
+		Storage::customAddStringContainer(&records[i], finalString.c_str());
 	}
 
 	*(uint8_t*)(0x140CDB1D9) = 0x01; // enables databank

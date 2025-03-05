@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 #include "databank.h"
 #include "urlutil.h"
@@ -33,14 +34,14 @@ namespace Databank
             try
             {
                 PvEntry entry;
-                entry.id = std::stoi(tokens[i]);
+                int id = std::stoi(tokens[i]);
                 entry.unk1 = std::stoi(tokens[i + 1]);
                 entry.unk2 = std::stoi(tokens[i + 2]);
                 entry.advStart = tokens[i + 3];
                 entry.advEnd = tokens[i + 4];
                 entry.start = tokens[i + 5];
                 entry.end = tokens[i + 6];
-                entries.insert(entry);
+                entries.insert({ id, entry });
             }
             catch (const std::exception& e)
             {
@@ -73,19 +74,39 @@ namespace Databank
         }
     }
 
-    bool PvList::finalize()
+    void PvList::addEntry(int id, PvEntry& entry)
+    {
+        entries.insert({ id, entry });
+    }
+
+    void PvList::generateMissingEntries()
+    {
+        PvEntry entry = PvEntry();
+
+        for (int i = 0; i <= 999; i++)
+        {
+            entry.advStart = "2000-01-01";
+            entry.advEnd = "2029-01-01";
+            entry.start = "2000-01-01";
+            entry.end = "2029-01-01";
+
+            entries.insert({ i, entry });
+        }
+    }
+
+    std::string PvList::finalize()
     {
         std::ostringstream csvStream;
         if (entries.empty())
         {
-            finalString = "%2A%2A%2A"; // ***
+            return "%2A%2A%2A"; // ***
             //checksum = "5341";
         }
         else
         {
             bool first = true;
 
-            for (const auto& entry : entries)
+            for (const auto& entryMap : entries)
             {
                 std::ostringstream entryStream;
                 if (!first)
@@ -93,7 +114,8 @@ namespace Databank
                     csvStream << ",";
                 }
                 first = false;
-                entryStream << entry.id << ","
+                const PvEntry& entry = entryMap.second;
+                entryStream << entryMap.first << ","
                     << entry.unk1 << ","
                     << entry.unk2 << ","
                     << entry.advStart << ","
@@ -103,35 +125,8 @@ namespace Databank
                 csvStream << urlEncode(entryStream.str());
             }
 
-            finalString = urlEncode(csvStream.str());
+            return urlEncode(csvStream.str());
             //checksum = std::to_string(crc16_ccitt(finalString));
-        }
-        return true;
-    }
-
-    void PvList::copyCstrData(char* dst)
-    {
-        strcpy_s((char*)dst, finalString.size(), finalString.c_str());
-    }
-
-    void PvList::addEntry(PvEntry& entry)
-    {
-        entries.insert(entry);
-    }
-
-    void PvList::generateMissingEntries()
-    {
-        PvEntry entry = PvEntry();
-
-        for (int i = 0; i <= 999; i++)
-        {
-            entry.id = i;
-            entry.advStart = "2000-01-01";
-            entry.advEnd = "2029-01-01";
-            entry.start = "2000-01-01";
-            entry.end = "2029-01-01";
-
-            entries.insert(entry);
         }
     }
 }

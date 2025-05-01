@@ -338,22 +338,34 @@ namespace Launcher {
 						this->labelGPU->LinkColor = System::Drawing::Color::Orange;
 						showGpuDialog = true;
 					}
-					else if (gpuModel->StartsWith("AD")) // unconfirmed??
+					else if (gpuModel->StartsWith("GB")) // unconfirmed??
+					{
+						this->labelGPU->Text += L"Issues: Blackwell GPU detected! Possible noise.\n(Click for more information)";
+						GPUIssueText = L"On Blackwell GPUs (RTX 50xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
+						this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+					}
+					else if (gpuModel->StartsWith("AD"))
 					{
 						this->labelGPU->Text += L"Issues: Ada Lovelace GPU detected! Possible noise.\n(Click for more information)";
 						GPUIssueText = L"On Ada Lovelace GPUs (RTX 40xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
 						this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
 					}
-					else if (gpuModel->StartsWith("GA")) // unconfirmed??
+					else if (gpuModel->StartsWith("GA"))
 					{
 						this->labelGPU->Text += L"Issues: Ampere GPU detected! Possible noise.\n(Click for more information)";
 						GPUIssueText = L"On Ampere GPUs (RTX 30xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
 						this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
 					}
-					else if (gpuModel->StartsWith("TU") || gpuModel->StartsWith("GV")) // let's assume Volta is like Turing for now
+					else if (gpuModel->StartsWith("TU"))
 					{
 						this->labelGPU->Text += L"Issues: Turing GPU detected! Possible noise.\n(Click for more information)";
 						GPUIssueText = L"On Turing GPUs (GTX 16xx/RTX 20xx), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
+						this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
+					}
+					else if (gpuModel->StartsWith("GV"))
+					{
+						this->labelGPU->Text += L"Issues: Volta GPU detected! Possible noise.\n(Click for more information)";
+						GPUIssueText = L"On Volta GPUs (TITAN V), some important character shaders have issues resulting in lines/noise.\nPlease make sure the ShaderPatch plugin is enabled.";
 						this->labelGPU->LinkColor = System::Drawing::Color::Yellow;
 					}
 					else if (gpuModel->StartsWith("GM") || gpuModel->StartsWith("GP"))

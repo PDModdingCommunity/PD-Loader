@@ -8,19 +8,18 @@ namespace Databank
     struct PvEntry
     {
         int unk1 = 1;
-        int unk2 = 0;
         std::string advStart, advEnd, start, end;
     };
 
     class PvList
     {
     protected:
-        std::map<int, PvEntry> entries;
+        std::map<std::tuple<int, int>, PvEntry> entries;
 
     public:
         bool readFromStr(std::string& str);
         bool readFromFile(const std::string& filename);
-        void addEntry(int id, PvEntry& entry);
+        void addEntry(int id, int extra, PvEntry& entry);
         void generateMissingEntries();
         std::string finalize();
     };

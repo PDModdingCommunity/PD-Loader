@@ -6,6 +6,9 @@ namespace TLAC::Input
 {
 	class Binding
 	{
+		// Used in down & tapped events
+		int lastDownId = -1;
+
 	public:
 		std::vector<IInputBinding*> InputBindings;
 

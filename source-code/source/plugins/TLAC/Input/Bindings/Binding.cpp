@@ -19,10 +19,14 @@ namespace TLAC::Input
 
 	bool Binding::AnyDown()
 	{
+		int i = 0;
 		for (const auto& binding : InputBindings)
 		{
-			if (binding->IsDown())
+			// If an old input is still held down, don't register it, only a new input is allowed.
+			if (binding->IsDown() && this->lastDownId == i)
 				return true;
+
+			i++;
 		}
 
 		return false;
@@ -30,10 +34,16 @@ namespace TLAC::Input
 
 	bool Binding::AnyTapped()
 	{
+		int i = 0;
 		for (const auto& binding : InputBindings)
 		{
-			if (binding->IsTapped())
+			if (binding->IsTapped()) {
+				// This saves the last button id to a variable, so that it's known as the last input registered (see AnyDown()).
+				this->lastDownId = i;
 				return true;
+			}
+
+			i++;
 		}
 
 		return false;

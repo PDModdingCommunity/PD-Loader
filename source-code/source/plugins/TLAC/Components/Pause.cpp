@@ -39,10 +39,12 @@ namespace TLAC::Components
 	uint8_t* Pause::framespeedPatchAddress = (uint8_t*)0x140192D50;
 	float_t* Pause::deltaFrameHistoryAddress = (float_t*)0x140EDA6C0;
 	int32_t* Pause::deltaFrameHistoryIntAddress = (int32_t*)0x140EDA6C4;
+	uint64_t* Pause::mediaSessionAddress;
 	std::vector<uint8_t> Pause::origAgeageHairOp;
 	uint8_t* Pause::ageageHairPatchAddress = (uint8_t*)0x14054352c;
 	std::vector<bool> Pause::streamPlayStates;
 	bool(*divaGiveUpFunc)(void*) = (bool(*)(void* cls))GIVEUP_FUNC_ADDRESS;
+	void(__cdecl* moviePlayLibLogging)(void*, char*, void*) = (void(__cdecl*)(void*, char*, void*))0x1404241F0;
 	PlayerData* Pause::playerData;
 	InputState* Pause::inputState;
 	TouchSliderState* Pause::sliderState;
@@ -112,6 +114,11 @@ namespace TLAC::Components
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(PVOID&)divaGiveUpFunc, hookedGiveUpFunc);
+		DetourTransactionCommit();
+
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourAttach(&(PVOID&)moviePlayLibLogging, hookedMoviePlayLibLogging);
 		DetourTransactionCommit();
 	}
 
@@ -603,10 +610,36 @@ namespace TLAC::Components
 		return *(GameState*)CURRENT_GAME_STATE_ADDRESS == GS_GAME && *(SubGameState*)CURRENT_GAME_SUB_STATE_ADDRESS == SUB_GAME_MAIN && *(uint8_t*)PV_STATE_ADDRESS == 1;
 	}
 
+	void Pause::hookedMoviePlayLibLogging(void*, char* arg2, uint64_t* item)
+	{
+		// printf("MoviePlayLib> %s(%p)\n", arg2, item);
+
+		if (strcmp("MoviePlayLib::MediaSession::MediaSession", arg2) == 0)
+		{
+			// printf("MoviePlayLib constructor detected: %p\n", item);
+			if (Pause::mediaSessionAddress == nullptr)
+			{
+				Pause::mediaSessionAddress = item;
+				// printf("Saved pointer: %p\n", Pause::mediaSessionAddress);
+			}
+		}
+	}
+
+	void Pause::cleanMediaSession()
+	{
+		if (Pause::mediaSessionAddress != nullptr)
+		{
+			Pause::mediaSessionAddress = nullptr;
+			// printf("Removed pointer: %p\n", Pause::mediaSessionAddress);
+		}
+	}
+
 	bool Pause::hookedGiveUpFunc(void* cls)
 	{
 		if (giveUp)
 		{
+			cleanMediaSession();
+
 			giveUp = false;
 			pause = false;
 			return true;
@@ -615,6 +648,8 @@ namespace TLAC::Components
 		{
 			if (divaGiveUpFunc(cls))
 			{
+				cleanMediaSession();
+
 				pause = false;
 				return true;
 			}

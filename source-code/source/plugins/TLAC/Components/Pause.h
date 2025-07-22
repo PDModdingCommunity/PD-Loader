@@ -35,6 +35,7 @@ namespace TLAC::Components
 		// this is a mess of static so that menuItems can work
 		static bool isPauseKeyTapped();
 		static bool isInGame();
+		static void cleanMediaSession();
 		static std::vector<bool> streamPlayStates;
 		static void InjectCode(void* address, const std::vector<uint8_t> data);
 
@@ -51,10 +52,12 @@ namespace TLAC::Components
 		static int32_t origDeltaFrameHistoryInt;
 		static float_t* deltaFrameHistoryAddress;
 		static int32_t* deltaFrameHistoryIntAddress;
+		static uint64_t* mediaSessionAddress;
 
 		static std::vector<uint8_t> origAgeageHairOp;
 		static uint8_t* ageageHairPatchAddress;
 
+		static void hookedMoviePlayLibLogging(void*, char* arg2, uint64_t* item);
 		static bool hookedGiveUpFunc(void* cls);
 
 		static void setSEVolume(int amount);
@@ -142,6 +145,11 @@ namespace TLAC::Components
 		static void unpause() { pause = false; };
 		static void restart()
 		{
+			if (mediaSessionAddress != nullptr) {
+				void(*setPosition)(uint64_t*, uint64_t) = (void(*)(uint64_t*, uint64_t))0x140428CA0;
+				setPosition(mediaSessionAddress, 0);
+			}
+
 			/*
 			140d0b510+2 = 0, 140d0b510+14 = 8 for restart
 

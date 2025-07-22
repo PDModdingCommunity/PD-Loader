@@ -172,6 +172,29 @@ namespace TLAC::Components
 			// inject flow overrides to switch cases in FUN_1400fddc0
 			InjectCode((void*)0x1401038cd, { 0x15 }); InjectCode((void*)0x140103b94, { 0x18 });
 
+			bool hasTaskMovie[2] = { false, false };
+			bool waitTaskMovie = false;
+			size_t(*taskMovieGet)(int32_t) = (size_t(*)(int32_t))0x14041ED30;
+			// reset movie position
+			for (int i = 0; i < 2; i++) {
+				size_t taskMovie = taskMovieGet(i);
+				if (taskMovie) {
+					size_t taskMoviePlayer = *(size_t*)(taskMovie + 0xB8);
+					if (taskMoviePlayer) {
+						size_t iPlayer = *(size_t*)(taskMoviePlayer + 0x10);
+						if (iPlayer) {
+							size_t iPlayerVtable = *(size_t*)(iPlayer + 0x00);
+							int(*iPlayer__SetCurrentPosition)(size_t, double) = (int(*)(size_t, double)) * (size_t*)(iPlayerVtable + 0x60);
+							iPlayer__SetCurrentPosition(iPlayer, 0.0);
+
+							*(bool*)(taskMovie + 0xD1) = true;
+							hasTaskMovie[i] = true;
+							waitTaskMovie = true;
+						}
+					}
+				}
+			}
+
 			// set parameters
 			*(uint8_t*)PV_STATE_ADDRESS = 0; *(uint8_t*)PV_LOADING_STATE_ADDRESS = 8; *(int*)PV_INNER_LOADING_STATE_ADDRESS = 0x11;
 
@@ -181,6 +204,21 @@ namespace TLAC::Components
 			while (*(int*)PV_INNER_LOADING_STATE_ADDRESS < 0x18)
 			{
 				doLoading(0x140cdd8d0);
+			}
+
+			// wait till movie resets
+			bool(*taskMovieCheckDisp)(size_t) = (bool(*)(size_t))0x14041F0E0;
+			while (waitTaskMovie) {
+				waitTaskMovie = false;
+
+				for (int i = 0; i < 2; i++) {
+					if (!hasTaskMovie[i])
+						continue;
+
+					size_t taskMovie = taskMovieGet(i);
+					if (taskMovie && !taskMovieCheckDisp(taskMovie))
+						waitTaskMovie = true;
+				}
 			}
 
 			// for some reason the above doesn't reset all scoring stuff

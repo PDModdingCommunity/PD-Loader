@@ -142,6 +142,19 @@ namespace TLAC::Components
 		static void unpause() { pause = false; };
 		static void restart()
 		{
+			// fix the percent calculation if restarted while in the challenge time
+			bool isInChallengeTime = *(bool*)(0x140C94438 + 38);
+
+			if (isInChallengeTime) {
+				uint64_t baseA1 = 0x140cdd8d0;
+				void(*doResetChallenge)(uint64_t, uint64_t, uint64_t) = (void(*)(uint64_t, uint64_t, uint64_t))0x14011B010;
+				doResetChallenge(baseA1 + 180088, baseA1 + 180088, 0);
+
+				// it is used in 14011BEA0 after the challenge time starts or ends
+				// and looks like required to do the reset process properly
+				*(bool*)(baseA1 + 180181) = 1;
+			}
+
 			/*
 			140d0b510+2 = 0, 140d0b510+14 = 8 for restart
 

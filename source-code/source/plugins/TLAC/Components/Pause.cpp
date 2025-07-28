@@ -18,6 +18,8 @@ namespace TLAC::Components
 	bool Pause::isPaused = false;
 	bool Pause::giveUp = false;
 	bool Pause::autoPause = false;
+	bool Pause::ignoreAutoPause = false;
+	bool Pause::autoReplay = false;
 	bool Pause::showUI = true;
 	int Pause::selResultAet1 = 0;
 	int Pause::selResultAet2 = 0;
@@ -43,6 +45,7 @@ namespace TLAC::Components
 	uint8_t* Pause::ageageHairPatchAddress = (uint8_t*)0x14054352c;
 	std::vector<bool> Pause::streamPlayStates;
 	bool(*divaGiveUpFunc)(void*) = (bool(*)(void* cls))GIVEUP_FUNC_ADDRESS;
+	void(*divaPVEndFunc)(uint64_t, char, char) = (void(*)(uint64_t, char, char))0x140108260;
 	PlayerData* Pause::playerData;
 	InputState* Pause::inputState;
 	TouchSliderState* Pause::sliderState;
@@ -56,7 +59,7 @@ namespace TLAC::Components
 			{
 				{ "RESUME", unpause, false },
 				{ "RESTART", restart, false },
-				{ "SE VOLUME", sevolmenu, false },
+				{ "SE VOLUME", sevolorpvmenu, false },
 				{ "GIVE UP", giveup, false },
 			}
 		},
@@ -66,6 +69,13 @@ namespace TLAC::Components
 				{ "+", sevolplus, true },
 				{ "XX", menuback, false },
 				{ "-", sevolminus, true },
+			}
+		},
+		{
+			"PV OPTIONS",
+			{
+				{ "XX", pvloop, false },
+				{ "XX", pvignoreautopause, false },
 			}
 		},
 	};
@@ -112,6 +122,11 @@ namespace TLAC::Components
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(PVOID&)divaGiveUpFunc, hookedGiveUpFunc);
+		DetourTransactionCommit();
+
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourAttach(&(PVOID&)divaPVEndFunc, hookedDivaPVEndFunc);
 		DetourTransactionCommit();
 	}
 
@@ -260,7 +275,9 @@ namespace TLAC::Components
 						}
 					}
 
-					if (curMenuSet == MENUSET_SEVOL)
+					switch (curMenuSet)
+					{
+					case MENUSET_SEVOL:
 					{
 						const char volformat[] = "%d";
 						size_t size = snprintf(nullptr, 0, volformat, playerData->act_vol) + 1;
@@ -268,6 +285,28 @@ namespace TLAC::Components
 						snprintf(buf, size, volformat, playerData->act_vol);
 						menu[MENUSET_SEVOL].items[1].name = buf;
 						delete[] buf;
+						break;
+					}
+					case MENUSET_PV:
+					{
+						char* buf1 = new char[11];
+						snprintf(buf1, 11, "PV LOOP: %s", autoReplay ? "Y" : "N");
+						menu[MENUSET_PV].items[0].name = buf1;
+						delete[] buf1;
+
+						char* buf2 = new char[12];
+						snprintf(buf2, 12, "NO PAUSE: %s", ignoreAutoPause ? "Y" : "N");
+						menu[MENUSET_PV].items[1].name = buf2;
+						delete[] buf2;
+						break;
+					}
+					case MENUSET_MAIN:
+					{
+						menu[MENUSET_MAIN].items[2].name = isInPV()
+							? menu[MENUSET_PV].name
+							: menu[MENUSET_SEVOL].name;
+						break;
+					}
 					}
 				}
 			}
@@ -342,6 +381,13 @@ namespace TLAC::Components
 		inputState->IntervalTapped.Buttons = (JvsButtons)(inputState->IntervalTapped.Buttons & ~filteredButtons);
 
 		lastTouchType = panelState->ContactType;
+
+		// ensure the PV-only temporary values aren't retained
+		if ((autoReplay || ignoreAutoPause) && *(uint8_t*)PV_LOADING_STATE_ADDRESS < 8)
+		{
+			ignoreAutoPause = false;
+			autoReplay = false;
+		}
 	}
 
 	// returns the midpoint of a menu button
@@ -589,7 +635,7 @@ namespace TLAC::Components
 
 	void Pause::OnFocusLost()
 	{
-		if (autoPause && isInGame())
+		if (autoPause && isInGame() && !ignoreAutoPause)
 			pause = true;
 	}
 
@@ -620,6 +666,18 @@ namespace TLAC::Components
 			}
 		}
 		return false;
+	}
+
+	void Pause::hookedDivaPVEndFunc(uint64_t p1, char p2, char p3)
+	{
+		if (autoReplay && isInPV())
+		{
+			restart();
+		}
+		else
+		{
+			divaPVEndFunc(p1, p2, p3);
+		}
 	}
 
 	void Pause::setSEVolume(int amount)

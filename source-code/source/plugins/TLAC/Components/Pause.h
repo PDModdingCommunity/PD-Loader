@@ -31,6 +31,8 @@ namespace TLAC::Components
 		static bool giveUp; // set give up to end current song
 
 		static bool autoPause; // pause when window loses focus
+		static bool ignoreAutoPause; // ignore pause on PV
+		static bool autoReplay; // loop PV
 	private:
 		// this is a mess of static so that menuItems can work
 		static bool isPauseKeyTapped();
@@ -56,6 +58,7 @@ namespace TLAC::Components
 		static uint8_t* ageageHairPatchAddress;
 
 		static bool hookedGiveUpFunc(void* cls);
+		static void hookedDivaPVEndFunc(uint64_t, char, char);
 
 		static void setSEVolume(int amount);
 
@@ -95,6 +98,7 @@ namespace TLAC::Components
 		{
 			MENUSET_MAIN = 0,
 			MENUSET_SEVOL = 1,
+			MENUSET_PV = 2,
 		};
 
 		struct menuItem
@@ -245,11 +249,25 @@ namespace TLAC::Components
 			InjectCode((void*)0x1401038cd, { 0x12 }); InjectCode((void*)0x140103b94, { 0x16 });
 			unpause();
 		}
-		static void giveup() { giveUp = true; };
 
-		static void sevolmenu() { setMenuPos(MENUSET_SEVOL, 1); };
+		static void giveup() {
+			ignoreAutoPause = false;
+			autoReplay = false;
+			giveUp = true;
+		};
+
+		static void sevolorpvmenu() {
+			setMenuPos(isInPV() ? MENUSET_PV : MENUSET_SEVOL, 1);
+		};
+
+		static void pvloop() { autoReplay = !autoReplay; }
+		static void pvignoreautopause() { ignoreAutoPause = !ignoreAutoPause; }
 		static void sevolplus() { setSEVolume(10); };
 		static void sevolminus() { setSEVolume(-10); };
+
+		static bool isInPV() {
+			return isInGame() && *(char*)0x140C94438 == 2;
+		}
 
 		// contents are in Pause.cpp because they can't be inline here for a static (const) array/vec
 		static std::vector<menuSet> menu;

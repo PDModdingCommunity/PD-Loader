@@ -46,6 +46,7 @@ namespace TLAC::Components
 	std::vector<bool> Pause::streamPlayStates;
 	bool(*divaGiveUpFunc)(void*) = (bool(*)(void* cls))GIVEUP_FUNC_ADDRESS;
 	void(*divaPVEndFunc)(uint64_t, char, char) = (void(*)(uint64_t, char, char))0x140108260;
+	char(*divaScriptCommandFunc)(uint64_t, uint64_t, uint64_t, void*, void*, char, char) = (char(*)(uint64_t, uint64_t, uint64_t, void*, void*, char, char))0x14011CBA0;
 	PlayerData* Pause::playerData;
 	InputState* Pause::inputState;
 	TouchSliderState* Pause::sliderState;
@@ -127,6 +128,11 @@ namespace TLAC::Components
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(PVOID&)divaPVEndFunc, hookedDivaPVEndFunc);
+		DetourTransactionCommit();
+
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourAttach(&(PVOID&)divaScriptCommandFunc, hookedScriptCommandFunc);
 		DetourTransactionCommit();
 	}
 
@@ -672,12 +678,34 @@ namespace TLAC::Components
 	{
 		if (autoReplay && isInPV())
 		{
+			printf("[TLAC] END triggered, restarting the PV\n");
+
 			restart();
 		}
 		else
 		{
 			divaPVEndFunc(p1, p2, p3);
 		}
+	}
+
+	char Pause::hookedScriptCommandFunc(uint64_t p1, uint64_t p2, uint64_t p3, void* p4, void* p5, char p6, char p7)
+	{
+		int position = *(int*)(p1 + 180012);
+		int cmd = *(int*)(p1 + 4 * position + 12);
+
+		// printf("ARG: %lld, %lld, %lld, %p, %p, %d, %d - POS: %d, CMD: %d\n", p1, p2, p3, p4, p5, p6, p7, position, cmd);
+
+		if (cmd == 83 && autoReplay)
+		{
+			printf("[TLAC] END_FADEOUT triggered but ignored\n");
+
+			// fix stucking at restart and the PV Script Command Error
+			*(int*)(p1 + 180012) = position + 3;
+
+			return 1;
+		}
+		
+		return divaScriptCommandFunc(p1, p2, p3, p4, p5, p6, p7);
 	}
 
 	void Pause::setSEVolume(int amount)

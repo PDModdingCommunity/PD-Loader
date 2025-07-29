@@ -59,6 +59,7 @@ namespace TLAC::Components
 
 		static bool hookedGiveUpFunc(void* cls);
 		static void hookedDivaPVEndFunc(uint64_t, char, char);
+		static char hookedScriptCommandFunc(uint64_t, uint64_t, uint64_t, void*, void*, char, char);
 
 		static void setSEVolume(int amount);
 
@@ -250,13 +251,15 @@ namespace TLAC::Components
 			unpause();
 		}
 
-		static void giveup() {
+		static void giveup()
+		{
 			ignoreAutoPause = false;
 			autoReplay = false;
 			giveUp = true;
 		};
 
-		static void sevolorpvmenu() {
+		static void sevolorpvmenu()
+		{
 			setMenuPos(isInPV() ? MENUSET_PV : MENUSET_SEVOL, 1);
 		};
 
@@ -265,8 +268,14 @@ namespace TLAC::Components
 		static void sevolplus() { setSEVolume(10); };
 		static void sevolminus() { setSEVolume(-10); };
 
-		static bool isInPV() {
-			return isInGame() && *(char*)0x140C94438 == 2;
+		static bool isInPV(bool checkIsInGame = true)
+		{
+			if (checkIsInGame && !isInGame())
+			{
+				return false;
+			}
+
+			return *(char*)0x140C94438 == 2;
 		}
 
 		// contents are in Pause.cpp because they can't be inline here for a static (const) array/vec

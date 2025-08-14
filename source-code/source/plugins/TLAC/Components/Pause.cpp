@@ -657,20 +657,13 @@ namespace TLAC::Components
 
 	bool Pause::hookedGiveUpFunc(void* cls)
 	{
-		if (giveUp)
+		if (giveUp || divaGiveUpFunc(cls))
 		{
 			giveUp = false;
 			pause = false;
 			return true;
 		}
-		else
-		{
-			if (divaGiveUpFunc(cls))
-			{
-				pause = false;
-				return true;
-			}
-		}
+
 		return false;
 	}
 
@@ -690,19 +683,22 @@ namespace TLAC::Components
 
 	char Pause::hookedScriptCommandFunc(uint64_t p1, uint64_t p2, uint64_t p3, void* p4, void* p5, char p6, char p7)
 	{
-		int position = *(int*)(p1 + 180012);
-		int cmd = *(int*)(p1 + 4 * position + 12);
-
-		// printf("ARG: %lld, %lld, %lld, %p, %p, %d, %d - POS: %d, CMD: %d\n", p1, p2, p3, p4, p5, p6, p7, position, cmd);
-
-		if (cmd == 83 && autoReplay)
+		if (autoReplay)
 		{
-			printf("[TLAC] END_FADEOUT triggered but ignored\n");
+			int position = *(int*)(p1 + 180012);
+			int cmd = *(int*)(p1 + 4 * position + 12);
 
-			// fix stucking at restart and the PV Script Command Error
-			*(int*)(p1 + 180012) = position + 3;
+			// printf("ARG: %lld, %lld, %lld, %p, %p, %d, %d - POS: %d, CMD: %d\n", p1, p2, p3, p4, p5, p6, p7, position, cmd);
 
-			return 1;
+			if (cmd == 83)
+			{
+				printf("[TLAC] END_FADEOUT triggered but ignored\n");
+
+				// fix stucking at restart and the PV Script Command Error
+				*(int*)(p1 + 180012) = position + 3;
+
+				return 1;
+			}
 		}
 		
 		return divaScriptCommandFunc(p1, p2, p3, p4, p5, p6, p7);

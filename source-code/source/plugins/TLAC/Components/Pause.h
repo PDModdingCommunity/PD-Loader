@@ -75,7 +75,7 @@ namespace TLAC::Components
 
 		static const int menuX = 640;
 		static const int menuY = 360;
-		static const int menuItemWidth = 150;
+		static const int menuItemWidth = 180;
 		static const int menuItemHeight = 36;
 		static const int menuItemPadding = 12;
 		static const int menuItemTotalHeight = menuItemHeight + menuItemPadding;
@@ -245,6 +245,15 @@ namespace TLAC::Components
 			*(int*)0x140D0A9C0 = 0; // slide
 			*(uint8_t*)0x140D0A50C = 0; // not clear flag
 			*(char*)0x140D0AA0F = 0; // chance time
+
+			// reset give up/end flags
+			// because the code above doesn't reset them
+			// and causing you to complete with MISSxTAKE 
+			// if you restarted after give up triggered
+			*(char*)0x140D0AA09 = 0;
+			*(char*)0x140D0AA0E = 0;
+			*(char*)0x140D0AA20 = 0;
+			*(char*)0x140D0AA35 = 0;
 
 			// revert patches and unpause
 			InjectCode((void*)0x1401038cd, { 0x12 }); InjectCode((void*)0x140103b94, { 0x16 });

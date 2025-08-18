@@ -41,7 +41,7 @@ namespace TLAC::Components
 		static void InjectCode(void* address, const std::vector<uint8_t> data);
 
 		static bool isPaused; // tracks internal state
-		
+
 		static void saveOldPatchOps();
 
 		static std::vector<uint8_t> origAetMovOp;
@@ -83,7 +83,7 @@ namespace TLAC::Components
 
 		static const uint32_t bgLayer = 0x18;
 		static const uint32_t contentLayer = 0x19; // same as startup screen
-		
+
 		static bool showUI;
 
 		static int selResultAet1;
@@ -94,7 +94,7 @@ namespace TLAC::Components
 		static int squareAet;
 		static int crossAet;
 		static int circleAet;
-		
+
 		enum menusets
 		{
 			MENUSET_MAIN = 0,
@@ -244,7 +244,12 @@ namespace TLAC::Components
 			*(int*)0x140D0A9B8 = 0; // hold + multi
 			*(int*)0x140D0A9C0 = 0; // slide
 			*(uint8_t*)0x140D0A50C = 0; // not clear flag
-			*(char*)0x140D0AA0F = 0; // chance time
+
+			// only reset chance time while in normal mode
+			if (!isInPV(false))
+			{
+				*(char*)0x140D0AA0F = 0; // chance time
+			}
 
 			// reset give up/end flags
 			// because the code above doesn't reset them

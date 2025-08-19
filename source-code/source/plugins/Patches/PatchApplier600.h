@@ -17,11 +17,6 @@ class PatchApplier600 : public PatchApplier {
 			// Ignore the EngineClear variable to clear the framebuffer at all resolutions
 			{ (void*)0x00000001404E7470, { 0x90, 0x90 } },
 			{ (void*)0x00000001404E7505, { 0x90, 0x90 } },
-			// Write ram files to the current directory instead of Y : / SBZV / ram
-			{ (void*)0x0000000140648AE9, { 0xE9, 0xD8, 0x00 } },
-			// Change mdata path from "C:/Mount/Option" to "mdata/"
-			{ (void*)0x0000000140A51058, { 0x6D, 0x64, 0x61, 0x74, 0x61, 0x2F, 0x00 } },
-			{ (void*)0x0000000140648A8E, { 0x06 } },
 			// Skip parts of the network check state
 			{ (void*)0x000000014064D391, { 0xE9, 0x22, 0x03, 0x00 } },
 			// Set the initial DHCP WAIT timer value to 0
@@ -73,6 +68,14 @@ class PatchApplier600 : public PatchApplier {
 			InjectCode(patches_600[i].Address, patches_600[i].Data);
 
 
+		if (nReplaceMdataRamDir)
+		{
+			// Write ram files to the current directory instead of Y : / SBZV / ram
+			InjectCode((void*)0x0000000140648AE9, { 0xE9, 0xD8, 0x00 });
+			// Change mdata path from "C:/Mount/Option" to "mdata/"
+			InjectCode((void*)0x0000000140A51058, { 0x6D, 0x64, 0x61, 0x74, 0x61, 0x2F, 0x00 });
+			InjectCode((void*)0x0000000140648A8E, { 0x06 });
+		}
 		
 		// The old stereo patch...
 		// Use 2 channels instead of 4

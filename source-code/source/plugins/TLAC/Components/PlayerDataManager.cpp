@@ -217,6 +217,20 @@ namespace TLAC::Components
 			}
 			VirtualProtect((void*)MODSELECTOR_CLOSE_AFTER_CUSTOMIZE, sizeof(uint8_t), oldProtect, &oldProtect);
 		}
+
+		// do not set the default module mode
+		{
+			void* initModuleModeSetter = (void*)0x1405bcba5;
+			size_t size = sizeof(uint8_t) * 10;
+
+			VirtualProtect(initModuleModeSetter, size, PAGE_EXECUTE_READWRITE, &oldProtect);
+			{
+				// replace all instructions with NOP
+				for (int i = 0; i < 10; i++)
+					*(uint8_t*)(0x1405bcba5 + i) = NOP_OPCODE;
+			}
+			VirtualProtect(initModuleModeSetter, size, oldProtect, &oldProtect);
+		}
 	}
 
 	void PlayerDataManager::LoadConfig()
@@ -235,6 +249,9 @@ namespace TLAC::Components
 		customPlayerData = new CustomPlayerData();
 		config.TryGetValue("player_name", &customPlayerData->PlayerName);
 		config.TryGetValue("level_name", &customPlayerData->LevelName);
+
+		customPlayerData->SortMode = config.GetIntegerValue("sort_mode", 2);
+		customPlayerData->ModuleMode = config.GetIntegerValue("module_mode", 2);
 
 		// ScoreSaver copies & declaring non-playerdata values
 		std::string utf8path = TLAC::framework::GetModuleDirectory() + "/playerdata.ini";
@@ -291,6 +308,9 @@ namespace TLAC::Components
 		setIfNotEqual(&playerData->chainslide_se_equip_cmn, customPlayerData->ChainslideSeEquip, -1);
 		setIfNotEqual(&playerData->slidertouch_se_equip_cmn, customPlayerData->SlidertouchSeEquip, -1);
 		setIfNotEqual(&playerData->act_toggle, customPlayerData->ActionSE, 1);
+
+		*(int*)0x1411A8DD4 = customPlayerData->SortMode;
+		*(int*)0x1411A9790 = customPlayerData->ModuleMode;
 
 		std::string* mylistString;
 		std::vector<std::string> mylistStringVec;
@@ -471,7 +491,24 @@ namespace TLAC::Components
 		{
 			playerData->use_pv_skin_equip = 1;
 		}
-				
+
+		int currentSortMode = *(int*)0x1411A8DD4;
+		if (currentSortMode != customPlayerData->SortMode)
+		{
+			customPlayerData->SortMode = currentSortMode;
+			WCHAR val[32];
+			swprintf(val, 32, L"%d", currentSortMode);
+			WritePrivateProfileStringW(L"playerdata", L"sort_mode", val, configPath);
+		}
+
+		int currentModuleMode = *(int*)0x1411A9790;
+		if (currentModuleMode != customPlayerData->ModuleMode)
+		{
+			customPlayerData->ModuleMode = currentModuleMode;
+			WCHAR val[32];
+			swprintf(val, 32, L"%d", currentModuleMode);
+			WritePrivateProfileStringW(L"playerdata", L"module_mode", val, configPath);
+		}
 
 		setIfNotEqual(&playerData->level, customPlayerData->LevelNum, 1);
 		setIfNotEqual(&playerData->level_plate_id, customPlayerData->LevelPlateId, 0);

@@ -1139,77 +1139,72 @@ private: System::Void checkHasInvalidGLUT()
 		SkinnedMessageBox::Show(this, "Support for custom versions of \"glut32.dll\" is deprecated and will be removed in future versions of PD Loader.\nPlease restore a valid copy of the original file, then validate your files and make sure \"glut32.dll\" passes.\n\nPlease DO NOT ASK for a copy of the file in our support channels!\nWe cannot provide it to you.", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 	}
 }
+private: System::Boolean launchanyway_divagl_novidia()
+{
+	return (SkinnedMessageBox::Show(
+		this,
+		"Plugins: Novidia and ShaderPatch should be disabled if DivaGL is enabled.\n\nLaunch anyway?",
+		"PD Launcher",
+		MessageBoxButtons::YesNo,
+		MessageBoxIcon::Error
+	) == System::Windows::Forms::DialogResult::Yes);
+}
+private: System::Boolean invalid_divagl_freeglut()
+{
+	SkinnedMessageBox::Show(
+		this,
+		"Plugins: DivaGL does not support custom versions of \"glut32.dll\".\nPlease restore a valid copy of the original file, then validate your files and make sure \"glut32.dll\" passes.\n\nPlease DO NOT ASK for a copy of the file in our support channels!\nWe cannot provide it to you.",
+		"PD Launcher",
+		MessageBoxButtons::OK,
+		MessageBoxIcon::Error
+	);
+	return true;
+}
+private: System::Boolean invalid_divagl_divaimguiold()
+{
+	SkinnedMessageBox::Show(
+		this,
+		"Plugins: Your version of DivaImGui is too old for DivaGL; please either update or disable it.",
+		"PD Launcher",
+		MessageBoxButtons::OK,
+		MessageBoxIcon::Error
+	);
+	return true;
+}
 private: System::Boolean hasInvalidSettings()
 {
 	bool divaGLEnabled = false;
 	bool novidiaEnabled = false;
 	bool shaderPatchEnabled = false;
-	//bool divaImGuiEnabled = false;
 	bool divaImGuiOldEnabled = false;
 
 	for (PluginOption* option : AllPluginOpts)
 	{
-		if (lstrcmpW(option->_friendlyName, L"DivaGL") == 0)
-		{
-			divaGLEnabled = ((CheckBox^)CheckBox::FromHandle(option->mainControlHandle))->Checked;
-			if (divaGLEnabled)
-			{
-				if (hasInvalidGLUT) goto divagl_freeglut;
-				else if (novidiaEnabled || shaderPatchEnabled) goto divagl_novidia;
-				else if (divaImGuiOldEnabled) goto divagl_divaimguiold;
-			}
-		}
-		else if (lstrcmpW(option->_friendlyName, L"Novidia") == 0)
-		{
-			novidiaEnabled = ((CheckBox^)CheckBox::FromHandle(option->mainControlHandle))->Checked;
-			if (novidiaEnabled && divaGLEnabled) goto divagl_novidia;
-		}
-		else if (lstrcmpW(option->_friendlyName, L"ShaderPatch") == 0)
-		{
-			shaderPatchEnabled = ((CheckBox^)CheckBox::FromHandle(option->mainControlHandle))->Checked;
-			if (shaderPatchEnabled && divaGLEnabled) goto divagl_novidia;
-		}
-		else if (lstrcmpW(option->_friendlyName, L"DivaImGui") == 0)
-		{
-			//divaImGuiEnabled = ((CheckBox^)CheckBox::FromHandle(option->mainControlHandle))->Checked;
+		auto handle = option->mainControlHandle;
+		if (handle == IntPtr::Zero) continue;
 
-			if (option->_builddate == L"Unknown")
-			{
-				divaImGuiOldEnabled = ((CheckBox^)CheckBox::FromHandle(option->mainControlHandle))->Checked;
-				if (divaImGuiOldEnabled && divaGLEnabled) goto divagl_divaimguiold;
-			}
-		}
+		auto checkbox = dynamic_cast<CheckBox^>(CheckBox::FromHandle(handle));
+		if (checkbox == nullptr) continue;
+
+		if (lstrcmpW(option->_friendlyName, L"DivaGL") == 0)
+			divaGLEnabled = checkbox->Checked;
+		else if (lstrcmpW(option->_friendlyName, L"Novidia") == 0)
+			novidiaEnabled = checkbox->Checked;
+		else if (lstrcmpW(option->_friendlyName, L"ShaderPatch") == 0)
+			shaderPatchEnabled = checkbox->Checked;
+		else if (lstrcmpW(option->_friendlyName, L"DivaImGui") == 0 && option->_builddate == L"Unknown")
+			divaImGuiOldEnabled = checkbox->Checked;
 	}
 
-	//if (divaImGuiEnabled)
-	//{
-	//	for (ConfigOptionBase* option : graphicsArray)
-	//	{
-	//		if (option->_iniSectionName == GRAPHICS_SECTION && option->_iniVarName == L"2D")
-	//		{
-	//			if (((CheckBox^)CheckBox::FromHandle(option->mainControlHandle))->Checked)
-	//			{
-	//				SkinnedMessageBox::Show(this, "Graphics: \"Disable 3D rendering\" must be disabled if DivaImGui is enabled.", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Error);
-	//				return true;
-	//			}
-	//			break;
-	//		}
-	//	}
-	//}
+	if (divaGLEnabled)
+	{
+		if (hasInvalidGLUT) return invalid_divagl_freeglut();
+		if (divaImGuiOldEnabled) return invalid_divagl_divaimguiold();
+		if ((novidiaEnabled || shaderPatchEnabled) && !launchanyway_divagl_novidia())
+			return true;
+	}
 
 	return false;
-
-divagl_freeglut:
-	SkinnedMessageBox::Show(this, "Plugins: DivaGL does not support custom versions of \"glut32.dll\".\nPlease restore a valid copy of the original file, then validate your files and make sure \"glut32.dll\" passes.\n\nPlease DO NOT ASK for a copy of the file in our support channels!\nWe cannot provide it to you.", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Error);
-	return true;
-
-divagl_novidia:
-	if (SkinnedMessageBox::Show(this, "Plugins: Novidia and ShaderPatch should be disabled if DivaGL is enabled.\n\nLaunch anyway?", "PD Launcher", MessageBoxButtons::YesNo, MessageBoxIcon::Error) != System::Windows::Forms::DialogResult::Yes)
-		return true;
-
-divagl_divaimguiold:
-	SkinnedMessageBox::Show(this, "Plugins: Your version of DivaImGui is too old for DivaGL; please either update or disable it.", "PD Launcher", MessageBoxButtons::OK, MessageBoxIcon::Error);
-	return true;
 }
 private: System::Boolean warnCheck()
 {

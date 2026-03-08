@@ -23,7 +23,7 @@ namespace TLAC::Input
 		for (const auto& binding : InputBindings)
 		{
 			// If an old input is still held down, don't register it, only a new input is allowed.
-			if (binding->IsDown() && this->lastDownId == i)
+			if (binding->IsDown() && (this->lastDownId == i || binding->BypassTransferCheck()))
 				return true;
 
 			i++;

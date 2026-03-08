@@ -13,6 +13,8 @@ namespace TLAC::Input
 		XinputBinding(BYTE keycode);
 		~XinputBinding();
 
+		bool BypassTransferCheck() override;
+
 		bool IsDown() override;
 		bool IsTapped() override;
 		bool IsReleased() override;

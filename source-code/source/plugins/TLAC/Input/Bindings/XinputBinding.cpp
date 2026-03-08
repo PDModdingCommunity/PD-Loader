@@ -11,6 +11,11 @@ namespace TLAC::Input
 	{
 	}
 
+	bool XinputBinding::BypassTransferCheck()
+	{
+		return false;
+	}
+
 	bool XinputBinding::IsDown()
 	{
 		return Xinput::GetInstance()->IsDown(Keycode);

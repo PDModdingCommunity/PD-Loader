@@ -2,12 +2,17 @@
 
 namespace TLAC::Input
 {
-	KeyboardBinding::KeyboardBinding(BYTE keycode) : Keycode(keycode)
+	KeyboardBinding::KeyboardBinding(BYTE keycode, bool bypassTransferCheck) : Keycode(keycode), SetBypassTransferCheck(bypassTransferCheck)
 	{
 	}
 
 	KeyboardBinding::~KeyboardBinding()
 	{
+	}
+
+	bool KeyboardBinding::BypassTransferCheck()
+	{
+		return SetBypassTransferCheck;
 	}
 	
 	bool KeyboardBinding::IsDown()

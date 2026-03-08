@@ -12,6 +12,11 @@ namespace TLAC::Input
 	{
 	}
 
+	bool GuBinding::BypassTransferCheck()
+	{
+		return false;
+	}
+
 	bool GuBinding::IsDown()
 	{
 		return GuInstanceCheckDefault(IsDown(Button));

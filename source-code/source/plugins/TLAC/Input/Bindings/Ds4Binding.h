@@ -12,6 +12,8 @@ namespace TLAC::Input
 		Ds4Binding(Ds4Button button);
 		~Ds4Binding();
 
+		bool BypassTransferCheck() override;
+
 		bool IsDown() override;
 		bool IsTapped() override;
 		bool IsReleased() override;

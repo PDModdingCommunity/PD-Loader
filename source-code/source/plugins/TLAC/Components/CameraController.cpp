@@ -59,36 +59,36 @@ namespace TLAC::Components
 		}
 
 		ToggleBinding = new Binding();
-		ToggleBinding->AddBinding(new KeyboardBinding(VK_F3));
+		ToggleBinding->AddBinding(new KeyboardBinding(VK_F3, true));
 
 		ForwardBinding = new Binding();
-		ForwardBinding->AddBinding(new KeyboardBinding('W'));
+		ForwardBinding->AddBinding(new KeyboardBinding('W', true));
 		BackwardBinding = new Binding();
-		BackwardBinding->AddBinding(new KeyboardBinding('S'));
+		BackwardBinding->AddBinding(new KeyboardBinding('S', true));
 		LeftBinding = new Binding();
-		LeftBinding->AddBinding(new KeyboardBinding('A'));
+		LeftBinding->AddBinding(new KeyboardBinding('A', true));
 		RightBinding = new Binding();
-		RightBinding->AddBinding(new KeyboardBinding('D'));
+		RightBinding->AddBinding(new KeyboardBinding('D', true));
 
 		UpBinding = new Binding();
-		UpBinding->AddBinding(new KeyboardBinding(VK_SPACE));
+		UpBinding->AddBinding(new KeyboardBinding(VK_SPACE, true));
 		DownBinding = new Binding();
-		DownBinding->AddBinding(new KeyboardBinding(VK_CONTROL));
+		DownBinding->AddBinding(new KeyboardBinding(VK_CONTROL, true));
 
 		ClockwiseBinding = new Binding();
-		ClockwiseBinding->AddBinding(new KeyboardBinding('E'));
+		ClockwiseBinding->AddBinding(new KeyboardBinding('E', true));
 		CounterClockwiseBinding = new Binding();
-		CounterClockwiseBinding->AddBinding(new KeyboardBinding('Q'));
+		CounterClockwiseBinding->AddBinding(new KeyboardBinding('Q', true));
 
 		ZoomInBinding = new Binding();
-		ZoomInBinding->AddBinding(new KeyboardBinding('R'));
+		ZoomInBinding->AddBinding(new KeyboardBinding('R', true));
 		ZoomOutBinding = new Binding();
-		ZoomOutBinding->AddBinding(new KeyboardBinding('F'));
+		ZoomOutBinding->AddBinding(new KeyboardBinding('F', true));
 
 		FastBinding = new Binding();
-		FastBinding->AddBinding(new KeyboardBinding(VK_SHIFT));
+		FastBinding->AddBinding(new KeyboardBinding(VK_SHIFT, true));
 		SlowBinding = new Binding();
-		SlowBinding->AddBinding(new KeyboardBinding(VK_MENU));
+		SlowBinding->AddBinding(new KeyboardBinding(VK_MENU, true));
 
 		camera = (Camera*)CAMERA_ADDRESS;
 	}

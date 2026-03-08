@@ -8,9 +8,12 @@ namespace TLAC::Input
 	{
 	public:
 		BYTE Keycode;
+		bool SetBypassTransferCheck;
 
-		KeyboardBinding(BYTE keycode);
+		KeyboardBinding(BYTE keycode, bool bypassTransferCheck = false);
 		~KeyboardBinding();
+
+		bool BypassTransferCheck() override;
 
 		bool IsDown() override;
 		bool IsTapped() override;

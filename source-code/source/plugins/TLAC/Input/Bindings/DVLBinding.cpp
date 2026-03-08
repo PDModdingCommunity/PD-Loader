@@ -12,6 +12,11 @@ namespace TLAC::Input
 	{
 	}
 
+	bool DivallerBinding::BypassTransferCheck()
+	{
+		return false;
+	}
+
 	bool DivallerBinding::IsDown()
 	{
 		return DivallerInstanceCheckDefault(IsDown(Button));

@@ -12,6 +12,8 @@ namespace TLAC::Input
 		DivallerBinding(DivallerButton button);
 		~DivallerBinding();
 
+		bool BypassTransferCheck() override;
+
 		bool IsDown() override;
 		bool IsTapped() override;
 		bool IsReleased() override;

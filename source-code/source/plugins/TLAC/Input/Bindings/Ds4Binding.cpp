@@ -12,6 +12,11 @@ namespace TLAC::Input
 	{
 	}
 
+	bool Ds4Binding::BypassTransferCheck()
+	{
+		return false;
+	}
+
 	bool Ds4Binding::IsDown()
 	{
 		return Ds4InstanceCheckDefault(IsDown(Button));

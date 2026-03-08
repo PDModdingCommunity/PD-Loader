@@ -12,6 +12,8 @@ namespace TLAC::Input
 		GuBinding(GuButton button);
 		~GuBinding();
 
+		bool BypassTransferCheck() override;
+
 		bool IsDown() override;
 		bool IsTapped() override;
 		bool IsReleased() override;

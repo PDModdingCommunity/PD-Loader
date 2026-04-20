@@ -40,6 +40,8 @@ namespace TLAC::Components
 		bool UseCard;
 		bool GameModifierOptions;
 		bool ActionSE;
+		int SortMode;
+		int ModuleMode;
 		std::vector<int> Mylist[3];
 	};
 }

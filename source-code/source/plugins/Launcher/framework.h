@@ -272,6 +272,7 @@ ConfigOptionBase* optionsArray[] = {
 	//new BooleanOption(L"ignore_exe_checksum", PATCHES_SECTION, CONFIG_FILE, L"Ignore exe checksum", L"Use at your own risk.", false, false),
 	new StringOption(L"command_line", LAUNCHER_SECTION, CONFIG_FILE, L"Command Line:", L"Allows setting command line parameters for the game when using the launcher.\nDisabling the launcher will bypass this.", L"", false),
 	new BooleanOption(L"use_divahook_bat", LAUNCHER_SECTION, CONFIG_FILE, L"Use divahook.bat/start.bat", L"Launches divahook.bat/start.bat intead of diva.exe.", false, false),
+	new BooleanOption(L"replace_mdata_ram_dir", PATCHES_SECTION, CONFIG_FILE, L"Replace mdata and ram directories", L"Sets the mdata directory to mdata/ and the ram directory to the game directory.\nDo not turn it off unless you're using the SegaTools.", true, false),
 };
 
 ConfigOptionBase* playerdataArray[] = {

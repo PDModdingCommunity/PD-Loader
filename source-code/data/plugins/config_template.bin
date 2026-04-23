@@ -88,6 +88,8 @@ Card=0
 Hardware_Slider=0
 #Enable custom patches
 Custom_Patches=1
+#Replace mdata and ram directories
+replace_mdata_ram_dir=1
 
 [Graphics]
 # Lag Compensation

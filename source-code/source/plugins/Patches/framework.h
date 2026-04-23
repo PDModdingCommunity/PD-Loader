@@ -147,3 +147,4 @@ auto nShadowResWidth = GetPrivateProfileIntW(L"graphics", L"shadow_res_width", 2
 auto nShadowResHeight = GetPrivateProfileIntW(L"graphics", L"shadow_res_height", 2048, CONFIG_FILE);
 auto nLagCompensation = GetPrivateProfileIntW(L"graphics", L"lag_compensation", 0, CONFIG_FILE);
 auto nUseDivahookBat = GetPrivateProfileIntW(L"launcher", L"use_divahook_bat", FALSE, CONFIG_FILE);
+auto nReplaceMdataRamDir = GetPrivateProfileIntW(L"patches", L"replace_mdata_ram_dir", TRUE, CONFIG_FILE);
